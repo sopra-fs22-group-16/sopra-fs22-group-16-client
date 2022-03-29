@@ -2,6 +2,7 @@
 
 .login {
   &.container {
+    //background-image: url("C:\Users\maria\Downloads\cmd.png");
     margin-top: 2em;
     min-height: 300px;
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
@@ -9,6 +10,7 @@
     flex-direction: column;
   }
   &.form {
+    //background-image: url("C:\Users\maria\Downloads\cmd.png");
     display: flex;
     flex-direction: column;
     justify-content: center;
