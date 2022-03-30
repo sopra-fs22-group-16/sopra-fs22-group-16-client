@@ -1,6 +1,5 @@
 import {useEffect, useState} from 'react';
 import {api, handleError} from 'helpers/api';
-import {Spinner} from 'components/ui/Spinner';
 import {Button} from 'components/ui/Button';
 import {useHistory} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
@@ -34,6 +33,8 @@ const Game = () => {
     localStorage.removeItem('token');
     history.push('/login');
   }
+
+  /*
 
   // the effect hook can be used to react to change in your component.
   // in this case, the effect hook is only run once, the first time the component is mounted
@@ -91,6 +92,7 @@ const Game = () => {
       </div>
     );
   }
+  */
 
   return (
     <BaseContainer className="game container">
@@ -98,7 +100,6 @@ const Game = () => {
       <p className="game paragraph">
         Get all users from secure endpoint:
       </p>
-      {content}
     </BaseContainer>
   );
 }

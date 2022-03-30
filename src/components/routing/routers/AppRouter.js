@@ -2,7 +2,8 @@ import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 import {GameGuard} from "components/routing/routeProtectors/GameGuard";
 import GameRouter from "components/routing/routers/GameRouter";
 import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
-import Login from "components/views/Login";
+import HomePage from "components/views/HomePage";
+import PublicLobbies from "components/views/PublicLobbies";
 
 /**
  * Main router of your application.
@@ -13,25 +14,30 @@ import Login from "components/views/Login";
  * /game renders a Router that contains other sub-routes that render in turn other react components
  * Documentation about routing in React: https://reacttraining.com/react-router/web/guides/quick-start
  */
-const AppRouter = () => {
+ const AppRouter = () => {
   return (
     <BrowserRouter>
-      <Switch>
-        <Route path="/game">
-          <GameGuard>
-            <GameRouter base="/game"/>
-          </GameGuard>
-        </Route>
-        <Route exact path="/login">
-          <LoginGuard>
-            <Login/>
-          </LoginGuard>
-        </Route>
-        <Route exact path="/">
-          <Redirect to="/game"/>
-        </Route>
-      </Switch>
-    </BrowserRouter>
+          <Switch>
+            <Route path="/game">
+              <GameGuard>
+                <GameRouter base="/game"/>
+              </GameGuard>
+            </Route>
+            <Route exact path="/">
+              <Redirect to="/game"/>
+            </Route>
+            <Route exact path="/HomePage">
+              <LoginGuard>
+                <HomePage/>
+              </LoginGuard>
+            </Route>
+            <Route exact path="/PublicLobbies">
+              <LoginGuard>
+                <PublicLobbies/>
+              </LoginGuard>
+            </Route>
+          </Switch>
+        </BrowserRouter>
   );
 };
 

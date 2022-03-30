@@ -3,7 +3,7 @@ import {api, handleError} from 'helpers/api';
 import User from 'models/User';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
-import 'styles/views/Login.scss';
+import 'styles/views/HomePage.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
 
@@ -35,7 +35,7 @@ FormField.propTypes = {
   onChange: PropTypes.func
 };
 
-const Login = props => {
+const PublicLobbies = props => {
   const history = useHistory();
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
@@ -58,31 +58,42 @@ const Login = props => {
     }
   };
 
+  const goJoinLobby = () => {
+    // change status from ONLINE to OFFLINE
+    history.push('/game/dashboard');
+  }
+
+  const goCreateLobby = () => {
+
+
+    // change status from ONLINE to OFFLINE
+    history.push('/game/dashboard');
+  }
+
   return (
     <BaseContainer>
-      <div className="login container">
-        <div className="login form">
-          <FormField
-            label="Username"
-            value={username}
-            onChange={un => setUsername(un)}
-          />
-          <FormField
-            label="Name"
-            value={name}
-            onChange={n => setName(n)}
-          />
-          <div className="login button-container">
+      <div className="HomePage container">
+      
+          <div className="HomePage button-container">
             <Button
               disabled={!username || !name}
               width="100%"
               onClick={() => doLogin()}
             >
-              Login
+              JOIN LOBBY
             </Button>
+            </div>
+            <div className="HomePage button-container">
+            <Button
+              disabled={!username || !name}
+              width="100%"
+              onClick={() => doLogin()}
+            >
+              CREATE LOBBY
+            </Button>
+        
           </div>
         </div>
-      </div>
     </BaseContainer>
   );
 };
@@ -91,4 +102,4 @@ const Login = props => {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default Login;
+export default PublicLobbies;
