@@ -1,13 +1,12 @@
 @import 'styles/theme';
 
-.header {
-  &.container {
-    @include center;
-  }
+img {
+    max-width: 60%;
+}
 
-  &.title {
-    font-weight: bold;
-    color: $background;
-    text-align: center;
-  }
+.header {
+    &.container {
+        @include center;
+        height: 115px
+    }
 }
