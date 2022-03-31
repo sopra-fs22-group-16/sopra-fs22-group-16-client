@@ -1,11 +1,10 @@
 @import 'styles/theme';
 
-.HomePage {
+.PublicLobbies {
   &.container {
     //background-size: 100% 100%;
     //background-image: url("wargroove_bw.png");
     margin-top: 2em;
-    background-repeat: repeat;
     //min-height: 300px;
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
@@ -13,22 +12,37 @@
     //background-size: contain;
     //background-image: url("wargroove_bw.png");
   }
-  &.form {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    width: 60%;
+  &.table {
+    border: 1px solid;
+    border-radius: 5px;
+    text-align: center;
+    //display: flex;
+    //flex-direction: column;
+    //justify-content: center;
+    width: 90%;
     max-width: 30em;
-    height: 20em;
-    font-size: 16px;
-    font-weight: 300;
-    padding-left: 37px;
-    padding-right: 37px;
-    border-radius: 0.75em;
-    background-color: $background;
-    transition: opacity 0.5s ease, transform 0.5s ease;
-    box-shadow: $dropShadow;
+    //height: 20em;
+    font-size: 10px;
+    //font-weight: 300;
+    //padding-left: 37px;
+    //padding-right: 37px;
+    //border-radius: 0.75em;
+    //background-color: $background;
+    //transition: opacity 0.5s ease, transform 0.5s ease;
+    //box-shadow: $dropShadow;
   }
+  &.table tr.top{
+    //padding-top: 20px;
+    //padding-bottom: 20px;
+    outline: 1px solid #FBC12E;
+    border-radius: 5px;
+    color: #604C18;
+    width: 100%;
+    text-transform: uppercase;
+  }
+  &.table tr:hover {
+    background-color: #604C18;
+    }
   &.field {
     display: flex;
     flex-direction: column;
@@ -64,7 +78,7 @@
   }
 
   &.image {
-    margin-bottom: 100px;
+    margin-bottom: 30px;
   }
 
   &.cover_image {

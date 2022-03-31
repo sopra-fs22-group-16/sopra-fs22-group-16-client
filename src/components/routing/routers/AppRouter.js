@@ -4,6 +4,7 @@ import GameRouter from "components/routing/routers/GameRouter";
 import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
+import CreateLobby from "components/views/CreateLobby";
 
 /**
  * Main router of your application.
@@ -34,6 +35,11 @@ import PublicLobbies from "components/views/PublicLobbies";
             <Route exact path="/PublicLobbies">
               <LoginGuard>
                 <PublicLobbies/>
+              </LoginGuard>
+            </Route>
+            <Route exact path="/CreateLobby">
+              <LoginGuard>
+                <CreateLobby/>
               </LoginGuard>
             </Route>
           </Switch>

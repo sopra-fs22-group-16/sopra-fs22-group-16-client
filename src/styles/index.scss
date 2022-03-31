@@ -4,6 +4,17 @@
 /**
 This file contains the general and shared style of your application.
  */
+
+h1 {
+  font-size: large;
+  font-weight: $fontweight;
+}
+
+h2 {
+  font-size: medium;
+  font-weight: $fontweight;
+}
+
 body {
   margin: 0;
   padding: 0;
@@ -12,6 +23,7 @@ body {
   font-family: $fontDefault;
   //background-image: url("wargroove_bw_dark.png");
   background-color: rgb(30,31,31);
+  font-weight: $fontweight;
 }
 
 input,

@@ -6,7 +6,9 @@ import AppRouter from "components/routing/routers/AppRouter";
  * React Template by Lucas Pelloni
  * Overhauled by Kyrill Hux
  */
-const App = () => {
+
+
+const App = () =>{
   return (
     <div>
       <Header height="100"/>

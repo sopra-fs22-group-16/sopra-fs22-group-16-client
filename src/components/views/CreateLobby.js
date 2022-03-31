@@ -36,7 +36,7 @@ FormField.propTypes = {
   onChange: PropTypes.func
 };
 
-const PublicLobbies = props => {
+const CreateLobby= props => {
   const history = useHistory();
   const [name, setName] = useState(null);
   const [username, setUsername] = useState(null);
@@ -137,4 +137,4 @@ const PublicLobbies = props => {
  * You can get access to the history object's properties via the withRouter.
  * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
  */
-export default PublicLobbies;
+export default CreateLobby;

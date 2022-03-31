@@ -13,7 +13,7 @@ import Hannibal_Logo from 'styles/ui/Hannibal_Logo.jpg';
  */
 const Header = props => (
   <div className="header container" style={{height: props.height}}>
-    <img src={Hannibal_Logo} width="400" height="100" />
+    <img className = "header image" src={Hannibal_Logo} width="200" height="50"/>
   </div>
 );
 

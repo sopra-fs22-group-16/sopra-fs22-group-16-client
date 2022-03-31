@@ -6,6 +6,8 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
+import Hannibal_Logo from 'styles/ui/Hannibal_Logo.jpg';
+import wargroove_bw from 'styles/views/wargroove_bw.png';
 
 /*
 It is possible to add multiple components inside a single file,
@@ -26,13 +28,15 @@ const HomePage = props => {
   const goCreateLobby = () => {
 
     // change status from ONLINE to OFFLINE
-    history.push('/game/dashboard');
+    history.push('/CreateLobby');
   }
 
   return (
     <BaseContainer>
+      <div class="cover_image">
+        <image src = {wargroove_bw} alt = "bake" />
       <div className="HomePage container">
-          
+      <img className = "HomePage image" src={Hannibal_Logo} width="400" height="100"/>
           <div className="HomePage button-container">
             <Button
             //disabled={!username || !name}
@@ -49,8 +53,8 @@ const HomePage = props => {
             >
               CREATE LOBBY
             </Button>
-        
           </div>
+        </div>
         </div>
     </BaseContainer>
   );
