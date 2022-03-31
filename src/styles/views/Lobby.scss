@@ -1,0 +1,85 @@
+@import 'styles/theme';
+
+
+.lobby {
+
+    table.player-view {
+        border: 2.5px solid #FBC12E;
+        align-self: center;
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        border-spacing: 0;
+        border-radius: 10px;
+    }
+
+
+    table.player-view td {
+        text-align: center;
+        color: #FBC12E;
+        height: 30px;
+        font-size: .95em;
+        width: 200px;
+    }
+
+    table.player-view th {
+        text-align: center;
+        color: darkgoldenrod;
+        height: 20px;
+        border-bottom: 2.5px solid #FBC12E;
+    }
+
+    table.lobby-info {
+        border: 2.5px solid #FBC12E;
+        border-radius: 10px;
+        align-self: center;
+        width: 250px;
+        margin-left: auto;
+        margin-right: auto;
+        border-spacing: 0;
+    }
+
+    table.lobby-info td {
+        text-align: center;
+        color: #FBC12E;
+        height: 20px;
+        font-size: .85em;
+    }
+
+    table.lobby-info tr {
+    }
+
+    table.lobby-info th {
+        text-align: center;
+        color: darkgoldenrod;
+        height: 20px;
+    }
+
+    &.lobby-title {
+        color: #FBC12E;
+        display: block;
+        text-align: center;
+        font-size: 1.5em;
+        padding-bottom: 2em;
+    }
+
+    &.lobby-labels {
+        color: #FBC12E;
+        display: block;
+        text-align: center;
+        font-size: .85em;
+        padding-top: 2em;
+        padding-bottom: 1em;
+    }
+
+    &.lobby-buttons {
+        padding-top: 2em;
+        text-align: center;
+    }
+
+    &.status-button {
+        background-color: Transparent;
+        border: Transparent;
+        color: #FBC12E;
+    }
+}
