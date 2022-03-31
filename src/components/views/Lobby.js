@@ -11,10 +11,9 @@ const Lobby = props => {
 
     /*this is for mocking the view*/
     const data = [
-        { id: 1, player: "Penguin1", team: "RED", status: "READY" },
-        { id: 2, player: "RandonUser1", team: "BLUE", status: "NOT READY" },
-        { id: 3, player: "CSSSucks93", team: "RED", status: "READY" },
-        { id: 4, player: "", team: "", status: "" },
+        { id: 1, player: "Penguin1", team: "red"},
+        { id: 2, player: "RandonUser1", team: "blue"},
+        { id: 3, player: "CSSSucks93", team: "red"}
     ]
     const data2 = { name: "Vindica", access: "private", mode: "2X2", totalUsers: "3/4", readyUsers: "2/4" };
     /*we will need to modify the view to call the backend*/
@@ -30,11 +29,6 @@ const Lobby = props => {
     }
 
     const changeStatus = (player) => {
-        if (player !== null) {
-            const btn = document.getElementById(player);
-            const status = btn.innerText
-            status === 'READY' ? btn.innerText = "NOT READY" : btn.innerText = "READY";
-        }
     }
 
     useEffect(() => {
@@ -53,10 +47,6 @@ const Lobby = props => {
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 <table className="lobby-info">
-                    <tr>
-                        <th>LOBBY NAME</th>
-                        <td>{data2.name}</td>
-                    </tr>
                     <tr>
                         <th>ACCESS</th>
                         <td>{data2.access}</td>
@@ -77,7 +67,6 @@ const Lobby = props => {
                 <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
                 <table className="player-view">
                     <tr>
-                        <th>#</th>
                         <th>PLAYER</th>
                         <th>TEAM</th>
                         <th>STATUS</th>
@@ -85,11 +74,12 @@ const Lobby = props => {
                     {data.map((val, key) => {
                         return (
                             <tr key={key}>
-                                <td>{val.id}</td>
                                 <td>{val.player}</td>
-                                <td>{val.team}</td>
                                 <td>
-                                    <button id={val.player} className="lobby status-button" onClick={() => changeStatus(val.player)}>{val.status}</button>
+                                    <div className={'lobby teambox ' + val.team} ></div>
+                                </td>
+                                <td>
+                                    <input id={val.player} className="lobby status" type="checkbox" onClick={() => changeStatus(val.player)} />
                                 </td>
                             </tr>
                         )
