@@ -1,0 +1,60 @@
+@import 'styles/theme';
+
+
+.createlobby {
+
+    table.lobby-info {
+        border: 2.5px solid #FBC12E;
+        border-radius: 10px;
+        align-self: center;
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+        border-spacing: 0;
+    }
+
+    table.lobby-info td {
+        text-align: left;
+        color: #FBC12E;
+        height: 50px;
+        width: 100px;
+        font-size: .85em;
+    }
+
+    table.lobby-info th {
+        text-align: center;
+        color: darkgoldenrod;
+        height: 20px;
+    }
+
+    &.lobby-title {
+        color: #FBC12E;
+        display: block;
+        text-align: center;
+        font-size: 1.5em;
+        padding-bottom: 5em;
+    }
+
+    &.input-name {
+        color: #FBC12E;
+        background: #4A4A47;
+        border: 0.5px solid #FBC12E;
+        border-radius: 7px;
+        width: 165px;
+    }
+
+    &.lobby-buttons {
+        padding-top: 1.5em;
+        text-align: center;
+    }
+
+    &.space {
+        padding-top: 7em;
+    }
+}
+
+::placeholder {
+    color: #FBC12E;
+    opacity: 3;
+    padding-left: 1em;
+}

@@ -1,140 +1,140 @@
-import React, {useState} from 'react';
-import {api, handleError} from 'helpers/api';
-import User from 'models/User';
-import {useHistory} from 'react-router-dom';
-import {Button} from 'components/ui/Button';
-import 'styles/views/HomePage.scss';
-import 'styles/views/PublicLobbies.scss';
+import React, { useState } from 'react';
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { Button } from 'components/ui/Button';
+import 'styles/views/CreateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
 const FormField = props => {
-  return (
-    <div className="login field">
-      <label className="login label">
-        {props.label}
-      </label>
-      <input
-        className="login input"
-        placeholder="enter here.."
-        value={props.value}
-        onChange={e => props.onChange(e.target.value)}
-      />
-    </div>
-  );
-};
-
-FormField.propTypes = {
-  label: PropTypes.string,
-  value: PropTypes.string,
-  onChange: PropTypes.func
-};
-
-const CreateLobby= props => {
-  const history = useHistory();
-  const [name, setName] = useState(null);
-  const [username, setUsername] = useState(null);
-
-  const doLogin = async () => {
-    try {
-      const requestBody = JSON.stringify({username, name});
-      const response = await api.post('/users', requestBody);
-
-      // Get the returned user and update a new object.
-      const user = new User(response.data);
-
-      // Store the token into the local storage.
-      localStorage.setItem('token', user.token);
-
-      // Login successfully worked --> navigate to the route /game in the GameRouter
-      history.push(`/game`);
-    } catch (error) {
-      alert(`Something went wrong during the login: \n${handleError(error)}`);
-    }
-  };
-
-  const goJoinLobby = () => {
-    // change status from ONLINE to OFFLINE
-    history.push('/game/dashboard');
-  }
-
-  const goCreateLobby = () => {
-
-
-    // change status from ONLINE to OFFLINE
-    history.push('/game/dashboard');
-  }
-
-  return (
-    <BaseContainer>
-      <div className="HomePage container">
-      <h1> Public Lobbies </h1> 
-      <h2> Click on one of the lobbies to join</h2>
-      <table className = "PublicLobbies table">
-      <tr className = "top">
-    <th>Lobby name</th>
-    <th>game mode</th>
-    <th>players</th>
-    <th>capacity</th>
-  </tr>
-  <tr>
-    <td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td>
-  </tr>
-  <tr><td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td></tr>
-  <tr><td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td></tr>
-  <tr><td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td></tr>
-  <tr><td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td></tr>
-  <tr><td>Peter</td>
-    <td>Griffin</td>
-    <td>Lois</td>
-    <td>Griffin</td></tr>
-      </table>
-          <div className="HomePage button-container">
-            <Button
-              width="100%"
-              onClick={() => doLogin()}
-            >
-              JOIN LOBBY
-            </Button>
-            </div>
-            <div className="HomePage button-container">
-            <Button className = "secondary-button"
-              
-              width="100%"
-              onClick={() => doLogin()}
-            >
-              RETURN HOME
-            </Button>
-        
-          </div>
+    return (
+        <div className="createlobby lobby-name">
+            <input
+                className="createlobby input-name"
+                placeholder="enter a name..."
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+            />
         </div>
-    </BaseContainer>
-  );
+    );
 };
 
-/**
- * You can get access to the history object's properties via the withRouter.
- * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
- */
+const CreateLobby = props => {
+
+    const history = useHistory();
+
+    const [name, setName] = useState(null);
+    const [mode, setMode] = useState("1V1");
+    const [access, setAccess] = useState("public");
+
+
+    const changeMode = (mode) => {
+        var otherMode = null;
+        if (mode === "1V1") {
+            otherMode = document.getElementById("2V2");
+
+        }
+        else{
+            otherMode = document.getElementById("1V1");
+        }
+
+        if (otherMode.checked = true) {
+            otherMode.checked = false;
+        }
+
+        setMode(mode);
+    }
+
+    const changeAccess = (access) => {
+        var otherAccess= null;
+        if (access === "public") {
+            otherAccess = document.getElementById("private");
+
+        }
+        else {
+            otherAccess = document.getElementById("public");
+        }
+
+        if (otherAccess.checked = true) {
+            otherAccess.checked = false;
+        }
+
+        setAccess(access);
+    }
+
+    const postLobby = () => {
+        alert("Mode: " + mode + "; Visibility: " + access + "; Visibility: " + name);
+    }
+
+    const returnHome = () => {
+        history.push('/home-page');
+    }
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+
+            } catch (error) {
+                alert("Something went wrong! ");
+            }
+        }
+        fetchData();
+    }, []);
+
+    return (
+        <BaseContainer>
+            <div className="createlobby">
+                <label className="createlobby lobby-title">Create Lobby</label>
+                <table className="lobby-info">
+                    <tr>
+                        <th>LOBBY NAME</th>
+                        <td>
+                            <FormField
+                                value={name}
+                                onChange={un => setName(un)}>
+                            </FormField>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>GAME MODE</th>
+                        <td>
+                            <label>
+                                <input id="1V1" defaultChecked={true} type="checkbox" onClick={() => changeMode("1V1")}/>
+                                1x1
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input id="2V2" type="checkbox" onClick={() => changeMode("2V2")}/>
+                                2x2
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>ACCESS</th>
+                        <td>
+                            <label>
+                                <input id="public" defaultChecked={true} type="checkbox" onClick={() => changeAccess("public")}/>
+                                Public
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input id="private" type="checkbox" onClick={() => changeAccess("private")}/>
+                                Private
+                            </label>
+                        </td>
+                    </tr>
+                </table>
+                <div className="createlobby space" />
+                <div className="createlobby lobby-buttons">
+                    <Button onClick={() => postLobby()}>POST LOBBY</Button>
+                </div>
+                <div className="createlobby lobby-buttons">
+                    <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
+                </div>
+            </div>
+        </BaseContainer>
+    );
+};
+
 export default CreateLobby;
