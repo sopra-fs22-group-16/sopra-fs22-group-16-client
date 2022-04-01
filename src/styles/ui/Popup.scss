@@ -1,0 +1,32 @@
+@import 'styles/theme';
+
+.modal {
+    display: none;
+}
+
+.modal_content {
+    background-color: darkgoldenrod;
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 300px;
+    padding: 20px;
+    border-radius: 10px;
+    border: 3px solid #604C18;
+    background: #FBC12E;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
+    text-align: center;
+}
+
+.close {
+    color: Black;
+    background: transparent;
+    border: none; 
+    font-weight: bolder;
+}
+
+.label {
+    color: black;
+}

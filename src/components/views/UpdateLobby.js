@@ -2,15 +2,15 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
-import 'styles/views/CreateLobby.scss';
+import 'styles/views/UpdateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
 
 const FormField = props => {
     return (
-        <div className="createlobby lobby-name">
+        <div className="updatelobby lobby-name">
             <input
-                className="createlobby input-name"
+                className="updatelobby input-name"
                 placeholder="enter a name..."
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
@@ -19,7 +19,7 @@ const FormField = props => {
     );
 };
 
-const CreateLobby = props => {
+const UpdateLobby = props => {
 
     const history = useHistory();
 
@@ -74,39 +74,15 @@ const CreateLobby = props => {
         }
         else {
 
-            //request body sent to the backend to create a new lobby
+            //request body sent to the backend to update a lobby
             const requestBody = {
                 "name": name,
                 "mode": mode,
                 "visibility": access
             };
 
-            //**TODO** here we need to call to the backend to create the lobby
-
-            // here we mocked the answer of the API create lobby
-            const responseBody = {
-                "invitationCode": "37-Xfdws3s34",
-                "name": requestBody.name,
-                "lobbyId": 37,
-                "members": [
-                    {
-                        "id": 1,
-                        "name": "Happy Einstein",
-                        "ready": false,
-                        "team": "1"
-                    }
-                    ],
-                "owner": 1,
-                "visibility": requestBody.visibility,
-                "mode": requestBody.mode,
-                "chatId": 11,
-                "ranked": false
-            };
-
-            history.push({
-                pathname: '/lobby/' + responseBody.lobbyId,
-                state: responseBody
-            })
+            //call to the backend to update a lobby
+            alert(JSON.stringify(requestBody));
 
         }
     }
@@ -117,8 +93,8 @@ const CreateLobby = props => {
 
     return (
         <BaseContainer>
-            <div className="createlobby">
-                <label className="createlobby lobby-title">Create Lobby</label>
+            <div className="updatelobby">
+                <label className="updatelobby lobby-title">Update Lobby</label>
                 <Popup id="noUser">You have to enter a lobby name!</Popup>
                 <table className="lobby-info">
                     <tr>
@@ -134,13 +110,13 @@ const CreateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="1V1" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeMode("1V1")}/>
+                                <input id="1V1" className="updatelobby check" defaultChecked={true} type="checkbox" onClick={() => changeMode("1V1")}/>
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="2V2" className="createlobby check" type="checkbox" onClick={() => changeMode("2V2")}/>
+                                <input id="2V2" className="updatelobby check" type="checkbox" onClick={() => changeMode("2V2")}/>
                                 2x2
                             </label>
                         </td>
@@ -149,28 +125,28 @@ const CreateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="public" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeAccess("public")}/>
+                                <input id="public" className="updatelobby check" defaultChecked={true} type="checkbox" onClick={() => changeAccess("public")}/>
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="private" className="createlobby check" type="checkbox" onClick={() => changeAccess("private")}/>
+                                <input id="private" className="updatelobby check" type="checkbox" onClick={() => changeAccess("private")}/>
                                 Private
                             </label>
                         </td>
                     </tr>
                 </table>
-                <div className="createlobby space" />
-                <div className="createlobby lobby-buttons">
-                    <Button onClick={() => postLobby()}>POST LOBBY</Button>
+                <div className="updatelobby space" />
+                <div className="updatelobby lobby-buttons">
+                    <Button onClick={() => postLobby()}>UPDATE LOBBY</Button>
                 </div>
-                <div className="createlobby lobby-buttons">
-                    <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
+                <div className="updatelobby lobby-buttons">
+                    <Button className="return" onClick={() => returnHome()}>RETURN LOBBY</Button>
                 </div>
             </div>
         </BaseContainer>
     );
 };
 
-export default CreateLobby;
+export default UpdateLobby;

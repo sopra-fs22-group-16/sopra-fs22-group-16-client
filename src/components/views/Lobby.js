@@ -1,21 +1,20 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import 'styles/views/Lobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
+import { getDomain } from 'helpers/getDomain';
 
 
 const Lobby = props => {
 
+    //we get the information from the creation page
+    const location = useLocation();
+    const lobbyData = location.state;
 
     /*this is for mocking the view*/
-    const data = [
-        { id: 1, player: "Penguin1", team: "red"},
-        { id: 2, player: "RandonUser1", team: "blue"},
-        { id: 3, player: "CSSSucks93", team: "red"}
-    ]
-    const data2 = { name: "Vindica", access: "private", mode: "2X2", totalUsers: "3/4", readyUsers: "2/4" };
+    const data2 = { totalUsers: "3/4", readyUsers: "2/4" };
     /*we will need to modify the view to call the backend*/
 
     const history = useHistory();
@@ -34,7 +33,7 @@ const Lobby = props => {
     useEffect(() => {
         async function fetchData() {
             try {
-
+                //let socket = new WebSocket(getDomain());
             } catch (error) {
                 alert("Something went wrong! ");
             }
@@ -48,12 +47,16 @@ const Lobby = props => {
                 <label className="lobby lobby-title">Lobby Information</label>
                 <table className="lobby-info">
                     <tr>
+                        <th>NAME</th>
+                        <td>{lobbyData.name}</td>
+                    </tr>
+                    <tr>
                         <th>ACCESS</th>
-                        <td>{data2.access}</td>
+                        <td>{lobbyData.visibility}</td>
                     </tr>
                     <tr>
                         <th>MODE</th>
-                        <td>{data2.mode}</td>
+                        <td>{lobbyData.mode}</td>
                     </tr>
                     <tr>
                         <th>USERS PRESENT</th>
@@ -71,15 +74,15 @@ const Lobby = props => {
                         <th>TEAM</th>
                         <th>STATUS</th>
                     </tr>
-                    {data.map((val, key) => {
+                    {lobbyData.members.map((user) => {
                         return (
-                            <tr key={key}>
-                                <td>{val.player}</td>
+                            <tr>
+                                <td>{user.name}</td>
                                 <td>
-                                    <div className={'lobby teambox ' + val.team} ></div>
+                                    <div className={'lobby teambox team' + user.team} ></div>
                                 </td>
                                 <td>
-                                    <input id={val.player} className="lobby status" type="checkbox" onClick={() => changeStatus(val.player)} />
+                                    <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.status)} />
                                 </td>
                             </tr>
                         )
