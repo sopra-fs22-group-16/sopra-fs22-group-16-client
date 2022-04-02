@@ -43,6 +43,9 @@ import PublicLobbies from "components/views/PublicLobbies";
                 <CreateLobby/>
               </LoginGuard>
             </Route>
+            <Route exact path="/update-lobby/:id">
+                    <UpdateLobby />
+                </Route>
           </Switch>
          </BrowserRouter>
      );

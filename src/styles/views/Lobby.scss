@@ -83,11 +83,11 @@
         width: 25px;
         border: 1px solid black;
 
-        &.red {
+        &.team1 {
             background-color: red;
         }
 
-        &.blue {
+        &.team2 {
             background-color: blue;
         }
     }
@@ -95,5 +95,20 @@
     &.status {
         width: 25px;
         height: 25px;
+    }
+
+    &.link {
+        color: #4B72C2;
+        display: block;
+        text-align: center;
+        font-size: 1.2em;
+        padding-bottom: 1em;
+        text-decoration: none;
+
+        &.link:after {
+            content: "  \279C";
+            color: #4B72C2;
+            font-size: 1.2em;
+        }
     }
 }
