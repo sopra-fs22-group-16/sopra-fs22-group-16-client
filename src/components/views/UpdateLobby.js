@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
 import 'styles/views/UpdateLobby.scss';
@@ -74,28 +74,32 @@ const UpdateLobby = props => {
         }
         else {
 
-            //request body sent to the backend to update a lobby
-            const requestBody = {
-                "name": name,
-                "mode": mode,
-                "visibility": access
-            };
+            try {
 
-            //call to the backend to update a lobby
-            alert(JSON.stringify(requestBody));
+                //request body sent to the backend to update a lobby
+                const requestBody = {
+                    "name": name,
+                    "mode": mode,
+                    "visibility": access
+                };
 
+                //call to the backend to update a lobby
+                alert(JSON.stringify(requestBody));
+
+            } catch (error) {
+                alert("Something went wrong! ");
+            }
         }
     }
 
-    const returnHome = () => {
-        history.push('/home-page');
+    const returnLobby = () => {
+        history.goBack();
     }
 
     return (
         <BaseContainer>
             <div className="updatelobby">
                 <label className="updatelobby lobby-title">Update Lobby</label>
-                <Popup id="noUser">You have to enter a lobby name!</Popup>
                 <table className="lobby-info">
                     <tr>
                         <th>NAME</th>
@@ -142,9 +146,10 @@ const UpdateLobby = props => {
                     <Button onClick={() => postLobby()}>UPDATE LOBBY</Button>
                 </div>
                 <div className="updatelobby lobby-buttons">
-                    <Button className="return" onClick={() => returnHome()}>RETURN LOBBY</Button>
+                    <Button className="return" onClick={() => returnLobby()}>RETURN LOBBY</Button>
                 </div>
             </div>
+            <Popup id="noUser">You have to enter a lobby name!</Popup>
         </BaseContainer>
     );
 };

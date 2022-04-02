@@ -1,10 +1,9 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory, useLocation, Link  } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import 'styles/views/Lobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import { getDomain } from 'helpers/getDomain';
 
 
 const Lobby = props => {
@@ -13,11 +12,11 @@ const Lobby = props => {
     const location = useLocation();
     const lobbyData = location.state;
 
-    /*this is for mocking the view*/
-    const data2 = { totalUsers: "3/4", readyUsers: "2/4" };
-    /*we will need to modify the view to call the backend*/
-
     const history = useHistory();
+
+    // TODO: change this with data obtained from the API
+    const totalUsers = lobbyData.mode === '1V1' ? 2 : 4;
+    const readyUsers = lobbyData.members.length;
 
     const returnLobbies = () => {
         history.push('/lobbies');
@@ -45,6 +44,10 @@ const Lobby = props => {
         <BaseContainer>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
+                <Link
+                    className="lobby link"
+                    to={'/update-lobby/' + lobbyData.lobbyId}>
+                    update lobby information</Link>
                 <table className="lobby-info">
                     <tr>
                         <th>NAME</th>
@@ -60,11 +63,11 @@ const Lobby = props => {
                     </tr>
                     <tr>
                         <th>USERS PRESENT</th>
-                        <td>{data2.totalUsers}</td>
+                        <td>{readyUsers + '/' + totalUsers}</td>
                     </tr>
                     <tr>
                         <th>USERS READY</th>
-                        <td>{data2.readyUsers}</td>
+                        <td>{readyUsers + '/' + totalUsers}</td>
                     </tr>
                 </table>
                 <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
@@ -88,6 +91,10 @@ const Lobby = props => {
                         )
                     })}
                 </table>
+                <Link
+                    className="lobby link"
+                    to={'/lobby/invite-users/' + lobbyData.lobbyId}>
+                    invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
                 </div>

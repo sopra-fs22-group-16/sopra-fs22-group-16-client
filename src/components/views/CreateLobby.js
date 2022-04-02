@@ -73,41 +73,45 @@ const CreateLobby = props => {
 
         }
         else {
+            try {
 
-            //request body sent to the backend to create a new lobby
-            const requestBody = {
-                "name": name,
-                "mode": mode,
-                "visibility": access
-            };
+                //request body sent to the backend to create a new lobby
+                const requestBody = {
+                    "name": name,
+                    "mode": mode,
+                    "visibility": access
+                };
 
-            //**TODO** here we need to call to the backend to create the lobby
+                //**TODO** here we need to call to the backend to create the lobby
 
-            // here we mocked the answer of the API create lobby
-            const responseBody = {
-                "invitationCode": "37-Xfdws3s34",
-                "name": requestBody.name,
-                "lobbyId": 37,
-                "members": [
-                    {
-                        "id": 1,
-                        "name": "Happy Einstein",
-                        "ready": false,
-                        "team": "1"
-                    }
+                // here we mocked the answer of the API create lobby
+                const responseBody = {
+                    "invitationCode": "37-Xfdws3s34",
+                    "name": requestBody.name,
+                    "lobbyId": 37,
+                    "members": [
+                        {
+                            "id": 1,
+                            "name": "Happy Einstein",
+                            "ready": false,
+                            "team": "1"
+                        }
                     ],
-                "owner": 1,
-                "visibility": requestBody.visibility,
-                "mode": requestBody.mode,
-                "chatId": 11,
-                "ranked": false
-            };
+                    "owner": 1,
+                    "visibility": requestBody.visibility,
+                    "mode": requestBody.mode,
+                    "chatId": 11,
+                    "ranked": false
+                };
 
-            history.push({
-                pathname: '/lobby/' + responseBody.lobbyId,
-                state: responseBody
-            })
-
+                history.push({
+                    pathname: '/lobby/' + responseBody.lobbyId,
+                    state: responseBody
+                })
+            } catch (error) {
+                //**TODO** control errors after call to the backend to create the lobby
+                alert("Something went wrong! ");
+            }
         }
     }
 

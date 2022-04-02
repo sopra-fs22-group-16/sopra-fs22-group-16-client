@@ -96,4 +96,19 @@
         width: 25px;
         height: 25px;
     }
+
+    &.link {
+        color: #4B72C2;
+        display: block;
+        text-align: center;
+        font-size: 1.2em;
+        padding-bottom: 1em;
+        text-decoration: none;
+
+        &.link:after {
+            content: "  \279C";
+            color: #4B72C2;
+            font-size: 1.2em;
+        }
+    }
 }
