@@ -7,6 +7,7 @@ import GameRouter from "components/routing/routers/GameRouter";
 import {LoginGuard} from "components/routing/routeProtectors/LoginGuard";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
+import UpdateLobby from "components/views/UpdateLobby";
  
  const AppRouter = () => {
      return (
@@ -44,7 +45,7 @@ import PublicLobbies from "components/views/PublicLobbies";
               </LoginGuard>
             </Route>
             <Route exact path="/update-lobby/:id">
-                    <UpdateLobby />
+                    <UpdateLobby/>
                 </Route>
           </Switch>
          </BrowserRouter>
