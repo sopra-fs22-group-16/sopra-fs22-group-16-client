@@ -1,6 +1,6 @@
 import React from 'react';
 import { useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation, Link  } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import 'styles/views/Lobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
@@ -8,17 +8,15 @@ import BaseContainer from "components/ui/BaseContainer";
 
 const Lobby = props => {
 
-
-    /*this is for mocking the view*/
-    const data = [
-        { id: 1, player: "Penguin1", team: "red"},
-        { id: 2, player: "RandonUser1", team: "blue"},
-        { id: 3, player: "CSSSucks93", team: "red"}
-    ]
-    const data2 = { name: "Vindica", access: "private", mode: "2X2", totalUsers: "3/4", readyUsers: "2/4" };
-    /*we will need to modify the view to call the backend*/
-
     const history = useHistory();
+
+    //we get the information from the creation page
+    const location = useLocation();
+    const lobbyData = location.state;
+
+    // TODO: change this with data obtained from the API
+    const totalUsers = lobbyData.mode === '1V1' ? 2 : 4;
+    const readyUsers = lobbyData.members.length;
 
     const returnLobbies = () => {
         history.push('/lobbies');
@@ -34,7 +32,7 @@ const Lobby = props => {
     useEffect(() => {
         async function fetchData() {
             try {
-
+                //let socket = new WebSocket(getDomain());
             } catch (error) {
                 alert("Something went wrong! ");
             }
@@ -46,22 +44,33 @@ const Lobby = props => {
         <BaseContainer>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
+                <Link
+                    className="lobby link"
+                    to={{
+                        pathname: '/update-lobby/' + lobbyData.lobbyId,
+                        state: { name: lobbyData.name, mode: lobbyData.mode, visibility: lobbyData.visibility }
+                    }} >
+                    update lobby information</Link>
                 <table className="lobby-info">
                     <tr>
+                        <th>NAME</th>
+                        <td>{lobbyData.name}</td>
+                    </tr>
+                    <tr>
                         <th>ACCESS</th>
-                        <td>{data2.access}</td>
+                        <td>{lobbyData.visibility}</td>
                     </tr>
                     <tr>
                         <th>MODE</th>
-                        <td>{data2.mode}</td>
+                        <td>{lobbyData.mode}</td>
                     </tr>
                     <tr>
                         <th>USERS PRESENT</th>
-                        <td>{data2.totalUsers}</td>
+                        <td>{readyUsers + '/' + totalUsers}</td>
                     </tr>
                     <tr>
                         <th>USERS READY</th>
-                        <td>{data2.readyUsers}</td>
+                        <td>{readyUsers + '/' + totalUsers}</td>
                     </tr>
                 </table>
                 <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
@@ -71,20 +80,24 @@ const Lobby = props => {
                         <th>TEAM</th>
                         <th>STATUS</th>
                     </tr>
-                    {data.map((val, key) => {
+                    {lobbyData.members.map((user) => {
                         return (
-                            <tr key={key}>
-                                <td>{val.player}</td>
+                            <tr key={user.id}>
+                                <td>{user.name}</td>
                                 <td>
-                                    <div className={'lobby teambox ' + val.team} ></div>
+                                    <div className={'lobby teambox team' + user.team} ></div>
                                 </td>
                                 <td>
-                                    <input id={val.player} className="lobby status" type="checkbox" onClick={() => changeStatus(val.player)} />
+                                    <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.status)} />
                                 </td>
                             </tr>
                         )
                     })}
                 </table>
+                <Link
+                    className="lobby link"
+                    to={'/lobby/invite-users/' + lobbyData.lobbyId}>
+                    invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
                 </div>
