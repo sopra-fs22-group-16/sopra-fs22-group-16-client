@@ -22,13 +22,13 @@ const HomePage = props => {
 
   const goJoinLobby = () => {
     // change status from ONLINE to OFFLINE
-    history.push('/PublicLobbies');
+    history.push('/public-lobbies');
   }
 
   const goCreateLobby = () => {
 
     // change status from ONLINE to OFFLINE
-    history.push('/CreateLobby');
+    history.push('/create-lobby');
   }
 
   return (
