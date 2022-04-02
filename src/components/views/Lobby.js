@@ -8,11 +8,11 @@ import BaseContainer from "components/ui/BaseContainer";
 
 const Lobby = props => {
 
+    const history = useHistory();
+
     //we get the information from the creation page
     const location = useLocation();
     const lobbyData = location.state;
-
-    const history = useHistory();
 
     // TODO: change this with data obtained from the API
     const totalUsers = lobbyData.mode === '1V1' ? 2 : 4;
@@ -46,7 +46,10 @@ const Lobby = props => {
                 <label className="lobby lobby-title">Lobby Information</label>
                 <Link
                     className="lobby link"
-                    to={'/update-lobby/' + lobbyData.lobbyId}>
+                    to={{
+                        pathname: '/update-lobby/' + lobbyData.lobbyId,
+                        state: { name: lobbyData.name, mode: lobbyData.mode, visibility: lobbyData.visibility }
+                    }} >
                     update lobby information</Link>
                 <table className="lobby-info">
                     <tr>
@@ -79,7 +82,7 @@ const Lobby = props => {
                     </tr>
                     {lobbyData.members.map((user) => {
                         return (
-                            <tr>
+                            <tr key={user.id}>
                                 <td>{user.name}</td>
                                 <td>
                                     <div className={'lobby teambox team' + user.team} ></div>

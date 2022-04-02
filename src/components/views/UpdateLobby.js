@@ -23,9 +23,19 @@ const UpdateLobby = props => {
 
     const history = useHistory();
 
-    const [name, setName] = useState('');
-    const [mode, setMode] = useState("1V1");
-    const [access, setAccess] = useState("public");
+    //we get the information from the lobby
+    const location = useLocation();
+    const lobbyData = location.state;
+
+    const [name, setName] = useState(lobbyData.name);
+    const [mode, setMode] = useState(lobbyData.mode);
+    const [access, setAccess] = useState(lobbyData.visibility);
+
+    //default values for checkboxes
+    const modeDef1 = mode === "1V1" ? true : false;
+    const modeDef2 = mode === "2V2" ? true : false;
+    const modeVis1 = access === "public" ? true : false;
+    const modeVis2 = access === "private" ? true : false;
 
     const changeMode = (mode) => {
         var otherMode = null;
@@ -114,13 +124,13 @@ const UpdateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="1V1" className="updatelobby check" defaultChecked={true} type="checkbox" onClick={() => changeMode("1V1")}/>
+                                <input id="1V1" className="updatelobby check" defaultChecked={modeDef1} type="checkbox" onClick={() => changeMode("1V1")}/>
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="2V2" className="updatelobby check" type="checkbox" onClick={() => changeMode("2V2")}/>
+                                <input id="2V2" className="updatelobby check" defaultChecked={modeDef2} type="checkbox" onClick={() => changeMode("2V2")}/>
                                 2x2
                             </label>
                         </td>
@@ -129,13 +139,13 @@ const UpdateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="public" className="updatelobby check" defaultChecked={true} type="checkbox" onClick={() => changeAccess("public")}/>
+                                <input id="public" className="updatelobby check" defaultChecked={modeVis1} type="checkbox" onClick={() => changeAccess("public")}/>
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="private" className="updatelobby check" type="checkbox" onClick={() => changeAccess("private")}/>
+                                <input id="private" className="updatelobby check" defaultChecked={modeVis2} type="checkbox" onClick={() => changeAccess("private")}/>
                                 Private
                             </label>
                         </td>
