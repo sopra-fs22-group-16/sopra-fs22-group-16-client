@@ -4,6 +4,8 @@
 
 
   &.container {
+  //background: url(wargroove_bw.png);
+  //background-size: contain;
     //background-size: 100% 100%;
     //background-image: url("wargroove_bw.png");
     margin-top: 2em;
@@ -12,7 +14,7 @@
     /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
     @include center;
     flex-direction: column;
-    //background-size: contain;
+    background-size: contain;
     //background-image: url("wargroove_bw.png");
   }
   
@@ -45,15 +47,8 @@
   }
 
   &.image {
+    margin-top: 100px;
     margin-bottom: 100px;
-  }
-
-  &.cover_image {
-    background: url(wargroove_bw.png) no-repeat center center fixed; 
-    -webkit-background-size: cover;
-    -moz-background-size: cover;
-    -o-background-size: cover;
-    background-size: cover;
   }
 
   }

@@ -10,7 +10,6 @@ import AppRouter from "components/routing/routers/AppRouter";
 const App = () =>{
   return (
     <div>
-      <Header height= {HeaderHeight}/>
       <AppRouter/>
     </div>
   );
