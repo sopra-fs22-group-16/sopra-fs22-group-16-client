@@ -40,12 +40,13 @@ import UpdateLobby from "components/views/UpdateLobby";
               </LoginGuard>
             </Route>
             <Route exact path="/create-lobby">
-              <LoginGuard>
                 <CreateLobby/>
-              </LoginGuard>
+              
             </Route>
             <Route exact path="/update-lobby/:id">
+              <LoginGuard>
                     <UpdateLobby/>
+                    </LoginGuard>
                 </Route>
           </Switch>
          </BrowserRouter>

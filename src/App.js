@@ -7,14 +7,17 @@ import AppRouter from "components/routing/routers/AppRouter";
  * Overhauled by Kyrill Hux
  */
 
-
 const App = () =>{
   return (
     <div>
-      <Header height="100"/>
+      <Header height= {HeaderHeight}/>
       <AppRouter/>
     </div>
   );
 };
 
+
+
 export default App;
+
+

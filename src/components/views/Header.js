@@ -1,8 +1,7 @@
 import React from "react";
-import HeaderImage from "styles/images/hannibal_header.png";
 import PropTypes from "prop-types";
 import "styles/views/Header.scss";
-import Hannibal_Logo from 'styles/ui/Hannibal_Logo.jpg';
+import Hannibal_Logo from 'styles/images/Hannibal_Logo.jpg';
 
 
 const Header = props => (

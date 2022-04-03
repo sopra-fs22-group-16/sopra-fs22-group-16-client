@@ -6,8 +6,8 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import Hannibal_Logo from 'styles/ui/Hannibal_Logo.jpg';
-import wargroove_bw from 'styles/views/wargroove_bw.png';
+import Hannibal_Logo from 'styles/images/Hannibal_Logo.jpg';
+//import wargroove_bw from 'styles/views/wargroove_bw.png';
 
 /*
 It is possible to add multiple components inside a single file,
@@ -16,9 +16,8 @@ As a rule of thumb, use one file per component and only add small,
 specific components that belong to the main one in the same file.
  */
 
-const HomePage = props => {
+const HomePage = () => {
   const history = useHistory();
-
 
   const goJoinLobby = () => {
     // change status from ONLINE to OFFLINE
@@ -33,13 +32,10 @@ const HomePage = props => {
 
   return (
     <BaseContainer>
-      <div class="cover_image">
-        <image src = {wargroove_bw} alt = "bake" />
       <div className="HomePage container">
       <img className = "HomePage image" src={Hannibal_Logo} width="400" height="100"/>
           <div className="HomePage button-container">
             <Button
-            //disabled={!username || !name}
               width="100%"
               onClick={() => goJoinLobby()}
             >
@@ -54,7 +50,6 @@ const HomePage = props => {
               CREATE LOBBY
             </Button>
           </div>
-        </div>
         </div>
     </BaseContainer>
   );
