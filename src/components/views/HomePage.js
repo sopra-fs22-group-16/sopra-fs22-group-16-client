@@ -6,7 +6,7 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import PropTypes from "prop-types";
-import Hannibal_Logo from 'styles/images/Hannibal_Logo.jpg';
+import Hannibal_Logo from 'styles/images/hannibal_header.png';
 //import wargroove_bw from 'styles/views/wargroove_bw.png';
 
 /*

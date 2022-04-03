@@ -65,7 +65,7 @@ const PublicLobbies = () => {
             </Button>
             </div>
             <div className="PublicLobbies button-container">
-            <Button className = "secondary-button"
+            <Button className = "secondary-button return"
               
               width="100%"
               onClick={() => returnHome()}

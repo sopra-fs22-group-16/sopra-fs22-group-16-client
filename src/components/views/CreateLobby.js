@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
+import { api, handleError } from 'helpers/api';
 import 'styles/views/CreateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
@@ -24,44 +25,45 @@ const CreateLobby = props => {
     const history = useHistory();
 
     const [name, setName] = useState('');
-    const [mode, setMode] = useState("1V1");
-    const [access, setAccess] = useState("public");
+    const [gameMode, setGameMode] = useState("ONE_VS_ONE");
+    const [visibility, setVisibility] = useState("PUBLIC");
+    const [gameType, setGameType] = useState("UNRANKED");
 
-    const changeMode = (mode) => {
-        var otherMode = null;
-        if (mode === "1V1") {
-            otherMode = document.getElementById("2V2");
+    const changeGameMode = (gameMode) => {
+        var otherGameMode = null;
+        if (gameMode === "ONE_VS_ONE") {
+            otherGameMode = document.getElementById("TWO_VS_TWO");
 
         }
         else{
-            otherMode = document.getElementById("1V1");
+            otherGameMode = document.getElementById("ONE_VS_ONE");
         }
 
-        if (otherMode.checked = true) {
-            otherMode.checked = false;
+        if (otherGameMode.checked = true) {
+            otherGameMode.checked = false;
         }
 
-        setMode(mode);
+        setGameMode(gameMode);
     }
 
-    const changeAccess = (access) => {
-        var otherAccess= null;
-        if (access === "public") {
-            otherAccess = document.getElementById("private");
+    const changeVisibility = (visibility) => {
+        var otherVisibility= null;
+        if (visibility === "PUBLIC") {
+            otherVisibility = document.getElementById("PRIVATE");
 
         }
         else {
-            otherAccess = document.getElementById("public");
+            otherVisibility = document.getElementById("PUBLIC");
         }
 
-        if (otherAccess.checked = true) {
-            otherAccess.checked = false;
+        if (otherVisibility.checked = true) {
+            otherVisibility.checked = false;
         }
 
-        setAccess(access);
+        setVisibility(visibility);
     }
 
-    const postLobby = () => {
+    const postLobby = async () => {
 
         if (name === '') {
 
@@ -78,39 +80,40 @@ const CreateLobby = props => {
                 //request body sent to the backend to create a new lobby
                 const requestBody = {
                     "name": name,
-                    "mode": mode,
-                    "visibility": access
+                    "visibility": visibility,
+                    "gameMode": gameMode,
+                    "gameType": gameType
                 };
 
-                //**TODO** here we need to call to the backend to create the lobby
+                //call to the backend to create a new lobby
+                const response = await api.post('/v1/game/lobby', JSON.stringify(requestBody),
+                    {
+                        headers: { 'token': '' }
+                    }
+                );
 
-                // here we mocked the answer of the API create lobby
-                const responseBody = {
-                    "invitationCode": "37-Xfdws3s34",
-                    "name": requestBody.name,
-                    "lobbyId": 37,
-                    "members": [
-                        {
-                            "id": 1,
-                            "name": "Happy Einstein",
-                            "ready": false,
-                            "team": "1"
-                        }
-                    ],
-                    "owner": 1,
-                    "visibility": requestBody.visibility,
-                    "mode": requestBody.mode,
-                    "chatId": 11,
-                    "ranked": false
-                };
+                var resStatus = response.status;
+                const idLobby = response.data.lobby.id;
 
                 history.push({
-                    pathname: '/lobby/' + responseBody.lobbyId,
-                    state: responseBody
+                    pathname: '/lobby/' + idLobby,
+                    state: response.data
                 })
             } catch (error) {
-                //**TODO** control errors after call to the backend to create the lobby
-                alert("Something went wrong! ");
+                if (resStatus == 409) {
+                    const popUp = document.getElementById("invalidUser");
+                    popUp.style.display = "block";
+                    popUp.addEventListener("click", () => {
+                        popUp.style.display = "none"
+                    })
+                }
+                else {
+                    const popUp = document.getElementById("technicalError");
+                    popUp.style.display = "block";
+                    popUp.addEventListener("click", () => {
+                        popUp.style.display = "none"
+                    })
+                }
             }
         }
     }
@@ -123,7 +126,6 @@ const CreateLobby = props => {
         <BaseContainer>
             <div className="createlobby">
                 <label className="createlobby lobby-title">Create Lobby</label>
-                <Popup id="noUser">You have to enter a lobby name!</Popup>
                 <table className="lobby-info">
                     <tr>
                         <th>NAME</th>
@@ -138,13 +140,13 @@ const CreateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="1V1" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeMode("1V1")}/>
+                                <input id="ONE_VS_ONE" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeGameMode("ONE_VS_ONE")}/>
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="2V2" className="createlobby check" type="checkbox" onClick={() => changeMode("2V2")}/>
+                                <input id="TWO_VS_TWO" className="createlobby check" type="checkbox" onClick={() => changeGameMode("TWO_VS_TWO")}/>
                                 2x2
                             </label>
                         </td>
@@ -153,13 +155,13 @@ const CreateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="public" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeAccess("public")}/>
+                                <input id="PUBLIC" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeVisibility("PUBLIC")}/>
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="private" className="createlobby check" type="checkbox" onClick={() => changeAccess("private")}/>
+                                <input id="PRIVATE" className="createlobby check" type="checkbox" onClick={() => changeVisibility("PRIVATE")}/>
                                 Private
                             </label>
                         </td>
@@ -173,6 +175,9 @@ const CreateLobby = props => {
                     <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
                 </div>
             </div>
+            <Popup id="noUser">You have to enter a lobby name!</Popup>
+            <Popup id="invalidUser">Lobby name assignment is not possible - name already taken!</Popup>
+            <Popup id="technicalError">Ups! Something happened. Try again and if the error persists, contact the administrator.</Popup>
         </BaseContainer>
     );
 };
