@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { useEffect } from 'react';
 import { useHistory, useLocation, Link  } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import 'styles/views/Lobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
+
+import { api, handleError } from 'helpers/api';
 
 
 const Lobby = props => {
@@ -12,11 +14,15 @@ const Lobby = props => {
 
     //we get the information from the creation page
     const location = useLocation();
-    const lobbyData = location.state;
+    const [token, setToken] = useState(location.state.token);
+    const [lobbyData, setLobbyData] = useState(location.state.lobby);
 
-    // TODO: change this with data obtained from the API
-    const totalUsers = lobbyData.mode === '1V1' ? 2 : 4;
-    const readyUsers = lobbyData.members.length;
+    //displayed labels
+    const displayedMode = lobbyData.gameMode === "ONE_VS_ONE" ? "1v1" : "2v2";
+    const displayedVisibility = lobbyData.visibility === "PUBLIC" ? "public" : "private";
+    const presentPlayers = lobbyData.players.length;
+    const readyPlayers = 0;
+    const totalPlayers = lobbyData.gameMode === "ONE_VS_ONE" ? 2 : 4;
 
     const returnLobbies = () => {
         history.push('/lobbies');
@@ -32,7 +38,14 @@ const Lobby = props => {
     useEffect(() => {
         async function fetchData() {
             try {
-                //let socket = new WebSocket(getDomain());
+
+                const apiResponse = await api.get(URL = '/v1/game/lobby/' + lobbyData.id,
+                    {
+                        headers: { 'token': token }
+                    }
+                );
+                setLobbyData(apiResponse.data);
+
             } catch (error) {
                 alert("Something went wrong! ");
             }
@@ -47,8 +60,8 @@ const Lobby = props => {
                 <Link
                     className="lobby link"
                     to={{
-                        pathname: '/update-lobby/' + lobbyData.lobbyId,
-                        state: { name: lobbyData.name, mode: lobbyData.mode, visibility: lobbyData.visibility }
+                        pathname: '/update-lobby/' + lobbyData.id,
+                        state: { name: lobbyData.name, visibility: lobbyData.visibility, gameMode: lobbyData.gameMode }
                     }} >
                     update lobby information</Link>
                 <table className="lobby-info">
@@ -58,19 +71,19 @@ const Lobby = props => {
                     </tr>
                     <tr>
                         <th>ACCESS</th>
-                        <td>{lobbyData.visibility}</td>
+                        <td>{displayedVisibility}</td>
                     </tr>
                     <tr>
                         <th>MODE</th>
-                        <td>{lobbyData.mode}</td>
+                        <td>{displayedMode}</td>
                     </tr>
                     <tr>
                         <th>USERS PRESENT</th>
-                        <td>{readyUsers + '/' + totalUsers}</td>
+                        <td>{presentPlayers + '/' + totalPlayers}</td>
                     </tr>
                     <tr>
                         <th>USERS READY</th>
-                        <td>{readyUsers + '/' + totalUsers}</td>
+                        <td>{readyPlayers + '/' + totalPlayers}</td>
                     </tr>
                 </table>
                 <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
@@ -80,7 +93,7 @@ const Lobby = props => {
                         <th>TEAM</th>
                         <th>STATUS</th>
                     </tr>
-                    {lobbyData.members.map((user) => {
+                    {lobbyData.players.map((user) => {
                         return (
                             <tr key={user.id}>
                                 <td>{user.name}</td>
@@ -88,7 +101,7 @@ const Lobby = props => {
                                     <div className={'lobby teambox team' + user.team} ></div>
                                 </td>
                                 <td>
-                                    <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.status)} />
+                                    <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.ready)} />
                                 </td>
                             </tr>
                         )
@@ -96,7 +109,7 @@ const Lobby = props => {
                 </table>
                 <Link
                     className="lobby link"
-                    to={'/lobby/invite-users/' + lobbyData.lobbyId}>
+                    to={'/lobby/invite-users/' + lobbyData.id}>
                     invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
