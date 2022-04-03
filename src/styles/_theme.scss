@@ -7,11 +7,16 @@
    these values control the colors of your application.
    feel free to play around with these and see what other look you can come up with! :D
 */
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans&display=swap');
+$accent: #292420;
 
-$accent: #97ABFF;
-$accentDark: #123597;
-$textColor: white;
-$background: #262632;
+//
+$accentDark: #292420;
+$textColor: #FBC12E;
+$fontweight: 10;
+
+// form coolour and text
+$background: #414141;
 
 /* some constants */
 
@@ -22,8 +27,8 @@ $SMALL_WIDTH: 768px;
 
 /* some standard elements */
 /* fonts */
-$fontDefault: "M PLUS Rounded 1c", sans-serif;
-$fontMono: "Roboto Mono", monospace;
+$fontDefault: 'Noto Sans', sans-serif;
+$fontMono: "Noto Sans", monospace;
 
 /* a standard drop shadow */
 $dropShadow: 0 0.25em 0.25em rgba(0, 0, 0, 0.25);

@@ -1,0 +1,67 @@
+@import 'styles/theme';
+
+.PublicLobbies {
+  &.container {
+    margin-top: 2em;
+    @include center;
+    flex-direction: column;
+  }
+  &.h1 {
+    display: block;
+    text-align: center;
+    font-size: 2em;
+    padding-bottom: 2em;
+}
+  &.table {
+    border: 1px solid;
+    border-radius: 5px;
+    text-align: center;
+    width: 90%;
+    max-width: 30em;
+    font-size: 10px;
+  }
+  &.table tr.top{
+    //outline: 1px solid #FBC12E;
+    border-radius: 5px;
+    color: #604C18;
+    width: 100%;
+    text-transform: uppercase;
+  }
+
+  &.table td {
+    width: 100px;
+  }
+
+  // hover on clicking except the tr.top
+  &.table tr:not(tr.top):hover {
+    background-color: #604C18;
+    }
+  &.field {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+  &.input {
+    height: 35px;
+    padding-left: 15px;
+    margin-left: -4px;
+    border: none;
+    border-radius: 0.75em;
+    margin-bottom: 20px;
+    background: transparentize(white, 0.85);
+    color: $textColor;
+  }
+  &.label {
+    color: $textColor;
+    margin-bottom: 10px;
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+  
+  &.button-container {
+    display: flex;
+    margin-top: 1em;
+    width: 200px;
+  }
+
+  }
