@@ -1,0 +1,53 @@
+@import 'styles/theme';
+
+.LobbyByCode {
+  &.container {
+    margin-top: 2em;
+    @include center;
+    flex-direction: column;
+  }
+  &.h2 {
+    display: block;
+    text-align: center;
+    font-size: 1em;
+    padding-top: 2em;
+    padding-bottom: 2em;
+}
+
+  &.label {
+    color: $textColor;
+    margin-bottom: 10px;
+    text-transform: lowercase;
+    font-weight: 300;
+  }
+  
+  &.button-container {
+    display: flex;
+    margin-top: 1em;
+    width: 200px;
+  }
+
+  &.input-name {
+    color: #FBC12E;
+    background: #4A4A47;
+    border: 0.5px solid #FBC12E;
+    border-radius: 7px;
+    height: 32px;
+    width: 180px;
+}
+  &.link {
+    color: #4B72C2;
+    display: block;
+    text-align: center;
+    font-size: 0.8em;
+    padding-bottom: 4em;
+    text-decoration: none;
+
+    &.link:after {
+        content: "  \279C";
+        color: #4B72C2;
+        font-size: 1.2em;
+    }
+}
+
+  }
