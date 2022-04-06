@@ -15,96 +15,114 @@ specific components that belong to the main one in the same file.
  */
 
 const PublicLobbies = () => {
-  const history = useHistory();
+    const history = useHistory();
 
-  const returnHome = () => {
-    history.push('/home-page');
-  }
+    const returnHome = () => {
+        history.push('/home-page');
+    }
 
-  // TODO - UPDATE WITH JOINBYCODE PAGE
-  const joinLobbybyCode = () => {
-    history.push('/home-page');
-  }
+    // TODO - UPDATE WITH JOINBYCODE PAGE
+    const joinLobbybyCode = () => {
+        history.push('/home-page');
+    }
 
-  // TODO - jsonDataLobbies import from REST or whatever
-  return (
-    <BaseContainer>
-      <div className="PublicLobbies container">
-      <label className = "PublicLobbies h1"> Public Lobbies </label> 
-      <h2> Click on one of the lobbies to join</h2>
-      <table className= "PublicLobbies table">
-      <tr className = "top">
+    // TODO - jsonDataLobbies import from REST or whatever
+    return (
+        <BaseContainer>
+            <div className="PublicLobbies container">
+                <label className="PublicLobbies h1"> Public Lobbies </label>
+                <h2> Click on one of the lobbies to join</h2>
+                <table className="PublicLobbies table">
+                    <thead>
+                        <tr className="top">
+                            <th>Lobby name</th>
+                            <th>game mode</th>
+                            <th>players</th>
+                            <th>capacity</th>
+                        </tr>
+                    </thead>
+                </table>
+                <table className="PublicLobbies table">
+                    <tbody>
+                    {jsonDataLobbies.map((data, key) => {
+                        return (
+                                <LobbyInfo
+                                    key={key}
+                                    name={data.name}
+                                    mode={data.mode}
+                                    players={data.players}
+                                    capacity={data.capacity}
+                                />
 
-<th>Lobby name</th>
-<th>game mode</th>
-<th>players</th>
-<th>capacity</th>
-</tr>
-</table>
-<table className= "PublicLobbies table">
-        {jsonDataLobbies.map((data, key) => {
-          return (
-            <div key={key}>
-              <LobbyInfo
-                key={key}
-                name={data.name}
-                mode={data.mode}
-                players={data.players}
-                capacity={data.capacity}
-              />
+                        );
+                    })}
+                    </tbody>
+                </table>
+                <div className="PublicLobbies button-container">
+                    <Button
+                        width="100%"
+                        onClick={() => joinLobbybyCode()}
+                    >
+                        JOIN A LOBBY BY CODE
+                    </Button>
+                </div>
+                <div className="PublicLobbies button-container">
+                    <Button className="secondary-button"
+
+                            width="100%"
+                            onClick={() => returnHome()}
+                    >
+                        RETURN HOME
+                    </Button>
+                </div>
             </div>
-          );
-        })}
-        </table>
-        <div className="PublicLobbies button-container">
-            <Button
-              width="100%"
-              onClick={() => joinLobbybyCode()}
-            >
-              JOIN A LOBBY BY CODE
-            </Button>
-            </div>
-            <div className="PublicLobbies button-container">
-            <Button className = "secondary-button"
-              
-              width="100%"
-              onClick={() => returnHome()}
-            >
-              RETURN HOME
-            </Button>
-            </div>
-      </div>
-      </BaseContainer>
+        </BaseContainer>
 
-  );
-      };
+    );
+};
 
-  const LobbyInfo = ({ name, mode, players, capacity }) => {
+const LobbyInfo = ({name, mode, players, capacity}) => {
 
-  const history = useHistory();
+    const history = useHistory();
 
-  // TODO - update with to lobby/id instead
-  const gotoLobbyPage = () => {
-    history.push('/home-page');
-  }
-        if (!name) return <div />;
-        return (
-              <tr onClick={() => gotoLobbyPage()}>
-                <td>
-                  {name}
-                </td>
-                <td>
-                  {mode}
-                </td>
-                <td>
-                  {players}
-                </td>
-                <td>
-                  {capacity}
-                </td>
-              </tr>
-        );
-      };
+    // TODO - update with to lobby/id instead
+    const gotoLobbyPage = () => {
+
+        try {
+
+            //**TODO** here we need to call to the backend to join the lobby
+
+            /*
+            history.push({
+                pathname: '/lobby/' + responseBody.lobbyId,
+                state: responseBody
+            })
+            */
+
+        } catch (error) {
+            //**TODO** control errors after call to the backend to create the lobby
+            alert("Something went wrong! ");
+        }
+    }
+    if (!name) return <div/>;
+    return (
+
+        <tr onClick={() => gotoLobbyPage()}>
+            <td>
+                {name}
+            </td>
+            <td>
+                {mode}
+            </td>
+            <td>
+                {players}
+            </td>
+            <td>
+                {capacity}
+            </td>
+        </tr>
+    );
+};
 
 export default PublicLobbies;
 
