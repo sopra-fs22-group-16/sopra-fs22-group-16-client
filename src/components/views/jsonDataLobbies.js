@@ -1,8 +1,4 @@
 const jsonDataLobbies = [
-<<<<<<< HEAD
-     {"id": "213821839179","name":"Akshit","mode":"1 X 1", "players": "1", "capacity": "2"},
-  {"id": "1543","name":"Akshit2","mode":"2 X 2", "players": "3", "capacity": "4"}];
-=======
    {
       "id": 1,
       "name": "NewLobby1",
@@ -62,6 +58,5 @@ const jsonDataLobbies = [
       "invitationCode": "HANNIBAL"
   }
 ];
->>>>>>> a147948c5d1a77747403be54a85216d3e9e0454c
 
   export default jsonDataLobbies;

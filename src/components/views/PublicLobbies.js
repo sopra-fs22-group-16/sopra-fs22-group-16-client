@@ -1,14 +1,15 @@
 import React, {useState} from 'react';
+import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import 'styles/views/PublicLobbies.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import jsonDataLobbies from "./jsonDataLobbies";
+import {useEffect} from "react";
 import {BlockPopup, Popup} from "../ui/Popup";
 import {createTheme, LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
-import {useEffect} from "react";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -16,6 +17,7 @@ however be sure not to clutter your files with an endless amount!
 As a rule of thumb, use one file per component and only add small,
 specific components that belong to the main one in the same file.
  */
+
 const theme = createTheme({
     palette: {
         primary: {
@@ -35,6 +37,7 @@ const PublicLobbies = () => {
     const returnHome = () => {
         history.push('/home-page');
     }
+
 
     // TODO - UPDATE WITH JOINBYCODE PAGE
     const joinLobbybyCode = () => {
@@ -77,22 +80,16 @@ const PublicLobbies = () => {
     let content = null;
 
     if (jsonDataLobbies) {
-        content = (
-            <div>
-                {jsonDataLobbies.map((data, key) => (
-                    <div key={key}>
-                        <LobbyInfo
-                            id={data.id}
-                            key={key}
-                            name={data.name}
-                            mode={data.mode}
-                            players={data.players}
-                            visibility={data.visibility}
-                        />
-                    </div>
-                ))}
-
-            </div>
+        content = jsonDataLobbies.map((data, key) => (
+                <LobbyInfo
+                    id={data.id}
+                    key={key}
+                    name={data.name}
+                    mode={data.mode}
+                    players={data.players}
+                    visibility={data.visibility}
+                />
+            )
         );
     }
 
@@ -106,6 +103,7 @@ const PublicLobbies = () => {
                 <label className="PublicLobbies h1"> Public Lobbies </label>
                 <h2> Click on one of the lobbies to join</h2>
                 <table className="PublicLobbies table">
+                    <thead>
                     <tr className="top">
 
                         <th>Lobby name</th>
@@ -113,9 +111,12 @@ const PublicLobbies = () => {
                         <th>players</th>
                         <th>capacity</th>
                     </tr>
+                    </thead>
                 </table>
                 <table className="PublicLobbies table">
+                    <tbody>
                     {content}
+                    </tbody>
                 </table>
                 <div className="PublicLobbies button-container">
                     <Button
@@ -136,9 +137,9 @@ const PublicLobbies = () => {
                 </div>
             </div>
         </BaseContainer>
+
     );
 };
-
 
 const LobbyInfo = ({id, name, mode, players, visibility}) => {
 
@@ -148,9 +149,7 @@ const LobbyInfo = ({id, name, mode, players, visibility}) => {
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
     async function gotoLobbyPage() {
-
         try {
-
             const popUp = document.getElementById("joinLobbyPopUp");
             popUp.style.display = "block";
 
@@ -161,27 +160,31 @@ const LobbyInfo = ({id, name, mode, players, visibility}) => {
 
             // here we mocked the answer of the API create lobby
             const responseBody = {
-                "invitationCode": "37-Xfdws3s34",
-                "name": name,
-                "lobbyId": id,
-                "members": [
-                    {
-                        "id": 1,
-                        "name": "Happy Einstein",
-                        "ready": false,
-                        "team": "1"
-                    },
-                    {
-                        "id": 2,
-                        "name": "MR. M",
-                        "ready": false,
-                        "team": "2"
-                    }
-                ],
-                "owner": 1,
-                "visibility": "PUBLIC",
-                "mode": "ONE_VS_ONE",
-                "ranked": false
+                "lobby": {
+                    "id": id,
+                    "name": "name",
+                    "ownerId": 0,
+                    "players": [
+                        {
+                            "id": 0,
+                            "name": "Player-0",
+                            "ready": false,
+                            "team": 0
+                        },
+                        {
+                            "id": 1,
+                            "name": "Player-2",
+                            "ready": false,
+                            "team": 0
+                        },
+
+                    ],
+                    "visibility": "PUBLIC",
+                    "gameMode": "TWO_VS_TWO",
+                    "gameType": "UNRANKED",
+                    "invitationCode": "ABCDEFGH"
+                },
+                "token": "THIS IS MY TOKEN"
             };
 
             history.push({
@@ -205,7 +208,7 @@ const LobbyInfo = ({id, name, mode, players, visibility}) => {
         }
     }
 
-    if (visibility === "PRIVATE") return <div/>;
+    if (visibility === "PRIVATE") return null;
     return (
         <tr onClick={gotoLobbyPage}>
             <td>
@@ -223,5 +226,5 @@ const LobbyInfo = ({id, name, mode, players, visibility}) => {
         </tr>
     );
 };
-export default PublicLobbies;
 
+export default PublicLobbies;
