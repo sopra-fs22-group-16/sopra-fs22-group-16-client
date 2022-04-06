@@ -1,11 +1,13 @@
-import React, {useState} from 'react';
-import {api, handleError} from 'helpers/api';
+import React from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import 'styles/views/PublicLobbies.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import jsonDataLobbies from "./jsonDataLobbies";
+import {BlockPopup, Popup} from "../ui/Popup";
+import {createTheme, LinearProgress} from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -13,6 +15,17 @@ however be sure not to clutter your files with an endless amount!
 As a rule of thumb, use one file per component and only add small,
 specific components that belong to the main one in the same file.
  */
+
+const theme = createTheme({
+    palette: {
+        primary: {
+            main: '#FBC12E',
+        },
+        secondary: {
+            main: '#292420',
+        }
+    },
+});
 
 const PublicLobbies = () => {
     const history = useHistory();
@@ -29,6 +42,8 @@ const PublicLobbies = () => {
     // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
+            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={theme}><LinearProgress color="secondary" /></ThemeProvider></BlockPopup>
+            <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
             <div className="PublicLobbies container">
                 <label className="PublicLobbies h1"> Public Lobbies </label>
                 <h2> Click on one of the lobbies to join</h2>
@@ -48,6 +63,7 @@ const PublicLobbies = () => {
                         return (
                                 <LobbyInfo
                                     key={key}
+                                    id={data.id}
                                     name={data.name}
                                     mode={data.mode}
                                     players={data.players}
@@ -81,27 +97,66 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({name, mode, players, capacity}) => {
+const LobbyInfo = ({id, name, mode, players, capacity}) => {
 
     const history = useHistory();
 
     // TODO - update with to lobby/id instead
-    const gotoLobbyPage = () => {
+    async function gotoLobbyPage() {
 
         try {
 
-            //**TODO** here we need to call to the backend to join the lobby
+            const popUp = document.getElementById("joinLobbyPopUp");
+            popUp.style.display = "block";
 
-            /*
+            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
+            // Remove when implementing actual call implemented
+            // Simulate joining lobby
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // here we mocked the answer of the API create lobby
+            const responseBody = {
+                "invitationCode": "37-Xfdws3s34",
+                "name": name,
+                "lobbyId": id,
+                "members": [
+                    {
+                        "id": 1,
+                        "name": "Happy Einstein",
+                        "ready": false,
+                        "team": "1"
+                    },
+                    {
+                        "id": 2,
+                        "name": "MR. M",
+                        "ready": false,
+                        "team": "2"
+                    }
+                ],
+                "owner": 1,
+                "visibility": "PUBLIC",
+                "mode": "ONE_VS_ONE",
+                "ranked": false
+            };
+
             history.push({
-                pathname: '/lobby/' + responseBody.lobbyId,
+                pathname: '/lobby/' + id,
                 state: responseBody
             })
-            */
+
 
         } catch (error) {
             //**TODO** control errors after call to the backend to create the lobby
             alert("Something went wrong! ");
+
+            const blockPopUp = document.getElementById("joinLobbyPopUp");
+            blockPopUp.style.display = "none"
+
+            const popUp = document.getElementById("failedLobbyPopUp");
+            popUp.style.display = "block";
+            popUp.addEventListener("click", () => {
+                popUp.style.display = "none"
+            })
         }
     }
     if (!name) return <div/>;
