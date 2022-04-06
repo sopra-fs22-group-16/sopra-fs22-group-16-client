@@ -1,14 +1,11 @@
 import React, {useState} from 'react';
 import {api, handleError} from 'helpers/api';
-import User from 'models/User';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import PropTypes from "prop-types";
-import Hannibal_Logo from 'styles/images/Hannibal_Logo.jpg';
-//import wargroove_bw from 'styles/views/wargroove_bw.png';
-
+import hannibal_header from "styles/images/hannibal_header.png"
+import hannibal_background from "styles/images/wargroove_bw_light.png"
 /*
 It is possible to add multiple components inside a single file,
 however be sure not to clutter your files with an endless amount!
@@ -30,10 +27,10 @@ const HomePage = () => {
     history.push('/create-lobby');
   }
 
+  //<img className = "HomePage full-width" src = {hannibal_background}/>
   return (
-    <BaseContainer>
-      <div className="HomePage container">
-      <img className = "HomePage image" src={Hannibal_Logo} width="400" height="100"/>
+    <div className="HomePage container">
+      <img className = "HomePage image" src={hannibal_header} width="400" height="100"/>
           <div className="HomePage button-container">
             <Button
               width="100%"
@@ -50,8 +47,9 @@ const HomePage = () => {
               CREATE LOBBY
             </Button>
           </div>
+          <div className='HomePage page-extender'></div>
         </div>
-    </BaseContainer>
+  
   );
 };
 

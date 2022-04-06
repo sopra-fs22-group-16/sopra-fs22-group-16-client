@@ -2,42 +2,25 @@
 
 .HomePage {
 
+  &.body {
+    margin: 0;
+  }
+
 
   &.container {
-  //background: url(wargroove_bw.png);
-  //background-size: contain;
-    //background-size: 100% 100%;
-    //background-image: url("wargroove_bw.png");
-    margin-top: 2em;
-    background-repeat: repeat;
-    //min-height: 300px;
-    /* we include the center mixin defined in _theme.scss and save three duplicate lines :) */
-    @include center;
-    flex-direction: column;
-    background-size: contain;
-    //background-image: url("wargroove_bw.png");
-  }
-  
-  &.field {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &.input {
-    height: 35px;
-    padding-left: 15px;
-    margin-left: -4px;
-    border: none;
-    border-radius: 0.75em;
-    margin-bottom: 20px;
-    background: transparentize(white, 0.85);
-    color: $textColor;
-  }
-  &.label {
-    color: $textColor;
-    margin-bottom: 10px;
-    text-transform: lowercase;
-    font-weight: 300;
+  position:absolute;
+  top:0px;
+  right:0px;
+  bottom:0px;
+  left:0px;
+  margin-top: 0em;
+  margin-bottom: 0em;
+  min-width: 100%;
+  min-height: 100%;
+  @include center;
+  flex-direction: column;
+  background-size: cover;
+  background-image: url("../images/wargroove_bw_light.png");
   }
   
   &.button-container {
@@ -49,6 +32,10 @@
   &.image {
     margin-top: 100px;
     margin-bottom: 100px;
+  }
+  
+  &.page-extender {
+      margin-bottom: 20em;
   }
 
   }

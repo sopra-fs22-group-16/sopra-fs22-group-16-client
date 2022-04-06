@@ -17,40 +17,34 @@
     border-radius: 5px;
     text-align: center;
     width: 90%;
-    max-width: 30em;
+    max-width: 480px;
     font-size: 10px;
+	  margin: 0; padding: 0;
+	  //border-collapse: collapse;
   }
   &.table tr.top{
     //outline: 1px solid #FBC12E;
     border-radius: 5px;
     color: #604C18;
-    width: 100%;
     text-transform: uppercase;
   }
 
+  &.table th {
+    border-spacing: 0;
+	  width: 120px;
+	  margin: 0; padding: 0;
+  }
   &.table td {
-    width: 100px;
+    border-spacing: 0;
+	  width: 120px;
+	  margin: 0; padding: 0;
   }
 
   // hover on clicking except the tr.top
   &.table tr:not(tr.top):hover {
     background-color: #604C18;
     }
-  &.field {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
-  &.input {
-    height: 35px;
-    padding-left: 15px;
-    margin-left: -4px;
-    border: none;
-    border-radius: 0.75em;
-    margin-bottom: 20px;
-    background: transparentize(white, 0.85);
-    color: $textColor;
-  }
+
   &.label {
     color: $textColor;
     margin-bottom: 10px;

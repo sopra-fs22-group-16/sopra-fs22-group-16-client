@@ -28,51 +28,56 @@ const UpdateLobby = props => {
     const lobbyData = location.state;
 
     const [name, setName] = useState(lobbyData.name);
-    const [mode, setMode] = useState(lobbyData.mode);
-    const [access, setAccess] = useState(lobbyData.visibility);
+    const [gameMode, setGameMode] = useState(lobbyData.gameMode);
+    const [visibility, setVisibility] = useState(lobbyData.visibility);
 
     //default values for checkboxes
-    const modeDef1 = mode === "1V1" ? true : false;
-    const modeDef2 = mode === "2V2" ? true : false;
-    const modeVis1 = access === "public" ? true : false;
-    const modeVis2 = access === "private" ? true : false;
+    const gameModeDef1 = gameMode === "ONE_VS_ONE" ? true : false;
+    const gameModeDef2 = gameMode === "TWO_VS_TWO" ? true : false;
+    const modeVis1 = visibility === "PUBLIC" ? true : false;
+    const modeVis2 = visibility === "PRIVATE" ? true : false;
 
-    const changeMode = (mode) => {
-        var otherMode = null;
-        if (mode === "1V1") {
-            otherMode = document.getElementById("2V2");
+
+    //control to avoid both gameMode checkboxes to be clicked at the same time
+    const changeGameMode = (gameMode) => {
+        var otherGameMode = null;
+        if (gameMode === "ONE_VS_ONE") {
+            otherGameMode = document.getElementById("TWO_VS_TWO");
 
         }
         else{
-            otherMode = document.getElementById("1V1");
+            otherGameMode = document.getElementById("ONE_VS_ONE");
         }
 
-        if (otherMode.checked = true) {
-            otherMode.checked = false;
+        if (otherGameMode.checked = true) {
+            otherGameMode.checked = false;
         }
 
-        setMode(mode);
+        setGameMode(gameMode);
     }
 
-    const changeAccess = (access) => {
-        var otherAccess= null;
-        if (access === "public") {
-            otherAccess = document.getElementById("private");
+    //control to avoid both visibility checkboxes to be clicked at the same time
+    const changeVisibility = (visibility) => {
+        var otherVisibility= null;
+        if (visibility === "PUBLIC") {
+            otherVisibility = document.getElementById("PRIVATE");
 
         }
         else {
-            otherAccess = document.getElementById("public");
+            otherVisibility = document.getElementById("PUBLIC");
         }
 
-        if (otherAccess.checked = true) {
-            otherAccess.checked = false;
+        if (otherVisibility.checked = true) {
+            otherVisibility.checked = false;
         }
 
-        setAccess(access);
+        setVisibility(visibility);
     }
 
-    const postLobby = () => {
+    //call to the update backend API
+    const updateLobby = () => {
 
+        // here we control that the name lobby field is filled
         if (name === '') {
 
             const popUp = document.getElementById("noUser");
@@ -89,8 +94,8 @@ const UpdateLobby = props => {
                 //request body sent to the backend to update a lobby
                 const requestBody = {
                     "name": name,
-                    "mode": mode,
-                    "visibility": access
+                    "gameMode": gameMode,
+                    "visibility": visibility
                 };
 
                 //call to the backend to update a lobby
@@ -102,6 +107,7 @@ const UpdateLobby = props => {
         }
     }
 
+    // return to the lobby
     const returnLobby = () => {
         history.goBack();
     }
@@ -124,13 +130,13 @@ const UpdateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="1V1" className="updatelobby check" defaultChecked={modeDef1} type="checkbox" onClick={() => changeMode("1V1")}/>
+                                <input id="ONE_VS_ONE" className="updatelobby check" defaultChecked={gameModeDef1} type="checkbox" onClick={() => changeGameMode("ONE_VS_ONE")}/>
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="2V2" className="updatelobby check" defaultChecked={modeDef2} type="checkbox" onClick={() => changeMode("2V2")}/>
+                                <input id="TWO_VS_TWO" className="updatelobby check" defaultChecked={gameModeDef2} type="checkbox" onClick={() => changeGameMode("TWO_VS_TWO")}/>
                                 2x2
                             </label>
                         </td>
@@ -139,13 +145,13 @@ const UpdateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="public" className="updatelobby check" defaultChecked={modeVis1} type="checkbox" onClick={() => changeAccess("public")}/>
+                                <input id="PUBLIC" className="updatelobby check" defaultChecked={modeVis1} type="checkbox" onClick={() => changeVisibility("PUBLIC")}/>
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="private" className="updatelobby check" defaultChecked={modeVis2} type="checkbox" onClick={() => changeAccess("private")}/>
+                                <input id="PRIVATE" className="updatelobby check" defaultChecked={modeVis2} type="checkbox" onClick={() => changeVisibility("PRIVATE")}/>
                                 Private
                             </label>
                         </td>
@@ -153,7 +159,7 @@ const UpdateLobby = props => {
                 </table>
                 <div className="updatelobby space" />
                 <div className="updatelobby lobby-buttons">
-                    <Button onClick={() => postLobby()}>UPDATE LOBBY</Button>
+                    <Button onClick={() => updateLobby()}>UPDATE LOBBY</Button>
                 </div>
                 <div className="updatelobby lobby-buttons">
                     <Button className="return" onClick={() => returnLobby()}>RETURN LOBBY</Button>
