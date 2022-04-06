@@ -6,6 +6,7 @@ import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
 import UpdateLobby from "components/views/UpdateLobby";
 import Header from "components/views/Header"
+import LobbyByCode from "components/views/LobbyByCode";
  
  const AppRouter = () => {
      return (
@@ -32,6 +33,10 @@ import Header from "components/views/Header"
                 <Route exact path="/update-lobby/:id">
                     <Header/>
                     <UpdateLobby/>
+            </Route>
+            <Route exact path="/join-code">
+                     <Header/>
+                    <LobbyByCode/>
             </Route>
         </Switch>
     </BrowserRouter>
