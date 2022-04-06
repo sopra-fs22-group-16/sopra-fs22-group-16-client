@@ -158,7 +158,7 @@ const LobbyInfo = ({id, name, mode, players, visibility}) => {
             // Simulate joining lobby
             await new Promise(resolve => setTimeout(resolve, 2000));
 
-            // here we mocked the answer of the API create lobby
+            // here we mocked the answer of the API join lobby
             const responseBody = {
                 "lobby": {
                     "id": id,
