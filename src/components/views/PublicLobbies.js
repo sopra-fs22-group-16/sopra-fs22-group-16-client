@@ -41,7 +41,7 @@ const PublicLobbies = () => {
 
     // TODO - UPDATE WITH JOINBYCODE PAGE
     const joinLobbybyCode = () => {
-        history.push('/join_code');
+        history.push('/join-lobby');
     }
 
     // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html

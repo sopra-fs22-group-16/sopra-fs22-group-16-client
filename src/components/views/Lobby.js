@@ -60,7 +60,7 @@ const Lobby = props => {
                 <Link
                     className="lobby link"
                     to={{
-                        pathname: '/update_lobby/' + lobbyData.id,
+                        pathname: '/update-lobby/' + lobbyData.id,
                         state: { name: lobbyData.name, visibility: lobbyData.visibility, gameMode: lobbyData.gameMode, gameType: lobbyData.gameType, id:lobbyData.id },
                         token: token
                     }} >

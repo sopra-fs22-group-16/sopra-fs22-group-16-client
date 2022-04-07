@@ -18,13 +18,13 @@ const HomePage = () => {
 
   const goJoinLobby = () => {
     // change status from ONLINE to OFFLINE
-    history.push('/public_lobbies');
+    history.push('/public-lobbies');
   }
 
   const goCreateLobby = () => {
 
     // change status from ONLINE to OFFLINE
-    history.push('/create_lobby');
+    history.push('/create-lobby');
   }
 
   //<img className = "HomePage full-width" src = {hannibal_background}/>

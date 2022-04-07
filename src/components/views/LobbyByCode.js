@@ -96,7 +96,7 @@ const LobbyByCode = () => {
           <div className="LobbyByCode button-container">
             <Button
               width="100%"
-              onClick={() =>  history.push('/public_lobbies')}
+              onClick={() =>  history.push('/public-lobbies')}
             >
               RETURN TO PUBLIC LOBBIES
             </Button>

@@ -18,7 +18,7 @@ const AppRouter = () => {
                 <Route exact path="/home">
                     <HomePage />
                 </Route>
-                <Route exact path="/create_lobby">
+                <Route exact path="/create-lobby">
                     <Header />
                     <CreateLobby />
                 </Route>
@@ -26,15 +26,15 @@ const AppRouter = () => {
                     <Header />
                     <Lobby />
                 </Route>
-                <Route exact path="/public_lobbies">
+                <Route exact path="/public-lobbies">
                     <Header />
                     <PublicLobbies />
                 </Route>
-                <Route exact path="/update_lobby/:id">
+                <Route exact path="/update-lobby/:id">
                     <Header />
                     <UpdateLobby />
                 </Route>
-                <Route exact path="/join_code">
+                <Route exact path="/join-lobby">
                     <Header />
                     <LobbyByCode />
                 </Route>
