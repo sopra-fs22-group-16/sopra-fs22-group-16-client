@@ -1,4 +1,4 @@
-import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
+import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
 import Lobby from "components/views/Lobby";
 import CreateLobby from "components/views/CreateLobby";
@@ -7,40 +7,40 @@ import PublicLobbies from "components/views/PublicLobbies";
 import UpdateLobby from "components/views/UpdateLobby";
 import Header from "components/views/Header"
 import LobbyByCode from "components/views/LobbyByCode";
- 
- const AppRouter = () => {
-     return (
-    <BrowserRouter>
-             <Switch>
+
+const AppRouter = () => {
+    return (
+        <BrowserRouter>
+            <Switch>
                 <Route exact path="/">
-                     <Redirect to="/home-page" />
+                    <Redirect to="/home" />
                 </Route>
-                <Route exact path="/home-page">
+                <Route exact path="/home">
                     <HomePage />
-                     </Route>
-                <Route exact path="/create-lobby">
+                </Route>
+                <Route exact path="/create_lobby">
                     <Header />
                     <CreateLobby />
                 </Route>
                 <Route exact path="/lobby/:id">
-                    <Header/>
-                    <Lobby/>
+                    <Header />
+                    <Lobby />
                 </Route>
-                <Route exact path="/public-lobbies">
-                    <Header/>
-                    <PublicLobbies/>
+                <Route exact path="/public_lobbies">
+                    <Header />
+                    <PublicLobbies />
                 </Route>
-                <Route exact path="/update-lobby/:id">
-                    <Header/>
-                    <UpdateLobby/>
-            </Route>
-            <Route exact path="/join-code">
-                     <Header/>
-                    <LobbyByCode/>
-            </Route>
-        </Switch>
-    </BrowserRouter>
-     );
- };
+                <Route exact path="/update_lobby/:id">
+                    <Header />
+                    <UpdateLobby />
+                </Route>
+                <Route exact path="/join_code">
+                    <Header />
+                    <LobbyByCode />
+                </Route>
+            </Switch>
+        </BrowserRouter>
+    );
+};
 
 export default AppRouter;

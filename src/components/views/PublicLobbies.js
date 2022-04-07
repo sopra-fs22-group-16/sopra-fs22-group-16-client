@@ -35,13 +35,13 @@ const PublicLobbies = () => {
     const [lobbyData, setLobbyData] = useState(null);
 
     const returnHome = () => {
-        history.push('/home-page');
+        history.push('/home');
     }
 
 
     // TODO - UPDATE WITH JOINBYCODE PAGE
     const joinLobbybyCode = () => {
-        history.push('/join-code');
+        history.push('/join_code');
     }
 
     // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
