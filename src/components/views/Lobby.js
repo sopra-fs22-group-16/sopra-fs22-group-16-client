@@ -29,7 +29,7 @@ const Lobby = props => {
     }
 
     const returnHome = () => {
-        history.push('/home-page');
+        history.push('/home');
     }
 
     const changeStatus = (player) => {
@@ -61,7 +61,8 @@ const Lobby = props => {
                     className="lobby link"
                     to={{
                         pathname: '/update-lobby/' + lobbyData.id,
-                        state: { name: lobbyData.name, visibility: lobbyData.visibility, gameMode: lobbyData.gameMode }
+                        state: { name: lobbyData.name, visibility: lobbyData.visibility, gameMode: lobbyData.gameMode, gameType: lobbyData.gameType, id:lobbyData.id },
+                        token: token
                     }} >
                     update lobby information</Link>
                 <table className="lobby-info">

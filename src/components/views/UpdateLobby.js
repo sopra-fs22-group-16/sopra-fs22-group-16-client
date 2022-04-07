@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
+import { api, handleError } from 'helpers/api';
 import 'styles/views/UpdateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
@@ -26,56 +27,16 @@ const UpdateLobby = props => {
     //we get the information from the lobby
     const location = useLocation();
     const lobbyData = location.state;
+    const token = location.token;
 
     const [name, setName] = useState(lobbyData.name);
     const [gameMode, setGameMode] = useState(lobbyData.gameMode);
+    const [gameType, setGameType] = useState(lobbyData.gameType);
     const [visibility, setVisibility] = useState(lobbyData.visibility);
-
-    //default values for checkboxes
-    const gameModeDef1 = gameMode === "ONE_VS_ONE" ? true : false;
-    const gameModeDef2 = gameMode === "TWO_VS_TWO" ? true : false;
-    const modeVis1 = visibility === "PUBLIC" ? true : false;
-    const modeVis2 = visibility === "PRIVATE" ? true : false;
-
-
-    //control to avoid both gameMode checkboxes to be clicked at the same time
-    const changeGameMode = (gameMode) => {
-        var otherGameMode = null;
-        if (gameMode === "ONE_VS_ONE") {
-            otherGameMode = document.getElementById("TWO_VS_TWO");
-
-        }
-        else{
-            otherGameMode = document.getElementById("ONE_VS_ONE");
-        }
-
-        if (otherGameMode.checked = true) {
-            otherGameMode.checked = false;
-        }
-
-        setGameMode(gameMode);
-    }
-
-    //control to avoid both visibility checkboxes to be clicked at the same time
-    const changeVisibility = (visibility) => {
-        var otherVisibility= null;
-        if (visibility === "PUBLIC") {
-            otherVisibility = document.getElementById("PRIVATE");
-
-        }
-        else {
-            otherVisibility = document.getElementById("PUBLIC");
-        }
-
-        if (otherVisibility.checked = true) {
-            otherVisibility.checked = false;
-        }
-
-        setVisibility(visibility);
-    }
+    const [id, setId] = useState(lobbyData.id);
 
     //call to the update backend API
-    const updateLobby = () => {
+    const updateLobby = async () => {
 
         // here we control that the name lobby field is filled
         if (name === '') {
@@ -95,12 +56,16 @@ const UpdateLobby = props => {
                 const requestBody = {
                     "name": name,
                     "gameMode": gameMode,
+                    "gameType": gameType,
                     "visibility": visibility
-                };
+                }; 
 
                 //call to the backend to update a lobby
-                alert(JSON.stringify(requestBody));
-
+                const response = await api.put(`/v1/game/lobby/${id}`, JSON.stringify(requestBody),
+                    {
+                        headers: { 'token': token }
+                    }
+                );
             } catch (error) {
                 alert("Something went wrong! ");
             }
@@ -130,14 +95,29 @@ const UpdateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="ONE_VS_ONE" className="updatelobby check" defaultChecked={gameModeDef1} type="checkbox" onClick={() => changeGameMode("ONE_VS_ONE")}/>
+                                <input id="ONE_VS_ONE" className="updatelobby check" checked={gameMode === "ONE_VS_ONE"} type="checkbox" onClick={() => setGameMode("ONE_VS_ONE")} />
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="TWO_VS_TWO" className="updatelobby check" defaultChecked={gameModeDef2} type="checkbox" onClick={() => changeGameMode("TWO_VS_TWO")}/>
+                                <input id="TWO_VS_TWO" className="updatelobby check" checked={gameMode === "TWO_VS_TWO"} type="checkbox" onClick={() => setGameMode("TWO_VS_TWO")} />
                                 2x2
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>TYPE</th>
+                        <td>
+                            <label>
+                                <input id="UNRANKED" className="createlobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
+                                Unranked
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input id="RANKED" className="createlobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
+                                Ranked
                             </label>
                         </td>
                     </tr>
@@ -145,13 +125,13 @@ const UpdateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="PUBLIC" className="updatelobby check" defaultChecked={modeVis1} type="checkbox" onClick={() => changeVisibility("PUBLIC")}/>
+                                <input id="PUBLIC" className="updatelobby check" checked={visibility === "PUBLIC"} type="checkbox" onClick={() => setVisibility("PUBLIC")} />
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="PRIVATE" className="updatelobby check" defaultChecked={modeVis2} type="checkbox" onClick={() => changeVisibility("PRIVATE")}/>
+                                <input id="PRIVATE" className="updatelobby check" checked={visibility === "PRIVATE"} type="checkbox" onClick={() => setVisibility("PRIVATE")} />
                                 Private
                             </label>
                         </td>

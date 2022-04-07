@@ -29,40 +29,6 @@ const CreateLobby = props => {
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
 
-    const changeGameMode = (gameMode) => {
-        var otherGameMode = null;
-        if (gameMode === "ONE_VS_ONE") {
-            otherGameMode = document.getElementById("TWO_VS_TWO");
-
-        }
-        else{
-            otherGameMode = document.getElementById("ONE_VS_ONE");
-        }
-
-        if (otherGameMode.checked = true) {
-            otherGameMode.checked = false;
-        }
-
-        setGameMode(gameMode);
-    }
-
-    const changeVisibility = (visibility) => {
-        var otherVisibility= null;
-        if (visibility === "PUBLIC") {
-            otherVisibility = document.getElementById("PRIVATE");
-
-        }
-        else {
-            otherVisibility = document.getElementById("PUBLIC");
-        }
-
-        if (otherVisibility.checked = true) {
-            otherVisibility.checked = false;
-        }
-
-        setVisibility(visibility);
-    }
-
     const postLobby = async () => {
 
         if (name === '') {
@@ -93,14 +59,14 @@ const CreateLobby = props => {
                 );
 
                 var resStatus = response.status;
-                const idLobby = response.data.lobby.id;
+                const lobbyId = response.data.lobby.id;
 
                 history.push({
-                    pathname: '/lobby/' + idLobby,
+                    pathname: '/lobby/' + lobbyId,
                     state: response.data
                 })
             } catch (error) {
-                if (resStatus == 409) {
+                if (resStatus === 409) {
                     const popUp = document.getElementById("invalidUser");
                     popUp.style.display = "block";
                     popUp.addEventListener("click", () => {
@@ -119,7 +85,7 @@ const CreateLobby = props => {
     }
 
     const returnHome = () => {
-        history.push('/home-page');
+        history.push('/home');
     }
 
     return (
@@ -140,14 +106,29 @@ const CreateLobby = props => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="ONE_VS_ONE" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeGameMode("ONE_VS_ONE")}/>
+                                <input id="ONE_VS_ONE" className="createlobby check" checked={gameMode === "ONE_VS_ONE"} type="checkbox" onClick={() => setGameMode("ONE_VS_ONE")} />
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="TWO_VS_TWO" className="createlobby check" type="checkbox" onClick={() => changeGameMode("TWO_VS_TWO")}/>
+                                <input id="TWO_VS_TWO" className="createlobby check" checked={gameMode === "TWO_VS_TWO"} type="checkbox" onClick={() => setGameMode("TWO_VS_TWO")} />
                                 2x2
+                            </label>
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>TYPE</th>
+                        <td>
+                            <label>
+                                <input id="UNRANKED" className="createlobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
+                                Unranked
+                            </label>
+                        </td>
+                        <td>
+                            <label>
+                                <input id="RANKED" className="createlobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
+                                Ranked
                             </label>
                         </td>
                     </tr>
@@ -155,13 +136,13 @@ const CreateLobby = props => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="PUBLIC" className="createlobby check" defaultChecked={true} type="checkbox" onClick={() => changeVisibility("PUBLIC")}/>
+                                <input id="PUBLIC" className="createlobby check" checked={visibility === "PUBLIC"} type="checkbox" onClick={() => setVisibility("PUBLIC")} />
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="PRIVATE" className="createlobby check" type="checkbox" onClick={() => changeVisibility("PRIVATE")}/>
+                                <input id="PRIVATE" className="createlobby check" checked={visibility === "PRIVATE"} type="checkbox" onClick={() => setVisibility("PRIVATE")} />
                                 Private
                             </label>
                         </td>
