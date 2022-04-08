@@ -69,6 +69,7 @@ const UpdateLobby = props => {
 
             } catch (error) {
                 if (error.response != null) {
+                    // conflict in lobby name
                     if (error.response.status == 409) {
                         const popUp = document.getElementById("invalidUser");
                         popUp.style.display = "block";
