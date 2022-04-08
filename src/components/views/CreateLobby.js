@@ -58,7 +58,6 @@ const CreateLobby = props => {
                     }
                 );
 
-                var resStatus = response.status;
                 const lobbyId = response.data.lobby.id;
 
                 history.push({
@@ -66,12 +65,21 @@ const CreateLobby = props => {
                     state: response.data
                 })
             } catch (error) {
-                if (resStatus = 409) {
-                    const popUp = document.getElementById("invalidUser");
-                    popUp.style.display = "block";
-                    popUp.addEventListener("click", () => {
-                        popUp.style.display = "none"
-                    })
+                if (error.response != null) {
+                    if (error.response.status == 409) {
+                        const popUp = document.getElementById("invalidUser");
+                        popUp.style.display = "block";
+                        popUp.addEventListener("click", () => {
+                            popUp.style.display = "none"
+                        })
+                    }
+                    else {
+                        const popUp = document.getElementById("technicalError");
+                        popUp.style.display = "block";
+                        popUp.addEventListener("click", () => {
+                            popUp.style.display = "none"
+                        })
+                    }
                 }
                 else {
                     const popUp = document.getElementById("technicalError");
