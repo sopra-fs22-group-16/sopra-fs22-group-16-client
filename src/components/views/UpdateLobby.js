@@ -66,8 +66,24 @@ const UpdateLobby = props => {
                         headers: { 'token': token }
                     }
                 );
+
+                var resStatus = response.status;
+
             } catch (error) {
-                alert("Something went wrong! ");
+                if (resStatus = 409) {
+                    const popUp = document.getElementById("invalidUser");
+                    popUp.style.display = "block";
+                    popUp.addEventListener("click", () => {
+                        popUp.style.display = "none"
+                    })
+                }
+                else {
+                    const popUp = document.getElementById("technicalError");
+                    popUp.style.display = "block";
+                    popUp.addEventListener("click", () => {
+                        popUp.style.display = "none"
+                    })
+                }
             }
         }
     }
@@ -146,6 +162,8 @@ const UpdateLobby = props => {
                 </div>
             </div>
             <Popup id="noUser">You have to enter a lobby name!</Popup>
+            <Popup id="invalidUser">Lobby name assignment is not possible - name already taken!</Popup>
+            <Popup id="technicalError">Ups! Something happened. Try again and if the error persists, contact the administrator.</Popup>
         </BaseContainer>
     );
 };

@@ -66,7 +66,7 @@ const CreateLobby = props => {
                     state: response.data
                 })
             } catch (error) {
-                if (resStatus === 409) {
+                if (resStatus = 409) {
                     const popUp = document.getElementById("invalidUser");
                     popUp.style.display = "block";
                     popUp.addEventListener("click", () => {

@@ -7,6 +7,8 @@ import PublicLobbies from "components/views/PublicLobbies";
 import UpdateLobby from "components/views/UpdateLobby";
 import Header from "components/views/Header"
 import LobbyByCode from "components/views/LobbyByCode";
+import ShareQRCode from "components/views/ShareQRCode";
+import ScanQRCode from "components/views/ScanQRCode";
 
 const AppRouter = () => {
     return (
@@ -37,6 +39,14 @@ const AppRouter = () => {
                 <Route exact path="/join-lobby">
                     <Header />
                     <LobbyByCode />
+                </Route>
+                <Route exact path="/lobby/:id/share/qr">
+                    <Header />
+                    <ShareQRCode />
+                </Route>
+                <Route exact path="/lobby/:id/scan/qr">
+                    <Header />
+                    <ScanQRCode />
                 </Route>
             </Switch>
         </BrowserRouter>
