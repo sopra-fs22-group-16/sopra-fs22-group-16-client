@@ -26,7 +26,7 @@ const Map = props => {
         ));
     }
 
-    // If content is not set display loading bar
+    // If content is not set, display loading bar
     if(!content) return (
         <div className={"loadingContainer"}>
             <ThemeProvider theme={defaultTheme}>

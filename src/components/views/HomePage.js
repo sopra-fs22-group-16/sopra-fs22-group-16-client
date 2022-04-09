@@ -14,43 +14,43 @@ specific components that belong to the main one in the same file.
  */
 
 const HomePage = () => {
-  const history = useHistory();
+    const history = useHistory();
 
-  const goJoinLobby = () => {
-    // change status from ONLINE to OFFLINE
-    history.push('/public-lobbies');
-  }
+    const goJoinLobby = () => {
+        // change status from ONLINE to OFFLINE
+        history.push('/public-lobbies');
+    }
 
-  const goCreateLobby = () => {
+    const goCreateLobby = () => {
 
-    // change status from ONLINE to OFFLINE
-    history.push('/create-lobby');
-  }
+        // change status from ONLINE to OFFLINE
+        history.push('/create-lobby');
+    }
 
-  //<img className = "HomePage full-width" src = {hannibal_background}/>
-  return (
-    <div className="HomePage container">
-      <img className = "HomePage image" src={hannibal_header} width="400" height="100"/>
-          <div className="HomePage button-container">
-            <Button
-              width="100%"
-              onClick={() => goJoinLobby()}
-            >
-              JOIN LOBBY
-            </Button>
+    //<img className = "HomePage full-width" src = {hannibal_background}/>
+    return (
+        <div className="HomePage container">
+            <img className = "HomePage image" src={hannibal_header} width="400" height="100"/>
+            <div className="HomePage button-container">
+                <Button
+                    width="100%"
+                    onClick={() => goJoinLobby()}
+                >
+                    JOIN LOBBY
+                </Button>
             </div>
             <div className="HomePage button-container">
-            <Button
-              width="100%"
-              onClick={() => goCreateLobby()}
-            >
-              CREATE LOBBY
-            </Button>
-          </div>
-          <div className='HomePage page-extender'></div>
+                <Button
+                    width="100%"
+                    onClick={() => goCreateLobby()}
+                >
+                    CREATE LOBBY
+                </Button>
+            </div>
+            <div className='HomePage page-extender'></div>
         </div>
-  
-  );
+
+    );
 };
 
 /**

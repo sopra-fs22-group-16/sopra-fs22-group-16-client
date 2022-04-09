@@ -7,12 +7,12 @@ This file contains the general and shared style of your application.
 
 h1 {
   font-size: large;
-  font-weight: $fontweight;
+  font-weight: $fontWeight;
 }
 
 h2 {
   font-size: medium;
-  font-weight: $fontweight;
+  font-weight: $fontWeight;
 }
 
 body {
@@ -23,7 +23,7 @@ body {
   font-family: $fontDefault;
   //background-image: url("wargroove_bw_dark.png");
   background-color: rgb(30,31,31);
-  font-weight: $fontweight;
+  font-weight: $fontWeight;
 }
 
 input,
