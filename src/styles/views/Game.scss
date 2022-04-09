@@ -43,15 +43,14 @@ body {
     width: 162px;
     height: 120px;
   }
+}
 
-  img:hover {
-    @include transform(rotateZ(25deg) rotateY(0deg));
+.surrenderFlagContainer:hover img {
+  @include transform(rotateZ(25deg) rotateY(0deg));
 
-    animation: wave 2s infinite ease-in-out -0.5s;
+  animation: wave 2s infinite ease-in-out -0.5s;
 
-    transform-origin: 50% 100%;
-
-  }
+  transform-origin: 50% 100%;
 }
 
 @keyframes wave {
