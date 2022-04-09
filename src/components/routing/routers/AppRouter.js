@@ -44,7 +44,7 @@ const AppRouter = () => {
                     <Header />
                     <ShareQRCode />
                 </Route>
-                <Route exact path="/lobby/:id/scan/qr">
+                <Route exact path="/lobby/scan/qr">
                     <Header />
                     <ScanQRCode />
                 </Route>
