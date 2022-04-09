@@ -1,4 +1,4 @@
-import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
+import {BrowserRouter, Redirect, Route, Switch} from "react-router-dom";
 
 import Lobby from "components/views/Lobby";
 import CreateLobby from "components/views/CreateLobby";
@@ -7,36 +7,43 @@ import PublicLobbies from "components/views/PublicLobbies";
 import UpdateLobby from "components/views/UpdateLobby";
 import Header from "components/views/Header"
 import LobbyByCode from "components/views/LobbyByCode";
+import {GameGuard} from "../routeProtectors/GameGuard";
+import Game from "../../views/game/Game";
 
 const AppRouter = () => {
     return (
         <BrowserRouter>
             <Switch>
                 <Route exact path="/">
-                    <Redirect to="/home" />
+                    <Redirect to="/home"/>
                 </Route>
                 <Route exact path="/home">
-                    <HomePage />
+                    <HomePage/>
                 </Route>
                 <Route exact path="/create-lobby">
-                    <Header />
-                    <CreateLobby />
+                    <Header/>
+                    <CreateLobby/>
                 </Route>
                 <Route exact path="/lobby/:id">
-                    <Header />
-                    <Lobby />
+                    <Header/>
+                    <Lobby/>
                 </Route>
                 <Route exact path="/public-lobbies">
-                    <Header />
-                    <PublicLobbies />
+                    <Header/>
+                    <PublicLobbies/>
                 </Route>
                 <Route exact path="/update-lobby/:id">
-                    <Header />
-                    <UpdateLobby />
+                    <Header/>
+                    <UpdateLobby/>
                 </Route>
                 <Route exact path="/join-lobby">
-                    <Header />
-                    <LobbyByCode />
+                    <Header/>
+                    <LobbyByCode/>
+                </Route>
+                <Route path="/game">
+                    <GameGuard>
+                        <Game/>
+                    </GameGuard>
                 </Route>
             </Switch>
         </BrowserRouter>

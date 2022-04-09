@@ -8,8 +8,9 @@ import BaseContainer from "components/ui/BaseContainer";
 import jsonDataLobbies from "./jsonDataLobbies";
 import {useEffect} from "react";
 import {BlockPopup, Popup} from "../ui/Popup";
-import {createTheme, LinearProgress} from "@mui/material";
+import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
+import defaultTheme from "../../styles/themes/defaulTheme";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -17,17 +18,6 @@ however be sure not to clutter your files with an endless amount!
 As a rule of thumb, use one file per component and only add small,
 specific components that belong to the main one in the same file.
  */
-
-const theme = createTheme({
-    palette: {
-        primary: {
-            main: '#FBC12E',
-        },
-        secondary: {
-            main: '#292420',
-        }
-    },
-});
 
 const PublicLobbies = () => {
     const history = useHistory();
@@ -96,7 +86,7 @@ const PublicLobbies = () => {
     // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
-            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={theme}><LinearProgress
+            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
                 color="secondary"/></ThemeProvider></BlockPopup>
             <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
             <div className="PublicLobbies container">
