@@ -22,11 +22,16 @@
 	  margin: 0; padding: 0;
 	  //border-collapse: collapse;
   }
+
   &.table tr.top{
     //outline: 1px solid #FBC12E;
     border-radius: 5px;
     color: #604C18;
     text-transform: uppercase;
+  }
+
+  &.table tr{
+    height: 32px;
   }
 
   &.table th {

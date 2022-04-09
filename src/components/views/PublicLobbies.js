@@ -11,6 +11,7 @@ import {BlockPopup, Popup} from "../ui/Popup";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import defaultTheme from "../../styles/themes/defaulTheme";
+import DynamicPopUp from "../ui/DynamicPopUp";
 
 /*
 It is possible to add multiple components inside a single file,
@@ -23,6 +24,8 @@ const PublicLobbies = () => {
     const history = useHistory();
     //const RESTDataLobbies = api.get(URL = '/v1/game/lobbies/');
     const [lobbyData, setLobbyData] = useState(null);
+    const [isJoining, setJoining] = useState(false);
+    const [displayErrorMessage, setDisplayErrorMessage] = useState({open: false, message: ""});
 
     const returnHome = () => {
         history.push('/home');
@@ -67,6 +70,59 @@ const PublicLobbies = () => {
         fetchData();
     }, []);
 
+    async function joinLobby(id) {
+        try {
+            setJoining(true);
+
+            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
+            // Remove when implementing actual call implemented
+            // Simulate joining lobby
+            await new Promise(resolve => setTimeout(resolve, 2000));
+
+            // here we mocked the answer of the API join lobby
+            const responseBody = {
+                "lobby": {
+                    "id": id,
+                    "name": "name",
+                    "ownerId": 0,
+                    "players": [
+                        {
+                            "id": 0,
+                            "name": "Player-0",
+                            "ready": false,
+                            "team": 0
+                        },
+                        {
+                            "id": 1,
+                            "name": "Player-2",
+                            "ready": false,
+                            "team": 0
+                        },
+
+                    ],
+                    "visibility": "PUBLIC",
+                    "gameMode": "TWO_VS_TWO",
+                    "gameType": "UNRANKED",
+                    "invitationCode": "ABCDEFGH"
+                },
+                "token": "THIS IS MY TOKEN"
+            };
+
+            history.push({
+                pathname: '/lobby/' + id,
+                state: responseBody
+            })
+
+        } catch (error) {
+
+            setJoining(false);
+
+            let errorMessage = "Did not get a response!";
+            setDisplayErrorMessage({open: true, message: errorMessage})
+
+        }
+    }
+
     let content = null;
 
     if (jsonDataLobbies) {
@@ -78,6 +134,7 @@ const PublicLobbies = () => {
                     mode={data.mode}
                     players={data.players}
                     visibility={data.visibility}
+                    joinLobby={joinLobby}
                 />
             )
         );
@@ -86,9 +143,20 @@ const PublicLobbies = () => {
     // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
-            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
-                color="secondary"/></ThemeProvider></BlockPopup>
-            <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
+            <ThemeProvider theme={defaultTheme}>
+                <DynamicPopUp open={isJoining} information={"Joining Lobby"}>
+                    <div style={{width: '100%'}}>
+                        <LinearProgress color="primary"/>
+                    </div>
+                </DynamicPopUp>
+                <DynamicPopUp open={displayErrorMessage.open} information={displayErrorMessage.message}>
+                    <Button onClick={() =>
+                        setDisplayErrorMessage({open: false, message: ""})
+                    }>
+                        Close
+                    </Button>
+                </DynamicPopUp>
+            </ThemeProvider>
             <div className="PublicLobbies container">
                 <label className="PublicLobbies h1"> Public Lobbies </label>
                 <h2> Click on one of the lobbies to join</h2>
@@ -131,76 +199,16 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({id, name, mode, players, visibility}) => {
+const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
 
     const history = useHistory();
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
-    async function gotoLobbyPage() {
-        try {
-            const popUp = document.getElementById("joinLobbyPopUp");
-            popUp.style.display = "block";
-
-            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
-            // Remove when implementing actual call implemented
-            // Simulate joining lobby
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // here we mocked the answer of the API join lobby
-            const responseBody = {
-                "lobby": {
-                    "id": id,
-                    "name": "name",
-                    "ownerId": 0,
-                    "players": [
-                        {
-                            "id": 0,
-                            "name": "Player-0",
-                            "ready": false,
-                            "team": 0
-                        },
-                        {
-                            "id": 1,
-                            "name": "Player-2",
-                            "ready": false,
-                            "team": 0
-                        },
-
-                    ],
-                    "visibility": "PUBLIC",
-                    "gameMode": "TWO_VS_TWO",
-                    "gameType": "UNRANKED",
-                    "invitationCode": "ABCDEFGH"
-                },
-                "token": "THIS IS MY TOKEN"
-            };
-
-            history.push({
-                pathname: '/lobby/' + id,
-                state: responseBody
-            })
-
-
-        } catch (error) {
-            //**TODO** control errors after call to the backend to create the lobby
-            alert("Something went wrong! ");
-
-            const blockPopUp = document.getElementById("joinLobbyPopUp");
-            blockPopUp.style.display = "none"
-
-            const popUp = document.getElementById("failedLobbyPopUp");
-            popUp.style.display = "block";
-            popUp.addEventListener("click", () => {
-                popUp.style.display = "none"
-            })
-        }
-    }
-
     if (visibility === "PRIVATE") return null;
     return (
-        <tr onClick={gotoLobbyPage}>
+        <tr onClick={() => joinLobby(id)}>
             <td>
                 {name}
             </td>
