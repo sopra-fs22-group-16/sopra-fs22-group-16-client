@@ -9,7 +9,8 @@ import jsonDataLobbies from "./jsonDataLobbies";
 import {useEffect} from "react";
 import {BlockPopup, Popup} from "../ui/Popup";
 import {createTheme, LinearProgress} from "@mui/material";
-import {ThemeProvider} from "@emotion/react";
+import { ThemeProvider } from "@emotion/react";
+import Header from "components/views/Header"
 
 /*
 It is possible to add multiple components inside a single file,
@@ -96,6 +97,7 @@ const PublicLobbies = () => {
     // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
+            <Header />
             <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={theme}><LinearProgress
                 color="secondary"/></ThemeProvider></BlockPopup>
             <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>

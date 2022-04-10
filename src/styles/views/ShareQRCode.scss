@@ -1,0 +1,28 @@
+@import 'styles/theme';
+
+
+.shareqr {
+
+    &.message {
+        color: #FBC12E;
+        display: block;
+        text-align: center;
+        font-size: 1.2em;
+        padding-bottom: 2em;
+        width: 320px;
+        margin: auto;
+    }
+
+    &.code {
+        display: block;
+        margin: auto;
+        width: 220px;
+        padding: 1em;
+        border: 2.5px solid #FBC12E;
+    }
+
+    &.lobby-buttons {
+        padding-top: 1.5em;
+        text-align: center;
+    }
+}

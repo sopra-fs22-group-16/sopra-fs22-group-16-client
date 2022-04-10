@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
-import { useHistory, useLocation } from 'react-router-dom';
-import { Button } from 'components/ui/Button';
-import { Popup } from 'components/ui/Popup';
-import { api, handleError } from 'helpers/api';
+import React, { useState, useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { api } from 'helpers/api';
 import 'styles/views/UpdateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
+import { Button } from 'components/ui/Button';
+import { Popup } from 'components/ui/Popup';
+import Header from "components/views/Header"
 
 
 const FormField = props => {
@@ -20,20 +21,44 @@ const FormField = props => {
     );
 };
 
-const UpdateLobby = props => {
+const UpdateLobby = ({ id }) => {
 
     const history = useHistory();
 
-    //we get the information from the lobby
-    const location = useLocation();
-    const lobbyData = location.state;
-    const token = location.token;
+    const token = localStorage.getItem('token');
 
-    const [name, setName] = useState(lobbyData.name);
-    const [gameMode, setGameMode] = useState(lobbyData.gameMode);
-    const [gameType, setGameType] = useState(lobbyData.gameType);
-    const [visibility, setVisibility] = useState(lobbyData.visibility);
-    const [id, setId] = useState(lobbyData.id);
+    const [name, setName] = useState(null);
+    const [gameMode, setGameMode] = useState(null);
+    const [gameType, setGameType] = useState(null);
+    const [visibility, setVisibility] = useState(null);
+
+
+    useEffect(() => {
+        async function fetchData() {
+            try {
+
+                const apiResponse = await api.get(`/v1/game/lobby/${id}`,
+                    {
+                        headers: { 'token': token }
+                    }
+                );
+
+                //set different values obtained from the API
+                setGameMode(apiResponse.data.gameMode);
+                setVisibility(apiResponse.data.visibility);
+                setName(apiResponse.data.name);
+                setGameType(apiResponse.data.gameType);
+
+            } catch (error) {
+                const popUp = document.getElementById("technicalError");
+                popUp.style.display = "block";
+                popUp.addEventListener("click", () => {
+                    popUp.style.display = "none"
+                })
+            }
+        }
+        fetchData();
+    }, []);
 
     //call to the update backend API
     const updateLobby = async () => {
@@ -58,16 +83,46 @@ const UpdateLobby = props => {
                     "gameMode": gameMode,
                     "gameType": gameType,
                     "visibility": visibility
-                }; 
+                };
 
                 //call to the backend to update a lobby
-                const response = await api.put(`/v1/game/lobby/${id}`, JSON.stringify(requestBody),
+                await api.put(`/v1/game/lobby/${id}`, JSON.stringify(requestBody),
                     {
                         headers: { 'token': token }
                     }
                 );
+
+                const popUp = document.getElementById("updatedLobby");
+                popUp.style.display = "block";
+                popUp.addEventListener("click", () => {
+                    popUp.style.display = "none"
+                })
+
             } catch (error) {
-                alert("Something went wrong! ");
+                if (error.response != null) {
+                    // conflict in lobby name
+                    if (error.response.status === 409) {
+                        const popUp = document.getElementById("invalidUser");
+                        popUp.style.display = "block";
+                        popUp.addEventListener("click", () => {
+                            popUp.style.display = "none"
+                        })
+                    }
+                    else {
+                        const popUp = document.getElementById("technicalError");
+                        popUp.style.display = "block";
+                        popUp.addEventListener("click", () => {
+                            popUp.style.display = "none"
+                        })
+                    }
+                }
+                else {
+                    const popUp = document.getElementById("technicalError");
+                    popUp.style.display = "block";
+                    popUp.addEventListener("click", () => {
+                        popUp.style.display = "none"
+                    })
+                }
             }
         }
     }
@@ -79,6 +134,7 @@ const UpdateLobby = props => {
 
     return (
         <BaseContainer>
+            <Header />
             <div className="updatelobby">
                 <label className="updatelobby lobby-title">Update Lobby</label>
                 <table className="lobby-info">
@@ -146,6 +202,9 @@ const UpdateLobby = props => {
                 </div>
             </div>
             <Popup id="noUser">You have to enter a lobby name!</Popup>
+            <Popup id="invalidUser">Lobby name assignment is not possible - name already taken!</Popup>
+            <Popup id="technicalError">Ups! Something happened. Try again and if the error persists, contact the administrator.</Popup>
+            <Popup id="updatedLobby">Lobby correctly updated!</Popup>
         </BaseContainer>
     );
 };
