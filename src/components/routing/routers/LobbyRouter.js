@@ -1,7 +1,6 @@
-import { Redirect, Route } from "react-router-dom";
+import { Switch, Redirect, Route } from "react-router-dom";
 import PropTypes from 'prop-types';
 import Lobby from "components/views/Lobby";
-import { Switch } from "react-router-dom";
 import UpdateLobby from "components/views/UpdateLobby";
 import ShareQRCode from "components/views/ShareQRCode";
 import ScanQRCode from "components/views/ScanQRCode";
