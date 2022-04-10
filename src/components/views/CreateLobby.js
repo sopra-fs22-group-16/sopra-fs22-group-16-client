@@ -2,9 +2,11 @@ import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
-import { api, handleError } from 'helpers/api';
+import { api } from 'helpers/api';
 import 'styles/views/CreateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
+import UserModel from 'models/UserModel';
+import Header from "components/views/Header"
 
 
 const FormField = props => {
@@ -28,6 +30,7 @@ const CreateLobby = props => {
     const [gameMode, setGameMode] = useState("ONE_VS_ONE");
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
+    const token = null;
 
     const postLobby = async () => {
 
@@ -52,22 +55,18 @@ const CreateLobby = props => {
                 };
 
                 //call to the backend to create a new lobby
-                const response = await api.post('/v1/game/lobby', JSON.stringify(requestBody),
-                    {
-                        headers: { 'token': '' }
-                    }
-                );
+                const response = await api.post('/v1/game/lobby', JSON.stringify(requestBody), { headers: { 'token': token || '' } });
 
-                const lobbyId = response.data.lobby.id;
+                // Get the returned user and update a new object.
+                const user = new UserModel(response.data);
+                // Store the token into the local storage.
+                localStorage.setItem('token', user.token);
 
-                history.push({
-                    pathname: '/lobby/' + lobbyId,
-                    state: response.data
-                })
+                history.push({ pathname: '/lobby/' + user.lobby.id })
             } catch (error) {
                 if (error.response != null) {
                     // conflict in lobby name
-                    if (error.response.status == 409) {
+                    if (error.response.status === 409) {
                         const popUp = document.getElementById("invalidUser");
                         popUp.style.display = "block";
                         popUp.addEventListener("click", () => {
@@ -75,6 +74,7 @@ const CreateLobby = props => {
                         })
                     }
                     else {
+                        console.log(error);
                         const popUp = document.getElementById("technicalError");
                         popUp.style.display = "block";
                         popUp.addEventListener("click", () => {
@@ -99,6 +99,7 @@ const CreateLobby = props => {
 
     return (
         <BaseContainer>
+            <Header />
             <div className="createlobby">
                 <label className="createlobby lobby-title">Create Lobby</label>
                 <table className="lobby-info">
