@@ -9,7 +9,7 @@ import "styles/views/Game.scss"
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
 
-const Game = () => {
+const Game = ({ id }) => {
 
     const [gameMode, setGameMode] = useState("");
     const [gameType, setGameType] = useState("");

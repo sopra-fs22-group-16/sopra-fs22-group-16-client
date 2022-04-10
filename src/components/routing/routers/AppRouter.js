@@ -4,8 +4,7 @@ import LobbyRouter from "./LobbyRouter";
 import CreateLobby from "components/views/CreateLobby";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
-import {GameGuard} from "../routeProtectors/GameGuard";
-import Game from "../../views/game/Game";
+import GameRouter from "./GameRouter";
 
 const AppRouter = () => {
     return (
@@ -27,9 +26,7 @@ const AppRouter = () => {
                     <LobbyRouter base="/lobby" />
                 </Route>
                 <Route path="/game">
-                    <GameGuard>
-                        <Game/>
-                    </GameGuard>
+                    <GameRouter base="/game" />
                 </Route>
             </Switch>
         </BrowserRouter>

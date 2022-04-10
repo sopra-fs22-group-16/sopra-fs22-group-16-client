@@ -49,7 +49,7 @@ const LobbyRouter = props => {
 };
 
 LobbyRouter.propTypes = {
-    base: PropTypes.string
+    base: PropTypes.string.isRequired
 }
 
 export default LobbyRouter;
