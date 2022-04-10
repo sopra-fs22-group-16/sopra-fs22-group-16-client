@@ -6,20 +6,29 @@
     margin: 0;
   }
 
-  &.container {
+  &.baseContainer {
+    position:relative;
+    overflow: hidden;
+  }
+
+  &.button-container-container{
     position: absolute;
+    width: 100%;
+    bottom: 10vh;
+
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  &.container {
+    position: relative;
     top: 0;
-    right: 0;
-    bottom: 0;
     left: 0;
-    margin-top: 0;
-    margin-bottom: 0;
     min-width: 100vw;
     min-height: 100vh;
-    @include center;
-    flex-direction: column;
-    background-size: cover;
-    background-image: url("../images/wargroove_bw_light.png");
+    padding-top: 20vh;
   }
 
   &.button-container {
@@ -32,4 +41,46 @@
     margin-bottom: 20em;
   }
 
+  @mixin transform($val) {
+    -webkit-transform: $val;
+    -moz-transform: $val;
+    -ms-transform: $val;
+    transform: $val;
+  }
+
+  &.backgroundImage {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 200vh;
+
+    animation: move 60s infinite ease-in-out;
+  }
+
+@keyframes move {
+  0% {
+    @include transform(translate(0, 0));
+
+  }
+  20% {
+    @include transform(translate(-30%, -20%));
+
+  }
+  40% {
+    @include transform(translate(-50%, -50%));
+
+  }
+  60% {
+    @include transform(translate(-20%, -60%));
+
+  }
+  80% {
+    @include transform(translate(-10%, -30%));
+
+  }
 }
+
+
+}
+
+
