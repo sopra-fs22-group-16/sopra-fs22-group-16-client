@@ -81,13 +81,15 @@ const Lobby = () => {
                         to={{
                             pathname: '/update-lobby/' + lobbyData.id,
                             state: {
-                                name: lobbyData.name,
-                                visibility: lobbyData.visibility,
-                                gameMode: lobbyData.gameMode,
-                                gameType: lobbyData.gameType,
-                                id: lobbyData.id
-                            },
-                            token: token
+                                lobby: {
+                                    name: lobbyData.name,
+                                    visibility: lobbyData.visibility,
+                                    gameMode: lobbyData.gameMode,
+                                    gameType: lobbyData.gameType,
+                                    id: lobbyData.id
+                                },
+                                token: token
+                            }
                         }}>
                         update lobby information</Link>
                     <table className="lobby-info">

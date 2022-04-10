@@ -1,73 +1,50 @@
-import React, {useState} from 'react';
-import {api, handleError} from 'helpers/api';
+import React, {useState, useEffect} from 'react';
+import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import 'styles/views/HomePage.scss';
 import 'styles/views/PublicLobbies.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import jsonDataLobbies from "./jsonDataLobbies";
-import {useEffect} from "react";
-import {BlockPopup, Popup} from "../ui/Popup";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import defaultTheme from "../../styles/themes/defaulTheme";
 import DynamicPopUp from "../ui/DynamicPopUp";
 
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
 
 const PublicLobbies = () => {
     const history = useHistory();
-    //const RESTDataLobbies = api.get(URL = '/v1/game/lobbies/');
     const [lobbyData, setLobbyData] = useState(null);
     const [isJoining, setJoining] = useState(false);
-    const [displayErrorMessage, setDisplayErrorMessage] = useState({open: false, message: ""});
+    const [errorMessage, setErrorMessage] = useState("");
 
     const returnHome = () => {
         history.push('/home');
     }
 
-
     // TODO - UPDATE WITH JOINBYCODE PAGE
-    const joinLobbybyCode = () => {
+    const joinLobbyByCode = () => {
         history.push('/join-lobby');
     }
 
-    // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
     useEffect(() => {
-        // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                const response = await api.get('/v1/game/lobby/1');
 
-                // delays continuous execution of an async operation for 1 second.
-                // This is just a fake async call, so that the spinner can be displayed
-                // feel free to remove it :)
+                // TODO - jsonDataLobbies import from REST or whatever
+                //const response = await api.get('/v1/game/lobby/1');
+                const response = jsonDataLobbies;
+
 
                 // Get the returned users and update the state.
-                //setLobbyData(response.data);
+                setLobbyData(response);
 
-                // This is just some data for you to see what is available.
-                // Feel free to remove it.
-                console.log('request to:', response.request.responseURL);
-                console.log('status code:', response.status);
-                console.log('status text:', response.statusText);
-                console.log('requested data:', response.data);
-
-                // See here to get more data.
-                console.log(response);
             } catch (error) {
-                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-                console.error("Details:", error);
-                //alert("Something went wrong while fetching the users! See the console for details.");
+                setErrorMessage("Something went wrong while fetching the lobbies")
             }
         }
 
-        fetchData();
+        fetchData().then();
     }, []);
 
     async function joinLobby(id) {
@@ -77,7 +54,7 @@ const PublicLobbies = () => {
             //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
             // Remove when implementing actual call implemented
             // Simulate joining lobby
-            await new Promise(resolve => setTimeout(resolve, 2000));
+            await new Promise(resolve => setTimeout(resolve, 1000));
 
             // here we mocked the answer of the API join lobby
             const responseBody = {
@@ -114,19 +91,20 @@ const PublicLobbies = () => {
             })
 
         } catch (error) {
-
             setJoining(false);
-
-            let errorMessage = "Did not get a response!";
-            setDisplayErrorMessage({open: true, message: errorMessage})
-
+            // TODO: Update with correct error codes and messages
+            if (error.response.status === 999) {
+                setErrorMessage("THIS IS A SAMPLE ERROR MESSAGE!");
+            } else {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
+            }
         }
     }
 
     let content = null;
 
-    if (jsonDataLobbies) {
-        content = jsonDataLobbies.map((data, key) => (
+    if (lobbyData) {
+        content = lobbyData.map((data, key) => (
                 <LobbyInfo
                     id={data.id}
                     key={key}
@@ -140,7 +118,6 @@ const PublicLobbies = () => {
         );
     }
 
-    // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
             <ThemeProvider theme={defaultTheme}>
@@ -149,9 +126,9 @@ const PublicLobbies = () => {
                         <LinearProgress color="primary"/>
                     </div>
                 </DynamicPopUp>
-                <DynamicPopUp open={displayErrorMessage.open} information={displayErrorMessage.message}>
+                <DynamicPopUp open={errorMessage !== ''} information={errorMessage}>
                     <Button onClick={() =>
-                        setDisplayErrorMessage({open: false, message: ""})
+                        setErrorMessage("")
                     }>
                         Close
                     </Button>
@@ -179,7 +156,7 @@ const PublicLobbies = () => {
                 <div className="PublicLobbies button-container">
                     <Button
                         width="100%"
-                        onClick={() => joinLobbybyCode()}
+                        onClick={() => joinLobbyByCode()}
                     >
                         JOIN A LOBBY BY CODE
                     </Button>
@@ -201,7 +178,6 @@ const PublicLobbies = () => {
 
 const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
 
-    const history = useHistory();
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;

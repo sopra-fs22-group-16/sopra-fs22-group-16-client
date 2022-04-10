@@ -76,7 +76,6 @@ const LobbyByCode = () => {
 
     }
 
-
     return (
         <BaseContainer>
             <div className="LobbyByCode container">
