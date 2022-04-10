@@ -4,6 +4,8 @@ import LobbyRouter from "./LobbyRouter";
 import CreateLobby from "components/views/CreateLobby";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
+import {GameGuard} from "../routeProtectors/GameGuard";
+import Game from "../../views/game/Game";
 
 const AppRouter = () => {
     return (

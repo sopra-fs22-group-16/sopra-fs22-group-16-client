@@ -1,19 +1,17 @@
-import React, {useState} from 'react';
+import React, {useState, useEffect} from 'react';
 import {api, handleError} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
-import 'styles/views/HomePage.scss';
-import 'styles/views/PublicLobbies.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import jsonDataLobbies from "./jsonDataLobbies";
-import {useEffect} from "react";
 import {BlockPopup, Popup} from "../ui/Popup";
-import {LinearProgress} from "@mui/material";
-import {ThemeProvider} from "@emotion/react";
 import defaultTheme from "../../styles/themes/defaulTheme";
-import {createTheme, LinearProgress} from "@mui/material";
+import { LinearProgress} from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import Header from "components/views/Header"
+
+import 'styles/views/HomePage.scss';
+import 'styles/views/PublicLobbies.scss';
 
 /*
 It is possible to add multiple components inside a single file,
@@ -90,7 +88,7 @@ const PublicLobbies = () => {
     return (
         <BaseContainer>
             <Header />
-            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={theme}><LinearProgress
+            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
                 color="secondary"/></ThemeProvider></BlockPopup>
             <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
             <div className="PublicLobbies container">
