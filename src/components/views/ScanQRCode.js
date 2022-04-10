@@ -4,7 +4,7 @@ import { Button } from 'components/ui/Button';
 import 'styles/views/ScanQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import QrReader from 'react-qr-reader'
-import Header from "components/views/Header"
+import Header from "components/ui/Header"
 
 const ScanQRCode = props => {
 

@@ -3,10 +3,10 @@ import {useHistory} from 'react-router-dom';
 import {api} from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
 import {Button} from 'components/ui/Button';
-import Header from "components/views/Header"
-import CustomPopUp from "../ui/CustomPopUp";
+import Header from "components/ui/Header"
+import CustomPopUp from "../../ui/CustomPopUp";
 
-import 'styles/views/UpdateLobby.scss';
+import 'styles/views/lobby/UpdateLobby.scss';
 
 const FormField = props => {
     return (

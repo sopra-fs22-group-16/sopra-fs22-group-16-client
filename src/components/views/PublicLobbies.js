@@ -3,12 +3,12 @@ import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import jsonDataLobbies from "./jsonDataLobbies";
+import jsonDataLobbies from "./lobby/jsonDataLobbies";
 import {BlockPopup, Popup} from "../ui/Popup";
 import {defaultTheme} from "../../styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
-import Header from "components/views/Header"
+import Header from "components/ui/Header"
 
 import 'styles/views/PublicLobbies.scss';
 import CustomPopUp from "../ui/CustomPopUp";

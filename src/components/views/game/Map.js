@@ -5,8 +5,8 @@ import {ThemeProvider} from "@emotion/react";
 
 import {defaultTheme} from "../../../styles/themes/defaulTheme";
 
-import "styles/views/Game.scss"
-import "styles/views/Map.scss"
+import "styles/views/game/Game.scss"
+import "styles/views/game/Map.scss"
 
 const Map = props => {
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
-import Header from "./Header";
+import Header from "../ui/Header";
 
 import hannibal_background from 'styles/images/wargroove_bw_light.png'
 
