@@ -1,16 +1,16 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, {useState, useEffect} from 'react';
+import {useHistory, Link} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
-import { Button } from 'components/ui/Button';
+import {Button} from 'components/ui/Button';
 import Header from "components/views/Header"
-import { api } from 'helpers/api';
+import {api} from 'helpers/api';
 import {defaultTheme} from "../../styles/themes/defaulTheme";
 import CustomPopUp from "../ui/CustomPopUp";
 import {ThemeProvider} from "@emotion/react";
 
 import 'styles/views/Lobby.scss';
 
-const Lobby = ({ id }) => {
+const Lobby = ({id}) => {
 
     const history = useHistory();
 
@@ -48,7 +48,7 @@ const Lobby = ({ id }) => {
 
                 const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                     {
-                        headers: { 'token': token }
+                        headers: {'token': token}
                     }
                 );
 
@@ -65,23 +65,24 @@ const Lobby = ({ id }) => {
                 setGetDataFailed(true);
             }
         }
+
         fetchData();
     }, []);
 
     return (
         <BaseContainer>
-            <Header />
+            <Header/>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 <Link
                     className="lobby link"
-                    to={`${id}/update`} >
+                    to={`${id}/update`}>
                     update lobby information</Link>
                 <table className="lobby-info">
                     <tbody>
                     <tr>
                         <th>NAME</th>
-                        <td>{name}</td>
+                        <td style={{overflow: 'hidden'}}>{name}</td>
                     </tr>
                     <tr>
                         <th>ACCESS</th>
@@ -92,16 +93,17 @@ const Lobby = ({ id }) => {
                         <td>{gameMode === "ONE_VS_ONE" ? "1v1" : "2v2"}</td>
                     </tr>
                     <tr>
-                        <th>USERS PRESENT</th>
+                        <th>PLAYERS</th>
                         <td>{presentPlayers + '/' + totalPlayers}</td>
                     </tr>
                     <tr>
-                        <th>USERS READY</th>
+                        <th>READY</th>
                         <td>{readyPlayers + '/' + totalPlayers}</td>
                     </tr>
                     </tbody>
                 </table>
-                <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
+                <label className="lobby lobby-labels">Click on your row to update your information and player
+                    status.</label>
                 <table className="player-view">
                     <tbody>
                     <tr>
@@ -114,10 +116,11 @@ const Lobby = ({ id }) => {
                             <tr key={user.id}>
                                 <td>{user.name}</td>
                                 <td>
-                                    <div className={'lobby teambox team' + user.team} />
+                                    <div className={'lobby teambox team' + user.team}/>
                                 </td>
                                 <td>
-                                    <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.ready)} />
+                                    <input id={user.id} className="lobby status" type="checkbox"
+                                           onClick={() => changeStatus(user.ready)}/>
                                 </td>
                             </tr>
                         )
