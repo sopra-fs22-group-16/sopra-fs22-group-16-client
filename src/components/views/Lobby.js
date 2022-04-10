@@ -82,7 +82,7 @@ const Lobby = ({id}) => {
                     <tbody>
                     <tr>
                         <th>NAME</th>
-                        <td style={{overflow: 'hidden'}}>{name}</td>
+                        <td nowrap={"true"} style={{overflow: 'hidden', 'maxWidth': '0'}}>{name}</td>
                     </tr>
                     <tr>
                         <th>ACCESS</th>
