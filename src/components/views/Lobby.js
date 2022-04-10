@@ -3,8 +3,12 @@ import { useHistory, Link } from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import { Button } from 'components/ui/Button';
 import Header from "components/views/Header"
-import 'styles/views/Lobby.scss';
 import { api } from 'helpers/api';
+import {defaultTheme} from "../../styles/themes/defaulTheme";
+import CustomPopUp from "../ui/CustomPopUp";
+import {ThemeProvider} from "@emotion/react";
+
+import 'styles/views/Lobby.scss';
 
 const Lobby = ({ id }) => {
 
@@ -20,11 +24,17 @@ const Lobby = ({ id }) => {
     const [name, setName] = useState(null);
     const [players, setPlayers] = useState(null);
 
+    // PopUp
+    const [errorMessage, setErrorMessage] = useState("");
+    const [getDataFailed, setGetDataFailed] = useState(false);
+
     const returnLobbies = () => {
-        history.push('/lobbies');
+        // Todo: leave lobby
+        history.push('/public-lobbies');
     }
 
     const returnHome = () => {
+        // Todo: leave lobby
         history.push('/home');
     }
 
@@ -51,9 +61,8 @@ const Lobby = ({ id }) => {
                 setName(apiResponse.data.name);
                 setPlayers(apiResponse.data.players);
 
-
             } catch (error) {
-                alert("Something went wrong! ");
+                setGetDataFailed(true);
             }
         }
         fetchData();
@@ -69,6 +78,7 @@ const Lobby = ({ id }) => {
                     to={`${id}/update`} >
                     update lobby information</Link>
                 <table className="lobby-info">
+                    <tbody>
                     <tr>
                         <th>NAME</th>
                         <td>{name}</td>
@@ -89,9 +99,11 @@ const Lobby = ({ id }) => {
                         <th>USERS READY</th>
                         <td>{readyPlayers + '/' + totalPlayers}</td>
                     </tr>
+                    </tbody>
                 </table>
                 <label className="lobby lobby-labels">Click on your row to update your information and player status.</label>
                 <table className="player-view">
+                    <tbody>
                     <tr>
                         <th>PLAYER</th>
                         <th>TEAM</th>
@@ -102,7 +114,7 @@ const Lobby = ({ id }) => {
                             <tr key={user.id}>
                                 <td>{user.name}</td>
                                 <td>
-                                    <div className={'lobby teambox team' + user.team} ></div>
+                                    <div className={'lobby teambox team' + user.team} />
                                 </td>
                                 <td>
                                     <input id={user.id} className="lobby status" type="checkbox" onClick={() => changeStatus(user.ready)} />
@@ -110,6 +122,7 @@ const Lobby = ({ id }) => {
                             </tr>
                         )
                     }) : null}
+                    </tbody>
                 </table>
                 <Link
                     className="lobby link"
@@ -123,6 +136,22 @@ const Lobby = ({ id }) => {
                     <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
                 </div>
             </div>
+            <ThemeProvider theme={defaultTheme}>
+                <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
+                    <Button onClick={() =>
+                        history.push('/home')
+                    }>
+                        Return Home
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                    <Button onClick={() =>
+                        setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
+            </ThemeProvider>
         </BaseContainer>
     );
 };
