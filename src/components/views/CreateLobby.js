@@ -54,6 +54,7 @@ const CreateLobby = () => {
 
                 // Get the returned user and update a new object.
                 const user = new UserModel(response.data);
+
                 // Store the token into the local storage.
                 localStorage.setItem('token', user.token);
 

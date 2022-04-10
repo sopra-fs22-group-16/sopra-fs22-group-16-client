@@ -1,7 +1,7 @@
 const jsonDataLobbies = [
    {
       "id": 1,
-      "name": "NewLobby1",
+      "name": "Lobby-0",
       "ownerId": 0,
       "players": [
           {
@@ -18,14 +18,14 @@ const jsonDataLobbies = [
         },
 
       ],
-      "visibility": "PUBLIC",
+      "visibility": "Lobby-1",
       "gameMode": "TWO_VS_TWO",
       "gameType": "UNRANKED",
-      "invitationCode": "ABCDEFGH"
+      "invitationCode": "FakeInvitationCode0"
   },
   {
    "id": 2,
-   "name": "NewLobby2",
+   "name": "Lobby-1",
    "ownerId": 0,
    "players": [
        {
@@ -35,14 +35,14 @@ const jsonDataLobbies = [
            "team": 0
        }
    ],
-   "visibility": "PRIVATE",
+   "visibility": "PUBLIC",
    "gameMode": "ONE_VS_ONE",
    "gameType": "UNRANKED",
-   "invitationCode": "AAAAAAAA"
+   "invitationCode": "FakeInvitationCode1"
 },
      {
       "id": 3,
-      "name": "LongerNewLobby3",
+      "name": "Lobby-2",
       "ownerId": 0,
       "players": [
           {
@@ -55,7 +55,7 @@ const jsonDataLobbies = [
       "visibility": "PUBLIC",
       "gameMode": "ONE_VS_ONE",
       "gameType": "UNRANKED",
-      "invitationCode": "HANNIBAL"
+      "invitationCode": "FakeInvitationCode2"
   }
 ];
 
