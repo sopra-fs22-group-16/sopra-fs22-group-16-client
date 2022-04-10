@@ -5,13 +5,15 @@ import "styles/views/Header.scss";
 
 
 const Header = props => (
-    <div className="header container" style={{ height: props.height }}>
-        <img src={HeaderImage} />
+    <div className={"hannibalTitleHeader hannibalTitleHeaderContainer " + props.className}
+         style={{ height: props.height }}>
+        <img src={HeaderImage} alt={"Hannibal"}/>
     </div>
 );
 
 Header.propTypes = {
-    height: PropTypes.string
+    height: PropTypes.string,
+    className: PropTypes.string
 };
 
 

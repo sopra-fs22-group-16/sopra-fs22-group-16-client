@@ -17,7 +17,10 @@ const defaultTheme = createTheme({
         background: {
             main: '#414141',
         }
-    }
+    },
+    typography: {
+        fontSize: 13,
+    },
 });
 
 export default defaultTheme;

@@ -1,14 +1,12 @@
 @import 'styles/theme';
 
-
-
-.header {
-    &.container {
+.hannibalTitleHeader {
+    &.hannibalTitleHeaderContainer {
         @include center;
         height: 115px
     }
 
-    img {
+    img{
         max-width: 60%;
     }
 }

@@ -5,7 +5,7 @@ import CreateLobby from "components/views/CreateLobby";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
 import UpdateLobby from "components/views/UpdateLobby";
-import Header from "components/views/Header"
+import Header from "components/ui/Header"
 import LobbyByCode from "components/views/LobbyByCode";
 import {GameGuard} from "../routeProtectors/GameGuard";
 import Game from "../../views/game/Game";
