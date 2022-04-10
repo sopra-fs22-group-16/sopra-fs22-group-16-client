@@ -50,32 +50,32 @@
 
   &.backgroundImage {
     position: absolute;
-    top: 0;
-    left: 0;
+    top: -10%;
+    left: -10%;
     height: 200vh;
 
-    animation: move 60s infinite ease-in-out;
+    animation: move 60s infinite linear;
   }
 
 @keyframes move {
   0% {
-    @include transform(translate(0, 0));
+    @include transform(translate(-10%, -10%));
 
   }
-  20% {
+  25% {
     @include transform(translate(-30%, -20%));
 
   }
-  40% {
-    @include transform(translate(-50%, -50%));
+  50% {
+    @include transform(translate(-20%, -30%));
 
   }
-  60% {
-    @include transform(translate(-20%, -60%));
+  75% {
+    @include transform(translate(0%, -20%));
 
   }
-  80% {
-    @include transform(translate(-10%, -30%));
+  100% {
+    @include transform(translate(-10%, -10%));
 
   }
 }
