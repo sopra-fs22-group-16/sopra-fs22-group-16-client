@@ -1,28 +1,24 @@
-import React, { useState }  from 'react';
-import { useEffect } from 'react';
-import { useHistory, useLocation, Link  } from 'react-router-dom';
-import { Button } from 'components/ui/Button';
-import 'styles/views/Lobby.scss';
+import React, { useState, useEffect } from 'react';
+import { useHistory, Link } from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
+import { Button } from 'components/ui/Button';
+import Header from "components/views/Header"
+import 'styles/views/Lobby.scss';
+import { api } from 'helpers/api';
 
-import { api, handleError } from 'helpers/api';
-
-
-const Lobby = props => {
+const Lobby = ({ id }) => {
 
     const history = useHistory();
 
     //we get the information from the creation page
-    const location = useLocation();
-    const [token, setToken] = useState(location.state.token);
-    const [lobbyData, setLobbyData] = useState(location.state.lobby);
-
-    //displayed labels
-    const displayedMode = lobbyData.gameMode === "ONE_VS_ONE" ? "1v1" : "2v2";
-    const displayedVisibility = lobbyData.visibility === "PUBLIC" ? "public" : "private";
-    const presentPlayers = lobbyData.players.length;
-    const readyPlayers = 0;
-    const totalPlayers = lobbyData.gameMode === "ONE_VS_ONE" ? 2 : 4;
+    const token = localStorage.getItem("token");
+    const [gameMode, setGameMode] = useState(null);
+    const [visibility, setVisibility] = useState(null);
+    const [presentPlayers, setPresentPlayers] = useState(null);
+    const [readyPlayers, setReadyPlayers] = useState(null);
+    const [totalPlayers, setTotalPlayers] = useState(null);
+    const [name, setName] = useState(null);
+    const [players, setPlayers] = useState(null);
 
     const returnLobbies = () => {
         history.push('/lobbies');
@@ -33,18 +29,28 @@ const Lobby = props => {
     }
 
     const changeStatus = (player) => {
+        //implement function (in the corresponding story)
     }
 
     useEffect(() => {
         async function fetchData() {
             try {
 
-                const apiResponse = await api.get(URL = '/v1/game/lobby/' + lobbyData.id,
+                const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                     {
                         headers: { 'token': token }
                     }
                 );
-                setLobbyData(apiResponse.data);
+
+                //set different values obtained from the API
+                setGameMode(apiResponse.data.gameMode);
+                setVisibility(apiResponse.data.visibility);
+                setPresentPlayers(apiResponse.data.players.length);
+                setReadyPlayers(0);
+                setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
+                setName(apiResponse.data.name);
+                setPlayers(apiResponse.data.players);
+
 
             } catch (error) {
                 alert("Something went wrong! ");
@@ -55,28 +61,25 @@ const Lobby = props => {
 
     return (
         <BaseContainer>
+            <Header />
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 <Link
                     className="lobby link"
-                    to={{
-                        pathname: '/update-lobby/' + lobbyData.id,
-                        state: { name: lobbyData.name, visibility: lobbyData.visibility, gameMode: lobbyData.gameMode, gameType: lobbyData.gameType, id:lobbyData.id },
-                        token: token
-                    }} >
+                    to={`${id}/update`} >
                     update lobby information</Link>
                 <table className="lobby-info">
                     <tr>
                         <th>NAME</th>
-                        <td>{lobbyData.name}</td>
+                        <td>{name}</td>
                     </tr>
                     <tr>
                         <th>ACCESS</th>
-                        <td>{displayedVisibility}</td>
+                        <td>{visibility === "PUBLIC" ? "public" : "private"}</td>
                     </tr>
                     <tr>
                         <th>MODE</th>
-                        <td>{displayedMode}</td>
+                        <td>{gameMode === "ONE_VS_ONE" ? "1v1" : "2v2"}</td>
                     </tr>
                     <tr>
                         <th>USERS PRESENT</th>
@@ -94,7 +97,7 @@ const Lobby = props => {
                         <th>TEAM</th>
                         <th>STATUS</th>
                     </tr>
-                    {lobbyData.players.map((user) => {
+                    {players ? players.map((user) => {
                         return (
                             <tr key={user.id}>
                                 <td>{user.name}</td>
@@ -106,11 +109,12 @@ const Lobby = props => {
                                 </td>
                             </tr>
                         )
-                    })}
+                    }) : null}
                 </table>
                 <Link
                     className="lobby link"
-                    to={'/lobby/invite-users/' + lobbyData.id}>
+                    // TODO: update link (in the corresponding story)
+                    to={'/lobby/invite-users/' + id}>
                     invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
