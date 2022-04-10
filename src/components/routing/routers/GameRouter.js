@@ -1,6 +1,7 @@
 import {Redirect, Route, Switch} from "react-router-dom";
 import PropTypes from "prop-types";
 import Game from "../../views/game/Game";
+import {TokenGuard} from "../routeProtectors/TokenGuard";
 
 const GameRouter = props => {
     /**
@@ -14,11 +15,14 @@ const GameRouter = props => {
                     <Redirect to={'/home'} />
                 </Route>
                 <Switch>
-                    <Route exact path={`${props.base}/:id`} render={({ match }) => {
-                        const id = parseInt(match.params.id)
-                        return <Game id={id} />
-                    }} >
-                    </Route>
+                    <TokenGuard>
+                        <Route exact path={`${props.base}/:id`} render={({ match }) => {
+                            const id = parseInt(match.params.id)
+                            return (
+                                <Game id={id} />
+                            )
+                        }} />
+                    </TokenGuard>
                 </Switch>
             </Switch>
         </div>
