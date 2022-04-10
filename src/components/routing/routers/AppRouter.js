@@ -4,6 +4,7 @@ import LobbyRouter from "./LobbyRouter";
 import CreateLobby from "components/views/CreateLobby";
 import HomePage from "components/views/HomePage";
 import PublicLobbies from "components/views/PublicLobbies";
+import GameRouter from "./GameRouter";
 
 const AppRouter = () => {
     return (
@@ -23,6 +24,9 @@ const AppRouter = () => {
                 </Route>
                 <Route path="/lobby">
                     <LobbyRouter base="/lobby" />
+                </Route>
+                <Route path="/game">
+                    <GameRouter base="/game" />
                 </Route>
             </Switch>
         </BrowserRouter>

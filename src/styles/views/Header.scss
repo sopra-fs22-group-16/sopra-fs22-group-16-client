@@ -1,12 +1,14 @@
 @import 'styles/theme';
 
-img {
-    max-width: 60%;
-}
+
 
 .header {
     &.container {
         @include center;
         height: 115px
+    }
+
+    img {
+        max-width: 60%;
     }
 }
