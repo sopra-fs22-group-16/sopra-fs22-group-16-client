@@ -1,11 +1,8 @@
 @import 'styles/theme';
 
-
-
 .header {
-    &.container {
+    &.headerContainer {
         @include center;
-        height: 115px
     }
 
     img {

@@ -5,7 +5,7 @@ import "styles/views/Header.scss";
 
 
 const Header = props => (
-    <div className="header container" style={{ height: props.height }}>
+    <div className="header headerContainer" style={{ height: props.height }}>
         <img src={HeaderImage} />
     </div>
 );
