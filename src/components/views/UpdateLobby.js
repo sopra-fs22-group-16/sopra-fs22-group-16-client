@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { api } from 'helpers/api';
-import 'styles/views/UpdateLobby.scss';
+import React, {useState, useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
+import {api} from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
-import { Button } from 'components/ui/Button';
-import { Popup } from 'components/ui/Popup';
+import {Button} from 'components/ui/Button';
 import Header from "components/views/Header"
+import CustomPopUp from "../ui/CustomPopUp";
 
+import 'styles/views/UpdateLobby.scss';
 
 const FormField = props => {
     return (
-        <div className="updatelobby lobby-name">
+        <div className="updateLobby lobby-name">
             <input
-                className="updatelobby input-name"
+                className="updateLobby input-name"
                 placeholder="enter a name..."
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
@@ -21,16 +21,20 @@ const FormField = props => {
     );
 };
 
-const UpdateLobby = ({ id }) => {
+const UpdateLobby = ({id}) => {
 
     const history = useHistory();
 
     const token = localStorage.getItem('token');
 
-    const [name, setName] = useState(null);
+    const [name, setName] = useState('');
     const [gameMode, setGameMode] = useState(null);
     const [gameType, setGameType] = useState(null);
     const [visibility, setVisibility] = useState(null);
+
+    // PopUps
+    const [errorMessage, setErrorMessage] = useState("");
+    const [getDataFailed, setGetDataFailed] = useState(false);
 
 
     useEffect(() => {
@@ -39,7 +43,7 @@ const UpdateLobby = ({ id }) => {
 
                 const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                     {
-                        headers: { 'token': token }
+                        headers: {'token': token}
                     }
                 );
 
@@ -50,13 +54,10 @@ const UpdateLobby = ({ id }) => {
                 setGameType(apiResponse.data.gameType);
 
             } catch (error) {
-                const popUp = document.getElementById("technicalError");
-                popUp.style.display = "block";
-                popUp.addEventListener("click", () => {
-                    popUp.style.display = "none"
-                })
+                setGetDataFailed(true);
             }
         }
+
         fetchData();
     }, []);
 
@@ -65,15 +66,8 @@ const UpdateLobby = ({ id }) => {
 
         // here we control that the name lobby field is filled
         if (name === '') {
-
-            const popUp = document.getElementById("noUser");
-            popUp.style.display = "block";
-            popUp.addEventListener("click", () => {
-                popUp.style.display = "none"
-            })
-
-        }
-        else {
+            setErrorMessage("You have to enter a lobby name!");
+        } else {
 
             try {
 
@@ -88,40 +82,21 @@ const UpdateLobby = ({ id }) => {
                 //call to the backend to update a lobby
                 await api.put(`/v1/game/lobby/${id}`, JSON.stringify(requestBody),
                     {
-                        headers: { 'token': token }
+                        headers: {'token': token}
                     }
                 );
 
-                const popUp = document.getElementById("updatedLobby");
-                popUp.style.display = "block";
-                popUp.addEventListener("click", () => {
-                    popUp.style.display = "none"
-                })
-
+                setErrorMessage("Lobby correctly updated!");
             } catch (error) {
                 if (error.response != null) {
                     // conflict in lobby name
                     if (error.response.status === 409) {
-                        const popUp = document.getElementById("invalidUser");
-                        popUp.style.display = "block";
-                        popUp.addEventListener("click", () => {
-                            popUp.style.display = "none"
-                        })
+                        setErrorMessage("Lobby name assignment is not possible - name already taken!");
+                    } else {
+                        setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
                     }
-                    else {
-                        const popUp = document.getElementById("technicalError");
-                        popUp.style.display = "block";
-                        popUp.addEventListener("click", () => {
-                            popUp.style.display = "none"
-                        })
-                    }
-                }
-                else {
-                    const popUp = document.getElementById("technicalError");
-                    popUp.style.display = "block";
-                    popUp.addEventListener("click", () => {
-                        popUp.style.display = "none"
-                    })
+                } else {
+                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
                 }
             }
         }
@@ -134,10 +109,11 @@ const UpdateLobby = ({ id }) => {
 
     return (
         <BaseContainer>
-            <Header />
-            <div className="updatelobby">
-                <label className="updatelobby lobby-title">Update Lobby</label>
+            <Header/>
+            <div className="updateLobby">
+                <label className="updateLobby lobby-title">Update Lobby</label>
                 <table className="lobby-info">
+                    <tbody>
                     <tr>
                         <th>NAME</th>
                         <td colSpan="2">
@@ -151,13 +127,15 @@ const UpdateLobby = ({ id }) => {
                         <th>MODE</th>
                         <td>
                             <label>
-                                <input id="ONE_VS_ONE" className="updatelobby check" checked={gameMode === "ONE_VS_ONE"} type="checkbox" onClick={() => setGameMode("ONE_VS_ONE")} />
+                                <input id="ONE_VS_ONE" className="updateLobby check" checked={gameMode === "ONE_VS_ONE"}
+                                       type="checkbox" onChange={() => setGameMode("ONE_VS_ONE")}/>
                                 1x1
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="TWO_VS_TWO" className="updatelobby check" checked={gameMode === "TWO_VS_TWO"} type="checkbox" onClick={() => setGameMode("TWO_VS_TWO")} />
+                                <input id="TWO_VS_TWO" className="updateLobby check" checked={gameMode === "TWO_VS_TWO"}
+                                       type="checkbox" onChange={() => setGameMode("TWO_VS_TWO")}/>
                                 2x2
                             </label>
                         </td>
@@ -166,13 +144,15 @@ const UpdateLobby = ({ id }) => {
                         <th>TYPE</th>
                         <td>
                             <label>
-                                <input id="UNRANKED" className="createLobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
+                                <input id="UNRANKED" className="createLobby check" checked={gameType === "UNRANKED"}
+                                       type="checkbox" onChange={() => setGameType("UNRANKED")}/>
                                 Unranked
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="RANKED" className="createLobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
+                                <input id="RANKED" className="createLobby check" checked={gameType === "RANKED"}
+                                       type="checkbox" onChange={() => setGameType("RANKED")}/>
                                 Ranked
                             </label>
                         </td>
@@ -181,30 +161,44 @@ const UpdateLobby = ({ id }) => {
                         <th>ACCESS</th>
                         <td>
                             <label>
-                                <input id="PUBLIC" className="updatelobby check" checked={visibility === "PUBLIC"} type="checkbox" onClick={() => setVisibility("PUBLIC")} />
+                                <input id="PUBLIC" className="updateLobby check" checked={visibility === "PUBLIC"}
+                                       type="checkbox" onChange={() => setVisibility("PUBLIC")}/>
                                 Public
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="PRIVATE" className="updatelobby check" checked={visibility === "PRIVATE"} type="checkbox" onClick={() => setVisibility("PRIVATE")} />
+                                <input id="PRIVATE" className="updateLobby check" checked={visibility === "PRIVATE"}
+                                       type="checkbox" onChange={() => setVisibility("PRIVATE")}/>
                                 Private
                             </label>
                         </td>
                     </tr>
+                    </tbody>
                 </table>
-                <div className="updatelobby space" />
-                <div className="updatelobby lobby-buttons">
+                <div className="updateLobby space"/>
+                <div className="updateLobby lobby-buttons">
                     <Button onClick={() => updateLobby()}>UPDATE LOBBY</Button>
                 </div>
-                <div className="updatelobby lobby-buttons">
+                <div className="updateLobby lobby-buttons">
                     <Button className="return" onClick={() => returnLobby()}>RETURN LOBBY</Button>
                 </div>
             </div>
-            <Popup id="noUser">You have to enter a lobby name!</Popup>
-            <Popup id="invalidUser">Lobby name assignment is not possible - name already taken!</Popup>
-            <Popup id="technicalError">Ups! Something happened. Try again and if the error persists, contact the administrator.</Popup>
-            <Popup id="updatedLobby">Lobby correctly updated!</Popup>
+
+            <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
+                <Button onClick={() =>
+                    history.push('/home')
+                }>
+                    Return Home
+                </Button>
+            </CustomPopUp>
+            <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                <Button onClick={() =>
+                    setErrorMessage("")
+                }>
+                    Close
+                </Button>
+            </CustomPopUp>
         </BaseContainer>
     );
 };
