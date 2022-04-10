@@ -166,13 +166,13 @@ const UpdateLobby = ({ id }) => {
                         <th>TYPE</th>
                         <td>
                             <label>
-                                <input id="UNRANKED" className="createlobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
+                                <input id="UNRANKED" className="createLobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
                                 Unranked
                             </label>
                         </td>
                         <td>
                             <label>
-                                <input id="RANKED" className="createlobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
+                                <input id="RANKED" className="createLobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
                                 Ranked
                             </label>
                         </td>

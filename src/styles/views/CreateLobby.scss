@@ -1,10 +1,10 @@
 @import 'styles/theme';
 
 
-.createlobby {
+.createLobby {
 
     table.lobby-info {
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
         border-radius: 10px;
         width: 320px;
         margin-left: auto;
@@ -14,7 +14,7 @@
 
     table.lobby-info td {
         text-align: left;
-        color: #FBC12E;
+        color: $accent;
         height: 50px;
         width: 35px;
         font-size: 1.0em;
@@ -23,15 +23,15 @@
 
     table.lobby-info th {
         text-align: center;
-        color: darkgoldenrod;
+        color: $accentDark;
         height: 20px;
         width: 30px;
         font-size: 1.2em;
-        border-right: 2.5px solid #FBC12E;
+        border-right: 2.5px solid $accent;
     }
 
     &.lobby-title {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 2em;
@@ -39,9 +39,9 @@
     }
 
     &.input-name {
-        color: #FBC12E;
-        background: #4A4A47;
-        border: 0.5px solid #FBC12E;
+        color: $accent;
+        background: $background;
+        border: 0.5px solid $accent;
         border-radius: 7px;
         height: 32px;
         width: 180px;
@@ -67,7 +67,7 @@
 }
 
 ::placeholder {
-    color: #FBC12E;
+    color: $accent;
     opacity: 3;
     padding-left: 1em;
 }

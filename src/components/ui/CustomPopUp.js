@@ -1,7 +1,7 @@
 import React from "react";
 import PropTypes from "prop-types";
 import {Backdrop, Stack} from "@mui/material";
-import "styles/ui/DynamicPopUp.scss"
+import "styles/ui/CustomPopUp.scss";
 
 const CustomPopUp = props => {
 
