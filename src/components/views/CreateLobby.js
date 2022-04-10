@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
-import {api} from 'helpers/api';
+import {api, handleError} from 'helpers/api';
 import 'styles/views/CreateLobby.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import DynamicPopUp from "../ui/DynamicPopUp";
