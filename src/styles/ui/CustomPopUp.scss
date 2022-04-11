@@ -1,0 +1,16 @@
+@import 'styles/theme.scss';
+
+.popUpContainer {
+  width: 300px;
+  padding: 20px;
+
+  border-radius: 10px;
+  border: 3px solid $accent;
+
+  color: $textColorLight;
+
+  background-color: $backgroundDark;
+
+  text-align: center;
+
+}

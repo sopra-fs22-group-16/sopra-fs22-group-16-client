@@ -1,13 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
-import { Popup } from 'components/ui/Popup';
-import { api, handleError } from 'helpers/api';
-import 'styles/views/ShareQRCode.scss';
+import 'styles/views/lobby/ShareQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
 
-const ShareQRCode = props => {
+const ShareQRCode = ({ id }) => {
 
     const history = useHistory();
 
@@ -36,7 +34,7 @@ const ShareQRCode = props => {
             <div className="shareqr">
                 <label className="shareqr message">Show this QR code to other players to join your lobbby:</label>
                 <div className="shareqr qrcontainer">
-                    <img className="shareqr code" src={QR} />
+                    <img className="shareqr code" src={QR} alt="" />
                 </div>
                 <div className="shareqr lobby-buttons">
                     <Button onClick={() => goBack()}>GO BACK</Button>

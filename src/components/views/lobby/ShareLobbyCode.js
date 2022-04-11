@@ -3,18 +3,16 @@ import { useHistory, Link, useParams, useLocation } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
 import { api, handleError } from 'helpers/api';
-import 'styles/views/ShareLobbyCode.scss';
-import 'styles/views/ShareQRCode.scss';
+import 'styles/views/lobby/ShareLobbyCode.scss';
+import 'styles/views/lobby/ShareQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
-
-const ShareLobbyCode = props => {
+const ShareLobbyCode = ({ id }) => {
     const history = useHistory();
 
     //passing lobby id from url parameters instead of using java script state
-    let { id } = useParams();
     const location = useLocation();
-    const token = location.token;
+    const token = localStorage.getItem('token');
     const [code, setCode] = useState(location.code);
 
 

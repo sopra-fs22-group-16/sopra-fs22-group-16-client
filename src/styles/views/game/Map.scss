@@ -1,0 +1,23 @@
+$tile-size: 48px;
+
+#map {
+  // collapse borders around tiles
+  border-collapse: collapse;
+}
+
+.loadingContainer {
+  position: absolute;
+  bottom: 0;
+  width: 100vw;
+  justify-content: center;
+}
+
+.Tile {
+  width: $tile-size;
+  height: $tile-size;
+
+  img {
+    width: $tile-size;
+    height: $tile-size;
+  }
+}

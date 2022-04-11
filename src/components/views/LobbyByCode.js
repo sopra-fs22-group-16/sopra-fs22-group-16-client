@@ -4,7 +4,7 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import jsonDataLobbies from './jsonDataLobbies';
+import jsonDataLobbies from './lobby/jsonDataLobbies';
 
 
 // form of code
@@ -82,35 +82,35 @@ const LobbyByCode = () => {
 
 
   return (
-    <BaseContainer>
-    <div className="LobbyByCode container">
-      <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided 8-digit code in the field below and press Join:</h2>
-      <FormField
-                                value={codeInput}
-                                onChange={un => ValidateCode(un)}>
-                            </FormField>
-       <Link className="LobbyByCode link"
+        <BaseContainer>
+            <div className="LobbyByCode container">
+                <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided 8-digit code in the field below and press Join:</h2>
+                <FormField
+                    value={codeInput}
+                    onChange={un => ValidateCode(un)}>
+                </FormField>
+                <Link className="LobbyByCode link"
                     to={{
                         pathname: '/join_QR'}}>
-                Join using a QR code instead</Link>
-          <div className="LobbyByCode button-container">
-            <Button
-              width="100%"
-              onClick={() =>  history.push('/public-lobbies')}
-            >
-              RETURN TO PUBLIC LOBBIES
-            </Button>
+                    Join using a QR code instead</Link>
+                <div className="LobbyByCode button-container">
+                    <Button
+                        width="100%"
+                        onClick={() =>  history.push('/public-lobbies')}
+                    >
+                    RETURN TO PUBLIC LOBBIES
+                    </Button>
+                </div>
+                <div className="LobbyByCode button-container">
+                    <Button className = "secondary-button return"
+                        width="100%"
+                        onClick={() => history.push('/home')}
+                        >
+                        RETURN HOME
+                    </Button>
+                </div>
             </div>
-            <div className="LobbyByCode button-container">
-            <Button className = "secondary-button return"
-              width="100%"
-              onClick={() => history.push('/home')}
-            >
-              RETURN HOME
-            </Button>
-          </div>
-          </div>
-    </BaseContainer>
+        </BaseContainer>
   );
 };
 

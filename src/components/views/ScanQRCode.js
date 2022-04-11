@@ -1,8 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
-import { Popup } from 'components/ui/Popup';
-import { api, handleError } from 'helpers/api';
 import 'styles/views/ScanQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import QrReader from 'react-qr-reader'
@@ -52,7 +50,7 @@ const ScanQRCode = props => {
                         onError={handleQRError}
                         onScan={handleQRScan}
                     />                    
-                </div>
+                </div>                
                 <div className="scanqr url">{result}</div>
                 <div className="scanqr lobby-buttons">
                     <Button onClick={() => goLobbies()}>RETURN TO LOBBIES</Button>
