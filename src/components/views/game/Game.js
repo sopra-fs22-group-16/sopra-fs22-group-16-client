@@ -4,7 +4,7 @@ import Map from "./Map";
 
 import surrenderFlag from "styles/images/surrenderFlag.png"
 
-import "styles/views/Game.scss"
+import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";

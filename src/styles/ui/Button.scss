@@ -1,8 +1,8 @@
 @import 'styles/theme';
 
 .primary-button {
-    background: #FBC12E;
-    border: 3px solid #604C18;
+    background: $accent;
+    border: 3px solid $accentDark;
     box-sizing: border-box;
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.5);
     border-radius: 10px;

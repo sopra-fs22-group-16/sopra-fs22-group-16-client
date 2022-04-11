@@ -1,77 +1,117 @@
 import React, {useState, useEffect} from 'react';
-import {api, handleError} from 'helpers/api';
+import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import jsonDataLobbies from "./jsonDataLobbies";
+import jsonDataLobbies from "./lobby/jsonDataLobbies";
 import {BlockPopup, Popup} from "../ui/Popup";
-import defaultTheme from "../../styles/themes/defaulTheme";
-import { LinearProgress} from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
-import Header from "components/views/Header"
+import {defaultTheme} from "../../styles/themes/defaulTheme";
+import {LinearProgress} from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
 
-import 'styles/views/HomePage.scss';
 import 'styles/views/PublicLobbies.scss';
-
-/*
-It is possible to add multiple components inside a single file,
-however be sure not to clutter your files with an endless amount!
-As a rule of thumb, use one file per component and only add small,
-specific components that belong to the main one in the same file.
- */
+import CustomPopUp from "../ui/CustomPopUp";
+import UserModel from "../../models/UserModel";
 
 const PublicLobbies = () => {
     const history = useHistory();
-    //const RESTDataLobbies = api.get(URL = '/v1/game/lobbies/');
     const [lobbyData, setLobbyData] = useState(null);
+
+    // PopUps
+    const [isJoining, setJoining] = useState(false);
+    const [errorMessage, setErrorMessage] = useState("");
+    const [getDataFailed, setGetDataFailed] = useState(false);
 
     const returnHome = () => {
         history.push('/home');
     }
 
-
-    // TODO - UPDATE WITH JOINBYCODE PAGE
-    const joinLobbybyCode = () => {
+    // TODO - UPDATE WITH JOIN BY CODE PAGE
+    const joinLobbyByCode = () => {
         history.push('/join-lobby');
     }
 
-    // for more information on the effect hook, please see https://reactjs.org/docs/hooks-effect.html
     useEffect(() => {
-        // effect callbacks are synchronous to prevent race conditions. So we put the async function inside:
         async function fetchData() {
             try {
-                const response = await api.get('/v1/game/lobby/1');
+                // TODO: Switch as soon as implemented
+                //const response = await api.get('/v1/game/lobby/1');
+                const response = jsonDataLobbies;
 
-                // delays continuous execution of an async operation for 1 second.
-                // This is just a fake async call, so that the spinner can be displayed
-                // feel free to remove it :)
+                setLobbyData(response);
 
-                // Get the returned users and update the state.
-                //setLobbyData(response.data);
-
-                // This is just some data for you to see what is available.
-                // Feel free to remove it.
-                console.log('request to:', response.request.responseURL);
-                console.log('status code:', response.status);
-                console.log('status text:', response.statusText);
-                console.log('requested data:', response.data);
-
-                // See here to get more data.
-                console.log(response);
             } catch (error) {
-                console.error(`Something went wrong while fetching the users: \n${handleError(error)}`);
-                console.error("Details:", error);
-                //alert("Something went wrong while fetching the users! See the console for details.");
+                setGetDataFailed(true);
             }
         }
 
         fetchData();
     }, []);
 
+    async function joinLobbyWithId(id) {
+        try {
+            setJoining(true);
+
+            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
+            // Remove when implementing actual call implemented
+            // Simulate joining lobby
+            await new Promise(resolve => setTimeout(resolve, 500));
+
+            // here we mocked the answer of the API join lobby
+            const response = {
+                "lobby": {
+                    "id": id,
+                    "name": "name",
+                    "ownerId": 0,
+                    "players": [
+                        {
+                            "id": 0,
+                            "name": "Player-0",
+                            "ready": false,
+                            "team": 0
+                        },
+                        {
+                            "id": 1,
+                            "name": "Player-2",
+                            "ready": false,
+                            "team": 0
+                        },
+
+                    ],
+                    "visibility": "PUBLIC",
+                    "gameMode": "TWO_VS_TWO",
+                    "gameType": "UNRANKED",
+                    "invitationCode": "ABCDEFGH"
+                },
+                "token": "THIS IS MY TOKEN"
+            };
+
+            // Get the returned user and update a new object.
+            const user = new UserModel(response.data);
+
+            // Store the token into the local storage.
+            localStorage.setItem('token', user.token);
+
+            history.push({pathname: '/lobby/' + user.lobby.id})
+        } catch (error) {
+            setJoining(false);
+            if (error.response != null) {
+                // TODO: Update with correct error codes and messages
+                if (error.response.status === 999) {
+                    setErrorMessage("THIS IS A SAMPLE ERROR MESSAGE!");
+                } else {
+                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
+                }
+            } else {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
+            }
+        }
+    }
+
     let content = null;
 
-    if (jsonDataLobbies) {
-        content = jsonDataLobbies.map((data, key) => (
+    if (lobbyData) {
+        content = lobbyData.map((data, key) => (
                 <LobbyInfo
                     id={data.id}
                     key={key}
@@ -79,6 +119,7 @@ const PublicLobbies = () => {
                     mode={data.mode}
                     players={data.players}
                     visibility={data.visibility}
+                    joinLobby={joinLobbyWithId}
                 />
             )
         );
@@ -112,7 +153,7 @@ const PublicLobbies = () => {
                 <div className="PublicLobbies button-container">
                     <Button
                         width="100%"
-                        onClick={() => joinLobbybyCode()}
+                        onClick={() => joinLobbyByCode()}
                     >
                         JOIN A LOBBY BY CODE
                     </Button>
@@ -127,81 +168,40 @@ const PublicLobbies = () => {
                     </Button>
                 </div>
             </div>
+            <ThemeProvider theme={defaultTheme}>
+                <CustomPopUp open={isJoining} information={"Joining Lobby"}>
+                    <div style={{width: '100%'}}>
+                        <LinearProgress color="primary"/>
+                    </div>
+                </CustomPopUp>
+                <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
+                    <Button onClick={() =>
+                        history.push('/home')
+                    }>
+                        Return Home
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                    <Button onClick={() =>
+                        setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
+            </ThemeProvider>
         </BaseContainer>
-
     );
 };
 
-const LobbyInfo = ({id, name, mode, players, visibility}) => {
+const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
 
-    const history = useHistory();
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
-    async function gotoLobbyPage() {
-        try {
-            const popUp = document.getElementById("joinLobbyPopUp");
-            popUp.style.display = "block";
-
-            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
-            // Remove when implementing actual call implemented
-            // Simulate joining lobby
-            await new Promise(resolve => setTimeout(resolve, 2000));
-
-            // here we mocked the answer of the API join lobby
-            const responseBody = {
-                "lobby": {
-                    "id": id,
-                    "name": "name",
-                    "ownerId": 0,
-                    "players": [
-                        {
-                            "id": 0,
-                            "name": "Player-0",
-                            "ready": false,
-                            "team": 0
-                        },
-                        {
-                            "id": 1,
-                            "name": "Player-2",
-                            "ready": false,
-                            "team": 0
-                        },
-
-                    ],
-                    "visibility": "PUBLIC",
-                    "gameMode": "TWO_VS_TWO",
-                    "gameType": "UNRANKED",
-                    "invitationCode": "ABCDEFGH"
-                },
-                "token": "THIS IS MY TOKEN"
-            };
-
-            history.push({
-                pathname: '/lobby/' + id,
-                state: responseBody
-            })
-
-
-        } catch (error) {
-            //**TODO** control errors after call to the backend to create the lobby
-            alert("Something went wrong! ");
-
-            const blockPopUp = document.getElementById("joinLobbyPopUp");
-            blockPopUp.style.display = "none"
-
-            const popUp = document.getElementById("failedLobbyPopUp");
-            popUp.style.display = "block";
-            popUp.addEventListener("click", () => {
-                popUp.style.display = "none"
-            })
-        }
-    }
-
-    if (visibility === "PRIVATE") return null;
+    if (visibility === "PRIVATE" || players >= totalPlayers) return null;
     return (
-        <tr onClick={gotoLobbyPage}>
+        <tr onClick={() => joinLobby(id)}>
             <td>
                 {name}
             </td>

@@ -1,19 +1,19 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
-import { Button } from 'components/ui/Button';
-import { Popup } from 'components/ui/Popup';
-import { api } from 'helpers/api';
-import 'styles/views/CreateLobby.scss';
+import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
+import {Button} from 'components/ui/Button';
+import {api} from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
 import UserModel from 'models/UserModel';
-import Header from "components/views/Header"
+import CustomPopUp from "../ui/CustomPopUp";
+
+import 'styles/views/CreateLobby.scss';
 
 
 const FormField = props => {
     return (
-        <div className="createlobby lobby-name">
+        <div className="createLobby lobby-name">
             <input
-                className="createlobby input-name"
+                className="createLobby input-name"
                 placeholder="enter a name..."
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
@@ -22,7 +22,7 @@ const FormField = props => {
     );
 };
 
-const CreateLobby = props => {
+const CreateLobby = () => {
 
     const history = useHistory();
 
@@ -30,20 +30,14 @@ const CreateLobby = props => {
     const [gameMode, setGameMode] = useState("ONE_VS_ONE");
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
+    const [errorMessage, setErrorMessage] = useState("");
     const token = null;
 
     const postLobby = async () => {
 
         if (name === '') {
-
-            const popUp = document.getElementById("noUser");
-            popUp.style.display = "block";
-            popUp.addEventListener("click", () => {
-                popUp.style.display = "none"
-            })
-
-        }
-        else {
+            setErrorMessage("You have to enter a lobby name!");
+        } else {
             try {
 
                 //request body sent to the backend to create a new lobby
@@ -55,39 +49,25 @@ const CreateLobby = props => {
                 };
 
                 //call to the backend to create a new lobby
-                const response = await api.post('/v1/game/lobby', JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                const response = await api.post('/v1/game/lobby', JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
                 // Get the returned user and update a new object.
                 const user = new UserModel(response.data);
+
                 // Store the token into the local storage.
                 localStorage.setItem('token', user.token);
 
-                history.push({ pathname: '/lobby/' + user.lobby.id })
+                history.push({pathname: '/lobby/' + user.lobby.id})
             } catch (error) {
                 if (error.response != null) {
                     // conflict in lobby name
                     if (error.response.status === 409) {
-                        const popUp = document.getElementById("invalidUser");
-                        popUp.style.display = "block";
-                        popUp.addEventListener("click", () => {
-                            popUp.style.display = "none"
-                        })
+                        setErrorMessage("Lobby name assignment is not possible - name already taken!");
+                    } else {
+                       setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
                     }
-                    else {
-                        console.log(error);
-                        const popUp = document.getElementById("technicalError");
-                        popUp.style.display = "block";
-                        popUp.addEventListener("click", () => {
-                            popUp.style.display = "none"
-                        })
-                    }
-                }
-                else {
-                    const popUp = document.getElementById("technicalError");
-                    popUp.style.display = "block";
-                    popUp.addEventListener("click", () => {
-                        popUp.style.display = "none"
-                    })
+                } else {
+                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
                 }
             }
         }
@@ -99,75 +79,89 @@ const CreateLobby = props => {
 
     return (
         <BaseContainer>
-            <div className="createlobby">
-                <label className="createlobby lobby-title">Create Lobby</label>
+            <div className="createLobby">
+                <label className="createLobby lobby-title">Create Lobby</label>
                 <table className="lobby-info">
-                    <tr>
-                        <th>NAME</th>
-                        <td colSpan="2">
-                            <FormField
-                                value={name}
-                                onChange={un => setName(un)}>
-                            </FormField>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>MODE</th>
-                        <td>
-                            <label>
-                                <input id="ONE_VS_ONE" className="createlobby check" checked={gameMode === "ONE_VS_ONE"} type="checkbox" onClick={() => setGameMode("ONE_VS_ONE")} />
-                                1x1
-                            </label>
-                        </td>
-                        <td>
-                            <label>
-                                <input id="TWO_VS_TWO" className="createlobby check" checked={gameMode === "TWO_VS_TWO"} type="checkbox" onClick={() => setGameMode("TWO_VS_TWO")} />
-                                2x2
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>TYPE</th>
-                        <td>
-                            <label>
-                                <input id="UNRANKED" className="createlobby check" checked={gameType === "UNRANKED"} type="checkbox" onClick={() => setGameType("UNRANKED")} />
-                                Unranked
-                            </label>
-                        </td>
-                        <td>
-                            <label>
-                                <input id="RANKED" className="createlobby check" checked={gameType === "RANKED"} type="checkbox" onClick={() => setGameType("RANKED")} />
-                                Ranked
-                            </label>
-                        </td>
-                    </tr>
-                    <tr>
-                        <th>ACCESS</th>
-                        <td>
-                            <label>
-                                <input id="PUBLIC" className="createlobby check" checked={visibility === "PUBLIC"} type="checkbox" onClick={() => setVisibility("PUBLIC")} />
-                                Public
-                            </label>
-                        </td>
-                        <td>
-                            <label>
-                                <input id="PRIVATE" className="createlobby check" checked={visibility === "PRIVATE"} type="checkbox" onClick={() => setVisibility("PRIVATE")} />
-                                Private
-                            </label>
-                        </td>
-                    </tr>
+                    <tbody>
+                        <tr>
+                            <th>NAME</th>
+                            <td colSpan="2">
+                                <FormField
+                                    value={name}
+                                    onChange={un => setName(un)}>
+                                </FormField>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>MODE</th>
+                            <td>
+                                <label>
+                                    <input id="ONE_VS_ONE" className="createLobby check"
+                                           checked={gameMode === "ONE_VS_ONE"} type="checkbox"
+                                           onChange={() => setGameMode("ONE_VS_ONE")}/>
+                                    1x1
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input id="TWO_VS_TWO" className="createLobby check"
+                                           checked={gameMode === "TWO_VS_TWO"} type="checkbox"
+                                           onChange={() => setGameMode("TWO_VS_TWO")}/>
+                                    2x2
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>TYPE</th>
+                            <td>
+                                <label>
+                                    <input id="UNRANKED" className="createLobby check" checked={gameType === "UNRANKED"}
+                                           type="checkbox" onChange={() => setGameType("UNRANKED")}/>
+                                    Unranked
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input id="RANKED" className="createLobby check" checked={gameType === "RANKED"}
+                                           type="checkbox" onChange={() => setGameType("RANKED")}/>
+                                    Ranked
+                                </label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th>ACCESS</th>
+                            <td>
+                                <label>
+                                    <input id="PUBLIC" className="createLobby check" checked={visibility === "PUBLIC"}
+                                           type="checkbox" onChange={() => setVisibility("PUBLIC")}/>
+                                    Public
+                                </label>
+                            </td>
+                            <td>
+                                <label>
+                                    <input id="PRIVATE" className="createLobby check" checked={visibility === "PRIVATE"}
+                                           type="checkbox" onChange={() => setVisibility("PRIVATE")}/>
+                                    Private
+                                </label>
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
-                <div className="createlobby space" />
-                <div className="createlobby lobby-buttons">
+                <div className="createLobby space"/>
+                <div className="createLobby lobby-buttons">
                     <Button onClick={() => postLobby()}>POST LOBBY</Button>
                 </div>
-                <div className="createlobby lobby-buttons">
+                <div className="createLobby lobby-buttons">
                     <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
                 </div>
             </div>
-            <Popup id="noUser">You have to enter a lobby name!</Popup>
-            <Popup id="invalidUser">Lobby name assignment is not possible - name already taken!</Popup>
-            <Popup id="technicalError">Ups! Something happened. Try again and if the error persists, contact the administrator.</Popup>
+            <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                <Button onClick={() =>
+                    setErrorMessage("")
+                }>
+                    Close
+                </Button>
+            </CustomPopUp>
         </BaseContainer>
     );
 };

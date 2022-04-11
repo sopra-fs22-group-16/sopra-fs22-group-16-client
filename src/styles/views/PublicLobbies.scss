@@ -6,12 +6,14 @@
     @include center;
     flex-direction: column;
   }
+
   &.h1 {
     display: block;
     text-align: center;
     font-size: 2em;
     padding-bottom: 2em;
-}
+  }
+
   &.table {
     border: 1px solid;
     border-radius: 5px;
@@ -19,43 +21,52 @@
     width: 90%;
     max-width: 480px;
     font-size: 10px;
-	  margin: 0; padding: 0;
-	  //border-collapse: collapse;
+    margin: 0;
+    padding: 0;
+    //border-collapse: collapse;
   }
-  &.table tr.top{
+
+  &.table tr.top {
     //outline: 1px solid #FBC12E;
     border-radius: 5px;
     color: #604C18;
     text-transform: uppercase;
   }
 
+  &.table tr{
+    height: 32px;
+  }
+
   &.table th {
     border-spacing: 0;
-	  width: 120px;
-	  margin: 0; padding: 0;
+    width: 120px;
+    margin: 0;
+    padding: 0;
   }
+
   &.table td {
     border-spacing: 0;
-	  width: 120px;
-	  margin: 0; padding: 0;
+    width: 120px;
+    margin: 0;
+    padding: 0;
   }
 
   // hover on clicking except the tr.top
   &.table tr:not(tr.top):hover {
     background-color: #604C18;
-    }
+  }
 
   &.label {
-    color: $textColor;
+    color: $textColorLight;
     margin-bottom: 10px;
     text-transform: lowercase;
     font-weight: 300;
   }
-  
+
   &.button-container {
     display: flex;
     margin-top: 1em;
     width: 200px;
   }
 
-  }
+}

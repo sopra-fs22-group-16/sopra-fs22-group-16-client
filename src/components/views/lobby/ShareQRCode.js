@@ -1,9 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
-import 'styles/views/ShareQRCode.scss';
+import 'styles/views/lobby/ShareQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import Header from "components/views/Header"
 
 
 const ShareQRCode = ({ id }) => {

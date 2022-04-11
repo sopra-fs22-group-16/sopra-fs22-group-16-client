@@ -4,8 +4,7 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import jsonDataLobbies from './jsonDataLobbies';
-import Header from "components/views/Header"
+import jsonDataLobbies from './lobby/jsonDataLobbies';
 
 
 // form of code
