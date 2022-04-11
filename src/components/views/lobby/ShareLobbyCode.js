@@ -57,7 +57,7 @@ const ShareLobbyCode = ({ id }) => {
                 </div>
                 <Link
                                     className="lobby link"
-                                    to={{pathname: '/lobby/' + id + '/share/qr'  , token: token}}>
+                                    to={{pathname: `/lobby/${id}/share/qr`, token: token}}>
                                     Generate QR code</Link>
                 <div className="sharecode lobby-button">
                     <Button onClick={goBack}>GO BACK</Button>
