@@ -4,7 +4,7 @@
 .lobby {
 
     table.player-view {
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
         align-self: center;
         width: 300px;
         margin-left: auto;
@@ -16,7 +16,7 @@
 
     table.player-view td {
         text-align: center;
-        color: #FBC12E;
+        color: $accent;
         height: 30px;
         font-size: 1.2em;
         width: 50px;
@@ -27,11 +27,11 @@
         color: darkgoldenrod;
         height: 20px;
         font-size: 1.2em;
-        border-bottom: 2.5px solid #FBC12E;
+        border-bottom: 2.5px solid $accent;
     }
 
     table.lobby-info {
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
         border-radius: 10px;
         align-self: center;
         width: 250px;
@@ -42,7 +42,7 @@
 
     table.lobby-info td {
         text-align: center;
-        color: #FBC12E;
+        color: $accent;
         height: 20px;
         font-size: 1.1em;
     }
@@ -55,7 +55,7 @@
     }
 
     &.lobby-title {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 2em;
@@ -63,7 +63,7 @@
     }
 
     &.lobby-labels {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 1.2em;

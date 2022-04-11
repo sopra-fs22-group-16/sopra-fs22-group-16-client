@@ -4,7 +4,7 @@
 .sharecode {
 
     &.message {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 1.2em;
@@ -15,16 +15,21 @@
 
     &.code {
         display: block;
-        color: 	white;
+        color: white;
         text-align: center;
         margin: auto;
         width: 220px;
         padding: 1em;
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
+        cursor: pointer;
     }
 
     &.lobby-button {
         padding-top: 1.5em;
         text-align: center;
+    }
+
+    &.space {
+        padding-top: 6.5em;
     }
 }
