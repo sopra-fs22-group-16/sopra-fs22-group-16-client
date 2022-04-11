@@ -41,7 +41,6 @@ const ScanQRCode = props => {
 
     return (
         <BaseContainer>
-            <Header />
             <div className="scanqr">
                 <label className="scanqr message">Please allow access to the camera first to be able to scan the QR code:</label>
                 <div className="scanqr container">

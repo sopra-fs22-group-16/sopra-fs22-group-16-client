@@ -32,7 +32,6 @@ const ShareQRCode = ({ id }) => {
 
     return (
         <BaseContainer>
-            <Header />
             <div className="shareqr">
                 <label className="shareqr message">Show this QR code to other players to join your lobbby:</label>
                 <div className="shareqr qrcontainer">

@@ -84,7 +84,6 @@ const LobbyByCode = () => {
 
   return (
         <BaseContainer>
-            <Header />
             <div className="LobbyByCode container">
                 <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided 8-digit code in the field below and press Join:</h2>
                 <FormField
