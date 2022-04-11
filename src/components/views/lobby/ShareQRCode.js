@@ -3,7 +3,6 @@ import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import 'styles/views/lobby/ShareQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import Header from "components/ui/Header"
 
 
 const ShareQRCode = ({ id }) => {

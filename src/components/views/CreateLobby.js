@@ -4,7 +4,6 @@ import {Button} from 'components/ui/Button';
 import {api} from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
 import UserModel from 'models/UserModel';
-import Header from "components/ui/Header"
 import CustomPopUp from "../ui/CustomPopUp";
 
 import 'styles/views/CreateLobby.scss';

@@ -5,7 +5,6 @@ import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import { useHistory, useLocation, Link } from 'react-router-dom';
 import jsonDataLobbies from './lobby/jsonDataLobbies';
-import Header from "components/ui/Header"
 
 
 // form of code

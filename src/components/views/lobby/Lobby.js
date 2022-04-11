@@ -2,7 +2,6 @@ import React, {useState, useEffect} from 'react';
 import {useHistory, Link} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import {Button} from 'components/ui/Button';
-import Header from "components/ui/Header"
 import {api} from 'helpers/api';
 import {defaultTheme} from "../../../styles/themes/defaulTheme";
 import CustomPopUp from "../../ui/CustomPopUp";

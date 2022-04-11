@@ -22,7 +22,7 @@ const HomePage = () => {
 
     return (
         <div className={"HomePage baseContainer"}>
-            <img src={hannibal_background} className={"HomePage backgroundImage"}/>
+            <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
             <div className="HomePage container">
                 <Header className={"HomePage image"}/>
                 <div className={"HomePage button-container-container"}>
