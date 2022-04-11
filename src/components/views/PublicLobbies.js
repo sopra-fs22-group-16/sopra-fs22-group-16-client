@@ -129,7 +129,6 @@ const PublicLobbies = () => {
     // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
-            <Header/>
             <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
                 color="secondary"/></ThemeProvider></BlockPopup>
             <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>

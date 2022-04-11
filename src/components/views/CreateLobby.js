@@ -80,7 +80,6 @@ const CreateLobby = () => {
 
     return (
         <BaseContainer>
-            <Header/>
             <div className="createLobby">
                 <label className="createLobby lobby-title">Create Lobby</label>
                 <table className="lobby-info">
