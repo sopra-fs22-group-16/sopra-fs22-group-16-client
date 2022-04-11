@@ -2,11 +2,12 @@
 
 
 .header {
-    &.headerContainer {
-        @include center;
-    }
-    
-    img {
-    max-width: 60%;
-    }
+  &.headerContainer {
+    @include center;
+  }
+
+  img {
+    max-width: 90vw;
+    max-height: 15vh;
+  }
 }
