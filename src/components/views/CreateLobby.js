@@ -99,7 +99,6 @@ const CreateLobby = props => {
 
     return (
         <BaseContainer>
-            <Header />
             <div className="createlobby">
                 <label className="createlobby lobby-title">Create Lobby</label>
                 <table className="lobby-info">

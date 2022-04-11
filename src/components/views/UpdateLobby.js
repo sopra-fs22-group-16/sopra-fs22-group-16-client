@@ -134,7 +134,6 @@ const UpdateLobby = ({ id }) => {
 
     return (
         <BaseContainer>
-            <Header />
             <div className="updatelobby">
                 <label className="updatelobby lobby-title">Update Lobby</label>
                 <table className="lobby-info">

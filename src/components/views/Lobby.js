@@ -61,7 +61,6 @@ const Lobby = ({ id }) => {
 
     return (
         <BaseContainer>
-            <Header />
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 <Link
