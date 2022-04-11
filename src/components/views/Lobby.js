@@ -14,7 +14,8 @@ const Lobby = props => {
 
     //we get the information from the creation page
     const location = useLocation();
-    const [token, setToken] = useState(location.state.token);
+    //const [token, setToken] = useState(location.state.token);
+    const token = location.state.token;
     const [lobbyData, setLobbyData] = useState(location.state.lobby);
 
     //displayed labels
@@ -23,6 +24,7 @@ const Lobby = props => {
     const presentPlayers = lobbyData.players.length;
     const readyPlayers = 0;
     const totalPlayers = lobbyData.gameMode === "ONE_VS_ONE" ? 2 : 4;
+    const invitationCode = lobbyData.invitationCode;
 
     const returnLobbies = () => {
         history.push('/lobbies');
@@ -110,7 +112,8 @@ const Lobby = props => {
                 </table>
                 <Link
                     className="lobby link"
-                    to={'/lobby/invite-users/' + lobbyData.id}>
+                    to={{pathname: '/lobby/' + lobbyData.id + '/invite-users' , token: token}}
+                    >
                     invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
