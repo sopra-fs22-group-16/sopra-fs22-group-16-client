@@ -4,7 +4,6 @@ import { Button } from 'components/ui/Button';
 import { Popup } from 'components/ui/Popup';
 import { api, handleError } from 'helpers/api';
 import 'styles/views/lobby/ShareLobbyCode.scss';
-import 'styles/views/lobby/ShareQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 
 const ShareLobbyCode = ({ id }) => {
