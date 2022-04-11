@@ -127,8 +127,7 @@ const Lobby = ({id}) => {
                 </table>
                 <Link
                     className="lobby link"
-                    // TODO: update link (in the corresponding story)
-                    to={'/lobby/invite-users/' + id}>
+                    to={`/lobby/${id}/invite-users`}>
                     invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>

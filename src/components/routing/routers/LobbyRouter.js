@@ -3,6 +3,7 @@ import PropTypes from 'prop-types';
 import Lobby from "components/views/lobby/Lobby";
 import UpdateLobby from "components/views/lobby/UpdateLobby";
 import ShareQRCode from "components/views/lobby/ShareQRCode";
+import ShareLobbyCode from "components/views/lobby/ShareLobbyCode";
 import ScanQRCode from "components/views/ScanQRCode";
 import LobbyByCode from "components/views/LobbyByCode";
 
@@ -31,6 +32,11 @@ const LobbyRouter = props => {
                     <Route path={`${props.base}/:id/share/qr`} render={({ match }) => {
                         const id = parseInt(match.params.id)
                         return <ShareQRCode id={id} />
+                    }} >
+                    </Route>
+                    <Route path={`${props.base}/:id/invite-users`} render={({ match }) => {
+                       const id = parseInt(match.params.id)
+                       return <ShareLobbyCode id={id} />
                     }} >
                     </Route>
                     <Route path={`${props.base}/scan/qr`} render={() => {
