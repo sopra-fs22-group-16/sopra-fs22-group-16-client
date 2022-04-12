@@ -4,7 +4,7 @@
 .scanqr {
 
     &.message {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 1.2em;
@@ -23,14 +23,14 @@
     }
 
     &.url {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 1.2em;
         padding: 0.5em;
         width: 320px;
         margin: auto;
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
     }
 
     &.lobby-buttons {

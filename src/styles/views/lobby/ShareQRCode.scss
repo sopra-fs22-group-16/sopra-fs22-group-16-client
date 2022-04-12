@@ -1,10 +1,10 @@
 @import 'styles/theme';
 
 
-.shareqr {
+.shareQR {
 
     &.message {
-        color: #FBC12E;
+        color: $accent;
         display: block;
         text-align: center;
         font-size: 1.2em;
@@ -18,10 +18,10 @@
         margin: auto;
         width: 220px;
         padding: 1em;
-        border: 2.5px solid #FBC12E;
+        border: 2.5px solid $accent;
     }
 
-    &.lobby-buttons {
+    &.buttons {
         padding-top: 1.5em;
         text-align: center;
     }
