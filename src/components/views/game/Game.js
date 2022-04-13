@@ -50,12 +50,11 @@ const Game = ({id}) => {
                 let mapData = response.map;
                 let mapArray = [];
 
-                // Convert response to array
-                Object.keys(mapData).forEach(function (y) {
+                mapData.forEach((row, y) => {
                     mapArray.push([]);
-                    Object.keys(mapData[y]).forEach(function (x) {
+                    row.forEach((tile, x) => {
                         mapArray[y].push(new TileModel(x, y, mapData[y][x]));
-                    })
+                    });
                 });
 
                 setGameMap(mapArray);
