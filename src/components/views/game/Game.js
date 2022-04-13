@@ -50,9 +50,9 @@ const Game = ({id}) => {
                 let mapData = response.map;
                 let mapArray = [];
 
-                mapData.forEach((row, y) => {
+                mapData.map((row, y) => {
                     mapArray.push([]);
-                    row.forEach((tile, x) => {
+                    row.map((tile, x) => {
                         mapArray[y].push(new TileModel(x, y, mapData[y][x]));
                     });
                 });
