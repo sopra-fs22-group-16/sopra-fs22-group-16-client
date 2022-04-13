@@ -5,7 +5,9 @@ import {Button} from 'components/ui/Button';
 import {api} from 'helpers/api';
 import {defaultTheme} from "../../../styles/themes/defaulTheme";
 import CustomPopUp from "../../ui/CustomPopUp";
-import {ThemeProvider} from "@emotion/react";
+import { ThemeProvider } from "@emotion/react";
+import Socket from "components/socket/Socket";
+
 
 import 'styles/views/lobby/Lobby.scss';
 
@@ -152,6 +154,7 @@ const Lobby = ({id}) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
+            <Socket topics={[`/topic/lobby/update/${id}`]}/>
         </BaseContainer>
     );
 };
