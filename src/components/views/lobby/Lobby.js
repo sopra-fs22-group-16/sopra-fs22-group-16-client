@@ -1,5 +1,5 @@
-import React, {useState, useEffect} from 'react';
-import {useHistory, Link} from 'react-router-dom';
+import React, { useState, useEffect } from 'react';
+import { useHistory, Link, useLocation} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import {Button} from 'components/ui/Button';
 import {api} from 'helpers/api';
@@ -14,6 +14,7 @@ import 'styles/views/lobby/Lobby.scss';
 const Lobby = ({id}) => {
 
     const history = useHistory();
+    const location = useLocation();
 
     //we get the information from the creation page
     const token = localStorage.getItem("token");
@@ -41,6 +42,11 @@ const Lobby = ({id}) => {
 
     const changeStatus = (player) => {
         //implement function (in the corresponding story)
+    }
+
+    // refresh view when receiving a message from the socket
+    const onMessage = () => {
+        window.location = window.location.href;
     }
 
     useEffect(() => {
@@ -154,7 +160,10 @@ const Lobby = ({id}) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
-            <Socket topics={[`/topic/lobby/update/${id}`]}/>
+            <Socket
+                topics={location.pathname}
+                onMessage={onMessage}
+            />
         </BaseContainer>
     );
 };

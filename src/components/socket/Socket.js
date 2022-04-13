@@ -3,17 +3,14 @@ import {getDomain} from 'helpers/getDomain';
 
 const Socket = props => {
 
-    // when receiving a message, Socket component will refresh the view 
-    // which uses it.
-    const onMessageReceive = () => {
-        window.location = window.location.href;
-    }
+    const WEBSOCKET_SUFFIX = "/hannibal-websocket"
+    const WEBSOCKET_PREFIX= "/topic"
 
     return (
         <SockJsClient
-            url={getDomain() + "/hannibal-websocket"}
-            topics={props.topics}
-            onMessage={() => onMessageReceive()}
+            url={getDomain() + WEBSOCKET_SUFFIX}
+            topics={[WEBSOCKET_PREFIX + props.topics]}
+            onMessage={props.onMessage}
         />
     );
 }
