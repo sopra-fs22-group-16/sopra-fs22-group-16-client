@@ -34,11 +34,9 @@ const PublicLobbies = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                // TODO: Switch as soon as implemented
-                //const response = await api.get('/v1/game/lobby/1');
-                const response = jsonDataLobbies;
-
-                setLobbyData(response);
+                const response = await api.get('/v1/game/lobby');
+                setLobbyData(jsonDataLobbies);
+                //setLobbyData(response.data);
 
             } catch (error) {
                 setGetDataFailed(true);
@@ -111,21 +109,20 @@ const PublicLobbies = () => {
     let content = null;
 
     if (lobbyData) {
-        content = lobbyData.map((data, key) => (
+        content = lobbyData.map((lobby, key) => (
                 <LobbyInfo
-                    id={data.id}
                     key={key}
-                    name={data.name}
-                    mode={data.mode}
-                    players={data.players}
-                    visibility={data.visibility}
+                    id={lobby.id}
+                    name={lobby.name}
+                    mode={lobby.gameMode}
+                    players={lobby.players}
+                    visibility={lobby.visibility}
                     joinLobby={joinLobbyWithId}
                 />
             )
         );
     }
 
-    // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
             <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
@@ -194,28 +191,47 @@ const PublicLobbies = () => {
 };
 
 const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
-
-    const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
+    const displayedMode = (mode === "ONE_VS_ONE" ? "1v1" : "2v2");
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
     if (visibility === "PRIVATE" || players >= totalPlayers) return null;
+    const enabled = presentPlayers < totalPlayers;
+    if (enabled) {
+        return (
+            <tr onClick={() => joinLobby(id)}>
+                <td>
+                    {name}
+                </td>
+                <td>
+                    {displayedMode}
+                </td>
+                <td>
+                    {presentPlayers}
+                </td>
+                <td>
+                    {totalPlayers}
+                </td>
+            </tr>
+        );
+    }
     return (
-        <tr onClick={() => joinLobby(id)}>
-            <td>
-                {name}
-            </td>
-            <td>
-                {displayedMode}
-            </td>
-            <td>
-                {presentPlayers}
-            </td>
-            <td>
-                {totalPlayers}
-            </td>
-        </tr>
-    );
+            // TODO: add a popup saying the lobby is full
+            <tr disabled={true}>
+                <td>
+                    {name}
+                </td>
+                <td>
+                    {displayedMode}
+                </td>
+                <td>
+                    {presentPlayers}
+                </td>
+                <td>
+                    {totalPlayers}
+                </td>
+            </tr>
+        );
 };
 
 export default PublicLobbies;
