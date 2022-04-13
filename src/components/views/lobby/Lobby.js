@@ -127,7 +127,7 @@ const Lobby = ({id}) => {
                 </table>
                 <Link
                     className="lobby link"
-                    to={`/lobby/${id}/invite-users`}>
+                    to={`${id}/invite-users`}>
                     invite users</Link>
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>

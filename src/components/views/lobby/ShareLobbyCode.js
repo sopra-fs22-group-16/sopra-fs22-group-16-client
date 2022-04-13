@@ -22,10 +22,10 @@ const ShareLobbyCode = ({ id }) => {
     useEffect(() => {
         async function fetchData() {
             try {
-
+                //TODO I would introduce a separate on the backend for the request of the invitation code
                 const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                     {
-                        headers: { 'token': token}
+                        headers: { 'token': token }
                     }
                 );
 
@@ -33,7 +33,7 @@ const ShareLobbyCode = ({ id }) => {
 
             } catch (error) {
                 setGetDataFailed(true);
-             }
+            }
         }
         fetchData();
     }, []);
@@ -47,10 +47,10 @@ const ShareLobbyCode = ({ id }) => {
     }
 
     const copyToClipBoard = () => {
-        navigator.clipboard.writeText(code).then(function () {},
-        function (err){
-            console.error('Async: Could not copy text: ', err);
-        });
+        navigator.clipboard.writeText(code).then(() => { },
+            (err) => {
+                console.error('Async: Could not copy text: ', err);
+            });
     }
 
     return (
@@ -75,9 +75,7 @@ const ShareLobbyCode = ({ id }) => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={getDataFailed} information={"Could not get the code - Please try again later!"}>
-                    <Button onClick={() =>
-                        history.push(`/lobby/${id}`)
-                    }>
+                    <Button onClick={goLobby}>
                         Return Lobby
                     </Button>
                 </CustomPopUp>
