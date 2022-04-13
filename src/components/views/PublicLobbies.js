@@ -26,7 +26,6 @@ const PublicLobbies = () => {
         history.push('/home');
     }
 
-    // TODO - UPDATE WITH JOIN BY CODE PAGE
     const joinLobbyByCode = () => {
         history.push('/join-lobby');
     }
@@ -35,7 +34,7 @@ const PublicLobbies = () => {
         async function fetchData() {
             try {
                 // TODO: Switch as soon as implemented
-                //const response = await api.get('/v1/game/lobby/1');
+                //const response = await api.get('/v1/game/lobby');
                 const response = jsonDataLobbies;
 
                 setLobbyData(response);
@@ -50,6 +49,7 @@ const PublicLobbies = () => {
 
     async function joinLobbyWithId(id) {
         try {
+            
             setJoining(true);
 
             //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
@@ -85,6 +85,7 @@ const PublicLobbies = () => {
                 },
                 "token": "THIS IS MY TOKEN"
             };
+        
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);

@@ -5,7 +5,6 @@ import UpdateLobby from "components/views/lobby/UpdateLobby";
 import ShareQRCode from "components/views/lobby/ShareQRCode";
 import ShareLobbyCode from "components/views/lobby/ShareLobbyCode";
 import ScanQRCode from "components/views/ScanQRCode";
-import LobbyByCode from "components/views/LobbyByCode";
 
 const LobbyRouter = props => {
     /**
@@ -41,10 +40,6 @@ const LobbyRouter = props => {
                     </Route>
                     <Route path={`${props.base}/scan/qr`} render={() => {
                         return <ScanQRCode/>
-                    }} >
-                    </Route>
-                    <Route path={`/join-lobby`} render={() => {
-                        return <LobbyByCode />
                     }} >
                     </Route>
                 </Switch>
