@@ -36,8 +36,8 @@ const PublicLobbies = () => {
         async function fetchData() {
             try {
                 const response = await api.get('/v1/game/lobby');
-                setLobbyData(jsonDataLobbies);
-                //setLobbyData(response.data);
+                //setLobbyData(jsonDataLobbies);
+                setLobbyData(response.data);
 
             } catch (error) {
                 setGetDataFailed(true);
