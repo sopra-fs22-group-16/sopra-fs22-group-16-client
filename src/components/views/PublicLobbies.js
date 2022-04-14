@@ -21,6 +21,7 @@ const PublicLobbies = () => {
     const [isJoining, setJoining] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
+    const [fullLobby, setFullLobby] = useState(null);
 
     const returnHome = () => {
         history.push('/home');
@@ -118,6 +119,7 @@ const PublicLobbies = () => {
                     players={lobby.players}
                     visibility={lobby.visibility}
                     joinLobby={joinLobbyWithId}
+                    popUpFullLobby={() => setFullLobby(lobby.name)}
                 />
             )
         );
@@ -171,6 +173,11 @@ const PublicLobbies = () => {
                         <LinearProgress color="primary"/>
                     </div>
                 </CustomPopUp>
+                <CustomPopUp open={fullLobby} information ={`Lobby is full!`}>
+                    <Button onClick={() => setFullLobby(null)}>
+                        Close
+                    </Button>
+                </CustomPopUp>
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')
@@ -190,7 +197,7 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
+const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLobby}) => {
     const displayedMode = (mode === "ONE_VS_ONE" ? "1v1" : "2v2");
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
@@ -199,7 +206,7 @@ const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
     const enabled = presentPlayers < totalPlayers;
     if (enabled) {
         return (
-            <tr onClick={() => joinLobby(id)}>
+            <tr onClick={() => joinLobby(id)} className="non-full">
                 <td>
                     {name}
                 </td>
@@ -216,8 +223,7 @@ const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
         );
     }
     return (
-            // TODO: add a popup saying the lobby is full
-            <tr disabled={true}>
+            <tr onClick={() => popUpFullLobby(name)} className="full">
                 <td>
                     {name}
                 </td>
