@@ -21,7 +21,6 @@ const PublicLobbies = () => {
     const [isJoining, setJoining] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
-    const [fullLobby, setFullLobby] = useState(null);
 
     const returnHome = () => {
         history.push('/home');
@@ -119,7 +118,7 @@ const PublicLobbies = () => {
                     players={lobby.players}
                     visibility={lobby.visibility}
                     joinLobby={joinLobbyWithId}
-                    popUpFullLobby={() => setFullLobby(lobby.name)}
+                    popUpFullLobby={() => setErrorMessage(`Lobby ${lobby.name} is full`)}
                 />
             )
         );
@@ -127,9 +126,6 @@ const PublicLobbies = () => {
 
     return (
         <BaseContainer>
-            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
-                color="secondary"/></ThemeProvider></BlockPopup>
-            <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
             <div className="PublicLobbies container">
                 <label className="PublicLobbies h1"> Public Lobbies </label>
                 <h2> Click on one of the lobbies to join</h2>
@@ -173,11 +169,6 @@ const PublicLobbies = () => {
                         <LinearProgress color="primary"/>
                     </div>
                 </CustomPopUp>
-                <CustomPopUp open={fullLobby} information ={`Lobby is full!`}>
-                    <Button onClick={() => setFullLobby(null)}>
-                        Close
-                    </Button>
-                </CustomPopUp>
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')
@@ -198,11 +189,11 @@ const PublicLobbies = () => {
 };
 
 const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLobby}) => {
-    const displayedMode = (mode === "ONE_VS_ONE" ? "1v1" : "2v2");
+    const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
-    if (visibility === "PRIVATE" || players >= totalPlayers) return null;
+    if (visibility === "PRIVATE" || players > totalPlayers) return null;
     const enabled = presentPlayers < totalPlayers;
     if (enabled) {
         return (
@@ -223,7 +214,7 @@ const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLob
         );
     }
     return (
-            <tr onClick={() => popUpFullLobby(name)} className="full">
+            <tr onClick={popUpFullLobby} className="full">
                 <td>
                     {name}
                 </td>
