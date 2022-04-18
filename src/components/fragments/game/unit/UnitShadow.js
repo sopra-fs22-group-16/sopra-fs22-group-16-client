@@ -11,14 +11,10 @@ const UnitImage = props => {
         return null;
     }
 
-    let colorUnitPath = unitData[props.color].path;
-    if(!colorUnitPath){
-        console.log("For unit of type " + props.type + ", don't know the color: " + props.color);
-        return null;
-    }
-
     let unitStyle = {
-        backgroundImage: 'url(' + colorUnitPath + ')',
+
+        backgroundImage: 'url(' + unitData.shadowPath + ')',
+        mixBlendMode: 'multiply',
     }
 
 
@@ -33,7 +29,6 @@ const UnitImage = props => {
                 + animationData.time + 's '
                 + 'steps(' + animationData.frames + ') '
                 + 'infinite';
-            unitStyle.top = animationData.yOffset;
         }
     }
 

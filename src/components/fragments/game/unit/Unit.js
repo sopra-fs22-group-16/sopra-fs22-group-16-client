@@ -1,11 +1,11 @@
 import PropTypes from "prop-types";
 import React, {useState} from "react";
-import UnitModel from "../../../../models/UnitModel";
 import UnitImage from "./UnitImage";
+import UnitShadow from "./UnitShadow";
 
 const Unit = props => {
 
-    const [animationState, setAnimationState] = useState("idle");
+    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection);
 
     let unitColor = "";
     switch(props.unit.teamId){
@@ -13,15 +13,12 @@ const Unit = props => {
         case 1: unitColor = "blue"; break;
     }
 
-    let animationName = animationState + "_" + props.unit.viewDirection;
-    // FIXME: Remove just for testing
-    if(props.unit.type === 'war_elephant'){
-       animationName = "run_south";
-    }
+    // TODO: Set animation dynamically when performing command
 
     return (
         <div>
-            <UnitImage type={props.unit.type} color={unitColor} animation={animationName}/>
+            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState}/>
+            <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
         </div>
     );
 }
