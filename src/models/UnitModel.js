@@ -24,4 +24,5 @@ class UnitModel {
 
     }
 }
+
 export default UnitModel;
