@@ -44,7 +44,8 @@ const ShareQRCode = ({ id }) => {
     }
 
     const returnHome = () => {
-        // TODO: leave lobby
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+        localStorage.removeItem('token');
         history.push('/home');
     }
 
