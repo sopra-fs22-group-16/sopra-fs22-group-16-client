@@ -1541,7 +1541,7 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: "river",
@@ -1675,7 +1675,18 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "archer",
+                    health: 100,
+                    defense: [15,5,5],
+                    attackDamage: [25,10,50],
+                    attackRange: 5,
+                    movementRange: 3,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 0,
+                    userId: 1,
+                }
             },
             {
                 type: "grass",
@@ -1789,7 +1800,7 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: "grass",
@@ -1801,7 +1812,18 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "war_elephant",
+                    health: 150,
+                    defense: [5,25,15],
+                    attackDamage: [25,50,25],
+                    attackRange: 1,
+                    movementRange: 8,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 1,
+                    userId: 1,
+                }
             },
             {
                 type: "grass",
@@ -1875,7 +1897,18 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "knight",
+                    health: 100,
+                    defense: [25,15,5],
+                    attackDamage: [25,25,5],
+                    attackRange: 1,
+                    movementRange: 2,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 0,
+                    userId: 1,
+                }
             },
             {
                 type: "grass",
@@ -1911,13 +1944,13 @@ const jsonTileMockData = {
                 type: "bridge",
                 variant: "left",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: "bridge",
                 variant: "right",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: "grass",
@@ -1953,7 +1986,18 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "knight",
+                    health: 100,
+                    defense: [15,5,5],
+                    attackDamage: [25,10,50],
+                    attackRange: 5,
+                    movementRange: 3,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 1,
+                    userId: 1,
+                }
             },
             {
                 type: "grass",
@@ -1971,7 +2015,7 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: "grass",
@@ -2153,7 +2197,18 @@ const jsonTileMockData = {
                 type: 'grass',
                 variant: 'flat',
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "archer",
+                    health: 100,
+                    defense: [15,5,5],
+                    attackDamage: [25,10,50],
+                    attackRange: 5,
+                    movementRange: 3,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 1,
+                    userId: 1,
+                }
             },
             {
                 type: 'grass',
@@ -2165,7 +2220,7 @@ const jsonTileMockData = {
                 type: 'grass',
                 variant: 'flat',
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
             },
             {
                 type: 'grass',
@@ -2177,7 +2232,8 @@ const jsonTileMockData = {
                 type: 'grass',
                 variant: 'flat',
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+
             },
             {
                 type: 'border',
@@ -2208,7 +2264,18 @@ const jsonTileMockData = {
                 type: 'grass',
                 variant: 'flat',
                 traversable: true,
-                traversingCost: 1
+                traversingCost: 1,
+                unit: {
+                    type: "war_elephant",
+                    health: 150,
+                    defense: [5,25,15],
+                    attackDamage: [25,50,25],
+                    attackRange: 1,
+                    movementRange: 8,
+                    commands: ['move', 'attack', 'wait'],
+                    teamId: 0,
+                    userId: 1,
+                }
             },
             {
                 type: 'grass',
