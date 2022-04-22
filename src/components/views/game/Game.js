@@ -9,6 +9,7 @@ import {Button} from "../../ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "../../../models/TileModel";
 import {useHistory} from "react-router-dom";
+import UnitModel from "../../../models/UnitModel";
 
 import "styles/views/game/Game.scss"
 
@@ -21,16 +22,57 @@ const Game = ({id}) => {
 
     const [gameMode, setGameMode] = useState("");
     const [gameType, setGameType] = useState("");
+
     const [gameMap, setGameMap] = useState();
+    const [unitArray, setUnitArray] = useState();
+
+    const [selectedUnit, setSelectedUnit] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
-    const exampleUpdateTileInGameMap = (tile) => {
-        tile.type = "river";
-        tile.variant = "flat";
-        // move content to new array and set it as game Map
-        setGameMap([...gameMap]);
+    const onClickTile = (tile) => {
+        if (selectedUnit == null && tile.unit != null /* TODO: && it is one of my units */) {
+            // If no unit is selected and a unit is on the clicked tile
+            // select this unit
+            selectUnit(tile.unit);
+            console.log("Selected a unit")
+        } else if (selectedUnit != null && tile.unit != null && selectedUnit !== tile.unit /* TODO: && it is one of my units */) {
+            // A unit is selected and we clicked on a tile with a unit on it and it is one of my units
+            // Select this unit instead
+            clearMapSelection(selectedUnit);
+            selectUnit(tile.unit);
+            console.log("Unit selected and clicking a different friendly unit")
+        } else if (selectedUnit != null && tile.unit != null && selectedUnit !== tile.unit /* TODO: && it is NOT one of my units */ && selectedUnit.attackableTiles.includes(tile)) {
+            // If it is a hostile unit do other stuff
+            // TODO: further command processing
+            console.log("Unit selected and clicking hostile unit in attack range")
+        } else if (selectedUnit != null && (tile.unit == null || selectedUnit === tile.unit) && selectedUnit.movableTiles.includes(tile)) {
+            //  A unit is selected and we clicked on a tile with a NO unit on it and the tile is in attack / movement range
+            // TODO: further command processing
+            console.log("Unit selected and clicking on a tile an empty or the selected units tile in movement range")
+        } else if (selectedUnit != null && tile.unit == null) {
+            // We clicked on a tile outside the selected unit
+            // Deselect the selected unit
+            clearMapSelection(selectedUnit);
+            console.log("Unit selected and clicking on empty tile")
+        }
+    }
+
+    const clearMapSelection = (unit) => {
+        unit.showRangeIndicator(false);
+        setSelectedUnit(null);
+    }
+
+    const selectUnit = (unit) => {
+        // Set the clicked unit as the selected unit
+        setSelectedUnit(unit);
+        // Set that the unit is selected
+        unit.selected = true;
+        // Calculate the movement and attack range
+        unit.calculateTilesInRange(gameMap)
+        // Show the attack and movement range
+        unit.showRangeIndicator(true);
     }
 
     useEffect(() => {
@@ -49,14 +91,22 @@ const Game = ({id}) => {
 
                 let mapData = response.map;
                 let mapArray = [];
+                let unitArray = [];
 
                 mapData.map((row, y) => {
                     mapArray.push([]);
                     row.map((tile, x) => {
-                        mapArray[y].push(new TileModel(x, y, mapData[y][x]));
+                        let unit = null;
+                        if (mapData[y][x].unit) {
+                            unit = new UnitModel(x, y, mapData[y][x].unit);
+                            unitArray.push(unit);
+                            delete mapData[y][x].unit;
+                        }
+                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]));
                     });
                 });
 
+                setUnitArray(unitArray);
                 setGameMap(mapArray);
 
             } catch (error) {
@@ -71,7 +121,7 @@ const Game = ({id}) => {
     if (gameMap) {
         content = (
             <div className={"mapContainer"}>
-                <Map mapData={gameMap} onClick={exampleUpdateTileInGameMap}/>
+                <Map mapData={gameMap} onClickTile={onClickTile}/>
             </div>);
     } else {
         content = (

@@ -14,7 +14,7 @@ const Map = props => {
                 {
                     row.map((tile, x) => (
                         <td key={x}>
-                            <Tile tile={tile}/>
+                            <Tile tile={tile} onClick={props.onClickTile}/>
                         </td>
                     ))
                 }
@@ -35,6 +35,7 @@ const Map = props => {
 
 Map.propTypes = {
     mapData: PropTypes.array,
+    onClickTile: PropTypes.func,
 }
 
 export default Map;
