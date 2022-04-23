@@ -191,7 +191,7 @@ const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLob
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
-    if (visibility === "PRIVATE" || players > totalPlayers) return null;
+    if (players > totalPlayers) return null;
     const enabled = presentPlayers < totalPlayers;
     if (enabled) {
         return (
