@@ -48,11 +48,11 @@ const Game = ({id}) => {
             // TODO: further command processing
             console.log("Unit selected and clicking hostile unit in attack range")
         } else if (selectedUnit != null && (tile.unit == null || selectedUnit === tile.unit) && selectedUnit.movableTiles.includes(tile)) {
-            //  A unit is selected and we clicked on a tile with a NO unit on it and the tile is in attack / movement range
+            //  A unit is selected and we clicked on a tile with a NO unit on it and the tile is in movement range
             // TODO: further command processing
             console.log("Unit selected and clicking on a tile an empty or the selected units tile in movement range")
         } else if (selectedUnit != null && tile.unit == null) {
-            // We clicked on a tile outside the selected unit
+            // We clicked on a tile outside the movement range of the selected unit and not on a hostile unit in attack range
             // Deselect the selected unit
             clearMapSelection(selectedUnit);
             console.log("Unit selected and clicking on empty tile")

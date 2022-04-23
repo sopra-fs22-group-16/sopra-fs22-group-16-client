@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import {TileIndicatorType} from "./TileIndicatorType";
+import {TileIndicatorType} from "./types/TileIndicatorType";
 import {tileIndicatorData} from "./data/tileIndicatorData";
 
 const TileIndicator = props => {

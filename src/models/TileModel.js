@@ -1,4 +1,5 @@
-import {TileIndicatorType} from "../components/fragments/game/tile/TileIndicatorType";
+import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
+import PathPart from "./PathPart";
 
 
 class TileModel {
@@ -11,6 +12,7 @@ class TileModel {
         this.traversingCost = null;
         this.indicatorType = TileIndicatorType.none;
         this.unit = unit;
+        this.pathPart = new PathPart();
         Object.assign(this, data);
     }
 }

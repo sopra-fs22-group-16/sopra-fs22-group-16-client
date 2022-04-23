@@ -1,6 +1,6 @@
-import {UnitViewDirection} from "../components/fragments/game/unit/UnitViewDirection";
+import {Direction} from "../components/fragments/game/unit/Direction";
 import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
-import {TileIndicatorType} from "../components/fragments/game/tile/TileIndicatorType";
+import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
 
 class UnitModel {
     constructor(x, y, data = {}) {
@@ -18,9 +18,9 @@ class UnitModel {
         Object.assign(this, data);
         // if teamId === 0 (red) look southWest/west else teamId === 1 (blue) look southEast/east
         if (this.type === UnitTypes.war_elephant) {
-            this.viewDirection = this.teamId ? UnitViewDirection.west : UnitViewDirection.east;
+            this.viewDirection = this.teamId ? Direction.west : Direction.east;
         } else {
-            this.viewDirection = this.teamId ? UnitViewDirection.southWest : UnitViewDirection.southEast;
+            this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
         }
         this.selected = false;
         this.movableTiles = null;

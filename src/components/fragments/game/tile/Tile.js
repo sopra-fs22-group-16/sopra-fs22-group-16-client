@@ -2,8 +2,10 @@ import PropTypes from "prop-types";
 import React, {useEffect} from "react";
 import TileModel from "../../../../models/TileModel";
 import TileBackground from "./TileBackground";
-import TileIndicator from "./TileHighlight";
+import TileIndicator from "./TileIndicator";
 import Unit from "../unit/Unit";
+import PathIndicator from "./PathIndicator";
+import {ArrowPartType} from "./types/ArrowPartType";
 
 const Tile = props => {
 
@@ -27,6 +29,7 @@ const Tile = props => {
         <div className="tileContainer" onClick={onClickTile}>
             <TileBackground type={props.tile.type} variant={props.tile.variant}/>
             <TileIndicator indicatorType={props.tile.indicatorType}/>
+            <PathIndicator pathPart={props.tile.pathPart}/>
             {unit}
         </div>
     );

@@ -2,10 +2,12 @@ import PropTypes from "prop-types";
 import React, {useState} from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
+import PathPart from "../../../../models/PathPart";
+import UnitModel from "../../../../models/UnitModel";
 
 const Unit = props => {
 
-    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection);
+    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection.name);
 
     let unitColor = "";
     switch(props.unit.teamId){
@@ -24,7 +26,7 @@ const Unit = props => {
 }
 
 Unit.propTypes = {
-   unit: PropTypes.object.isRequired
+   unit: PropTypes.instanceOf(UnitModel).isRequired
 }
 
 export default Unit;
