@@ -4,8 +4,6 @@ import {Button} from 'components/ui/Button';
 import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import { useHistory, useLocation, Link } from 'react-router-dom';
-import jsonDataLobbies from './lobby/jsonDataLobbies';
-import {BlockPopup, Popup} from "../ui/Popup";
 import {defaultTheme} from "../../styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
@@ -29,68 +27,60 @@ const FormField = props => {
 const LobbyByCode = () => {
   const history = useHistory();
   const [codeInput, setCodeInput] = useState(null);
-  const lengthCode = 10;
-  const [validCodes, setValidCodes] = useState(null);
-  const [lobbiesData, setLobbyData] = useState(null);
-  const[lobbyId, setLobbyId] = useState(null);
+  const lengthCode = 10;;
   const[isJoining, setJoining] = useState(false);
   const[errorMessage, setErrorMessage] = useState("");
-  const[getDataFailed, setGetDataFailed] = useState(false);
+  const token = null;
 
 
-  useEffect(() => {
-    async function fetchData() {
+  const ValidateCode = async() => {
+    
+    // un.length-(lobbySeparator+1) == lengthCode && lobbySeparator > 0
+    // here, needs to extract code ID and check for 10 digits after -
+    // /Long id = Long.parseLong(invitationCode.substring(0, invitationCode.length()-(10+1)));
+    const lobbySeparator = codeInput.indexOf("-");
+    
+
+        // extract ID
+        const id = codeInput.substring(0, lobbySeparator);
+
+     
         try {
-            // TODO: Switch as soon as implemented
-            //const response = await api.get('/v1/game/lobby');
-            const response = jsonDataLobbies;
 
-            setLobbyData(response);
-            const Codes = [];
-            const Ids = [];
-            response.map(lobby =>(
-            Codes.push(lobby.invitationCode)
+            //request body sent to the backend to create a new lobby
+            const requestBody = {
+                "invitationCode": codeInput,
+            };
 
-    ))
 
-    setValidCodes(Codes);
+            //call to the backend to post the player with the attempted password
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
+            // Get the returned user and update a new object.
+            //const user = new UserModel(response.data);
+
+            // Store the token into the local storage.
+            localStorage.setItem('token', response.data.token);
+
+            setJoining(isJoining);
+            new Promise(resolve => setTimeout(resolve, 500));
+            history.push({pathname: '/lobby/' + id});
         } catch (error) {
-          setGetDataFailed(true);
-        }
-    }
-
-    fetchData();
-}, []);
-  
-
-/*
-  //maybe TODO - find lobby of the ID
-  const findLobbyID = (un) => {
-    const lobbyNumber = validCodes.index(un);
-    setLobbyId(lobbiesData[lobbyNumber].id);
-  }
-  */
-
-  const ValidateCode = (un) => {
-
-    setCodeInput(un);
-
-    // automatically enters the code if it is the right number of digits
-    if(un.length === lengthCode) {
-       
-      if(validCodes.includes(un)) {
-        // TODO - select correct id of the lobby + add player to the lobby
-        // right now just finds the ID of the lobby and pushes that page
-        setJoining(isJoining);
-        new Promise(resolve => setTimeout(resolve, 500));
-        history.replace('lobby/1');
+            if (error.response != null) {
+                // conflict in lobby name
+                if (error.response.status == 404) {
+                    setErrorMessage("This lobby does not seem to be live!");
+                } else {
+                   setErrorMessage(error.response.status);
+                }
+            } else {
+                //setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                //alert(error.response.status);
+            }
       }
 
-      else {
-        setErrorMessage("The Code does not seem to corresponnd to an existing lobby. Please check with the lobby owner");
-      }
-    }
+
+    
 
   }
 
@@ -99,11 +89,16 @@ const LobbyByCode = () => {
   return (
         <BaseContainer>
             <div className="LobbyByCode container">
-                <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided 10-digit code in the field below:</h2>
+                <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided code in the field below:</h2>
                 <FormField
                     value={codeInput}
-                    onChange={un => ValidateCode(un)}>
+                    onChange={un => setCodeInput(un)}
+                    >
                 </FormField>
+                <Button className = "secondary-button return"
+                        width="10%"
+                        onClick={() => ValidateCode()}
+                        ></Button>
                 <Link className="LobbyByCode link"
                     to={{
                         pathname: '/lobby/scan/QR'}}>
@@ -130,13 +125,6 @@ const LobbyByCode = () => {
                     <div style={{width: '100%'}}>
                         <LinearProgress color="primary"/>
                     </div>
-                </CustomPopUp>
-                <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
-                    <Button onClick={() =>
-                        history.push('/home')
-                    }>
-                        Return Home
-                    </Button>
                 </CustomPopUp>
                 <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
                     <Button onClick={() =>
