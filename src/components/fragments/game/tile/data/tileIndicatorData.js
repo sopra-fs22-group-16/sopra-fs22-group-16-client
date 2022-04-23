@@ -1,5 +1,5 @@
 export const tileIndicatorData = {
-    Tile: {
+    hostileUnit: {
         path: "/tiles/ui/tileIndicator/hostile_unit_indicator.png",
     },
     attackRange: {

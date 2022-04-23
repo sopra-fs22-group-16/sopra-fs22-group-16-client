@@ -15,6 +15,8 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
+import {ArrowPartType} from "../../fragments/game/tile/types/ArrowPartType";
+import PathPart from "../../../models/PathPart";
 
 const Game = ({id}) => {
 
@@ -61,6 +63,7 @@ const Game = ({id}) => {
 
     const clearMapSelection = (unit) => {
         unit.showRangeIndicator(false);
+        unit.showPathIndicator(false);
         setSelectedUnit(null);
     }
 
@@ -73,6 +76,24 @@ const Game = ({id}) => {
         unit.calculateTilesInRange(gameMap)
         // Show the attack and movement range
         unit.showRangeIndicator(true);
+    }
+
+    const onTileEnter = (tile) => {
+        if (selectedUnit != null) {
+            // Check if the tile is a movable tile of the selected unit
+            if (selectedUnit.movableTiles.includes(tile)) {
+                selectedUnit.showPathIndicator(false);
+                selectedUnit.calculatePathToTile(tile.y, tile.x, gameMap);
+                selectedUnit.showPathIndicator(true);
+
+                // Auto update does not work?
+                setGameMap([...gameMap]);
+            }
+        }
+    }
+
+    const onTileLeave = (tile) => {
+
     }
 
     useEffect(() => {
@@ -121,7 +142,11 @@ const Game = ({id}) => {
     if (gameMap) {
         content = (
             <div className={"mapContainer"}>
-                <Map mapData={gameMap} onClickTile={onClickTile}/>
+                <Map mapData={gameMap}
+                     onClickTile={onClickTile}
+                     onMouseEnterTile={onTileEnter}
+                     onMouseLeaveTile={onTileLeave}
+                />
             </div>);
     } else {
         content = (

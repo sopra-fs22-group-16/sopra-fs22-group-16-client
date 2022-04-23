@@ -2,20 +2,22 @@ import PropTypes from "prop-types";
 import React from "react";
 import {ArrowPartType} from "./types/ArrowPartType";
 import {pathArrowData} from "./data/pathArrowData";
-import TileModel from "../../../../models/TileModel";
-import PathPart from "../../../../models/PathPart";
+import {Direction} from "../unit/Direction";
 
 const PathIndicator = props => {
 
-    let indicatorData = pathArrowData[props.pathPart.type];
+    let indicatorData = pathArrowData[props.pathPartType];
     if (!indicatorData) {
-        if (props.pathPart.type !== ArrowPartType.none)
-            console.log("Don't know " + props.pathPart.type + " arrow part!");
+        if (props.pathPartType !== ArrowPartType.none)
+            console.log("Don't know " + props.pathPartType + " arrow part!");
         return null;
     }
 
     let indicatorStyle = {
-        // Do correct rotation
+        WebkitTransform: 'rotate(' + props.pathPartDirection.angle + 'deg)',
+        MozTransform: 'rotate(' + props.pathPartDirection.angle + 'deg)',
+        msTransform: 'rotate(' + props.pathPartDirection.angle + 'deg)',
+        transform: 'rotate(' + props.pathPartDirection.angle + 'deg)',
         backgroundImage: 'url(' + indicatorData.path + ')',
     }
 
@@ -25,7 +27,8 @@ const PathIndicator = props => {
 }
 
 PathIndicator.propTypes = {
-    pathPart: PropTypes.instanceOf(PathPart).isRequired,
+    pathPartType: PropTypes.oneOf(Object.keys(ArrowPartType)).isRequired,
+    pathPartDirection: PropTypes.oneOf(Object.values(Direction)).isRequired,
 }
 
 export default PathIndicator;
