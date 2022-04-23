@@ -26,9 +26,9 @@ const Game = ({id}) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
-    const exampleUpdateTileInGameMap = (x,y) => {
-        gameMap[y][x].type = "river";
-        gameMap[y][x].variant = "flat";
+    const exampleUpdateTileInGameMap = (tile) => {
+        tile.type = "river";
+        tile.variant = "flat";
         // move content to new array and set it as game Map
         setGameMap([...gameMap]);
     }
@@ -71,7 +71,7 @@ const Game = ({id}) => {
     if (gameMap) {
         content = (
             <div className={"mapContainer"}>
-                <Map mapData={gameMap}/>
+                <Map mapData={gameMap} onClick={exampleUpdateTileInGameMap}/>
             </div>);
     } else {
         content = (

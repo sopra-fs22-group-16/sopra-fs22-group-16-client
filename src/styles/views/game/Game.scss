@@ -9,7 +9,10 @@
 
 .mapContainer {
   max-height: 100vh;
+  max-width: 100vw;
+  width: fit-content;
   overflow: scroll;
+  margin: auto;
   scroll-behavior: smooth;
   // Hide scrollbar for IE, Edge and Firefox
   -ms-overflow-style: none; /* IE and Edge */

@@ -26,7 +26,6 @@ const PublicLobbies = () => {
         history.push('/home');
     }
 
-    // TODO - UPDATE WITH JOIN BY CODE PAGE
     const joinLobbyByCode = () => {
         history.push('/join-lobby');
     }
@@ -37,7 +36,6 @@ const PublicLobbies = () => {
                 const response = await api.get('/v1/game/lobby');
                 //setLobbyData(jsonDataLobbies);
                 setLobbyData(response.data);
-
             } catch (error) {
                 setGetDataFailed(true);
             }

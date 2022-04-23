@@ -28,7 +28,19 @@ $tile-size: 48px;
 }
 
 @keyframes animation2Frames {
-  100% { background-position-x: 200%;}
+  100% { background-position-x: -200%;}
+}
+
+@keyframes animation4Frames {
+  100% { background-position-x: -400%;}
+}
+
+@keyframes animation8Frames {
+  100% { background-position-x: -800%;}
+}
+
+@keyframes animation16Frames {
+  100% { background-position-x: -1600%;}
 }
 
 .pixelated {
