@@ -33,12 +33,9 @@ const PublicLobbies = () => {
     useEffect(() => {
         async function fetchData() {
             try {
-                // TODO: Switch as soon as implemented
-                //const response = await api.get('/v1/game/lobby');
-                const response = jsonDataLobbies;
-
-                setLobbyData(response);
-
+                const response = await api.get('/v1/game/lobby');
+                //setLobbyData(jsonDataLobbies);
+                setLobbyData(response.data);
             } catch (error) {
                 setGetDataFailed(true);
             }
@@ -49,7 +46,6 @@ const PublicLobbies = () => {
 
     async function joinLobbyWithId(id) {
         try {
-            
             setJoining(true);
 
             //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
@@ -85,7 +81,6 @@ const PublicLobbies = () => {
                 },
                 "token": "THIS IS MY TOKEN"
             };
-        
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
@@ -112,26 +107,23 @@ const PublicLobbies = () => {
     let content = null;
 
     if (lobbyData) {
-        content = lobbyData.map((data, key) => (
+        content = lobbyData.map((lobby, key) => (
                 <LobbyInfo
-                    id={data.id}
                     key={key}
-                    name={data.name}
-                    mode={data.mode}
-                    players={data.players}
-                    visibility={data.visibility}
+                    id={lobby.id}
+                    name={lobby.name}
+                    mode={lobby.gameMode}
+                    players={lobby.players}
+                    visibility={lobby.visibility}
                     joinLobby={joinLobbyWithId}
+                    popUpFullLobby={() => setErrorMessage(`Lobby ${lobby.name} is full`)}
                 />
             )
         );
     }
 
-    // TODO - jsonDataLobbies import from REST or whatever
     return (
         <BaseContainer>
-            <BlockPopup id="joinLobbyPopUp">Joining lobby<br/><br/><ThemeProvider theme={defaultTheme}><LinearProgress
-                color="secondary"/></ThemeProvider></BlockPopup>
-            <Popup id="failedLobbyPopUp">Failed to join lobby</Popup>
             <div className="PublicLobbies container">
                 <label className="PublicLobbies h1"> Public Lobbies </label>
                 <h2> Click on one of the lobbies to join</h2>
@@ -194,29 +186,47 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({id, name, mode, players, visibility, joinLobby}) => {
-
+const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLobby}) => {
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
 
-    if (visibility === "PRIVATE" || players >= totalPlayers) return null;
+    if (players > totalPlayers) return null;
+    const enabled = presentPlayers < totalPlayers;
+    if (enabled) {
+        return (
+            <tr onClick={() => joinLobby(id)} className="non-full">
+                <td>
+                    {name}
+                </td>
+                <td>
+                    {displayedMode}
+                </td>
+                <td>
+                    {presentPlayers}
+                </td>
+                <td>
+                    {totalPlayers}
+                </td>
+            </tr>
+        );
+    }
     return (
-        <tr onClick={() => joinLobby(id)}>
-            <td>
-                {name}
-            </td>
-            <td>
-                {displayedMode}
-            </td>
-            <td>
-                {presentPlayers}
-            </td>
-            <td>
-                {totalPlayers}
-            </td>
-        </tr>
-    );
+            <tr onClick={popUpFullLobby} className="full">
+                <td>
+                    {name}
+                </td>
+                <td>
+                    {displayedMode}
+                </td>
+                <td>
+                    {presentPlayers}
+                </td>
+                <td>
+                    {totalPlayers}
+                </td>
+            </tr>
+        );
 };
 
 export default PublicLobbies;
