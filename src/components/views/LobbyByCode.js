@@ -8,6 +8,7 @@ import {defaultTheme} from "../../styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import CustomPopUp from "../ui/CustomPopUp";
+import UserModel from 'models/UserModel';
 
 // form of code
 const FormField = props => {
@@ -35,7 +36,7 @@ const LobbyByCode = () => {
 const checkLength = (un) => {
 setCodeInput(un);
 const lobbySeparator = un.indexOf("-");
-if(un.length -(lobbySeparator+1) == 10 && lobbySeparator > 0) {
+if(un.length -(lobbySeparator+1) == lengthCode && lobbySeparator > 0) {
     const id = un.substring(0, lobbySeparator);
     ValidateCode(id);
 }
@@ -55,11 +56,10 @@ const ValidateCode = async(id) => {
             //call to the backend to post the player with the attempted password
             const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
-            // Get the returned user and update a new object.
-            //const user = new UserModel(response.data);
-
-            // Store the token into the local storage.
-            localStorage.setItem('token', response.data.token);
+             // Get the returned user and update a new object.
+             const user = new UserModel(response.data);
+             localStorage.setItem('token', user.token);
+             localStorage.setItem('playerId', user.id);
 
             setJoining(isJoining);
             new Promise(resolve => setTimeout(resolve, 500));

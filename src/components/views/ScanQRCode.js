@@ -9,6 +9,7 @@ import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import CustomPopUp from "../ui/CustomPopUp";
 import {defaultTheme} from "../../styles/themes/defaulTheme";
+import UserModel from 'models/UserModel';
 
 const ScanQRCode = props => {
 
@@ -42,8 +43,10 @@ const ScanQRCode = props => {
                 const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
     
     
-                // Store the token into the local storage.
-                localStorage.setItem('token', response.data.token);
+                 // Get the returned user and update a new object.
+                const user = new UserModel(response.data);
+                localStorage.setItem('token', user.token);
+                localStorage.setItem('playerId', user.id);
     
                 setJoining(isJoining);
                 new Promise(resolve => setTimeout(resolve, 500));
