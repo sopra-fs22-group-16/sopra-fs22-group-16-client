@@ -60,8 +60,9 @@ const CreateLobby = () => {
                 // Get the returned user and update a new object.
                 const user = new UserModel(response.data);
 
-                // Store the token into the local storage.
+                // Store the token and playerId into the local storage.
                 localStorage.setItem('token', user.token);
+                localStorage.setItem('playerId', user.playerId);
 
                 history.push({pathname: '/lobby/' + user.lobby.id})
             } catch (error) {

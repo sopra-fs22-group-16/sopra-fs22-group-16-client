@@ -25,6 +25,8 @@ const Lobby = ({id}) => {
     const [totalPlayers, setTotalPlayers] = useState(null);
     const [name, setName] = useState(null);
     const [players, setPlayers] = useState(null);
+    const [invitationCode, setInvitationCode] = useState(null);
+    const [isHost, setIsHost] = useState(null);
 
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
@@ -65,10 +67,14 @@ const Lobby = ({id}) => {
                 setGameMode(apiResponse.data.gameMode);
                 setVisibility(apiResponse.data.visibility);
                 setPresentPlayers(apiResponse.data.players.length);
+                setIsHost(apiResponse.data.hostId == localStorage.getItem("playerId"));
+                console.log(apiResponse.data.hostId);
+                console.log(localStorage.getItem("playerId"));
                 setReadyPlayers(0);
                 setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
                 setName(apiResponse.data.name);
                 setPlayers(apiResponse.data.players);
+                setInvitationCode(apiResponse.data.invitationCode);
 
             } catch (error) {
                 setGetDataFailed(true);
@@ -82,10 +88,13 @@ const Lobby = ({id}) => {
         <BaseContainer>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
-                <Link
-                    className="lobby link"
-                    to={`${id}/update`}>
-                    update lobby information</Link>
+                {
+                  // Only show update link to host
+                  isHost ? <Link
+                            className="lobby link"
+                            to={`${id}/update`}>
+                            update lobby information</Link>:null
+                }
                 <table className="lobby-info">
                     <tbody>
                     <tr>
@@ -135,10 +144,13 @@ const Lobby = ({id}) => {
                     }) : null}
                     </tbody>
                 </table>
-                <Link
-                    className="lobby link"
-                    to={`${id}/invite-users`}>
-                    invite users</Link>
+                {
+                  //Only show invite users link if invitationCode is known.
+                  invitationCode ? <Link
+                                    className="lobby link"
+                                    to={`${id}/invite-users`}>
+                                    invite users</Link>:null
+                }
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>
                 </div>
