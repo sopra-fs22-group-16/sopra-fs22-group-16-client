@@ -3,8 +3,8 @@ import { useHistory, Link, useLocation} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
 import {Button} from 'components/ui/Button';
 import {api} from 'helpers/api';
-import {defaultTheme} from "../../../styles/themes/defaulTheme";
-import CustomPopUp from "../../ui/CustomPopUp";
+import {defaultTheme} from "styles/themes/defaulTheme";
+import CustomPopUp from "components/ui/CustomPopUp";
 import { ThemeProvider } from "@emotion/react";
 import Socket from "components/socket/Socket";
 
@@ -33,17 +33,30 @@ const Lobby = ({id}) => {
     const [getDataFailed, setGetDataFailed] = useState(false);
 
     const returnLobbies = () => {
-        // Todo: leave lobby
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
         history.push('/public-lobbies');
     }
 
     const returnHome = () => {
-        // Todo: leave lobby
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
         history.push('/home');
     }
 
-    const changeStatus = (player) => {
-        //implement function (in the corresponding story)
+    const changeStatus = (user) => {
+        try {
+            if (parseInt(localStorage.getItem("playerId")) === user.id) {
+                const requestBody = {
+                    "ready": !user.ready
+                };
+                api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+            }
+        } catch (error) {
+            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+        }
     }
 
     // refresh view when receiving a message from the socket
@@ -61,14 +74,14 @@ const Lobby = ({id}) => {
                     }
                 );
 
+                const players = apiResponse.data.players;
+
                 //set different values obtained from the API
                 setGameMode(apiResponse.data.gameMode);
                 setVisibility(apiResponse.data.visibility);
-                setPresentPlayers(apiResponse.data.players.length);
-                setIsHost(apiResponse.data.hostId == localStorage.getItem("playerId"));
-                console.log(apiResponse.data.hostId);
-                console.log(localStorage.getItem("playerId"));
-                setReadyPlayers(0);
+                setPresentPlayers(players.length);
+                setIsHost(apiResponse.data.hostId === parseInt(localStorage.getItem("playerId")));
+                setReadyPlayers(players.filter(players => players.ready === true).length);
                 setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
                 setName(apiResponse.data.name);
                 setPlayers(apiResponse.data.players);
@@ -128,14 +141,15 @@ const Lobby = ({id}) => {
                     </tr>
                     {players ? players.map((user) => {
                         return (
-                            <tr key={user.id}>
+                            <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
                                 <td>{user.name}</td>
                                 <td>
                                     <div className={'lobby teambox team' + user.team}/>
                                 </td>
                                 <td>
                                     <input id={user.id} className="lobby status" type="checkbox"
-                                           onClick={() => changeStatus(user.ready)}/>
+                                        checked={user.ready}
+                                        onClick={() => changeStatus(user)}/>
                                 </td>
                             </tr>
                         )
@@ -143,11 +157,11 @@ const Lobby = ({id}) => {
                     </tbody>
                 </table>
                 {
-                  //Only show invite users link if invitationCode is known.
-                  invitationCode ? <Link
-                                    className="lobby link"
-                                    to={`${id}/invite-users`}>
-                                    invite users</Link>:null
+                  //Only show invite users link if invitationCode is known and the player is the host.
+                  invitationCode && isHost ? <Link
+                                                className="lobby link"
+                                                to={`${id}/invite-users`}>
+                                                invite users</Link>:null
                 }
                 <div className="lobby lobby-buttons">
                     <Button onClick={() => returnLobbies()}>RETURN TO LOBBIES</Button>

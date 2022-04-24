@@ -4,7 +4,10 @@ import {Button} from 'components/ui/Button';
 import {api} from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
 import UserModel from 'models/UserModel';
-import CustomPopUp from "../ui/CustomPopUp";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import CustomPopUp from "components/ui/CustomPopUp";
+import { LinearProgress } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 
 import 'styles/views/CreateLobby.scss';
 
@@ -30,6 +33,7 @@ const CreateLobby = () => {
     const [gameMode, setGameMode] = useState("ONE_VS_ONE");
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
+    const [creating, setCreating] = useState("");
     const [errorMessage, setErrorMessage] = useState("");
     const token = null;
 
@@ -39,6 +43,8 @@ const CreateLobby = () => {
             setErrorMessage("You have to enter a lobby name!");
         } else {
             try {
+
+                setCreating(true);
 
                 //request body sent to the backend to create a new lobby
                 const requestBody = {
@@ -60,6 +66,9 @@ const CreateLobby = () => {
 
                 history.push({pathname: '/lobby/' + user.lobby.id})
             } catch (error) {
+
+                setCreating(false);
+
                 if (error.response != null) {
                     // conflict in lobby name
                     if (error.response.status === 409) {
@@ -156,13 +165,20 @@ const CreateLobby = () => {
                     <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
                 </div>
             </div>
-            <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
-                <Button onClick={() =>
-                    setErrorMessage("")
-                }>
-                    Close
-                </Button>
-            </CustomPopUp>
+            <ThemeProvider theme={defaultTheme}>
+                <CustomPopUp open={creating} information={"Creating Lobby"}>
+                    <div style={{ width: '100%' }}>
+                        <LinearProgress color="primary" />
+                    </div>
+                </CustomPopUp>
+                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                    <Button onClick={() =>
+                        setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
+            </ThemeProvider>
         </BaseContainer>
     );
 };
