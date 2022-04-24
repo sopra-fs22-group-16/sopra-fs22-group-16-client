@@ -17,7 +17,6 @@ const Map = props => {
                             <Tile tile={tile}
                                   onClick={props.onClickTile}
                                   onMouseEnter={props.onMouseEnterTile}
-                                  onMouseLeave={props.onMouseLeaveTile}
                             />
                         </td>
                     ))
@@ -41,7 +40,6 @@ Map.propTypes = {
     mapData: PropTypes.array,
     onClickTile: PropTypes.func,
     onMouseEnterTile: PropTypes.func,
-    onMouseLeaveTile: PropTypes.func,
 }
 
 export default Map;

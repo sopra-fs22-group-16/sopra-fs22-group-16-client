@@ -15,8 +15,6 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
-import {ArrowPartType} from "../../fragments/game/tile/types/ArrowPartType";
-import PathPart from "../../../models/PathPart";
 
 const Game = ({id}) => {
 
@@ -92,10 +90,6 @@ const Game = ({id}) => {
         }
     }
 
-    const onTileLeave = (tile) => {
-
-    }
-
     useEffect(() => {
         async function fetchData() {
             try {
@@ -145,7 +139,6 @@ const Game = ({id}) => {
                 <Map mapData={gameMap}
                      onClickTile={onClickTile}
                      onMouseEnterTile={onTileEnter}
-                     onMouseLeaveTile={onTileLeave}
                 />
             </div>);
     } else {
