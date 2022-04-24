@@ -3,12 +3,11 @@ import {api, handleError} from 'helpers/api';
 import {Button} from 'components/ui/Button';
 import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import { useHistory, useLocation, Link } from 'react-router-dom';
+import { useHistory, Link } from 'react-router-dom';
 import {defaultTheme} from "../../styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 import CustomPopUp from "../ui/CustomPopUp";
-import UserModel from "../../models/UserModel";
 
 // form of code
 const FormField = props => {
@@ -33,18 +32,18 @@ const LobbyByCode = () => {
   const token = null;
 
 
-  const ValidateCode = async() => {
-    
-    // un.length-(lobbySeparator+1) == lengthCode && lobbySeparator > 0
-    // here, needs to extract code ID and check for 10 digits after -
-    // /Long id = Long.parseLong(invitationCode.substring(0, invitationCode.length()-(10+1)));
-    const lobbySeparator = codeInput.indexOf("-");
-    
+const checkLength = (un) => {
+setCodeInput(un);
+const lobbySeparator = un.indexOf("-");
+if(un.length -(lobbySeparator+1) == 10 && lobbySeparator > 0) {
+    const id = un.substring(0, lobbySeparator);
+    ValidateCode(id);
+}
+setCodeInput(null);
+}
 
-        // extract ID
-        const id = codeInput.substring(0, lobbySeparator);
+const ValidateCode = async(id) => {
 
-     
         try {
 
             //request body sent to the backend to create a new lobby
@@ -87,25 +86,19 @@ const LobbyByCode = () => {
       }
 
 
-    
-
-  }
-
+    }
 
 
   return (
         <BaseContainer>
             <div className="LobbyByCode container">
                 <h2 className=' LobbyByCode h2'> To join a private lobby, enter  the provided code in the field below:</h2>
-                <FormField
+            
+                <FormField 
                     value={codeInput}
-                    onChange={un => setCodeInput(un)}
+                    onChange={un => checkLength(un)}
                     >
                 </FormField>
-                <Button className = "secondary-button return"
-                        width="10%"
-                        onClick={() => ValidateCode()}
-                        ></Button>
                 <Link className="LobbyByCode link"
                     to={{
                         pathname: '/lobby/scan/QR'}}>

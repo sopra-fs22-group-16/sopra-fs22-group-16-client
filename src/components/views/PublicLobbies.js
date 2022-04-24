@@ -68,15 +68,17 @@ const PublicLobbies = () => {
             history.push({pathname: '/lobby/' + id})
         } catch (error) {
             setJoining(false);
-            if (error.response != null) {
-                // TODO: Update with correct error codes and messages
-                if (error.response.status === 999) {
-                    setErrorMessage("THIS IS A SAMPLE ERROR MESSAGE!");
-                } else {
-                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
+                if (error.response.status == 404) {
+                    setErrorMessage("This lobby does not seem to be live!");
+                } 
+                
+                else if (error.response.status == 409) {
+                   setErrorMessage("This lobby is already full!");
                 }
-            } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
+
+                else {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                
             }
         }
     }

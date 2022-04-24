@@ -5,6 +5,10 @@ import 'styles/views/ScanQRCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
 import QrReader from 'react-qr-reader'
 import {api, handleError} from 'helpers/api';
+import {LinearProgress} from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
+import CustomPopUp from "../ui/CustomPopUp";
+import {defaultTheme} from "../../styles/themes/defaulTheme";
 
 const ScanQRCode = props => {
 
@@ -37,8 +41,6 @@ const ScanQRCode = props => {
                 //call to the backend to post the player with the attempted password
                 const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
     
-                // Get the returned user and update a new object.
-                //const user = new UserModel(response.data);
     
                 // Store the token into the local storage.
                 localStorage.setItem('token', response.data.token);
@@ -86,7 +88,7 @@ const ScanQRCode = props => {
     }
 
     const handleQRError = () => {
-        alert("Error while scanning QR code");
+        setErrorMessage("Error in the scanning of the QR code!");
     }
 
     const handleQRScan = (data) => {
@@ -119,6 +121,20 @@ const ScanQRCode = props => {
                     <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
                 </div>
             </div>
+            <ThemeProvider theme={defaultTheme}>
+                <CustomPopUp open={isJoining} information={"Joining Lobby"}>
+                    <div style={{width: '100%'}}>
+                        <LinearProgress color="primary"/>
+                    </div>
+                </CustomPopUp>
+                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                    <Button onClick={() =>
+                        setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
+            </ThemeProvider>
         </BaseContainer>
     );
 };
