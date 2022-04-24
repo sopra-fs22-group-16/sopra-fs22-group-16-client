@@ -43,6 +43,9 @@ const ShareLobbyCode = ({ id }) => {
     }
 
     const returnHome = () => {
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
         history.push('/home');
     }
 
