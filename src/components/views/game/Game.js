@@ -32,26 +32,26 @@ const Game = ({id}) => {
     const [getDataFailed, setGetDataFailed] = useState(false);
 
     const onClickTile = (tile) => {
-        if (selectedUnit == null && tile.unit != null /* TODO: && it is one of my units */) {
+        if (selectedUnit === null && tile.unit !== null /* TODO: && it is one of my units */) {
             // If no unit is selected and a unit is on the clicked tile
             // select this unit
             selectUnit(tile.unit);
             console.log("Selected a unit")
-        } else if (selectedUnit != null && tile.unit != null && selectedUnit !== tile.unit /* TODO: && it is one of my units */) {
+        } else if (selectedUnit !== null && tile.unit !== null && selectedUnit !== tile.unit /* TODO: && it is one of my units */) {
             // A unit is selected and we clicked on a tile with a unit on it and it is one of my units
             // Select this unit instead
             clearMapSelection(selectedUnit);
             selectUnit(tile.unit);
             console.log("Unit selected and clicking a different friendly unit")
-        } else if (selectedUnit != null && tile.unit != null && selectedUnit !== tile.unit /* TODO: && it is NOT one of my units */ && selectedUnit.attackableTiles.includes(tile)) {
+        } else if (selectedUnit !== null && tile.unit !== null && selectedUnit !== tile.unit /* TODO: && it is NOT one of my units */ && selectedUnit.attackableTiles.includes(tile)) {
             // If it is a hostile unit do other stuff
             // TODO: further command processing
             console.log("Unit selected and clicking hostile unit in attack range")
-        } else if (selectedUnit != null && (tile.unit == null || selectedUnit === tile.unit) && selectedUnit.movableTiles.includes(tile)) {
+        } else if (selectedUnit !== null && (tile.unit === null || selectedUnit === tile.unit) && selectedUnit.movableTiles.includes(tile)) {
             //  A unit is selected and we clicked on a tile with a NO unit on it and the tile is in attack / movement range
             // TODO: further command processing
             console.log("Unit selected and clicking on a tile an empty or the selected units tile in movement range")
-        } else if (selectedUnit != null && tile.unit == null) {
+        } else if (selectedUnit !== null && tile.unit === null) {
             // We clicked on a tile outside the selected unit
             // Deselect the selected unit
             clearMapSelection(selectedUnit);
