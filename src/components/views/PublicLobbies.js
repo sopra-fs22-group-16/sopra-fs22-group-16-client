@@ -3,15 +3,13 @@ import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import jsonDataLobbies from "./lobby/jsonDataLobbies";
-import {BlockPopup, Popup} from "../ui/Popup";
-import {defaultTheme} from "../../styles/themes/defaulTheme";
+import {defaultTheme} from "styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 
 import 'styles/views/PublicLobbies.scss';
-import CustomPopUp from "../ui/CustomPopUp";
-import UserModel from "../../models/UserModel";
+import CustomPopUp from "components/ui/CustomPopUp";
+import UserModel from "models/UserModel";
 
 const PublicLobbies = () => {
     const history = useHistory();
@@ -35,8 +33,8 @@ const PublicLobbies = () => {
         async function fetchData() {
             try {
                 const response = await api.get('/v1/game/lobby');
-                //setLobbyData(jsonDataLobbies);
                 setLobbyData(response.data);
+
             } catch (error) {
                 setGetDataFailed(true);
             }
@@ -47,23 +45,19 @@ const PublicLobbies = () => {
 
     async function joinLobbyWithId(id) {
         try {
+
             setJoining(true);
-
-            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
-            // Remove when implementing actual call implemented
-            // Simulate joining lobby
-            await new Promise(resolve => setTimeout(resolve, 500));
-
             const requestBody = {
                 "invitationCode": null
             };
-
-            // here we mocked the answer of the API join lobby
+            setJoining(true);
             //call to the backend to post the player with the attempted password
             const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
             
             // Get the returned user and update a new object.
-            localStorage.setItem('token', response.data.token);
+            const user = new UserModel(response.data);
+            localStorage.setItem('token', user.token);
+            localStorage.setItem('playerId', user.id);
 
             history.push({pathname: '/lobby/' + id})
         } catch (error) {
