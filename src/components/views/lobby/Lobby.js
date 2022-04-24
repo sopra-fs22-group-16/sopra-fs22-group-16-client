@@ -35,12 +35,14 @@ const Lobby = ({id}) => {
     const returnLobbies = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
         history.push('/public-lobbies');
     }
 
     const returnHome = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
         history.push('/home');
     }
 
@@ -79,7 +81,7 @@ const Lobby = ({id}) => {
                 setVisibility(apiResponse.data.visibility);
                 setPresentPlayers(players.length);
                 setIsHost(apiResponse.data.hostId == localStorage.getItem("playerId"));
-                setReadyPlayers(players.filter(players => players.ready == true).length);
+                setReadyPlayers(players.filter(players => players.ready === true).length);
                 setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
                 setName(apiResponse.data.name);
                 setPlayers(apiResponse.data.players);
