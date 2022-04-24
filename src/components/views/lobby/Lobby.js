@@ -48,7 +48,7 @@ const Lobby = ({id}) => {
 
     const changeStatus = (user) => {
         try {
-            if (localStorage.getItem("playerId") == user.id) {
+            if (parseInt(localStorage.getItem("playerId")) === user.id) {
                 const requestBody = {
                     "ready": !user.ready
                 };
@@ -80,7 +80,7 @@ const Lobby = ({id}) => {
                 setGameMode(apiResponse.data.gameMode);
                 setVisibility(apiResponse.data.visibility);
                 setPresentPlayers(players.length);
-                setIsHost(apiResponse.data.hostId == localStorage.getItem("playerId"));
+                setIsHost(apiResponse.data.hostId === parseInt(localStorage.getItem("playerId")));
                 setReadyPlayers(players.filter(players => players.ready === true).length);
                 setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
                 setName(apiResponse.data.name);
@@ -141,7 +141,7 @@ const Lobby = ({id}) => {
                     </tr>
                     {players ? players.map((user) => {
                         return (
-                            <tr key={user.id} style={user.id == localStorage.getItem("playerId") ? { background: '#787878'} : {}}>
+                            <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
                                 <td>{user.name}</td>
                                 <td>
                                     <div className={'lobby teambox team' + user.team}/>
