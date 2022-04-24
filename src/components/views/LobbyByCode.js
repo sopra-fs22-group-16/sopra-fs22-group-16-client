@@ -48,7 +48,7 @@ const LobbyByCode = () => {
             setLobbyData(response);
             const Codes = [];
             const Ids = [];
-            response.map(lobby =>(
+            response.forEach(lobby =>(
             Codes.push(lobby.invitationCode)
 
     ))
@@ -83,7 +83,6 @@ const LobbyByCode = () => {
         // TODO - select correct id of the lobby + add player to the lobby
         // right now just finds the ID of the lobby and pushes that page
         setJoining(isJoining);
-        new Promise(resolve => setTimeout(resolve, 500));
         history.replace('lobby/1');
       }
 

@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import {backgroundData} from "./data/backgroundData";
 
-const Tile = props => {
+const TileBackground = props => {
 
     let tileData = backgroundData[props.type][props.variant];
     if (!tileData) {
@@ -28,9 +28,9 @@ const Tile = props => {
     );
 }
 
-Tile.propTypes = {
+TileBackground.propTypes = {
     type: PropTypes.string,
     variant: PropTypes.string,
 }
 
-export default Tile;
+export default TileBackground;

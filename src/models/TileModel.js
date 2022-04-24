@@ -1,5 +1,4 @@
 import {TileIndicatorType} from "../components/fragments/game/tile/TileIndicatorType";
-import LobbyModel from "./LobbyModel";
 import UnitModel from "./UnitModel";
 
 class TileModel {

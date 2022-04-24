@@ -2,7 +2,7 @@ import PropTypes from "prop-types";
 import React from "react";
 import TileModel from "../../../../models/TileModel";
 import TileBackground from "./TileBackground";
-import TileIndicator from "./TileHighlight";
+import TileIndicator from "./TileIndicator";
 import Unit from "../unit/Unit";
 
 const Tile = props => {

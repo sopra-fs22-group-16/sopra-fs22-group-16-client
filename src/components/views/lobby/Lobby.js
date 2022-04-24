@@ -74,14 +74,14 @@ const Lobby = ({id}) => {
                     }
                 );
 
-                const players = apiResponse.data.players;
+                const apiResponsePlayers = apiResponse.data.players;
 
                 //set different values obtained from the API
                 setGameMode(apiResponse.data.gameMode);
                 setVisibility(apiResponse.data.visibility);
-                setPresentPlayers(players.length);
+                setPresentPlayers(apiResponsePlayers.length);
                 setIsHost(apiResponse.data.hostId === parseInt(localStorage.getItem("playerId")));
-                setReadyPlayers(players.filter(players => players.ready === true).length);
+                setReadyPlayers(apiResponsePlayers.filter(p => p.ready === true).length);
                 setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
                 setName(apiResponse.data.name);
                 setPlayers(apiResponse.data.players);
