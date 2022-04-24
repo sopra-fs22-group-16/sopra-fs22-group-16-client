@@ -15,7 +15,6 @@ const ScanQRCode = props => {
 
     const history = useHistory();
     const [result, setResult] = useState(null);
-    const token = null;
     const[isJoining, setJoining] = useState(false);
     const[errorMessage, setErrorMessage] = useState("");
 
@@ -40,7 +39,7 @@ const ScanQRCode = props => {
     
     
                 //call to the backend to post the player with the attempted password
-                const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+                const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': ''}});
     
     
                  // Get the returned user and update a new object.

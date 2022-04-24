@@ -30,7 +30,6 @@ const LobbyByCode = () => {
   const lengthCode = 10;;
   const[isJoining, setJoining] = useState(false);
   const[errorMessage, setErrorMessage] = useState("");
-  const token = null;
 
 
 const checkLength = (un) => {
@@ -54,7 +53,7 @@ const ValidateCode = async(id) => {
 
 
             //call to the backend to post the player with the attempted password
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': ''}});
 
              // Get the returned user and update a new object.
              const user = new UserModel(response.data);
