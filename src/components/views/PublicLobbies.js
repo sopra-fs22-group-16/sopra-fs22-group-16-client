@@ -16,6 +16,7 @@ import UserModel from "../../models/UserModel";
 const PublicLobbies = () => {
     const history = useHistory();
     const [lobbyData, setLobbyData] = useState(null);
+    const token = null;
 
     // PopUps
     const [isJoining, setJoining] = useState(false);
@@ -53,42 +54,18 @@ const PublicLobbies = () => {
             // Simulate joining lobby
             await new Promise(resolve => setTimeout(resolve, 500));
 
-            // here we mocked the answer of the API join lobby
-            const response = {
-                "lobby": {
-                    "id": id,
-                    "name": "name",
-                    "ownerId": 0,
-                    "players": [
-                        {
-                            "id": 0,
-                            "name": "Player-0",
-                            "ready": false,
-                            "team": 0
-                        },
-                        {
-                            "id": 1,
-                            "name": "Player-2",
-                            "ready": false,
-                            "team": 0
-                        },
-
-                    ],
-                    "visibility": "PUBLIC",
-                    "gameMode": "TWO_VS_TWO",
-                    "gameType": "UNRANKED",
-                    "invitationCode": "ABCDEFGH"
-                },
-                "token": "THIS IS MY TOKEN"
+            const requestBody = {
+                "invitationCode": null
             };
 
+            // here we mocked the answer of the API join lobby
+            //call to the backend to post the player with the attempted password
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+            
             // Get the returned user and update a new object.
-            const user = new UserModel(response.data);
+            localStorage.setItem('token', response.data.token);
 
-            // Store the token into the local storage.
-            localStorage.setItem('token', user.token);
-
-            history.push({pathname: '/lobby/' + user.lobby.id})
+            history.push({pathname: '/lobby/' + id})
         } catch (error) {
             setJoining(false);
             if (error.response != null) {

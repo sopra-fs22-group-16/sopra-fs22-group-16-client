@@ -70,12 +70,19 @@ const LobbyByCode = () => {
                 // conflict in lobby name
                 if (error.response.status == 404) {
                     setErrorMessage("This lobby does not seem to be live!");
-                } else {
-                   setErrorMessage(error.response.status);
+                } 
+                
+                else if (error.response.status == 409) {
+                   setErrorMessage("This lobby is already full!");
                 }
+
+                else {
+                    setErrorMessage("The password does not match the lobby!")
+                }
+
             } else {
-                //setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
-                //alert(error.response.status);
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                
             }
       }
 
