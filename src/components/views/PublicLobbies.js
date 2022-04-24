@@ -3,15 +3,13 @@ import {api} from 'helpers/api';
 import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import jsonDataLobbies from "./lobby/jsonDataLobbies";
-import {BlockPopup, Popup} from "../ui/Popup";
-import {defaultTheme} from "../../styles/themes/defaulTheme";
+import {defaultTheme} from "styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
 
 import 'styles/views/PublicLobbies.scss';
-import CustomPopUp from "../ui/CustomPopUp";
-import UserModel from "../../models/UserModel";
+import CustomPopUp from "components/ui/CustomPopUp";
+import UserModel from "models/UserModel";
 
 const PublicLobbies = () => {
     const history = useHistory();
@@ -34,8 +32,8 @@ const PublicLobbies = () => {
         async function fetchData() {
             try {
                 const response = await api.get('/v1/game/lobby');
-                //setLobbyData(jsonDataLobbies);
                 setLobbyData(response.data);
+
             } catch (error) {
                 setGetDataFailed(true);
             }
@@ -46,61 +44,21 @@ const PublicLobbies = () => {
 
     async function joinLobbyWithId(id) {
         try {
+
             setJoining(true);
-
-            //**TODO** here we need to call to the backend to join the lobby and set the token (unregistered User)
-            // Remove when implementing actual call implemented
-            // Simulate joining lobby
-            await new Promise(resolve => setTimeout(resolve, 500));
-
-            // here we mocked the answer of the API join lobby
-            const response = {
-                "lobby": {
-                    "id": id,
-                    "name": "name",
-                    "ownerId": 0,
-                    "players": [
-                        {
-                            "id": 0,
-                            "name": "Player-0",
-                            "ready": false,
-                            "team": 0
-                        },
-                        {
-                            "id": 1,
-                            "name": "Player-2",
-                            "ready": false,
-                            "team": 0
-                        },
-
-                    ],
-                    "visibility": "PUBLIC",
-                    "gameMode": "TWO_VS_TWO",
-                    "gameType": "UNRANKED",
-                    "invitationCode": "ABCDEFGH"
-                },
-                "token": "THIS IS MY TOKEN"
-            };
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify({}), { headers: { 'token': '' } });
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
-
-            // Store the token into the local storage.
             localStorage.setItem('token', user.token);
+            localStorage.setItem('playerId', user.id);
 
-            history.push({pathname: '/lobby/' + user.lobby.id})
+            history.push({pathname: `/lobby/${id}`});
+
         } catch (error) {
             setJoining(false);
-            if (error.response != null) {
-                // TODO: Update with correct error codes and messages
-                if (error.response.status === 999) {
-                    setErrorMessage("THIS IS A SAMPLE ERROR MESSAGE!");
-                } else {
-                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
-                }
-            } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
-            }
+            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+        
         }
     }
 
