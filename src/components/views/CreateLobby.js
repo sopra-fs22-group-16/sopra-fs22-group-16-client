@@ -62,7 +62,7 @@ const CreateLobby = () => {
 
                 // Store the token and playerId into the local storage.
                 localStorage.setItem('token', user.token);
-                localStorage.setItem('playerId', user.playerId)
+                localStorage.setItem('playerId', user.playerId);
 
                 history.push({pathname: '/lobby/' + user.lobby.id})
             } catch (error) {
