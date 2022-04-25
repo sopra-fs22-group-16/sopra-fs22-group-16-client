@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useEffect} from "react";
 import TileModel from "../../../../models/TileModel";
 import TileBackground from "./TileBackground";
 import TileIndicator from "./TileIndicator";
@@ -17,6 +17,11 @@ const Tile = props => {
     if(props.tile.unit){
         unit = <Unit unit={props.tile.unit}/>;
     }
+
+    useEffect(() => {
+        // Used that the tile updates automatically when tile changes
+        // console.log("Updating: " + props.tile);
+    }, [props]);
 
     return (
         <div className="tileContainer" onClick={onClickTile}>
