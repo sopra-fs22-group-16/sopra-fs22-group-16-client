@@ -22,13 +22,11 @@ const ShareQRCode = ({ id }) => {
     useEffect(() => {
         async function fetchData() {
             try {
-
                 const apiResponse = await api.get(`/v1/game/lobby/${id}/qrcode`,
                     {
                         headers: { 'token': token }
                     }
                 );
-
                 setQR(apiResponse.data);
 
             } catch (error) {

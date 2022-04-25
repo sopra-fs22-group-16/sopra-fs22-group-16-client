@@ -1,14 +1,15 @@
 import React, { useState, useEffect } from 'react';
-import { useHistory, Link, useLocation} from 'react-router-dom';
-import BaseContainer from "components/ui/BaseContainer";
-import {Button} from 'components/ui/Button';
-import {api} from 'helpers/api';
-import {defaultTheme} from "styles/themes/defaulTheme";
-import CustomPopUp from "components/ui/CustomPopUp";
+import { useHistory, Link, useLocation } from 'react-router-dom';
 import { ThemeProvider } from "@emotion/react";
+
+import { api } from 'helpers/api';
+import CustomPopUp from "components/ui/CustomPopUp";
 import Socket from "components/socket/Socket";
+import BaseContainer from "components/ui/BaseContainer";
+import { Button } from 'components/ui/Button';
+import Countdown from 'components/ui/Countdown';
 
-
+import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/lobby/Lobby.scss';
 
 // form for changing name
@@ -65,13 +66,14 @@ const Lobby = ({id}) => {
         history.push('/home');
     }
 
-    const changeStatus = (user) => {
+    // change the status of the player when clicking the checkbox
+    const changeStatus = async (user) => {
         try {
             if (parseInt(localStorage.getItem("playerId")) === user.id) {
                 const requestBody = {
                     "ready": !user.ready
                 };
-                api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
             }
         } catch (error) {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
@@ -125,8 +127,37 @@ const Lobby = ({id}) => {
   }
 
     // refresh view when receiving a message from the socket
-    const onMessage = () => {
-        window.location = window.location.href;
+    const onMessage = (msg) => {
+        if (msg === "GameCreated") {
+            history.push(`/game/${id}`);
+        }
+        else {
+            window.location = window.location.href;
+        }
+    }
+
+    //action after the countdown ends
+    const createGame = async () => {
+        if (isHost) {
+            try {
+                await api.post(`/v1/game/match/${id}`, JSON.stringify({}), { headers: { 'token': token || '' } });
+            } catch (error) {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                notReady();
+            }
+        }
+    }
+
+    //action to stop the counter
+    const notReady = async () => {
+        try {
+            const requestBody = {
+                "ready": false
+            };
+            await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+        } catch (error) {
+            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+        }
     }
 
     useEffect(() => {
@@ -266,6 +297,17 @@ const Lobby = ({id}) => {
                 topics={location.pathname}
                 onMessage={onMessage}
             />
+            {
+                // the timer is displayed when all players are ready
+                readyPlayers === totalPlayers && totalPlayers != null ?
+                    <Countdown
+                        duration={5} size={120}
+                        content={"Lobby complete! Game loading ..."}
+                        onComplete={createGame}
+                        buttonMessage={"Not ready"}
+                        onClick={notReady}
+                    /> : null
+            }
         </BaseContainer>
     );
 };

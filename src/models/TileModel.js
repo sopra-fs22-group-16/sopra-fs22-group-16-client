@@ -1,8 +1,7 @@
 import {TileIndicatorType} from "../components/fragments/game/tile/TileIndicatorType";
-import UnitModel from "./UnitModel";
 
 class TileModel {
-    constructor(x, y, data = {}) {
+    constructor(x, y, unit, data = {}) {
         this.x = x;
         this.y = y;
         this.type = null;
@@ -10,10 +9,7 @@ class TileModel {
         this.traversable = null;
         this.traversingCost = null;
         this.indicatorType = TileIndicatorType.none;
-        if (data.unit) {
-            this.unit = new UnitModel(x, y, data.unit);
-            delete data.unit
-        }
+        this.unit = unit;
         Object.assign(this, data);
     }
 }
