@@ -42,6 +42,7 @@ const ScanQRCode = props => {
             localStorage.setItem('playerId', user.id);
     
             setJoining(true);
+            //just to make more interesting the joining
             await new Promise(r => setTimeout(r, 2000));
             history.push({ pathname: '/lobby/' + id });
 
