@@ -12,6 +12,23 @@ import Countdown from 'components/ui/Countdown';
 import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/lobby/Lobby.scss';
 
+// form for changing name
+const FormName = props => {
+    return (
+        <div className="buttonIn">
+            <input
+                className="buttonIn name"
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+            />
+            <button
+                className="buttonIn button"
+                onClick={e => props.onClick(e.target.value)}>
+            </button>
+        </div>
+    );
+  };
+
 const Lobby = ({id}) => {
 
     const history = useHistory();
@@ -28,6 +45,7 @@ const Lobby = ({id}) => {
     const [players, setPlayers] = useState(null);
     const [invitationCode, setInvitationCode] = useState(null);
     const [isHost, setIsHost] = useState(null);
+    const [playerName, setPlayerName] = useState(null);
 
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
@@ -60,6 +78,53 @@ const Lobby = ({id}) => {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
         }
     }
+
+ 
+
+    // set new name, let the user know if it's already taken (409)
+    const changeName = async(user) => {
+        if(!user.ready) {
+            if (parseInt(localStorage.getItem("playerId")) === user.id) {
+        try {
+                const requestBody = {
+                    "name": playerName
+                };
+                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });                
+            }
+         catch (error) {
+            if(error.response.status === 409) {
+                setErrorMessage("This name is already taken!");
+            }
+
+            else if(error.response.status === 400) {
+                setErrorMessage("The name should not be empty!");
+            }
+            else {
+            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+            }
+        }
+    }
+    } else setErrorMessage("Changing information after setting ready status is not possible!");
+    }
+
+// setting new Name - moving here to determine if the row is a form or not
+const setClassName = (user) => {
+    if(user.id === parseInt(localStorage.getItem("playerId"))) {
+        return(
+                <td>
+                <FormName
+                    value={playerName === null ? user.name : playerName}
+                    onChange={newName => setPlayerName(newName)}
+                    onClick={() => changeName(user)}
+                    >
+                    </FormName>
+                </td>
+    )}
+    else {
+        return (
+            <td>{user.name}</td>
+    )}
+}
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
@@ -173,7 +238,7 @@ const Lobby = ({id}) => {
                     {players ? players.map((user) => {
                         return (
                             <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
-                                <td>{user.name}</td>
+                                {setClassName(user)}                         
                                 <td>
                                     <div className={'lobby teambox team' + user.team}/>
                                 </td>

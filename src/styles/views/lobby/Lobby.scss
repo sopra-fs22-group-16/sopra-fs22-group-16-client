@@ -111,4 +111,37 @@
             font-size: 1.2em;
         }
     }
+
+    &.input-name {
+        color: $accent;
+        text-align: center;
+        background: black;
+        border: 0.5px solid #FBC12E;
+        border-radius: 7px;
+        height: 32px;
+        width: 100%;
+    }
+    
+        .buttonIn {
+            position: relative;
+            height: 32px;
+            width: 120%;
+        
+            &.button {
+                position: absolute;
+                background: $accent;
+                right: 0px;
+                width: 20px;
+            }
+        
+            &.name {
+                color: $accent;
+                text-align: center;
+                background: $backgroundDark;
+                border: 0.5px solid #FBC12E;
+                border-radius: 7px;
+                width: 100%;
+            }
+        }
+        
 }
