@@ -1,9 +1,10 @@
 import React, {useState, useEffect} from 'react';
 import {useHistory} from 'react-router-dom';
-import {api} from 'helpers/api';
+
+import { api } from 'helpers/api';
 import BaseContainer from "components/ui/BaseContainer";
 import {Button} from 'components/ui/Button';
-import CustomPopUp from "../../ui/CustomPopUp";
+import CustomPopUp from "components/ui/CustomPopUp";
 
 import 'styles/views/lobby/UpdateLobby.scss';
 
@@ -38,8 +39,8 @@ const UpdateLobby = ({id}) => {
 
     useEffect(() => {
         async function fetchData() {
-            try {
 
+            try {
                 const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                     {
                         headers: {'token': token}
@@ -69,7 +70,6 @@ const UpdateLobby = ({id}) => {
         } else {
 
             try {
-
                 //request body sent to the backend to update a lobby
                 const requestBody = {
                     "name": name,
@@ -103,7 +103,7 @@ const UpdateLobby = ({id}) => {
 
     // return to the lobby
     const returnLobby = () => {
-        history.goBack();
+        history.push(`/lobby/${id}`);
     }
 
     return (

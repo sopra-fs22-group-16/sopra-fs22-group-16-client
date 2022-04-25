@@ -10,7 +10,7 @@ const Socket = props => {
         <SockJsClient
             url={getDomain() + WEBSOCKET_SUFFIX}
             topics={[WEBSOCKET_PREFIX + props.topics]}
-            onMessage={props.onMessage}
+            onMessage={(msg) => props.onMessage(msg)}
         />
     );
 }
