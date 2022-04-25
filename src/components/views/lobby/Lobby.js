@@ -25,7 +25,6 @@ const FormName = props => {
     );
   };
 
-
 const Lobby = ({id}) => {
 
     const history = useHistory();
@@ -47,8 +46,6 @@ const Lobby = ({id}) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
     const [forbiddenChange, setForbiddenChange] = useState(false);
-
-
 
     const returnLobbies = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
@@ -88,8 +85,7 @@ const Lobby = ({id}) => {
                 const requestBody = {
                     "name": un
                 };
-                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
-                
+                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });                
             }
          catch (error) {
             if(error.response.status === 409) {
@@ -121,11 +117,8 @@ const Lobby = ({id}) => {
     }
     else {
         return(<td>{user.name}</td>
-
         )
     }
-
-
   }
 
     // refresh view when receiving a message from the socket
@@ -240,13 +233,9 @@ const Lobby = ({id}) => {
                     {players ? players.map((user) => {
                         return (
                             <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
-                                
-                                {setClassName(user)}
-                                    
+                                {setClassName(user)}                         
                                 <td>
-                                    <div 
-                                    className={'lobby teambox team' + user.team}/>
-
+                                    <div className={'lobby teambox team' + user.team}/>
                                 </td>
                                 <td>
                                     <input id={user.id} className="lobby status" type="checkbox"
