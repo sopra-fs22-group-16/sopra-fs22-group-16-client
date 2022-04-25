@@ -18,7 +18,6 @@ const FormName = props => {
         <div>
             <input
                 className="lobby input-name"
-                placeholder="enter code here..."
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
             />
@@ -43,7 +42,6 @@ const Lobby = ({id}) => {
     const [players, setPlayers] = useState(null);
     const [invitationCode, setInvitationCode] = useState(null);
     const [isHost, setIsHost] = useState(null);
-    const [classForm, setClassForm] = useState(null);
 
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
@@ -97,6 +95,10 @@ const Lobby = ({id}) => {
             if(error.response.status === 409) {
                 setErrorMessage("This name is already taken!");
             }
+
+            if(error.response.status === 400) {
+                setErrorMessage("The name should not be empty!");
+            }
             else {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
             }
@@ -105,8 +107,8 @@ const Lobby = ({id}) => {
     } else setForbiddenChange(true);
     }
 
-      // element to determine the right element
-  const setClass = (user) => {
+// setting new Name - moving here to determine if the row is a form or not
+  const setClassName = (user) => {
     if(user.id === parseInt(localStorage.getItem("playerId"))) {
     return(
 <td>
@@ -239,7 +241,7 @@ const Lobby = ({id}) => {
                         return (
                             <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
                                 
-                                {setClass(user)}
+                                {setClassName(user)}
                                     
                                 <td>
                                     <div 
@@ -287,7 +289,7 @@ const Lobby = ({id}) => {
                 </CustomPopUp>
                 <CustomPopUp open={forbiddenChange !== false} information={"Changing information after setting ready status is not possible!"}>
                     <Button onClick={() =>
-                        setForbiddenChange("")
+                        setForbiddenChange(false)
                     }>
                         Close
                     </Button>

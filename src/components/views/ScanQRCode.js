@@ -24,7 +24,9 @@ const ScanQRCode = props => {
     const ValidateCode = async () => {
 
         const codeInput = result.substring(result.indexOf('?data=') + 6);
-        const id = codeInput.substring(0,1);
+        // extract id
+        const lobbySeparator = codeInput.indexOf("-");
+        const id = codeInput.substring(0, lobbySeparator);
          
         try {
     
