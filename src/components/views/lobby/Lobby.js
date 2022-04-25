@@ -15,12 +15,16 @@ import 'styles/views/lobby/Lobby.scss';
 // form for changing name
 const FormName = props => {
     return (
-        <div>
+        <div className="buttonIn">
             <input
-                className="lobby input-name"
+                className="buttonIn name"
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
             />
+            <button
+                className="buttonIn button"
+                onClick={e => props.onClick(e.target.value)}>
+            </button>
         </div>
     );
   };
@@ -41,11 +45,11 @@ const Lobby = ({id}) => {
     const [players, setPlayers] = useState(null);
     const [invitationCode, setInvitationCode] = useState(null);
     const [isHost, setIsHost] = useState(null);
+    const [playerName, setPlayerName] = useState(null);
 
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
-    const [forbiddenChange, setForbiddenChange] = useState(false);
 
     const returnLobbies = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
@@ -78,12 +82,12 @@ const Lobby = ({id}) => {
  
 
     // set new name, let the user know if it's already taken (409)
-    const setNewName = async(user, un) => {
+    const changeName = async(user) => {
         if(!user.ready) {
             if (parseInt(localStorage.getItem("playerId")) === user.id) {
         try {
                 const requestBody = {
-                    "name": un
+                    "name": playerName
                 };
                 await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });                
             }
@@ -92,7 +96,7 @@ const Lobby = ({id}) => {
                 setErrorMessage("This name is already taken!");
             }
 
-            if(error.response.status === 400) {
+            else if(error.response.status === 400) {
                 setErrorMessage("The name should not be empty!");
             }
             else {
@@ -100,26 +104,27 @@ const Lobby = ({id}) => {
             }
         }
     }
-    } else setForbiddenChange(true);
+    } else setErrorMessage("Changing information after setting ready status is not possible!");
     }
 
 // setting new Name - moving here to determine if the row is a form or not
-  const setClassName = (user) => {
+const setClassName = (user) => {
     if(user.id === parseInt(localStorage.getItem("playerId"))) {
-    return(
-<td>
-<FormName value={user.name}
-                    onChange={un => setNewName(user, un)}
+        return(
+                <td>
+                <FormName
+                    value={playerName === null ? user.name : playerName}
+                    onChange={newName => setPlayerName(newName)}
+                    onClick={() => changeName(user)}
                     >
-                </FormName>
+                    </FormName>
                 </td>
-    )
-    }
+    )}
     else {
-        return(<td>{user.name}</td>
-        )
-    }
-  }
+        return (
+            <td>{user.name}</td>
+    )}
+}
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
@@ -272,13 +277,6 @@ const Lobby = ({id}) => {
                 <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
                     <Button onClick={() =>
                         setErrorMessage("")
-                    }>
-                        Close
-                    </Button>
-                </CustomPopUp>
-                <CustomPopUp open={forbiddenChange !== false} information={"Changing information after setting ready status is not possible!"}>
-                    <Button onClick={() =>
-                        setForbiddenChange(false)
                     }>
                         Close
                     </Button>
