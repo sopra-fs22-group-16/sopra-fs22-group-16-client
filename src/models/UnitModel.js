@@ -127,7 +127,7 @@ class UnitModel {
     }
 
     calculateTilesInRange = (map) => {
-        if (this.movableTiles == null || this.attackableTiles == null) {
+        if (this.movableTiles === null || this.attackableTiles === null) {
             this.#calculateMovementRange(map);
             this.#calculateAttackRange(map);
         }
@@ -172,7 +172,7 @@ class UnitModel {
                     // if it is it has smaller distance and we don't need to add it again
                     if (!frontier.includes(childTile) && !movableTiles.includes(childTile)) {
                         // Check if tile is traversable
-                        if (childTile.traversable && childTile.unit == null) {
+                        if (childTile.traversable && childTile.unit === null) {
                             // Calculate the distance to the child
                             let childDistance = distance + childTile.traversingCost;
 
@@ -191,7 +191,7 @@ class UnitModel {
     }
 
     #calculateAttackRange = (map) => {
-        if (this.movableTiles == null) return;
+        if (this.movableTiles === null) return;
         let attackableTiles = [];
 
         this.movableTiles.forEach((movableTile) => {
@@ -351,7 +351,7 @@ class UnitModel {
 
     showRangeIndicator = (show) => {
         // Update the tiles that they show the attack range indicator
-        if (this.attackableTiles != null)
+        if (this.attackableTiles !== null)
             this.attackableTiles.forEach((tile) => {
                 if (show) {
                     if (tile.unit && tile.unit.teamId !== this.teamId) {
@@ -365,7 +365,7 @@ class UnitModel {
             })
 
         // Update the tiles that they show the movement range indicator
-        if (this.movableTiles != null)
+        if (this.movableTiles !== null)
             this.movableTiles.forEach((tile) => {
                 if (show) {
                     if (tile.indicatorType !== TileIndicatorType.hostileUnit) {

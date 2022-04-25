@@ -3,7 +3,7 @@ import React from "react";
 import {unitImageData} from "./data/unitImageData";
 import {UnitTypes} from "./data/UnitTypes";
 
-const UnitImage = props => {
+const UnitShadow = props => {
 
     let unitData = unitImageData[props.type];
     if (!unitData) {
@@ -37,11 +37,11 @@ const UnitImage = props => {
     );
 }
 
-UnitImage.propTypes = {
+UnitShadow.propTypes = {
     color: PropTypes.oneOf(["red", "blue"]).isRequired,
     type: PropTypes.oneOf(Object.keys(UnitTypes)).isRequired,
     animation: PropTypes.string.isRequired,
 
 }
 
-export default UnitImage;
+export default UnitShadow;

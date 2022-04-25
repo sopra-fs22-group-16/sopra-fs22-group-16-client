@@ -3,7 +3,6 @@ import PathPart from "./PathPart";
 import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
 import {Direction} from "../components/fragments/game/unit/Direction";
 
-
 class TileModel {
     constructor(x, y, unit, data = {}) {
         this.x = x;
