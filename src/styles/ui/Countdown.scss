@@ -1,0 +1,29 @@
+@import 'styles/theme';
+
+
+.countdown-timer{
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+}
+
+.countdown-label {
+    text-align: center;
+    font-size: 1.0em;
+    display: block;
+    padding-top: 1.75em;
+}
+
+.countdown-container {
+    width: 275px;
+    height: 275px;
+    position: absolute;
+    float: left;
+    left: 50%;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    border: 2.5px solid $accent;
+    background: $background;
+}

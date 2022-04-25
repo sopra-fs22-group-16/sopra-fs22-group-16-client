@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useHistory, Link, useLocation} from 'react-router-dom';
 import BaseContainer from "components/ui/BaseContainer";
-import {Button} from 'components/ui/Button';
+import { Button } from 'components/ui/Button';
+import Countdown from 'components/ui/Countdown';
 import {api} from 'helpers/api';
 import {defaultTheme} from "styles/themes/defaulTheme";
 import CustomPopUp from "components/ui/CustomPopUp";
@@ -62,6 +63,11 @@ const Lobby = ({id}) => {
     // refresh view when receiving a message from the socket
     const onMessage = () => {
         window.location = window.location.href;
+    }
+
+    //action after the countdown ends
+    const createGame = () => {
+        history.push(`/game/${id}`);
     }
 
     useEffect(() => {
@@ -190,6 +196,14 @@ const Lobby = ({id}) => {
                 topics={location.pathname}
                 onMessage={onMessage}
             />
+            {
+                readyPlayers === totalPlayers && totalPlayers != null ?
+                    <Countdown
+                        duration={5}
+                        content={"Lobby complete! Game loading ..."}
+                        onComplete={createGame}
+                    /> : null
+            }
         </BaseContainer>
     );
 };
