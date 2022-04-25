@@ -35,7 +35,7 @@ const ShareQRCode = ({ id }) => {
         }
 
         fetchData();
-    }, []);
+    }, [id, token]);
 
     const goLobby = () => {
         history.push(`/lobby/${id}`);

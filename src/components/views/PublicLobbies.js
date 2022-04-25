@@ -1,11 +1,11 @@
-import React, {useState, useEffect} from 'react';
-import {api} from 'helpers/api';
-import {useHistory} from 'react-router-dom';
-import {Button} from 'components/ui/Button';
+import React, { useState, useEffect } from 'react';
+import { api } from 'helpers/api';
+import { useHistory } from 'react-router-dom';
+import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import {defaultTheme} from "styles/themes/defaulTheme";
-import {LinearProgress} from "@mui/material";
-import {ThemeProvider} from "@emotion/react";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import { LinearProgress } from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
 
 import 'styles/views/PublicLobbies.scss';
 import CustomPopUp from "components/ui/CustomPopUp";
@@ -53,20 +53,20 @@ const PublicLobbies = () => {
             localStorage.setItem('token', user.token);
             localStorage.setItem('playerId', user.id);
 
-            history.push({pathname: '/lobby/' + id})
+            history.push({ pathname: '/lobby/' + id })
         } catch (error) {
             setJoining(false);
-                if (error.response.status == 404) {
-                    setErrorMessage("This lobby does not seem to be live!");
-                } 
-                
-                else if (error.response.status == 409) {
-                   setErrorMessage("This lobby is already full!");
-                }
+            if (error.response.status === 404) {
+                setErrorMessage("This lobby does not seem to be live!");
+            }
 
-                else {
+            else if (error.response.status === 409) {
+                setErrorMessage("This lobby is already full!");
+            }
+
+            else {
                 setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
-                
+
             }
         }
     }
@@ -75,17 +75,17 @@ const PublicLobbies = () => {
 
     if (lobbyData) {
         content = lobbyData.map((lobby, key) => (
-                <LobbyInfo
-                    key={key}
-                    id={lobby.id}
-                    name={lobby.name}
-                    mode={lobby.gameMode}
-                    players={lobby.players}
-                    visibility={lobby.visibility}
-                    joinLobby={joinLobbyWithId}
-                    popUpFullLobby={() => setErrorMessage(`Lobby ${lobby.name} is full`)}
-                />
-            )
+            <LobbyInfo
+                key={key}
+                id={lobby.id}
+                name={lobby.name}
+                mode={lobby.gameMode}
+                players={lobby.players}
+                visibility={lobby.visibility}
+                joinLobby={joinLobbyWithId}
+                popUpFullLobby={() => setErrorMessage(`Lobby ${lobby.name} is full`)}
+            />
+        )
         );
     }
 
@@ -96,18 +96,18 @@ const PublicLobbies = () => {
                 <h2> Click on one of the lobbies to join</h2>
                 <table className="PublicLobbies table">
                     <thead>
-                    <tr className="top">
+                        <tr className="top">
 
-                        <th>Lobby name</th>
-                        <th>game mode</th>
-                        <th>players</th>
-                        <th>capacity</th>
-                    </tr>
+                            <th>Lobby name</th>
+                            <th>game mode</th>
+                            <th>players</th>
+                            <th>capacity</th>
+                        </tr>
                     </thead>
                 </table>
                 <table className="PublicLobbies table">
                     <tbody>
-                    {content}
+                        {content}
                     </tbody>
                 </table>
                 <div className="PublicLobbies button-container">
@@ -121,8 +121,8 @@ const PublicLobbies = () => {
                 <div className="PublicLobbies button-container">
                     <Button className="secondary-button return"
 
-                            width="100%"
-                            onClick={() => returnHome()}
+                        width="100%"
+                        onClick={() => returnHome()}
                     >
                         RETURN HOME
                     </Button>
@@ -130,8 +130,8 @@ const PublicLobbies = () => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={isJoining} information={"Joining Lobby"}>
-                    <div style={{width: '100%'}}>
-                        <LinearProgress color="primary"/>
+                    <div style={{ width: '100%' }}>
+                        <LinearProgress color="primary" />
                     </div>
                 </CustomPopUp>
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
@@ -153,7 +153,7 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLobby}) => {
+const LobbyInfo = ({ id, name, mode, players, visibility, joinLobby, popUpFullLobby }) => {
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
@@ -179,21 +179,21 @@ const LobbyInfo = ({id, name, mode, players, visibility, joinLobby, popUpFullLob
         );
     }
     return (
-            <tr onClick={popUpFullLobby} className="full">
-                <td>
-                    {name}
-                </td>
-                <td>
-                    {displayedMode}
-                </td>
-                <td>
-                    {presentPlayers}
-                </td>
-                <td>
-                    {totalPlayers}
-                </td>
-            </tr>
-        );
+        <tr onClick={popUpFullLobby} className="full">
+            <td>
+                {name}
+            </td>
+            <td>
+                {displayedMode}
+            </td>
+            <td>
+                {presentPlayers}
+            </td>
+            <td>
+                {totalPlayers}
+            </td>
+        </tr>
+    );
 };
 
 export default PublicLobbies;

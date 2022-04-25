@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
 import QrReader from 'react-qr-reader'
-import {LinearProgress} from "@mui/material";
+import { LinearProgress } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 
 import { api } from 'helpers/api';
@@ -10,14 +10,14 @@ import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
 
-import {defaultTheme} from "styles/themes/defaulTheme";
+import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/ScanQRCode.scss';
 
 const ScanQRCode = props => {
 
     const history = useHistory();
     const [result, setResult] = useState(null);
-    const[isJoining, setJoining] = useState(false);
+    const [isJoining, setJoining] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [isValidated, setIsValidated] = useState(false);
 
@@ -27,22 +27,22 @@ const ScanQRCode = props => {
         // extract id
         const lobbySeparator = codeInput.indexOf("-");
         const id = codeInput.substring(0, lobbySeparator);
-         
+
         try {
-    
+
             //request body sent to the backend to create a new lobby
             const requestBody = {
                 "invitationCode": codeInput,
             };
-    
+
             //call to the backend to post the player with the attempted password
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': ''}});
-    
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': '' } });
+
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
             localStorage.setItem('token', user.token);
             localStorage.setItem('playerId', user.id);
-    
+
             setJoining(true);
             //just to make more interesting the joining
             await new Promise(r => setTimeout(r, 2000));
@@ -50,17 +50,17 @@ const ScanQRCode = props => {
 
         } catch (error) {
             if (error.response != null) {
-                if (error.response.status == 404) {
+                if (error.response.status === 404) {
                     setErrorMessage("This lobby does not seem to be live!");
-                }                    
-                else if (error.response.status == 409) {
+                }
+                else if (error.response.status === 409) {
                     setErrorMessage("This lobby is already full!");
-                }    
+                }
                 else {
                     setErrorMessage("The password does not match the lobby!")
-                }    
+                }
             } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");                    
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
             }
 
             // if there's an error, we reset the values to scan again the qr code
@@ -112,8 +112,8 @@ const ScanQRCode = props => {
                         style={QRStyle}
                         onError={handleQRError}
                         onScan={handleQRScan}
-                    />                    
-                </div>                
+                    />
+                </div>
                 <div className="scanqr lobby-buttons">
                     <Button onClick={() => goLobbies()}>RETURN TO LOBBIES</Button>
                 </div>
@@ -123,8 +123,8 @@ const ScanQRCode = props => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={isJoining} information={"Joining Lobby"}>
-                    <div style={{width: '100%'}}>
-                        <LinearProgress color="primary"/>
+                    <div style={{ width: '100%' }}>
+                        <LinearProgress color="primary" />
                     </div>
                 </CustomPopUp>
                 <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
