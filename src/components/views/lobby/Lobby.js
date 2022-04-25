@@ -11,6 +11,21 @@ import Socket from "components/socket/Socket";
 
 import 'styles/views/lobby/Lobby.scss';
 
+// form for changing name
+const FormName = props => {
+    return (
+        <div>
+            <input
+                className="lobby input-name"
+                placeholder="enter code here..."
+                value={props.value}
+                onChange={e => props.onChange(e.target.value)}
+            />
+        </div>
+    );
+  };
+
+
 const Lobby = ({id}) => {
 
     const history = useHistory();
@@ -27,10 +42,14 @@ const Lobby = ({id}) => {
     const [players, setPlayers] = useState(null);
     const [invitationCode, setInvitationCode] = useState(null);
     const [isHost, setIsHost] = useState(null);
+    const [classForm, setClassForm] = useState(null);
 
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
+    const [forbiddenChange, setForbiddenChange] = useState(false);
+
+
 
     const returnLobbies = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
@@ -58,6 +77,52 @@ const Lobby = ({id}) => {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
         }
     }
+
+ 
+
+    // set new name, let the user know if it's already taken (409)
+    const setNewName = async(user, un) => {
+        if(!user.ready) {
+            if (parseInt(localStorage.getItem("playerId")) === user.id) {
+        try {
+                const requestBody = {
+                    "name": un
+                };
+                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                
+            }
+         catch (error) {
+            if(error.response.status === 409) {
+                setErrorMessage("This name is already taken!");
+            }
+            else {
+            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+            }
+        }
+    }
+    } else setForbiddenChange(true);
+    }
+
+      // element to determine the right element
+  const setClass = (user) => {
+    if(user.id === parseInt(localStorage.getItem("playerId"))) {
+    return(
+<td>
+<FormName value={user.name}
+                    onChange={un => setNewName(user, un)}
+                    >
+                </FormName>
+                </td>
+    )
+    }
+    else {
+        return(<td>{user.name}</td>
+
+        )
+    }
+
+
+  }
 
     // refresh view when receiving a message from the socket
     const onMessage = () => {
@@ -142,9 +207,13 @@ const Lobby = ({id}) => {
                     {players ? players.map((user) => {
                         return (
                             <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878'} : {}}>
-                                <td>{user.name}</td>
+                                
+                                {setClass(user)}
+                                    
                                 <td>
-                                    <div className={'lobby teambox team' + user.team}/>
+                                    <div 
+                                    className={'lobby teambox team' + user.team}/>
+
                                 </td>
                                 <td>
                                     <input id={user.id} className="lobby status" type="checkbox"
@@ -181,6 +250,13 @@ const Lobby = ({id}) => {
                 <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
                     <Button onClick={() =>
                         setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp open={forbiddenChange !== false} information={"Changing information after setting ready status is not possible!"}>
+                    <Button onClick={() =>
+                        setForbiddenChange("")
                     }>
                         Close
                     </Button>

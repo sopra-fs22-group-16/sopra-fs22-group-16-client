@@ -111,4 +111,22 @@
             font-size: 1.2em;
         }
     }
+
+    &.input-name {
+        color: $accent;
+        text-align: center;
+        background: black;
+        border: 0.5px solid #FBC12E;
+        border-radius: 7px;
+        height: 32px;
+        width: 100%;
+    }
+
+    &.input-freeze {
+        color: $accent;
+        background: transparent;
+        height: 32px;
+        width: 100%;
+
+    }
 }
