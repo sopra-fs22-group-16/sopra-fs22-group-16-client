@@ -1,5 +1,5 @@
-import React, { useState, useEffect } from 'react';
-import { api, handleError } from 'helpers/api';
+import React, { useState } from 'react';
+import { api } from 'helpers/api';
 import { Button } from 'components/ui/Button';
 import 'styles/views/LobbyByCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
