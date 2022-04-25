@@ -93,17 +93,18 @@ const Game = ({id}) => {
                 let mapArray = [];
                 let unitArray = [];
 
-                mapData.map((row, y) => {
+                mapData.forEach((row, y) => {
                     mapArray.push([]);
-                    row.map((tile, x) => {
+
+                      row.forEach((tile, x) => {
                         let unit = null;
                         if (mapData[y][x].unit) {
                             unit = new UnitModel(x, y, mapData[y][x].unit);
                             unitArray.push(unit);
                             delete mapData[y][x].unit;
                         }
-                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]));
-                    });
+                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]);
+                                        );
                 });
 
                 setUnitArray(unitArray);

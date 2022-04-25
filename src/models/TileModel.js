@@ -1,6 +1,5 @@
 import {TileIndicatorType} from "../components/fragments/game/tile/TileIndicatorType";
 
-
 class TileModel {
     constructor(x, y, unit, data = {}) {
         this.x = x;

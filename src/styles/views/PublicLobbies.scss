@@ -33,6 +33,7 @@
     text-transform: uppercase;
   }
 
+  //TODO: make the full lobbies grey
   &.table tr{
     height: 32px;
   }
@@ -52,9 +53,23 @@
   }
 
   // hover on clicking except the tr.top
-  &.table tr:not(tr.top):hover {
+  &.table tr.non-full:hover {
     background-color: #604C18;
   }
+
+  // hover on clicking except the tr.top
+  &.table tr.full:hover {
+    background-color: #787878;
+  }
+
+  &.table tr.full {
+    text-decoration: line-through;
+    color: #F0F0F0;
+  }
+
+
+
+
 
   &.label {
     color: $textColorLight;
