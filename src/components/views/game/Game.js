@@ -103,8 +103,8 @@ const Game = ({id}) => {
                             unitArray.push(unit);
                             delete mapData[y][x].unit;
                         }
-                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]);
-                                        );
+                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]));
+                      });
                 });
 
                 setUnitArray(unitArray);
