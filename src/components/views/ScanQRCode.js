@@ -68,7 +68,7 @@ const ScanQRCode = props => {
     }
 
     const goLobbies = () => {
-        history.goBack();
+        history.push('/public-lobbies');
     }
 
     const returnHome = () => {
