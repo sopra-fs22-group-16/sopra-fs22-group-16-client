@@ -29,9 +29,12 @@ const AppRouter = () => {
                 <Route path="/game">
                     <GameRouter base="/game" />
                 </Route>
-                
+
                 <Route path="/join-lobby">
                     <LobbyByCode />
+                </Route>
+                <Route path="*">
+                    <Redirect to="/home" />
                 </Route>
             </Switch>
         </BrowserRouter>

@@ -1,5 +1,6 @@
 import { Switch, Redirect, Route } from "react-router-dom";
 import PropTypes from 'prop-types';
+import { TokenGuard } from "components/routing/routeProtectors/TokenGuard";
 import Lobby from "components/views/lobby/Lobby";
 import UpdateLobby from "components/views/lobby/UpdateLobby";
 import ShareQRCode from "components/views/lobby/ShareQRCode";
@@ -18,30 +19,32 @@ const LobbyRouter = props => {
                     <Redirect to={'/home'} />
                 </Route>
                 <Switch>
-                    <Route exact path={`${props.base}/:id`} render={({ match }) => {
-                        const id = parseInt(match.params.id)
-                        return <Lobby id={id} />
-                    }} >
-                    </Route>
-                    <Route path={`${props.base}/:id/update`} render={({ match }) => {
-                        const id = parseInt(match.params.id)
-                        return <UpdateLobby id={id} />
-                    }} >
-                    </Route>
-                    <Route path={`${props.base}/:id/share/qr`} render={({ match }) => {
-                        const id = parseInt(match.params.id)
-                        return <ShareQRCode id={id} />
-                    }} >
-                    </Route>
-                    <Route path={`${props.base}/:id/invite-users`} render={({ match }) => {
-                       const id = parseInt(match.params.id)
-                       return <ShareLobbyCode id={id} />
-                    }} >
-                    </Route>
-                    <Route path={`${props.base}/scan/qr`} render={() => {
-                        return <ScanQRCode/>
-                    }} >
-                    </Route>
+                    <TokenGuard>
+                        <Route exact path={`${props.base}/:id`} render={({ match }) => {
+                            const id = parseInt(match.params.id)
+                            return <Lobby id={id} />
+                        }} >
+                        </Route>
+                        <Route path={`${props.base}/:id/update`} render={({ match }) => {
+                            const id = parseInt(match.params.id)
+                            return <UpdateLobby id={id} />
+                        }} >
+                        </Route>
+                        <Route path={`${props.base}/:id/share/qr`} render={({ match }) => {
+                            const id = parseInt(match.params.id)
+                            return <ShareQRCode id={id} />
+                        }} >
+                        </Route>
+                        <Route path={`${props.base}/:id/invite-users`} render={({ match }) => {
+                            const id = parseInt(match.params.id)
+                            return <ShareLobbyCode id={id} />
+                        }} >
+                        </Route>
+                        <Route path={`${props.base}/scan/qr`} render={() => {
+                            return <ScanQRCode />
+                        }} >
+                        </Route>
+                    </TokenGuard>
                 </Switch>
             </Switch>
         </div>
