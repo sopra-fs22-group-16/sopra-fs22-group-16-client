@@ -1,7 +1,7 @@
-import {Redirect, Route, Switch} from "react-router-dom";
+import { Redirect, Route, Switch } from "react-router-dom";
 import PropTypes from "prop-types";
-import Game from "../../views/game/Game";
-import {TokenGuard} from "../routeProtectors/TokenGuard";
+import Game from "components/views/game/Game";
+import { TokenGuard } from "components/routing/routeProtectors/TokenGuard";
 
 const GameRouter = props => {
     /**

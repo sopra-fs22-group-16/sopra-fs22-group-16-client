@@ -1,8 +1,8 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
-import {Button} from 'components/ui/Button';
-import Header from "../ui/Header";
+import { useHistory } from 'react-router-dom';
 
+import {Button} from 'components/ui/Button';
+import Header from "components/ui/Header";
 import hannibal_background from 'styles/images/wargroove_bw_light.png'
 
 import 'styles/views/HomePage.scss';
@@ -12,12 +12,12 @@ const HomePage = () => {
 
     const goJoinLobby = () => {
         // change status from ONLINE to OFFLINE
-        history.push('/public-lobbies');
+        history.push('/lobby/join');
     }
 
     const goCreateLobby = () => {
         // change status from ONLINE to OFFLINE
-        history.push('/create-lobby');
+        history.push('/lobby/create');
     }
 
     return (
