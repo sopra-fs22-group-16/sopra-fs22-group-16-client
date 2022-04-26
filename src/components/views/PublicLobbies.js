@@ -25,7 +25,7 @@ const PublicLobbies = () => {
     }
 
     const joinLobbyByCode = () => {
-        history.push('/join-lobby');
+        history.push('/lobby/join/code');
     }
 
     useEffect(() => {

@@ -70,7 +70,7 @@ const ScanQRCode = props => {
     }
 
     const goLobbies = () => {
-        history.push('/public-lobbies');
+        history.push('/lobby/join');
     }
 
     const returnHome = () => {
