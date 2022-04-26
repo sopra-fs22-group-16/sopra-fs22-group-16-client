@@ -100,13 +100,13 @@ const LobbyByCode = () => {
                 </FormField>
                 <Link className="LobbyByCode link"
                     to={{
-                        pathname: '/lobby/scan/QR'
+                        pathname: '/lobby/join/qr'
                     }}>
                     Join using a QR code instead</Link>
                 <div className="LobbyByCode button-container">
                     <Button
                         width="100%"
-                        onClick={() => history.push('/public-lobbies')}
+                        onClick={() => history.push('/lobby/join')}
                     >
                         RETURN TO PUBLIC LOBBIES
                     </Button>

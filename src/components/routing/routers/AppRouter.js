@@ -1,11 +1,9 @@
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 
-import LobbyRouter from "./LobbyRouter";
-import CreateLobby from "components/views/CreateLobby";
+import LobbyRouter from "components/routing/routers/LobbyRouter";
+import GameRouter from "components/routing/routers/GameRouter";
+
 import HomePage from "components/views/HomePage";
-import PublicLobbies from "components/views/PublicLobbies";
-import GameRouter from "./GameRouter";
-import LobbyByCode from "components/views/LobbyByCode";
 
 const AppRouter = () => {
     return (
@@ -17,21 +15,14 @@ const AppRouter = () => {
                 <Route exact path="/home">
                     <HomePage />
                 </Route>
-                <Route exact path="/create-lobby">
-                    <CreateLobby />
-                </Route>
-                <Route exact path="/public-lobbies">
-                    <PublicLobbies />
-                </Route>
                 <Route path="/lobby">
                     <LobbyRouter base="/lobby" />
                 </Route>
                 <Route path="/game">
                     <GameRouter base="/game" />
                 </Route>
-                
-                <Route path="/join-lobby">
-                    <LobbyByCode />
+                <Route path="*">
+                    <Redirect to="/home" />
                 </Route>
             </Switch>
         </BrowserRouter>
