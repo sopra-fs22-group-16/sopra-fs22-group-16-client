@@ -18,6 +18,9 @@ const Unit = props => {
         case 1:
             unitColor = "blue";
             break;
+        default:
+            console.log("Team id " + props.unit.teamId + " not provided or does not match!");
+            break;
     }
 
     // TODO: Set animation dynamically when performing command

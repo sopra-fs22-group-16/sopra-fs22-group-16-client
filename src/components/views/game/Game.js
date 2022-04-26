@@ -10,6 +10,7 @@ import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "../../../models/TileModel";
 import {useHistory} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
+import {api} from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
@@ -19,6 +20,8 @@ import jsonTileMockData from "./jsonTileMockData";
 const Game = ({id}) => {
 
     const history = useHistory();
+
+    const token = localStorage.getItem("token");
 
     const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
 
@@ -31,13 +34,13 @@ const Game = ({id}) => {
     useEffect(() => {
         async function fetchData() {
             try {
-                // delays continuous execution of an async operation for 1 second.
-                // This is just a fake async call, so that the spinner can be displayed
-                // feel free to remove it :)
-                await new Promise(resolve => setTimeout(resolve, 1500));
+
+                let response;
+
+                //response = api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
                 // Set Mock map data
-                const response = jsonTileMockData;
+                response = jsonTileMockData;
 
                 let mapData = response.map;
                 let unitData = response.units;
@@ -63,7 +66,6 @@ const Game = ({id}) => {
                 });
 
                 setGameData({
-                    ...gameData,
                     gameType: response.gameType,
                     gameMode: response.gameMode,
                     map: mapArray,
@@ -85,13 +87,13 @@ const Game = ({id}) => {
     }
 
     const onClickTile = (tile) => {
-        if(selectedUnit && selectedUnit.movableTiles.includes(tile)){
-            // Show path to movable tile
+        if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
+            // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
             setGameData({...gameData});
-        }else if(selectedUnit && (!tile.movableTiles?.includes(tile) && !tile.attackableTiles?.includes(tile))){
+        }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
             // Deselect unit
             selectedUnit.showPathIndicator(false);
             setGameData({...gameData});
@@ -108,7 +110,6 @@ const Game = ({id}) => {
                 }
             }
             selectUnit(unit);
-            console.log(unit.attackableTilesFromATile);
         }else if(selectedUnit /* && unit is hostile */){
             // TODO: Attack command
         }

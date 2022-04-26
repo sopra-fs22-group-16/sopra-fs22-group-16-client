@@ -24,9 +24,9 @@ class UnitModel {
             this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
         }
         this.selected = false;
-        this.movableTiles = null;
-        this.attackableTiles = null;
-        this.attackableTilesFromATile = null;
+        this.traversableTiles = null;
+        this.tilesInAttackRange = null;
+        this.tilesInAttackRangeSpecificTile = null;
         this.pathGoal = null
         this.path = null;
 
@@ -34,7 +34,7 @@ class UnitModel {
 
     calculatePathToTile = (goalY, goalX, map) => {
         // Check if movable is already calculated and that the goal is in range
-        if (this.movableTiles == null || !this.movableTiles.includes(map[goalY][goalX])) return;
+        if (this.traversableTiles == null || !this.traversableTiles.includes(map[goalY][goalX])) return;
 
         // Check if the goal is already set and if it changed
         if (this.pathGoal != null && (this.pathGoal[0] === goalY && this.pathGoal[1] === goalX)) return;
@@ -79,7 +79,7 @@ class UnitModel {
                     childTile = map[yPos][xPos];
 
                     // Check if childTile is in movableTiles
-                    if (this.movableTiles.includes(childTile)) {
+                    if (this.traversableTiles.includes(childTile)) {
 
                         if (childTile.y === goalY && childTile.x === goalX) {
                             this.path = [];
@@ -116,9 +116,7 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort(function (a, b) {
-                return a[2] - b[2]
-            });
+            frontier.sort((a,b)=>{return a[2]-b[2]});
 
         }
 
@@ -128,7 +126,7 @@ class UnitModel {
     }
 
     calculateTilesInRange = (map) => {
-        if (this.movableTiles === null || this.attackableTiles === null) {
+        if (this.traversableTiles === null || this.tilesInAttackRange === null) {
             this.#calculateMovementRange(map);
             this.#calculateAttackRange(map);
         }
@@ -188,20 +186,20 @@ class UnitModel {
             });
         }
 
-        this.movableTiles = movableTiles;
+        this.traversableTiles = movableTiles;
     }
 
     #calculateAttackRange = (map) => {
-        if (this.movableTiles === null) return;
-        let attackableTiles = [];
+        if (this.traversableTiles === null) return;
+        let tilesInAttackRange = [];
 
-        this.attackableTilesFromATile = {};
+        this.tilesInAttackRangeSpecificTile = {};
 
-        this.movableTiles.forEach((movableTile) => {
+        this.traversableTiles.forEach((movableTile) => {
             let node = null;
             let frontier = [[movableTile, 0]]; // tile, distance
 
-            let attackableTilesFromThisTile = [];
+            let tilesInAttackRangeSpecificTile = [];
             let foundHostileUnit = false;
 
             while (frontier.length > 0) {
@@ -209,13 +207,13 @@ class UnitModel {
                 let tile = node[0];
                 let distance = node[1];
 
-                // If node is not in attackableTiles yet and it is traversable add it
-                if (!attackableTiles.includes(tile) && tile.traversable) {
-                    attackableTiles.push(tile);
+                // If node is not in tilesInAttackRange yet and it is traversable add it
+                if (!tilesInAttackRange.includes(tile) && tile.traversable) {
+                    tilesInAttackRange.push(tile);
                 }
 
-                if(!attackableTilesFromThisTile.includes(tile) && tile.traversable){
-                    attackableTilesFromThisTile.push(tile);
+                if(!tilesInAttackRangeSpecificTile.includes(tile) && tile.traversable){
+                    tilesInAttackRangeSpecificTile.push(tile);
                 }
 
                 // If we reached maxRange we do not have to look at children of the tile
@@ -255,15 +253,15 @@ class UnitModel {
             }
 
             if(foundHostileUnit){
-                if(!this.attackableTilesFromATile[movableTile.y]){
-                    this.attackableTilesFromATile[movableTile.y] = {};
+                if(!this.tilesInAttackRangeSpecificTile[movableTile.y]){
+                    this.tilesInAttackRangeSpecificTile[movableTile.y] = {};
                 }
-                this.attackableTilesFromATile[movableTile.y][movableTile.x] = attackableTilesFromThisTile;
+                this.tilesInAttackRangeSpecificTile[movableTile.y][movableTile.x] = tilesInAttackRangeSpecificTile;
 
             }
         });
 
-        this.attackableTiles = attackableTiles;
+        this.tilesInAttackRange = tilesInAttackRange;
     }
 
     showPathIndicator = (show) => {
@@ -372,8 +370,8 @@ class UnitModel {
 
     showRangeIndicator = (show) => {
         // Update the tiles that they show the attack range indicator
-        if (this.attackableTiles !== null)
-            this.attackableTiles.forEach((tile) => {
+        if (this.tilesInAttackRange !== null)
+            this.tilesInAttackRange.forEach((tile) => {
                 if (show) {
                     if (tile.unit && tile.unit.teamId !== this.teamId) {
                         tile.indicatorType = TileIndicatorType.hostileUnit;
@@ -386,8 +384,8 @@ class UnitModel {
             })
 
         // Update the tiles that they show the movement range indicator
-        if (this.movableTiles !== null)
-            this.movableTiles.forEach((tile) => {
+        if (this.traversableTiles !== null)
+            this.traversableTiles.forEach((tile) => {
                 if (show) {
                     if (tile.indicatorType !== TileIndicatorType.hostileUnit) {
                         tile.indicatorType = TileIndicatorType.movementRange;
