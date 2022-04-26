@@ -20,75 +20,13 @@ const Game = ({id}) => {
 
     const history = useHistory();
 
-    const [gameMode, setGameMode] = useState("");
-    const [gameType, setGameType] = useState("");
-
-    const [gameMap, setGameMap] = useState();
-    const [unitArray, setUnitArray] = useState();
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
-    const onClickTile = (tile) => {
-        if (selectedUnit === null && tile.unit !== null /* TODO: && it is one of my units */) {
-            // If no unit is selected and a unit is on the clicked tile
-            // select this unit
-            selectUnit(tile.unit);
-            console.log("Selected a unit")
-        } else if (selectedUnit !== null && tile.unit !== null && selectedUnit !== tile.unit /* TODO: && it is one of my units */) {
-            // A unit is selected and we clicked on a tile with a unit on it and it is one of my units
-            // Select this unit instead
-            clearMapSelection(selectedUnit);
-            selectUnit(tile.unit);
-            console.log("Unit selected and clicking a different friendly unit")
-        } else if (selectedUnit !== null && tile.unit !== null && selectedUnit !== tile.unit /* TODO: && it is NOT one of my units */ && selectedUnit.attackableTiles.includes(tile)) {
-            // If it is a hostile unit do other stuff
-            // TODO: further command processing
-            console.log("Unit selected and clicking hostile unit in attack range")
-        } else if (selectedUnit !== null && (tile.unit === null || selectedUnit === tile.unit) && selectedUnit.movableTiles.includes(tile)) {
-            //  A unit is selected and we clicked on a tile with a NO unit on it and the tile is in movement range
-            // TODO: further command processing
-            console.log("Unit selected and clicking on a tile an empty or the selected units tile in movement range")
-        } else if (selectedUnit !== null && tile.unit === null) {
-            // We clicked on a tile outside the movement range of the selected unit and not on a hostile unit in attack range
-            // Deselect the selected unit
-            clearMapSelection(selectedUnit);
-            console.log("Unit selected and clicking on empty tile")
-        }
-    }
-
-    const clearMapSelection = (unit) => {
-        unit.showRangeIndicator(false);
-        unit.showPathIndicator(false);
-        setSelectedUnit(null);
-    }
-
-    const selectUnit = (unit) => {
-        // Set the clicked unit as the selected unit
-        setSelectedUnit(unit);
-        // Set that the unit is selected
-        unit.selected = true;
-        // Calculate the movement and attack range
-        unit.calculateTilesInRange(gameMap)
-        // Show the attack and movement range
-        unit.showRangeIndicator(true);
-    }
-
-    const onTileEnter = (tile) => {
-        if (selectedUnit != null) {
-            // Check if the tile is a movable tile of the selected unit
-            if (selectedUnit.movableTiles.includes(tile)) {
-                selectedUnit.showPathIndicator(false);
-                selectedUnit.calculatePathToTile(tile.y, tile.x, gameMap);
-                selectedUnit.showPathIndicator(true);
-
-                // Auto update does not work?
-                setGameMap([...gameMap]);
-            }
-        }
-    }
 
     useEffect(() => {
         async function fetchData() {
@@ -101,31 +39,39 @@ const Game = ({id}) => {
                 // Set Mock map data
                 const response = jsonTileMockData;
 
-                setGameMode(response.gameMode);
-                setGameType(response.gameType);
-
                 let mapData = response.map;
+                let unitData = response.units;
+
                 let mapArray = [];
                 let unitArray = [];
 
                 mapData.forEach((row, y) => {
                     mapArray.push([]);
-
-                      row.forEach((tile, x) => {
-                        let unit = null;
-                        if (mapData[y][x].unit) {
-                            unit = new UnitModel(x, y, mapData[y][x].unit);
-                            unitArray.push(unit);
-                            delete mapData[y][x].unit;
-                        }
-                        mapArray[y].push(new TileModel(x, y, unit, mapData[y][x]));
-                      });
+                    row.forEach((tile, x) => {
+                        mapArray[y].push(new TileModel(y, x, mapData[y][x]));
+                    });
                 });
 
-                setUnitArray(unitArray);
-                setGameMap(mapArray);
+                unitData.forEach((unit) => {
+                    let y = unit.position.y;
+                    let x = unit.position.x;
+
+                    delete unit.position;
+                    let unitModel = new UnitModel(y, x, unit);
+                    mapArray[y][x].unit = unitModel;
+                    unitArray.push(unitModel);
+                });
+
+                setGameData({
+                    ...gameData,
+                    gameType: response.gameType,
+                    gameMode: response.gameMode,
+                    map: mapArray,
+                    units: unitArray
+                });
 
             } catch (error) {
+                console.log(error);
                 setGetDataFailed(true);
             }
         }
@@ -133,22 +79,50 @@ const Game = ({id}) => {
         fetchData();
     }, []);
 
-    let content;
-    if (gameMap) {
-        content = (
-            <div className={"mapContainer"}>
-                <Map mapData={gameMap}
-                     onClickTile={onClickTile}
-                     onMouseEnterTile={onTileEnter}
-                />
-            </div>);
-    } else {
-        content = (
-            <div className={"loadingContainer"}>
-                <ThemeProvider theme={defaultTheme}>
-                    <LinearProgress color="secondary"/>
-                </ThemeProvider>
-            </div>);
+
+    const onMouseEnterTile = (tile) => {
+
+    }
+
+    const onClickTile = (tile) => {
+        if(selectedUnit && selectedUnit.movableTiles.includes(tile)){
+            // Show path to movable tile
+            selectedUnit.showPathIndicator(false);
+            selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
+            selectedUnit.showPathIndicator(true);
+            setGameData({...gameData});
+        }else if(selectedUnit && (!tile.movableTiles?.includes(tile) && !tile.attackableTiles?.includes(tile))){
+            // Deselect unit
+            selectedUnit.showPathIndicator(false);
+            setGameData({...gameData});
+        }
+    }
+
+    const onClickUnit = (unit) => {
+        if(selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/){
+            if(selectedUnit){
+                selectedUnit.showRangeIndicator(false);
+                if(selectedUnit.path){
+                    selectedUnit.showPathIndicator(false);
+                    setGameData({...gameData});
+                }
+            }
+            selectUnit(unit);
+            console.log(unit.attackableTilesFromATile);
+        }else if(selectedUnit /* && unit is hostile */){
+            // TODO: Attack command
+        }
+    }
+
+    const selectUnit = (unit) => {
+        // Set the clicked unit as the selected unit
+        setSelectedUnit(unit);
+        // Set that the unit is selected
+        unit.selected = true;
+        // Calculate the movement and attack range
+        unit.calculateTilesInRange(gameData.map)
+        // Show the attack and movement range
+        unit.showRangeIndicator(true);
     }
 
     return (
@@ -159,7 +133,23 @@ const Game = ({id}) => {
                       content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             </Helmet>
 
-            {content}
+            {
+                (gameData.map === [[]]) ?
+                    <div className={"loadingContainer"}>
+                        <ThemeProvider theme={defaultTheme}>
+                            <LinearProgress color="secondary"/>
+                        </ThemeProvider>
+                    </div>
+                    :
+
+                        <Map mapData={gameData.map}
+                             unitData={gameData.units}
+                             onClickTile={onClickTile}
+                             onClickUnit={onClickUnit}
+                             onMouseEnterTile={onMouseEnterTile}
+                        />
+
+            }
 
             <div className={"surrenderFlagContainer"}>
                 <img className={"pixelated"} src={surrenderFlag}

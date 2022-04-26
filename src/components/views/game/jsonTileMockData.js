@@ -1675,18 +1675,7 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1,
-                unit: {
-                    type: "archer",
-                    health: 100,
-                    defense: [15,5,5],
-                    attackDamage: [25,10,50],
-                    attackRange: 5,
-                    movementRange: 3,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 0,
-                    userId: 1,
-                }
+                traversingCost: 1
             },
             {
                 type: "grass",
@@ -1813,17 +1802,6 @@ const jsonTileMockData = {
                 variant: "flat",
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "war_elephant",
-                    health: 150,
-                    defense: [5,25,15],
-                    attackDamage: [25,50,25],
-                    attackRange: 1,
-                    movementRange: 8,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 1,
-                    userId: 1,
-                }
             },
             {
                 type: "grass",
@@ -1898,17 +1876,6 @@ const jsonTileMockData = {
                 variant: "flat",
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "knight",
-                    health: 100,
-                    defense: [25,15,5],
-                    attackDamage: [25,25,5],
-                    attackRange: 1,
-                    movementRange: 2,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 1,
-                    userId: 1,
-                }
             },
             {
                 type: "grass",
@@ -1938,52 +1905,19 @@ const jsonTileMockData = {
                 type: "grass",
                 variant: "flat",
                 traversable: true,
-                traversingCost: 1,
-                unit: {
-                    type: "archer",
-                    health: 100,
-                    defense: [15,5,5],
-                    attackDamage: [25,10,50],
-                    attackRange: 5,
-                    movementRange: 3,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 0,
-                    userId: 1,
-                }
+                traversingCost: 1
             },
             {
                 type: "bridge",
                 variant: "left",
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "war_elephant",
-                    health: 150,
-                    defense: [5,25,15],
-                    attackDamage: [25,50,25],
-                    attackRange: 1,
-                    movementRange: 8,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 0,
-                    userId: 1,
-                }
             },
             {
                 type: "bridge",
                 variant: "right",
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "archer",
-                    health: 100,
-                    defense: [15,5,5],
-                    attackDamage: [25,10,50],
-                    attackRange: 5,
-                    movementRange: 3,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 0,
-                    userId: 1,
-                }
             },
             {
                 type: "grass",
@@ -2020,17 +1954,6 @@ const jsonTileMockData = {
                 variant: "flat",
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "knight",
-                    health: 100,
-                    defense: [15,5,5],
-                    attackDamage: [25,10,50],
-                    attackRange: 5,
-                    movementRange: 3,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 1,
-                    userId: 1,
-                }
             },
             {
                 type: "grass",
@@ -2231,17 +2154,6 @@ const jsonTileMockData = {
                 variant: 'flat',
                 traversable: true,
                 traversingCost: 1,
-                unit: {
-                    type: "archer",
-                    health: 100,
-                    defense: [15,5,5],
-                    attackDamage: [25,10,50],
-                    attackRange: 5,
-                    movementRange: 3,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 1,
-                    userId: 1,
-                }
             },
             {
                 type: 'grass',
@@ -2297,18 +2209,7 @@ const jsonTileMockData = {
                 type: 'grass',
                 variant: 'flat',
                 traversable: true,
-                traversingCost: 1,
-                unit: {
-                    type: "war_elephant",
-                    health: 150,
-                    defense: [5,25,15],
-                    attackDamage: [25,50,25],
-                    attackRange: 1,
-                    movementRange: 8,
-                    commands: ['move', 'attack', 'wait'],
-                    teamId: 0,
-                    userId: 1,
-                }
+                traversingCost: 1
             },
             {
                 type: 'grass',
@@ -3916,7 +3817,98 @@ const jsonTileMockData = {
                 traversingCost: 999
             }
         ]
-
+    ],
+    units: [
+        {
+            position: {
+                x: 6,
+                y: 12,
+            },
+            type: "archer",
+            health: 100,
+            defense: [15, 5, 5],
+            attackDamage: [25, 10, 50],
+            attackRange: 5,
+            movementRange: 3,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 1,
+            userId: 1,
+        },
+        {
+            position: {
+                x: 7,
+                y: 8,
+            },
+            type: "knight",
+            health: 125,
+            defense: [25, 15, 5],
+            attackDamage: [50, 25, 10],
+            attackRange: 1,
+            movementRange: 2,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 1,
+            userId: 1,
+        },
+        {
+            position: {
+                x: 3,
+                y: 10,
+            },
+            type: "war_elephant",
+            health: 150,
+            defense: [5, 25, 15],
+            attackDamage: [25, 50, 25],
+            attackRange: 1,
+            movementRange: 6,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 0,
+            userId: 1,
+        },
+        {
+            position: {
+                x: 23,
+                y: 8,
+            },
+            type: "archer",
+            health: 100,
+            defense: [15, 5, 5],
+            attackDamage: [25, 10, 50],
+            attackRange: 5,
+            movementRange: 3,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 1,
+            userId: 2,
+        },
+        {
+            position: {
+                x: 22,
+                y: 12,
+            },
+            type: "knight",
+            health: 125,
+            defense: [25, 15, 5],
+            attackDamage: [50, 25, 10],
+            attackRange: 1,
+            movementRange: 2,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 1,
+            userId: 2,
+        },
+        {
+            position: {
+                x: 26,
+                y: 10,
+            },
+            type: "war_elephant",
+            health: 150,
+            defense: [5, 25, 15],
+            attackDamage: [25, 50, 25],
+            attackRange: 1,
+            movementRange: 6,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 1,
+            userId: 2,
+        }
     ]
 }
 

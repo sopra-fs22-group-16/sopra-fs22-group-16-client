@@ -1,8 +1,11 @@
 import PropTypes from "prop-types";
-import React from "react";
+import React, {useEffect} from "react";
 import {ArrowPartType} from "./types/ArrowPartType";
 import {pathArrowData} from "./data/pathArrowData";
 import {Direction} from "../unit/Direction";
+import jsonTileMockData from "../../../views/game/jsonTileMockData";
+import UnitModel from "../../../../models/UnitModel";
+import TileModel from "../../../../models/TileModel";
 
 const PathIndicator = props => {
 

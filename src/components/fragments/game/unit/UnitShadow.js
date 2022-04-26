@@ -33,7 +33,7 @@ const UnitShadow = props => {
     }
 
     return (
-        <div style={unitStyle} className="tile pixelated"/>
+        <div style={unitStyle} className="unitImage pixelated"/>
     );
 }
 

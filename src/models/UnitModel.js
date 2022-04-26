@@ -4,9 +4,9 @@ import {TileIndicatorType} from "../components/fragments/game/tile/types/TileInd
 import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
 
 class UnitModel {
-    constructor(x, y, data = {}) {
-        this.x = x;
+    constructor(y, x, data = {}) {
         this.y = y;
+        this.x = x;
         this.type = null;
         this.health = 0;
         this.defense = 0;
@@ -26,6 +26,7 @@ class UnitModel {
         this.selected = false;
         this.movableTiles = null;
         this.attackableTiles = null;
+        this.attackableTilesFromATile = null;
         this.pathGoal = null
         this.path = null;
 
@@ -194,9 +195,14 @@ class UnitModel {
         if (this.movableTiles === null) return;
         let attackableTiles = [];
 
+        this.attackableTilesFromATile = {};
+
         this.movableTiles.forEach((movableTile) => {
             let node = null;
             let frontier = [[movableTile, 0]]; // tile, distance
+
+            let attackableTilesFromThisTile = [];
+            let foundHostileUnit = false;
 
             while (frontier.length > 0) {
                 node = frontier.shift();
@@ -206,6 +212,10 @@ class UnitModel {
                 // If node is not in attackableTiles yet and it is traversable add it
                 if (!attackableTiles.includes(tile) && tile.traversable) {
                     attackableTiles.push(tile);
+                }
+
+                if(!attackableTilesFromThisTile.includes(tile) && tile.traversable){
+                    attackableTilesFromThisTile.push(tile);
                 }
 
                 // If we reached maxRange we do not have to look at children of the tile
@@ -234,10 +244,21 @@ class UnitModel {
                         if (childDistance <= this.attackRange) {
                             // Add child to frontier
                             frontier.push([childTile, childDistance]);
+                            if(childTile.unit !== null && childTile.unit.teamId !== this.teamId){
+                                foundHostileUnit = true;
+                            }
                         }
 
                     }
                 });
+
+            }
+
+            if(foundHostileUnit){
+                if(!this.attackableTilesFromATile[movableTile.y]){
+                    this.attackableTilesFromATile[movableTile.y] = {};
+                }
+                this.attackableTilesFromATile[movableTile.y][movableTile.x] = attackableTilesFromThisTile;
 
             }
         });
@@ -256,82 +277,82 @@ class UnitModel {
             this.path.forEach((tile) => {
                 if (show) {
                     if (this.pathGoal[0] === tile.y && this.pathGoal[1] === tile.x) {
-                        tile.pathPart.type = ArrowPartType.end;
+                        tile.arrowPart = ArrowPartType.end;
                     } else if (this.y === tile.y && this.x === tile.x) {
-                        tile.pathPart.type = ArrowPartType.start;
+                        tile.arrowPart = ArrowPartType.start;
                     } else {
-                        tile.pathPart.type = ArrowPartType.straight;
+                        tile.arrowPart = ArrowPartType.straight;
                     }
 
 
                     if (tile.y < lastY) {
-                        tile.pathPart.direction = Direction.south;
+                        tile.arrowDirection = Direction.south;
                         if (lastTile != null) {
-                            if (lastTile.pathPart.type !== ArrowPartType.end) {
+                            if (lastTile.arrowPart !== ArrowPartType.end) {
                                 if (lastDir === Direction.east) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.south;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.south;
                                 } else if (lastDir === Direction.west) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.west;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.west;
                                 }
                             } else {
-                                lastTile.pathPart.direction = Direction.south;
+                                lastTile.arrowDirection = Direction.south;
                             }
                         }
 
 
                         lastDir = Direction.north;
                     } else if (tile.y > lastY) {
-                        tile.pathPart.direction = Direction.north;
+                        tile.arrowDirection = Direction.north;
 
                         if (lastTile != null) {
-                            if (lastTile.pathPart.type !== ArrowPartType.end) {
+                            if (lastTile.arrowPart !== ArrowPartType.end) {
                                 if (lastDir === Direction.east) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.east;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.east;
                                 } else if (lastDir === Direction.west) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.north;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.north;
                                 }
                             } else {
-                                lastTile.pathPart.direction = Direction.north;
+                                lastTile.arrowDirection = Direction.north;
                             }
                         }
 
 
                         lastDir = Direction.south;
                     } else if (tile.x > lastX) {
-                        tile.pathPart.direction = Direction.west;
+                        tile.arrowDirection = Direction.west;
                         if (lastTile != null) {
-                            if (lastTile.pathPart.type !== ArrowPartType.end) {
+                            if (lastTile.arrowPart !== ArrowPartType.end) {
                                 if (lastDir === Direction.north) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.north;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.north;
                                 } else if (lastDir === Direction.south) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.west;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.west;
                                 }
                             } else {
-                                lastTile.pathPart.direction = Direction.west;
+                                lastTile.arrowDirection = Direction.west;
                             }
                         }
 
 
                         lastDir = Direction.east;
                     } else if (tile.x < lastX) {
-                        tile.pathPart.direction = Direction.east;
+                        tile.arrowDirection = Direction.east;
                         if (lastTile != null) {
-                            if (lastTile.pathPart.type !== ArrowPartType.end) {
+                            if (lastTile.arrowPart !== ArrowPartType.end) {
                                 if (lastDir === Direction.north) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.east;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.east;
                                 } else if (lastDir === Direction.south) {
-                                    lastTile.pathPart.type = ArrowPartType.corner;
-                                    lastTile.pathPart.direction = Direction.south;
+                                    lastTile.arrowPart = ArrowPartType.corner;
+                                    lastTile.arrowDirection = Direction.south;
                                 }
                             } else {
-                                lastTile.pathPart.direction = Direction.east;
+                                lastTile.arrowDirection = Direction.east;
                             }
                         }
 
@@ -343,7 +364,7 @@ class UnitModel {
                     lastY = tile.y;
                     lastTile = tile;
                 } else {
-                    tile.pathPart.type = ArrowPartType.none;
+                    tile.arrowPart = ArrowPartType.none;
 
                 }
             });
