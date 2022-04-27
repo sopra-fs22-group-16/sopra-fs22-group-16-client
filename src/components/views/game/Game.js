@@ -37,13 +37,14 @@ const Game = ({id}) => {
 
                 let response;
 
-                //response = api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
-
+                response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
+                
                 // Set Mock map data
-                response = jsonTileMockData;
+                //response = jsonTileMockData;
+                alert("error check 1");
+                let mapData = response.data.gameMap.tiles;
 
-                let mapData = response.map;
-                let unitData = response.units;
+                let unitData = response.data.units;
 
                 let mapArray = [];
                 let unitArray = [];
@@ -54,6 +55,7 @@ const Game = ({id}) => {
                         mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                     });
                 });
+                alert("error check 2");
 
                 unitData.forEach((unit) => {
                     let y = unit.position.y;
@@ -64,17 +66,22 @@ const Game = ({id}) => {
                     mapArray[y][x].unit = unitModel;
                     unitArray.push(unitModel);
                 });
+                alert(unitArray[0]);
 
+                alert("error check 3");
                 setGameData({
-                    gameType: response.gameType,
-                    gameMode: response.gameMode,
+                    gameType: response.data.gameType,
+                    gameMode: response.data.gameMode,
                     map: mapArray,
                     units: unitArray
                 });
+                
+
+                alert("error check 4");
 
             } catch (error) {
-                console.log(error);
-                setGetDataFailed(true);
+                alert("there is still an error here");
+                //setGetDataFailed(true);
             }
         }
 
