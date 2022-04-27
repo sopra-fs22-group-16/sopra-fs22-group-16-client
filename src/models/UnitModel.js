@@ -9,11 +9,11 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
-        this.defense = 0;
-        this.attackDamage = 0;
+        this.defenseList = 0;
+        this.attackDamageList = 0;
         this.attackRange = 0;
         this.movementRange = 0;
-        this.commands = [];
+        this.commandList = [];
         this.teamId = null;
         this.userId = null;
         Object.assign(this, data);

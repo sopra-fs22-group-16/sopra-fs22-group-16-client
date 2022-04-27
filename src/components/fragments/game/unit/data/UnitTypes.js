@@ -1,5 +1,5 @@
 export const UnitTypes = {
-    knight: 'knight',
-    archer: 'archer',
-    war_elephant: 'war_elephant',
+    knight: 'KNIGHT',
+    archer: 'ARCHER',
+    war_elephant: 'WAR_ELEPHANT',
 }
