@@ -13,6 +13,7 @@ class TileModel {
         this.traversable = null;
         this.traversingCost = null;
         this.dropdown = DropdownType.none;
+        this.onClick = null;
         this.indicatorType = TileIndicatorType.none;
         this.unit = null;
         this.arrowPart = ArrowPartType.none;

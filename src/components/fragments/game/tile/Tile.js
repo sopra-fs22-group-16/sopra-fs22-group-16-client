@@ -21,7 +21,7 @@ const Tile = props => {
             <TileBackground type={props.tile.type} variant={props.tile.variant}/>
             <TileIndicator indicatorType={props.tile.indicatorType}/>
             <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection} />
-            <Dropdown size={props.tile.dropdown}/>
+            <Dropdown onClick={props.tile.onClick} size={props.tile.dropdown} tile={props.tile}/>
         </div>
     );
 }

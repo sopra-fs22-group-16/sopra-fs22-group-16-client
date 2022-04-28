@@ -1,7 +1,8 @@
-import {Direction} from "../components/fragments/game/unit/Direction";
-import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
-import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
+import { Direction } from "../components/fragments/game/unit/Direction";
+import { UnitTypes } from "../components/fragments/game/unit/data/UnitTypes";
+import { TileIndicatorType } from "../components/fragments/game/tile/types/TileIndicatorType";
 import { ArrowPartType } from "../components/fragments/game/tile/types/ArrowPartType";
+import { DropdownType } from "../components/fragments/game/tile/types/DropdownType";
 
 class UnitModel {
     constructor(y, x, data = {}) {
@@ -116,7 +117,7 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a,b)=>{return a[2]-b[2]});
+            frontier.sort((a, b) => { return a[2] - b[2] });
 
         }
 
@@ -212,7 +213,7 @@ class UnitModel {
                     tilesInAttackRange.push(tile);
                 }
 
-                if(!tilesInAttackRangeSpecificTile.includes(tile) && tile.traversable){
+                if (!tilesInAttackRangeSpecificTile.includes(tile) && tile.traversable) {
                     tilesInAttackRangeSpecificTile.push(tile);
                 }
 
@@ -242,7 +243,7 @@ class UnitModel {
                         if (childDistance <= this.attackRange) {
                             // Add child to frontier
                             frontier.push([childTile, childDistance]);
-                            if(childTile.unit !== null && childTile.unit.teamId !== this.teamId){
+                            if (childTile.unit !== null && childTile.unit.teamId !== this.teamId) {
                                 foundHostileUnit = true;
                             }
                         }
@@ -252,8 +253,8 @@ class UnitModel {
 
             }
 
-            if(foundHostileUnit){
-                if(!this.tilesInAttackRangeSpecificTile[movableTile.y]){
+            if (foundHostileUnit) {
+                if (!this.tilesInAttackRangeSpecificTile[movableTile.y]) {
                     this.tilesInAttackRangeSpecificTile[movableTile.y] = {};
                 }
                 this.tilesInAttackRangeSpecificTile[movableTile.y][movableTile.x] = tilesInAttackRangeSpecificTile;
@@ -395,6 +396,11 @@ class UnitModel {
                 }
 
             })
+    }
+
+    move = () => {
+        this.x = this.pathGoal[1];
+        this.y = this.pathGoal[0];
     }
 }
 
