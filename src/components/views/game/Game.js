@@ -93,10 +93,19 @@ const Game = ({id}) => {
         if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
+            setSmallDropDown({...smallDropDown, open: false})
+            // TODO: setLargeDropDown(false);
+
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
             setGameData({...gameData});
-            setSmallDropDown({open: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+            if(selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]){
+                // TODO: Show big drop down as a hostile unit is in range form this tile
+            }else{
+                // Show small drop down as no unit is in range
+                setSmallDropDown({open: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+            }
+
         }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
             // Deselect unit
             selectedUnit.showRangeIndicator(false);
@@ -127,6 +136,8 @@ const Game = ({id}) => {
                 }
             }
             selectUnit(unit);
+            console.log(unit.y + " , " + unit.x);
+            console.log(unit.tilesInAttackRangeSpecificTile);
         }else if(selectedUnit /* && unit is hostile */){
             // TODO: Attack command
         }
