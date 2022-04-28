@@ -33,7 +33,7 @@ const Unit = props => {
     return (
         <div className={'unitContainer'} style={unitStyle} onClick={() => props.onClick(props.unit)}>
             <UnitShadow type={props.unit.type} color={unitColor} animation={animationState}/>
-            <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
+            <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
         </div>
     );
 }

@@ -1,7 +1,7 @@
 import {Direction} from "../components/fragments/game/unit/Direction";
 import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
 import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
-import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
+import { ArrowPartType } from "../components/fragments/game/tile/types/ArrowPartType";
 
 class UnitModel {
     constructor(y, x, data = {}) {
@@ -396,7 +396,6 @@ class UnitModel {
 
             })
     }
-
 }
 
 export default UnitModel;

@@ -16,6 +16,7 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
+import { DropdownType } from "../../fragments/game/tile/types/DropdownType";
 
 const Game = ({id}) => {
 
@@ -92,6 +93,7 @@ const Game = ({id}) => {
             selectedUnit.showPathIndicator(false);
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
+            tile.dropdown = DropdownType.small;
             setGameData({...gameData});
         }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
             // Deselect unit
