@@ -16,7 +16,7 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
-import { DropdownType } from "../../fragments/game/tile/types/DropdownType";
+import DropDown from "../../ui/DropDown";
 
 const Game = ({ id }) => {
 
@@ -25,6 +25,8 @@ const Game = ({ id }) => {
     const token = localStorage.getItem("token");
 
     const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
+
+    const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -122,18 +124,40 @@ const Game = ({ id }) => {
         if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
+            setDropDown({...dropDown, open: false})
+
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
-            tile.dropdown = DropdownType.small;
-            setGameData({ ...gameData });
-            tile.onClick = unitAction;
-            setGameData({ ...gameData });
-        } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
+            setGameData({...gameData});
+            if(selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]){
+                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+            }else{
+                // Show small drop down as no unit is in range
+                setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+            }
+
+        }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
             // Deselect unit
             selectedUnit.showRangeIndicator(false);
             selectedUnit.showPathIndicator(false);
-            setGameData({ ...gameData });
+            setSelectedUnit(null);
+            setDropDown({...dropDown, open: false})
+            setGameData({...gameData});
         }
+    }
+
+    const onClickAttack = (tile) => {
+        console.log("attack action used on tile " + tile.y + " , " + tile.x);
+    }
+
+    const onClickWait = (tile) => {
+        console.log("move action used on tile " + tile.y + " , " + tile.x);
+    }
+
+    const onClickCancel = (tile) => {
+        selectedUnit.showPathIndicator(false);
+        setGameData({...gameData});
+        setDropDown({...dropDown, open: false})
     }
 
     const onClickUnit = (unit) => {
@@ -146,16 +170,8 @@ const Game = ({ id }) => {
                 }
             }
             selectUnit(unit);
-        } else if (selectedUnit && unit.teamId != 0) {
-            const tileAttack = gameData.map[unit.y][unit.x];
-            tileAttack.dropdown = DropdownType.large;
-            tileAttack.onClick = unitAction;
-            unit.remove();
-            setGameData({ ...gameData });
-            //selectedUnit.move();
-            //unit.remove();
-            //setGameData({ ...gameData });
-
+        }else if(selectedUnit /* && unit is hostile */){
+            // TODO: Show DropDown
         }
     }
 
@@ -187,12 +203,23 @@ const Game = ({ id }) => {
                     </div>
                     :
 
-                    <Map mapData={gameData.map}
-                        unitData={gameData.units}
-                        onClickTile={onClickTile}
-                        onClickUnit={onClickUnit}
-                        onMouseEnterTile={onMouseEnterTile}
-                    />
+                        <Map mapData={gameData.map}
+                             unitData={gameData.units}
+                             onClickTile={onClickTile}
+                             onClickUnit={onClickUnit}
+                             onMouseEnterTile={onMouseEnterTile}
+                        >
+                            <DropDown
+                                open={dropDown.open}
+                                showAttack={dropDown.showAttack}
+                                y={dropDown.y}
+                                x={dropDown.x}
+                                onClickWait={onClickWait}
+                                onClickCancel={onClickCancel}
+                                onClickAttack={onClickAttack}
+                                target={dropDown.target}
+                            />
+                        </Map>
 
             }
 
