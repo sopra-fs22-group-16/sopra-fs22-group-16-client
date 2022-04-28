@@ -3,7 +3,7 @@ import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
 import {ThemeProvider} from "@emotion/react";
 import {defaultTheme} from "styles/themes/defaulTheme";
-import {LinearProgress} from "@mui/material";
+import {alertTitleClasses, LinearProgress} from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
 import {Button} from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
@@ -17,6 +17,7 @@ import "styles/views/game/Game.scss"
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
 import { alignProperty } from "@mui/material/styles/cssUtils";
+import { ArrowPartType } from "components/fragments/game/tile/types/ArrowPartType";
 
 const Game = ({id}) => {
 
@@ -40,9 +41,14 @@ const Game = ({id}) => {
 
                 let response;
 
-                response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
-                let mapData = response.data.gameMap.tiles;
-                let unitData = response.data.units;
+                //response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
+                //let mapData = response.data.gameMap.tiles;
+                //let unitData = response.data.units;
+
+                response = jsonTileMockData;
+
+                let mapData = response.map;
+                let unitData = response.units;
 
 
                 let mapArray = [];
@@ -51,8 +57,8 @@ const Game = ({id}) => {
                 mapData.forEach((row, y) => {
                     mapArray.push([]);
                     row.forEach((tile, x) => {
-                        tile.type = tile.type.toLowerCase();
-                        tile.variant = tile.variant.toLowerCase();
+                        //tile.type = tile.type.toLowerCase();
+                        //tile.variant = tile.variant.toLowerCase();
                         mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                     });
                 });
@@ -63,7 +69,7 @@ const Game = ({id}) => {
                     let x = unit.position.x;
 
                     delete unit.position;
-                    unit.type = unit.type.toLowerCase();
+                    //unit.type = unit.type.toLowerCase();
                     let unitModel = new UnitModel(y, x, unit);
                     mapArray[y][x].unit = unitModel;
                     unitArray.push(unitModel);
@@ -71,8 +77,10 @@ const Game = ({id}) => {
 
             
                 setGameData({
-                    gameType: response.data.gameType,
-                    gameMode: response.data.gameMode,
+                    gameType: response.gameType,
+                    gameMode: response.gameMode,
+                    //gameType: response.data.gameType,
+                    //gameMode: response.data.gameMode,
                     map: mapArray,
                     units: unitArray
                 });
@@ -120,27 +128,26 @@ const Game = ({id}) => {
             alert("selected own unit");
             selectUnit(unit);
         }else if(unit.teamId != myTeam && selectedUnit != null){
-            //selectedUnit.showDropDownMenu(true, gameData.map);
-            alert("selected opponent unit");
-            alert(unit.x);
-            alert(unit.y);
-            alert(selectedUnit.x);
-            alert(selectedUnit.y);
-            selectedUnit.calculatePathToTile(unit.y, unit.x, gameData.map);
-            alert("check not null");
-            unit.showPathIndicator(true);
-            setGameData({...gameData});
-            alert("check 2");
-            //attacks the foreign unit from the previously selected unit selectedUnit
+            selectedUnit.showPathIndicator(false);
+            //alert("position of own unit is" + selectedUnit.x+ selectedUnit.y);
+            //alert("position of other unit is" + unit.x+ unit.y);
             const opponentTile = gameData.map[unit.y][unit.x];
-            if(selectedUnit.tilesInAttackRange.contains(opponentTile)) {            
+            selectedUnit.calculatePathToTile(unit.y, unit.x, gameData.map);
+            //for some reason the path is null........
+            //alert(selectedUnit.path.length);
+            selectedUnit.showPathIndicator(true);
+            alert("path selected");
+            setGameData({...gameData});
+            //attacks the foreign unit from the previously selected unit selectedUnit
+            //const opponentTile = gameData.map[unit.y][unit.x];
+            if(selectedUnit.tilesInAttackRange.includes(opponentTile)) {            
                 const requestBody = {
                     "attacker": [selectedUnit.x, selectedUnit.y],
                     "defender": [unit.x, unit.y]
                 };
     
-                await api.post(`/v1/game/match/${id}/command/attack`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
-                setGameData({...gameData});
+                //await api.post(`/v1/game/match/${id}/command/attack`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                //setGameData({...gameData});
 
         }
     }

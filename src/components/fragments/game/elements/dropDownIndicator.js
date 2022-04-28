@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import React from "react";
-import { DropDownType} from "./dropDownType";
+import {DropDownType} from "./dropDownType";
 import {DropDownData} from "./dropDownData";
 
 const DropDownIndicator = props => {
