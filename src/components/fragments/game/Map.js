@@ -4,6 +4,7 @@ import Tile from "./tile/Tile";
 
 import "styles/views/game/Map.scss"
 import Unit from "./unit/Unit";
+import SmallDropDown from "../../ui/SmallDropDown";
 
 const Map = props => {
 
@@ -33,13 +34,13 @@ const Map = props => {
 
     return (
         <div className={"mapContainer"}>
-
             <table cellPadding={0} cellSpacing={0} border={0} id={"map"}>
                 <tbody>
                 {tiles}
                 </tbody>
             </table>
             {units}
+            {props.children}
         </div>
     );
 
@@ -50,6 +51,7 @@ Map.propTypes = {
     unitData: PropTypes.array.isRequired,
     onClickTile: PropTypes.func.isRequired,
     onClickUnit: PropTypes.func.isRequired,
+
 }
 
 export default Map;

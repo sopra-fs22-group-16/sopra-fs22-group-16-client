@@ -16,6 +16,7 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
+import SmallDropDown from "../../ui/SmallDropDown";
 
 const Game = ({id}) => {
 
@@ -24,6 +25,8 @@ const Game = ({id}) => {
     const token = localStorage.getItem("token");
 
     const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
+
+    const [smallDropDown, setSmallDropDown] = useState({open: false, y: 0, x: 0, target: null});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -93,11 +96,25 @@ const Game = ({id}) => {
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
             setGameData({...gameData});
+            setSmallDropDown({open: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
         }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
             // Deselect unit
+            selectedUnit.showRangeIndicator(false);
             selectedUnit.showPathIndicator(false);
+            setSelectedUnit(null);
+            setSmallDropDown({...smallDropDown, open: false})
             setGameData({...gameData});
         }
+    }
+
+    const onClickWait = (tile) => {
+        console.log("move to " + tile.y + " , " + tile.x);
+    }
+
+    const onClickCancel = (tile) => {
+        selectedUnit.showPathIndicator(false);
+        setGameData({...gameData});
+        setSmallDropDown({...smallDropDown, open: false})
     }
 
     const onClickUnit = (unit) => {
@@ -148,7 +165,9 @@ const Game = ({id}) => {
                              onClickTile={onClickTile}
                              onClickUnit={onClickUnit}
                              onMouseEnterTile={onMouseEnterTile}
-                        />
+                        >
+                            <SmallDropDown open={smallDropDown.open} y={smallDropDown.y} x={smallDropDown.x} onClickWait={onClickWait} onClickCancel={onClickCancel} target={smallDropDown.target} />
+                        </Map>
 
             }
 

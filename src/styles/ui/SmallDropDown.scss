@@ -1,0 +1,45 @@
+.smallDropDown{
+  position:absolute;
+  width: 114px;
+  height: 111px;
+}
+
+.selection {
+  position:absolute;
+  left: 9px;
+  width: 96px;
+  height: 45px;
+
+  &.first {
+    top: 9px;
+  }
+
+  &.second {
+    top: 57px;
+  }
+
+  .light {
+    display: block;
+  }
+  .dark {
+    display: none;
+  }
+}
+
+.selection:hover{
+  .light {
+    display: none;
+  }
+  .dark {
+    display: block;
+  }
+}
+
+.dropDownArrow {
+  position: absolute;
+  top: 10.5px;
+  left: -9.125px;
+}
+
+
+
