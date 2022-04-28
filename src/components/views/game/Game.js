@@ -23,8 +23,6 @@ const Game = ({ id }) => {
     const history = useHistory();
 
     const token = localStorage.getItem("token");
-    const myTeam = 0;
-    //const myTeam = localStorage.getItem("team");
 
     const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
 
@@ -40,15 +38,13 @@ const Game = ({ id }) => {
 
                 let response;
 
-                //response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
-                //let mapData = response.data.gameMap.tiles;
-                //let unitData = response.data.units;
+                //response = api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
+                // Set Mock map data
                 response = jsonTileMockData;
 
                 let mapData = response.map;
                 let unitData = response.units;
-
 
                 let mapArray = [];
                 let unitArray = [];
@@ -56,35 +52,26 @@ const Game = ({ id }) => {
                 mapData.forEach((row, y) => {
                     mapArray.push([]);
                     row.forEach((tile, x) => {
-                        //tile.type = tile.type.toLowerCase();
-                        //tile.variant = tile.variant.toLowerCase();
                         mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                     });
                 });
 
-                
                 unitData.forEach((unit) => {
                     let y = unit.position.y;
                     let x = unit.position.x;
 
                     delete unit.position;
-                    //unit.type = unit.type.toLowerCase();
                     let unitModel = new UnitModel(y, x, unit);
                     mapArray[y][x].unit = unitModel;
                     unitArray.push(unitModel);
                 });
 
-            
                 setGameData({
                     gameType: response.gameType,
                     gameMode: response.gameMode,
-                    //gameType: response.data.gameType,
-                    //gameMode: response.data.gameMode,
                     map: mapArray,
                     units: unitArray
                 });
-    
-
 
             } catch (error) {
                 console.log(error);
@@ -103,19 +90,31 @@ const Game = ({ id }) => {
     const unitAction = (action, tile) => {
         if (action === 'wait') {
             selectedUnit.move();
+            gameData.map[tile.y][tile.x].dropdown = DropdownType.none;;
+            setGameData({ ...gameData });
         }
+        
         else if (action === 'attack') {
-            selectedUnit.attack();
+            selectedUnit.attack(tile);
         }
+        
         else if (action === 'cancel') {
 
         }
+        
         else {
             console.error("No valid action!");
         }
+        
+
+        //selectedUnit.showRangeIndicator(false);
+        //selectedUnit.showPathIndicator(false);
+        setGameData({ ...gameData });
+    }
+
+    const unClickDropdown = (tile) => {
+
         tile.dropdown = DropdownType.none;
-        selectedUnit.showRangeIndicator(false);
-        selectedUnit.showPathIndicator(false);
         setGameData({ ...gameData });
     }
 
@@ -126,6 +125,7 @@ const Game = ({ id }) => {
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
             tile.dropdown = DropdownType.small;
+            setGameData({ ...gameData });
             tile.onClick = unitAction;
             setGameData({ ...gameData });
         } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
@@ -145,13 +145,19 @@ const Game = ({ id }) => {
                     setGameData({ ...gameData });
                 }
             }
-            alert("selected own unit");
             selectUnit(unit);
-        } else if (selectedUnit /* && unit is hostile */) {
-            // TODO: Attack command
+        } else if (selectedUnit && unit.teamId != 0) {
+            const tileAttack = gameData.map[unit.y][unit.x];
+            tileAttack.dropdown = DropdownType.large;
+            tileAttack.onClick = unitAction;
+            unit.remove();
+            setGameData({ ...gameData });
+            //selectedUnit.move();
+            //unit.remove();
+            //setGameData({ ...gameData });
+
         }
     }
-}
 
     const selectUnit = (unit) => {
         // Set the clicked unit as the selected unit
@@ -213,6 +219,6 @@ const Game = ({ id }) => {
             </ThemeProvider>
         </div>
     );
-
+}
 
 export default Game;

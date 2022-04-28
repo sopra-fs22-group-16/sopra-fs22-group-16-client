@@ -38,10 +38,10 @@ class UnitModel {
 
     calculatePathToTile = (goalY, goalX, map) => {
         // Check if movable is already calculated and that the goal is in range
-        //if (this.traversableTiles == null || !this.traversableTiles.includes(map[goalY][goalX])) return;
+        if (this.traversableTiles == null || !this.traversableTiles.includes(map[goalY][goalX])) return;
 
         // Check if the goal is already set and if it changed
-        //if (this.pathGoal != null && (this.pathGoal[0] === goalY && this.pathGoal[1] === goalX)) return;
+        if (this.pathGoal != null && (this.pathGoal[0] === goalY && this.pathGoal[1] === goalX)) return;
 
 
         this.pathGoal = [goalY, goalX];
@@ -125,8 +125,8 @@ class UnitModel {
         }
 
         // If no path was found return empty array
-        //this.pathGoal = [goalY, goalX];
-        //this.path = [];
+        this.pathGoal = [goalY, goalX];
+        this.path = [];
     }
 
     calculateTilesInRange = (map) => {
@@ -425,8 +425,21 @@ class UnitModel {
     }
 
     move = () => {
-        this.x = this.pathGoal[1];
-        this.y = this.pathGoal[0];
+        this.x = 12;
+        this.y = 12;
+    }
+
+    remove = () => {
+
+        //move player
+        this.x = null;
+        this.y = null;
+
+    }
+
+    attack = (unitAttack) => {
+        this.move();
+        unitAttack.remove();
     }
 }
 
