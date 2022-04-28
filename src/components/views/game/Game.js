@@ -1,25 +1,24 @@
-import React, {useEffect, useState} from "react";
-import {Helmet} from "react-helmet";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import Map from "components/fragments/game/Map";
-import {ThemeProvider} from "@emotion/react";
-import {defaultTheme} from "styles/themes/defaulTheme";
-import {alertTitleClasses, LinearProgress} from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import { LinearProgress } from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import {api} from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
-import { alignProperty } from "@mui/material/styles/cssUtils";
-import { ArrowPartType } from "components/fragments/game/tile/types/ArrowPartType";
+import { DropdownType } from "../../fragments/game/tile/types/DropdownType";
 
-const Game = ({id}) => {
+const Game = ({ id }) => {
 
     const history = useHistory();
 
@@ -27,7 +26,7 @@ const Game = ({id}) => {
     const myTeam = 0;
     //const myTeam = localStorage.getItem("team");
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: ([[]]), units: []});
+    const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -101,54 +100,55 @@ const Game = ({id}) => {
 
     }
 
+    const unitAction = (action, tile) => {
+        if (action === 'wait') {
+            selectedUnit.move();
+        }
+        else if (action === 'attack') {
+            selectedUnit.attack();
+        }
+        else if (action === 'cancel') {
+
+        }
+        else {
+            console.error("No valid action!");
+        }
+        tile.dropdown = DropdownType.none;
+        selectedUnit.showRangeIndicator(false);
+        selectedUnit.showPathIndicator(false);
+        setGameData({ ...gameData });
+    }
+
     const onClickTile = (tile) => {
-        if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
+        if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
-            setGameData({...gameData});
-        }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
+            tile.dropdown = DropdownType.small;
+            tile.onClick = unitAction;
+            setGameData({ ...gameData });
+        } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
             // Deselect unit
+            selectedUnit.showRangeIndicator(false);
             selectedUnit.showPathIndicator(false);
-            setGameData({...gameData});
+            setGameData({ ...gameData });
         }
     }
 
-    const onClickUnit = async(unit) => {
-        if(selectedUnit === null || (unit.teamId === myTeam)/* TODO: instead check that unit is mine*/){
-            if(selectedUnit){
+    const onClickUnit = (unit) => {
+        if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
+            if (selectedUnit) {
                 selectedUnit.showRangeIndicator(false);
-                if(selectedUnit.path){
+                if (selectedUnit.path) {
                     selectedUnit.showPathIndicator(false);
-                    setGameData({...gameData});
-                    
+                    setGameData({ ...gameData });
                 }
             }
             alert("selected own unit");
             selectUnit(unit);
-        }else if(unit.teamId != myTeam && selectedUnit != null){
-            selectedUnit.showPathIndicator(false);
-            //alert("position of own unit is" + selectedUnit.x+ selectedUnit.y);
-            //alert("position of other unit is" + unit.x+ unit.y);
-            const opponentTile = gameData.map[unit.y][unit.x];
-            selectedUnit.calculatePathToTile(unit.y, unit.x, gameData.map);
-            //for some reason the path is null........
-            //alert(selectedUnit.path.length);
-            selectedUnit.showPathIndicator(true);
-            alert("path selected");
-            setGameData({...gameData});
-            //attacks the foreign unit from the previously selected unit selectedUnit
-            //const opponentTile = gameData.map[unit.y][unit.x];
-            if(selectedUnit.tilesInAttackRange.includes(opponentTile)) {            
-                const requestBody = {
-                    "attacker": [selectedUnit.x, selectedUnit.y],
-                    "defender": [unit.x, unit.y]
-                };
-    
-                //await api.post(`/v1/game/match/${id}/command/attack`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
-                //setGameData({...gameData});
-
+        } else if (selectedUnit /* && unit is hostile */) {
+            // TODO: Attack command
         }
     }
 }
@@ -169,30 +169,30 @@ const Game = ({id}) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary"/>
+                            <LinearProgress color="secondary" />
                         </ThemeProvider>
                     </div>
                     :
 
-                        <Map mapData={gameData.map}
-                             unitData={gameData.units}
-                             onClickTile={onClickTile}
-                             onClickUnit={onClickUnit}
-                             onMouseEnterTile={onMouseEnterTile}
-                        />
+                    <Map mapData={gameData.map}
+                        unitData={gameData.units}
+                        onClickTile={onClickTile}
+                        onClickUnit={onClickUnit}
+                        onMouseEnterTile={onMouseEnterTile}
+                    />
 
             }
 
             <div className={"surrenderFlagContainer"}>
                 <img className={"pixelated"} src={surrenderFlag}
-                     alt={"A white flag - press to surrender"}/>
+                    alt={"A white flag - press to surrender"} />
             </div>
 
             <ThemeProvider theme={defaultTheme}>
@@ -213,6 +213,6 @@ const Game = ({id}) => {
             </ThemeProvider>
         </div>
     );
-}
+
 
 export default Game;
