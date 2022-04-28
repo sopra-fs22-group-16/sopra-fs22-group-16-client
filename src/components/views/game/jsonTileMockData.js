@@ -3831,7 +3831,22 @@ const jsonTileMockData = {
             attackRange: 5,
             movementRange: 3,
             commands: ['move', 'attack', 'wait'],
-            teamId: 1,
+            teamId: 0,
+            userId: 1,
+        },
+        {
+            position: {
+                x: 10,
+                y: 12,
+            },
+            type: "war_elephant",
+            health: 100,
+            defense: [15, 5, 5],
+            attackDamage: [25, 10, 50],
+            attackRange: 5,
+            movementRange: 3,
+            commands: ['move', 'attack', 'wait'],
+            teamId: 0,
             userId: 1,
         },
         {
@@ -3846,7 +3861,7 @@ const jsonTileMockData = {
             attackRange: 1,
             movementRange: 2,
             commands: ['move', 'attack', 'wait'],
-            teamId: 1,
+            teamId: 0,
             userId: 1,
         },
         {
@@ -3861,7 +3876,7 @@ const jsonTileMockData = {
             attackRange: 1,
             movementRange: 6,
             commands: ['move', 'attack', 'wait'],
-            teamId: 0,
+            teamId: 1,
             userId: 1,
         },
         {
@@ -3881,7 +3896,7 @@ const jsonTileMockData = {
         },
         {
             position: {
-                x: 22,
+                x: 12,
                 y: 12,
             },
             type: "knight",

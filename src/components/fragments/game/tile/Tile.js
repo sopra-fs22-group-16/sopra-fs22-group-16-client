@@ -4,6 +4,8 @@ import TileModel from "../../../../models/TileModel";
 import TileBackground from "./TileBackground";
 import TileIndicator from "./TileIndicator";
 import PathIndicator from "./PathIndicator";
+import DropDownIndicator from "../elements/dropDownIndicator";
+import { DropDownType } from "../elements/dropDownType";
 
 const Tile = props => {
 
@@ -20,6 +22,7 @@ const Tile = props => {
             <TileBackground type={props.tile.type} variant={props.tile.variant}/>
             <TileIndicator indicatorType={props.tile.indicatorType}/>
             <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection}/>
+            <DropDownIndicator indicatorType = {props.tile.DropDownIndicator} />
         </div>
     );
 }

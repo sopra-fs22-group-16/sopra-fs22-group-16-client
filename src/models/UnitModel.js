@@ -2,6 +2,9 @@ import {Direction} from "../components/fragments/game/unit/Direction";
 import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
 import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
 import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
+import { DropDownType } from "components/fragments/game/elements/dropDownType";
+import {DropDownIndicator} from "components/fragments/game/elements/dropDownIndicator";
+import { api } from "helpers/api";
 
 class UnitModel {
     constructor(y, x, data = {}) {
@@ -9,11 +12,14 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
+        //this.defense = 0;
+        //this.attackDamage = 0
         this.defenseList = 0;
         this.attackDamageList = 0;
         this.attackRange = 0;
         this.movementRange = 0;
         this.commandList = [];
+        //this.commands = [];
         this.teamId = null;
         this.userId = null;
         Object.assign(this, data);
@@ -152,7 +158,7 @@ class UnitModel {
             // as they would all have greater distance than max range
             if (distance >= this.movementRange) continue;
 
-            // Check each tile up, down, left, right
+            // Cheack each tile up, down, left, right
             let tileOffset = [[-1, 0], [1, 0], [0, -1], [0, 1]];
 
             let childTile = null;
@@ -263,6 +269,29 @@ class UnitModel {
 
         this.tilesInAttackRange = tilesInAttackRange;
     }
+
+    /*
+    showDropDownMenu = (show, map) => {
+
+        // get position of the unit, dropdown should start under
+        let positionX = this.x;
+        let positionY = this.y;
+        let tile = map[positionX][positionY];
+
+        /*
+        //dropdown menu big icon starts underneath
+        const pathMenu = [[tile.y+1, tile.x], [tile.y+2, tile.x], [tile.y+3, tile.x]];
+
+        pathMenu.forEach((tile) => {
+            
+        tile.dropDown = DropDownType.attack_dark;
+
+        }
+        )  
+        
+
+    }
+    */
 
     showPathIndicator = (show) => {
         // Update the tiles that they show the attack range indicator
@@ -396,6 +425,7 @@ class UnitModel {
 
             })
     }
+
 
 }
 

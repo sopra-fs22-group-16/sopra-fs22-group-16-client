@@ -16,14 +16,17 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
+import { alignProperty } from "@mui/material/styles/cssUtils";
 
 const Game = ({id}) => {
 
     const history = useHistory();
 
     const token = localStorage.getItem("token");
+    const myTeam = 0;
+    //const myTeam = localStorage.getItem("team");
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: ([[]]), units: []});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -38,13 +41,9 @@ const Game = ({id}) => {
                 let response;
 
                 response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
-                
-                // Set Mock map data
-                //response = jsonTileMockData;
-                alert("error check 1");
                 let mapData = response.data.gameMap.tiles;
-
                 let unitData = response.data.units;
+
 
                 let mapArray = [];
                 let unitArray = [];
@@ -52,36 +51,37 @@ const Game = ({id}) => {
                 mapData.forEach((row, y) => {
                     mapArray.push([]);
                     row.forEach((tile, x) => {
+                        tile.type = tile.type.toLowerCase();
+                        tile.variant = tile.variant.toLowerCase();
                         mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                     });
                 });
-                alert("error check 2");
 
+                
                 unitData.forEach((unit) => {
                     let y = unit.position.y;
                     let x = unit.position.x;
 
                     delete unit.position;
+                    unit.type = unit.type.toLowerCase();
                     let unitModel = new UnitModel(y, x, unit);
                     mapArray[y][x].unit = unitModel;
                     unitArray.push(unitModel);
                 });
-                alert(unitArray[0]);
 
-                alert("error check 3");
+            
                 setGameData({
                     gameType: response.data.gameType,
                     gameMode: response.data.gameMode,
                     map: mapArray,
                     units: unitArray
                 });
-                
+    
 
-                alert("error check 4");
 
             } catch (error) {
-                alert("there is still an error here");
-                //setGetDataFailed(true);
+                console.log(error);
+                setGetDataFailed(true);
             }
         }
 
@@ -107,20 +107,44 @@ const Game = ({id}) => {
         }
     }
 
-    const onClickUnit = (unit) => {
-        if(selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/){
+    const onClickUnit = async(unit) => {
+        if(selectedUnit === null || (unit.teamId === myTeam)/* TODO: instead check that unit is mine*/){
             if(selectedUnit){
                 selectedUnit.showRangeIndicator(false);
                 if(selectedUnit.path){
                     selectedUnit.showPathIndicator(false);
                     setGameData({...gameData});
+                    
                 }
             }
+            alert("selected own unit");
             selectUnit(unit);
-        }else if(selectedUnit /* && unit is hostile */){
-            // TODO: Attack command
+        }else if(unit.teamId != myTeam && selectedUnit != null){
+            //selectedUnit.showDropDownMenu(true, gameData.map);
+            alert("selected opponent unit");
+            alert(unit.x);
+            alert(unit.y);
+            alert(selectedUnit.x);
+            alert(selectedUnit.y);
+            selectedUnit.calculatePathToTile(unit.y, unit.x, gameData.map);
+            alert("check not null");
+            unit.showPathIndicator(true);
+            setGameData({...gameData});
+            alert("check 2");
+            //attacks the foreign unit from the previously selected unit selectedUnit
+            const opponentTile = gameData.map[unit.y][unit.x];
+            if(selectedUnit.tilesInAttackRange.contains(opponentTile)) {            
+                const requestBody = {
+                    "attacker": [selectedUnit.x, selectedUnit.y],
+                    "defender": [unit.x, unit.y]
+                };
+    
+                await api.post(`/v1/game/match/${id}/command/attack`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                setGameData({...gameData});
+
         }
     }
+}
 
     const selectUnit = (unit) => {
         // Set the clicked unit as the selected unit

@@ -2,6 +2,7 @@ import {TileIndicatorType} from "../components/fragments/game/tile/types/TileInd
 import PathPart from "./PathPart";
 import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
 import {Direction} from "../components/fragments/game/unit/Direction";
+import { DropDownType } from "components/fragments/game/elements/dropDownType";
 
 class TileModel {
     constructor(y, x, data = {}) {
@@ -15,6 +16,7 @@ class TileModel {
         this.unit = null;
         this.arrowPart = ArrowPartType.none;
         this.arrowDirection = Direction.north;
+        this.dropDown = DropDownType.none;
         Object.assign(this, data);
     }
 }
