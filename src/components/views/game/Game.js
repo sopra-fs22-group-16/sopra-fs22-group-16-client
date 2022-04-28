@@ -16,7 +16,7 @@ import "styles/views/game/Game.scss"
 
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
-import SmallDropDown from "../../ui/SmallDropDown";
+import DropDown from "../../ui/DropDown";
 
 const Game = ({id}) => {
 
@@ -26,7 +26,7 @@ const Game = ({id}) => {
 
     const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
 
-    const [smallDropDown, setSmallDropDown] = useState({open: false, y: 0, x: 0, target: null});
+    const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -93,17 +93,16 @@ const Game = ({id}) => {
         if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
-            setSmallDropDown({...smallDropDown, open: false})
-            // TODO: setLargeDropDown(false);
+            setDropDown({...dropDown, open: false})
 
             selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
             selectedUnit.showPathIndicator(true);
             setGameData({...gameData});
             if(selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]){
-                // TODO: Show big drop down as a hostile unit is in range form this tile
+                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
             }else{
                 // Show small drop down as no unit is in range
-                setSmallDropDown({open: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+                setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
             }
 
         }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
@@ -111,19 +110,23 @@ const Game = ({id}) => {
             selectedUnit.showRangeIndicator(false);
             selectedUnit.showPathIndicator(false);
             setSelectedUnit(null);
-            setSmallDropDown({...smallDropDown, open: false})
+            setDropDown({...dropDown, open: false})
             setGameData({...gameData});
         }
     }
 
+    const onClickAttack = (tile) => {
+        console.log("attack action used on tile " + tile.y + " , " + tile.x);
+    }
+
     const onClickWait = (tile) => {
-        console.log("move to " + tile.y + " , " + tile.x);
+        console.log("move action used on tile " + tile.y + " , " + tile.x);
     }
 
     const onClickCancel = (tile) => {
         selectedUnit.showPathIndicator(false);
         setGameData({...gameData});
-        setSmallDropDown({...smallDropDown, open: false})
+        setDropDown({...dropDown, open: false})
     }
 
     const onClickUnit = (unit) => {
@@ -136,10 +139,8 @@ const Game = ({id}) => {
                 }
             }
             selectUnit(unit);
-            console.log(unit.y + " , " + unit.x);
-            console.log(unit.tilesInAttackRangeSpecificTile);
         }else if(selectedUnit /* && unit is hostile */){
-            // TODO: Attack command
+            // TODO: Show DropDown
         }
     }
 
@@ -177,7 +178,16 @@ const Game = ({id}) => {
                              onClickUnit={onClickUnit}
                              onMouseEnterTile={onMouseEnterTile}
                         >
-                            <SmallDropDown open={smallDropDown.open} y={smallDropDown.y} x={smallDropDown.x} onClickWait={onClickWait} onClickCancel={onClickCancel} target={smallDropDown.target} />
+                            <DropDown
+                                open={dropDown.open}
+                                showAttack={dropDown.showAttack}
+                                y={dropDown.y}
+                                x={dropDown.x}
+                                onClickWait={onClickWait}
+                                onClickCancel={onClickCancel}
+                                onClickAttack={onClickAttack}
+                                target={dropDown.target}
+                            />
                         </Map>
 
             }

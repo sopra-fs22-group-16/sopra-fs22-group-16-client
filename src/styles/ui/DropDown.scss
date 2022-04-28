@@ -1,4 +1,4 @@
-.smallDropDown{
+.dropDown{
   position:absolute;
   width: 114px;
   height: 111px;
@@ -16,6 +16,10 @@
 
   &.second {
     top: 57px;
+  }
+
+  &.third {
+    top: 105px;
   }
 
   .light {
