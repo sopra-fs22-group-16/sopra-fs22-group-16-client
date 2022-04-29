@@ -90,6 +90,7 @@ const Game = ({id}) => {
     }
 
     const onClickTile = (tile) => {
+        console.log(gameData);
         if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
@@ -120,7 +121,25 @@ const Game = ({id}) => {
     }
 
     const onClickWait = (tile) => {
-        console.log("move action used on tile " + tile.y + " , " + tile.x);
+        //delete unit from map array
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
+
+        //remove current reachable tiles and arrow path indicator
+        selectedUnit.showRangeIndicator(false);
+        selectedUnit.showPathIndicator(false);
+
+        //we remove the traversable tiles, so in the next movement these are recalculated (calculateTilesInRange)
+        selectedUnit.traversableTiles = null;
+        selectedUnit.tilesInAttackRange = null;
+
+        //insert new unit
+        selectedUnit.move();
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
+
+        //update game, close dropdown
+        setSelectedUnit(null);
+        setGameData({ ...gameData });
+        setDropDown({ ...dropDown, open: false })
     }
 
     const onClickCancel = (tile) => {
@@ -130,7 +149,7 @@ const Game = ({id}) => {
     }
 
     const onClickUnit = (unit) => {
-        if(selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/){
+        if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
             if(selectedUnit){
                 selectedUnit.showRangeIndicator(false);
                 if(selectedUnit.path){
@@ -150,7 +169,7 @@ const Game = ({id}) => {
         // Set that the unit is selected
         unit.selected = true;
         // Calculate the movement and attack range
-        unit.calculateTilesInRange(gameData.map)
+        unit.calculateTilesInRange(gameData.map);
         // Show the attack and movement range
         unit.showRangeIndicator(true);
     }
