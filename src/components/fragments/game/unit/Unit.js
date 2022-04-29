@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {useState} from "react";
+import React, { useState } from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";
@@ -57,13 +57,13 @@ const Unit = props => {
         top: -90,
         right: -9,
         height: '5px',
-        width: 30 * props.unit.health/maxHealth + 'px',
+        width: 30 * props.unit.health / maxHealth + 'px',
         background: unitColor
     }
 
     return (
         <div className={'unitContainer'} style={unitStyle} onClick={() => props.onClick(props.unit)}>
-            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState}/>
+            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
             <img src={healthSource} style={healthBoxStyle} alt={''} />
             <div style={healthBarStyle}></div>
