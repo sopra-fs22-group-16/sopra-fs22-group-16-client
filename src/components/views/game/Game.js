@@ -142,6 +142,7 @@ const Game = ({id}) => {
     }
 
     const onClickCancel = (tile) => {
+        selectedUnit.showRangeIndicator(false);
         selectedUnit.showPathIndicator(false);
         setGameData({...gameData});
         setDropDown({...dropDown, open: false})
