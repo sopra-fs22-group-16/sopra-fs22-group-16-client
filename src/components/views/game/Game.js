@@ -18,6 +18,8 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 
+function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
+
 const Game = ({id}) => {
 
     const history = useHistory();
@@ -93,6 +95,31 @@ const Game = ({id}) => {
 
     }
 
+    const onClickWait = async (tile) => {
+        //delete unit from map array
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
+
+        //remove current reachable tiles and arrow path indicator
+        selectedUnit.showRangeIndicator(false);
+        selectedUnit.showPathIndicator(false);
+
+        //we remove the traversable tiles, so in the next movement these are recalculated (calculateTilesInRange)
+        selectedUnit.traversableTiles = null;
+        selectedUnit.tilesInAttackRange = null;
+
+        setDropDown({ ...dropDown, open: false });
+
+        //update position
+        for (const tilePath of selectedUnit.path.reverse()) {
+            selectedUnit.move(tilePath.y, tilePath.x);
+            setGameData({ ...gameData });
+            await timer(250);
+        }
+        //insert new unit
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
+        setSelectedUnit(null);
+        }
+
     const onClickTile = (tile) => {
         if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
@@ -124,7 +151,7 @@ const Game = ({id}) => {
         }
     }
 
-    const onClickAttack = (tile) => {
+    const onClickAttack = async(tile) => {
 
         // if clicking directly on the unit
         if(tile.unit) {
@@ -134,28 +161,25 @@ const Game = ({id}) => {
         else{
         
             //first the unit moves to the place from which it can attack (the clicked tile), the range updates for another go
+            //update position
+        for (const tile of selectedUnit.path.reverse()) {
             selectedUnit.move(tile.y, tile.x);
-            const unitNew = selectedUnit;
-            selectedUnit.showRangeIndicator(false);
+            setGameData({ ...gameData });
+            await timer(250);
+        }
+            //update the range indicator around the unit
+            selectedUnit.showRangeIndicator(true);  
             selectedUnit.showPathIndicator(false);
-            setSelectedUnit(null);
-            setDropDown({...dropDown, open: false})
+            selectedUnit.traversableTiles = null;
+            selectedUnit.tilesInAttackRange = null;
+            selectedUnit.calculateTilesInRange(gameData.map);
+            selectedUnit.showRangeIndicator(true);
+            setDropDown({...dropDown, open: false});
             setGameData({...gameData});
-            selectUnit(unitNew);
-            setGameData({...gameData});
-            //selectedUnit.showRangeIndicator(false);
-            //selectedUnit.showPathIndicator(false);
-            //setGameData({...gameData});
-            //selectUnit(selectedUnit);
-            //selectedUnit.showRangeIndicator(true);
-            //setGameData({...gameData});
 
         }
     }
 
-    const onClickWait = (tile) => {
-        console.log("move action used on tile " + tile.y + " , " + tile.x);
-    }
 
     const onClickCancel = (tile) => {
         selectedUnit.showPathIndicator(false);
