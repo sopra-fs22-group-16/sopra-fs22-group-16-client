@@ -90,7 +90,6 @@ const Game = ({id}) => {
     }
 
     const onClickTile = (tile) => {
-        console.log(gameData);
         if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
