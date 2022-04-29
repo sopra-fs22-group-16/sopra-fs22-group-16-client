@@ -18,6 +18,8 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 
+function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
+
 const Game = ({id}) => {
 
     const history = useHistory();
@@ -119,7 +121,7 @@ const Game = ({id}) => {
         console.log("attack action used on tile " + tile.y + " , " + tile.x);
     }
 
-    const onClickWait = (tile) => {
+    const onClickWait = async () => {
         //delete unit from map array
         gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
 
@@ -131,14 +133,18 @@ const Game = ({id}) => {
         selectedUnit.traversableTiles = null;
         selectedUnit.tilesInAttackRange = null;
 
-        //insert new unit
-        selectedUnit.move();
-        gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
+        setDropDown({ ...dropDown, open: false });
 
-        //update game, close dropdown
+        //update position
+        for (const tilePath of selectedUnit.path.reverse()) {
+            selectedUnit.move(tilePath.x, tilePath.y);
+            setGameData({ ...gameData });
+            await timer(250);
+        }
+
+        //insert new unit
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
         setSelectedUnit(null);
-        setGameData({ ...gameData });
-        setDropDown({ ...dropDown, open: false })
     }
 
     const onClickCancel = (tile) => {

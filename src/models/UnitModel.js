@@ -396,9 +396,9 @@ class UnitModel {
             })
     }
 
-    move = () => {
-        this.x = this.pathGoal[1];
-        this.y = this.pathGoal[0];
+    move = (x, y) => {
+        this.x = x;
+        this.y = y;
     }
 
 }
