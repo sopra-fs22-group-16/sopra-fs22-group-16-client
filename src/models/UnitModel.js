@@ -129,6 +129,100 @@ class UnitModel {
         this.path = [];
     }
 
+
+    calculatePathToUnit = (goalY, goalX, map) => {
+        // Check if movable is already calculated and that the goal is in range
+        if (this.tilesInAttackRange == null || !this.tilesInAttackRange.includes(map[goalY][goalX])) return;
+
+        // Check if the goal is already set and if it changed
+        if (this.pathGoal != null && (this.pathGoal[0] === goalY && this.pathGoal[1] === goalX)) return;
+
+
+        this.pathGoal = [goalY, goalX];
+        this.path = null;
+
+        // more or less implementation of A*
+        let tile = map[this.y][this.x];
+
+        let node = [tile, 0, 0, null]; // [tile, g(x), f(x) = g(x) + h(x), parent]
+
+        // Check if the goal is the tile the unit stands on
+        if (this.y === goalY && this.x === goalX) {
+            this.path = [tile];
+            return;
+        }
+        let frontier = [node]; // array sorted by f(x)
+        let reached = [tile];
+
+        while (frontier.length > 0) {
+            // Get first element in frontier
+            node = frontier.shift();
+
+            let tile = node[0];
+            let distance = node[1];
+
+            // Check each tile up, down, left, right
+            let tileOffset = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+            let childTile = null;
+
+            tileOffset.forEach((tileOffset) => {
+                // Calculate the position of the child
+                let yPos = tile.y + tileOffset[0];
+                let xPos = tile.x + tileOffset[1];
+
+                // Check if tile is in map
+                if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
+                    // get child tile
+                    childTile = map[yPos][xPos];
+
+                    // Check if childTile is in movableTiles
+                    if (this.tilesInAttackRange.includes(childTile)) {
+
+                        if (childTile.y === goalY && childTile.x === goalX) {
+                            this.path = [];
+                            this.path.push(childTile);
+                            this.path.push(tile);
+                            // go back up and add tiles to path
+                            let parent = node[3];
+                            while (parent != null) {
+                                // Add the parent tile to the path
+                                this.path.push(parent[0]);
+                                // Get the parent of the parent
+                                parent = parent[3];
+                            }
+                            return;
+                        }
+                        if (!reached.includes(childTile)) {
+                            reached.push(childTile);
+
+                            let childDistance = distance + childTile.traversingCost;
+                            let childHeuristic = Math.sqrt((goalY - childTile.y) ** 2 + (goalX - childTile.x) ** 2);
+                            let childEstimatedCost = childDistance + childHeuristic;
+
+                            frontier.push([childTile, childDistance, childEstimatedCost, node])
+
+                        }
+                    }
+
+                }
+            });
+
+            // Check if a path was found
+            if (this.path != null) {
+                return;
+            }
+
+            // After all children have been added sort by f(x)
+            frontier.sort((a, b) => { return a[2] - b[2] });
+
+        }
+
+        // If no path was found return empty array
+        this.pathGoal = [goalY, goalX];
+        this.path = [];
+    }
+
     calculateTilesInRange = (map) => {
         if (this.traversableTiles === null || this.tilesInAttackRange === null) {
             this.#calculateMovementRange(map);
@@ -424,9 +518,9 @@ class UnitModel {
             })
     }
 
-    move = () => {
-        this.x = 12;
-        this.y = 12;
+    move = (goalY, goalX) => {
+        this.y = goalY;
+        this.x = goalX;
     }
 
     remove = () => {

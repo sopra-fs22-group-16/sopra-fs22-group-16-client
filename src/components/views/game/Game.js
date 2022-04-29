@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
+import React, {useEffect, useState} from "react";
+import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
-import { ThemeProvider } from "@emotion/react";
-import { defaultTheme } from "styles/themes/defaulTheme";
-import { LinearProgress } from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
+import {defaultTheme} from "styles/themes/defaulTheme";
+import {LinearProgress} from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import { Button } from "components/ui/Button";
+import {Button} from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import { useHistory } from "react-router-dom";
+import {useHistory} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import { api } from "../../../helpers/api";
+import {api} from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
@@ -18,17 +18,21 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 
-const Game = ({ id }) => {
+const Game = ({id}) => {
 
     const history = useHistory();
 
     const token = localStorage.getItem("token");
+    //TODO: replace with storage
+    //const myTeam = localStorage.getItem(team);
+    const myTeam = 0;
 
-    const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
 
     const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
 
     const [selectedUnit, setSelectedUnit] = useState(null);
+    const[attackMode, setAttackMode] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
@@ -89,39 +93,8 @@ const Game = ({ id }) => {
 
     }
 
-    const unitAction = (action, tile) => {
-        if (action === 'wait') {
-            selectedUnit.move();
-            gameData.map[tile.y][tile.x].dropdown = DropdownType.none;;
-            setGameData({ ...gameData });
-        }
-        
-        else if (action === 'attack') {
-            selectedUnit.attack(tile);
-        }
-        
-        else if (action === 'cancel') {
-
-        }
-        
-        else {
-            console.error("No valid action!");
-        }
-        
-
-        //selectedUnit.showRangeIndicator(false);
-        //selectedUnit.showPathIndicator(false);
-        setGameData({ ...gameData });
-    }
-
-    const unClickDropdown = (tile) => {
-
-        tile.dropdown = DropdownType.none;
-        setGameData({ ...gameData });
-    }
-
     const onClickTile = (tile) => {
-        if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
+        if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
             // Show path to traversable tile
             selectedUnit.showPathIndicator(false);
             setDropDown({...dropDown, open: false})
@@ -130,10 +103,15 @@ const Game = ({ id }) => {
             selectedUnit.showPathIndicator(true);
             setGameData({...gameData});
             if(selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]){
-                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+   
+                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile});
+                
             }else{
                 // Show small drop down as no unit is in range
-                setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+                setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x+1) * 48, target: tile});
+                setGameData({...gameData});
+
+                
             }
 
         }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
@@ -147,7 +125,32 @@ const Game = ({ id }) => {
     }
 
     const onClickAttack = (tile) => {
-        console.log("attack action used on tile " + tile.y + " , " + tile.x);
+
+        // if clicking directly on the unit
+        if(tile.unit) {
+            alert("attacking");
+            console.log("attack action used on tile " + tile.y + " , " + tile.x);
+        }
+        else{
+        
+            //first the unit moves to the place from which it can attack (the clicked tile), the range updates for another go
+            selectedUnit.move(tile.y, tile.x);
+            const unitNew = selectedUnit;
+            selectedUnit.showRangeIndicator(false);
+            selectedUnit.showPathIndicator(false);
+            setSelectedUnit(null);
+            setDropDown({...dropDown, open: false})
+            setGameData({...gameData});
+            selectUnit(unitNew);
+            setGameData({...gameData});
+            //selectedUnit.showRangeIndicator(false);
+            //selectedUnit.showPathIndicator(false);
+            //setGameData({...gameData});
+            //selectUnit(selectedUnit);
+            //selectedUnit.showRangeIndicator(true);
+            //setGameData({...gameData});
+
+        }
     }
 
     const onClickWait = (tile) => {
@@ -161,18 +164,28 @@ const Game = ({ id }) => {
     }
 
     const onClickUnit = (unit) => {
-        if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
-            if (selectedUnit) {
+        if(selectedUnit === null || (unit.teamId === myTeam)){
+            if(selectedUnit){
                 selectedUnit.showRangeIndicator(false);
-                if (selectedUnit.path) {
+                if(selectedUnit.path){
                     selectedUnit.showPathIndicator(false);
-                    setGameData({ ...gameData });
+                    setGameData({...gameData});
                 }
             }
             selectUnit(unit);
-        }else if(selectedUnit /* && unit is hostile */){
-            // TODO: Show DropDown
+        }else if(selectedUnit && unit.teamId !== myTeam){
+            const tile = gameData.map[unit.y][unit.x];
+            
+            if(selectedUnit.tilesInAttackRange.includes(tile)){
+                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+            };
+            
+            selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
+            selectedUnit.showPathIndicator(true);
+            setGameData({...gameData});
+            
         }
+        
     }
 
     const selectUnit = (unit) => {
@@ -181,7 +194,7 @@ const Game = ({ id }) => {
         // Set that the unit is selected
         unit.selected = true;
         // Calculate the movement and attack range
-        unit.calculateTilesInRange(gameData.map)
+        unit.calculateTilesInRange(gameData.map);
         // Show the attack and movement range
         unit.showRangeIndicator(true);
     }
@@ -191,14 +204,14 @@ const Game = ({ id }) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary" />
+                            <LinearProgress color="secondary"/>
                         </ThemeProvider>
                     </div>
                     :
@@ -225,7 +238,7 @@ const Game = ({ id }) => {
 
             <div className={"surrenderFlagContainer"}>
                 <img className={"pixelated"} src={surrenderFlag}
-                    alt={"A white flag - press to surrender"} />
+                     alt={"A white flag - press to surrender"}/>
             </div>
 
             <ThemeProvider theme={defaultTheme}>

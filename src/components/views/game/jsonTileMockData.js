@@ -3897,7 +3897,7 @@ const jsonTileMockData = {
         {
             position: {
                 x: 12,
-                y: 12,
+                y: 13,
             },
             type: "knight",
             health: 125,
