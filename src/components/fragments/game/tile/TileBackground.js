@@ -4,7 +4,6 @@ import {backgroundData} from "./data/backgroundData";
 
 const TileBackground = props => {
 
-
     let tileData = backgroundData[props.type][props.variant];
     if (!tileData) {
         console.log("Don't know " + props.type + ":" + props.variant + " tile!");
