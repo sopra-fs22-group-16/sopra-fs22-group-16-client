@@ -32,6 +32,8 @@ const Game = ({ id }) => {
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
+    const [lock, setLock] = useState(false);
+
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
@@ -92,28 +94,30 @@ const Game = ({ id }) => {
     }
 
     const onClickTile = (tile) => {
-        if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
-            // Show path to traversable tile
-            selectedUnit.showPathIndicator(false);
-            setDropDown({ ...dropDown, open: false })
+        if (!lock) {
+            if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
+                // Show path to traversable tile
+                selectedUnit.showPathIndicator(false);
+                setDropDown({ ...dropDown, open: false })
 
-            selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
-            selectedUnit.showPathIndicator(true);
-            setGameData({ ...gameData });
-            if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
-                setDropDown({ open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
-            } else {
-                // Show small drop down as no unit is in range
-                setDropDown({ open: true, showAttack: false, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
+                selectedUnit.showPathIndicator(true);
+                setGameData({ ...gameData });
+                if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
+                    setDropDown({ open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                } else {
+                    // Show small drop down as no unit is in range
+                    setDropDown({ open: true, showAttack: false, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                }
+
+            } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
+                // Deselect unit
+                selectedUnit.showRangeIndicator(false);
+                selectedUnit.showPathIndicator(false);
+                setSelectedUnit(null);
+                setDropDown({ ...dropDown, open: false })
+                setGameData({ ...gameData });
             }
-
-        } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
-            // Deselect unit
-            selectedUnit.showRangeIndicator(false);
-            selectedUnit.showPathIndicator(false);
-            setSelectedUnit(null);
-            setDropDown({ ...dropDown, open: false })
-            setGameData({ ...gameData });
         }
     }
 
@@ -122,6 +126,10 @@ const Game = ({ id }) => {
     }
 
     const onClickWait = async () => {
+
+        //lock other actions while moving
+        setLock(true);
+
         //delete unit from map array
         gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
 
@@ -142,9 +150,12 @@ const Game = ({ id }) => {
             await timer(250);
         }
 
-        //insert new unit
+        //insert new unit and unselect unit
         gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
         setSelectedUnit(null);
+
+        //unlock
+        setLock(false);
     }
 
     const onClickCancel = (tile) => {
@@ -155,17 +166,19 @@ const Game = ({ id }) => {
     }
 
     const onClickUnit = (unit) => {
-        if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
-            if (selectedUnit) {
-                selectedUnit.showRangeIndicator(false);
-                if (selectedUnit.path) {
-                    selectedUnit.showPathIndicator(false);
-                    setGameData({ ...gameData });
+        if (!lock) {
+            if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
+                if (selectedUnit) {
+                    selectedUnit.showRangeIndicator(false);
+                    if (selectedUnit.path) {
+                        selectedUnit.showPathIndicator(false);
+                        setGameData({ ...gameData });
+                    }
                 }
+                selectUnit(unit);
+            } else if (selectedUnit /* && unit is hostile */) {
+                // TODO: Show DropDown
             }
-            selectUnit(unit);
-        } else if (selectedUnit /* && unit is hostile */) {
-            // TODO: Show DropDown
         }
     }
 
