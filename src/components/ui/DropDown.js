@@ -77,8 +77,6 @@ DropDown.propTypes = {
     y: PropTypes.number,
     x: PropTypes.number,
     showAttack: PropTypes.bool,
-    showWait: PropTypes.bool,
-    showAttackWait: PropTypes.bool,
     onClickAttack: PropTypes.func,
     onClickWait: PropTypes.func,
     onClickCancel: PropTypes.func,
