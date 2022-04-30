@@ -1,16 +1,16 @@
-import React, {useEffect, useState} from "react";
-import {Helmet} from "react-helmet";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet";
 import Map from "components/fragments/game/Map";
-import {ThemeProvider} from "@emotion/react";
-import {defaultTheme} from "styles/themes/defaulTheme";
-import {LinearProgress} from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import { LinearProgress } from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import {api} from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
@@ -18,17 +18,21 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 
-const Game = ({id}) => {
+function timer(ms) { return new Promise(res => setTimeout(res, ms)); }
+
+const Game = ({ id }) => {
 
     const history = useHistory();
 
     const token = localStorage.getItem("token");
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
+    const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
 
-    const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
+    const [dropDown, setDropDown] = useState({ open: false, showAttack: false, y: 0, x: 0, target: null });
 
     const [selectedUnit, setSelectedUnit] = useState(null);
+
+    const [lock, setLock] = useState(false);
 
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
@@ -90,28 +94,30 @@ const Game = ({id}) => {
     }
 
     const onClickTile = (tile) => {
-        if(selectedUnit && selectedUnit.traversableTiles.includes(tile)){
-            // Show path to traversable tile
-            selectedUnit.showPathIndicator(false);
-            setDropDown({...dropDown, open: false})
+        if (!lock) {
+            if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
+                // Show path to traversable tile
+                selectedUnit.showPathIndicator(false);
+                setDropDown({ ...dropDown, open: false })
 
-            selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
-            selectedUnit.showPathIndicator(true);
-            setGameData({...gameData});
-            if(selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]){
-                setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
-            }else{
-                // Show small drop down as no unit is in range
-                setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
+                selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
+                selectedUnit.showPathIndicator(true);
+                setGameData({ ...gameData });
+                if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
+                    setDropDown({ open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                } else {
+                    // Show small drop down as no unit is in range
+                    setDropDown({ open: true, showAttack: false, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                }
+
+            } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
+                // Deselect unit
+                selectedUnit.showRangeIndicator(false);
+                selectedUnit.showPathIndicator(false);
+                setSelectedUnit(null);
+                setDropDown({ ...dropDown, open: false })
+                setGameData({ ...gameData });
             }
-
-        }else if(selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))){
-            // Deselect unit
-            selectedUnit.showRangeIndicator(false);
-            selectedUnit.showPathIndicator(false);
-            setSelectedUnit(null);
-            setDropDown({...dropDown, open: false})
-            setGameData({...gameData});
         }
     }
 
@@ -119,28 +125,61 @@ const Game = ({id}) => {
         console.log("attack action used on tile " + tile.y + " , " + tile.x);
     }
 
-    const onClickWait = (tile) => {
-        console.log("move action used on tile " + tile.y + " , " + tile.x);
+    const onClickWait = async () => {
+
+        //lock other actions while moving
+        setLock(true);
+
+        //delete unit from map array
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
+
+        //remove current reachable tiles and arrow path indicator
+        selectedUnit.showRangeIndicator(false);
+        selectedUnit.showPathIndicator(false);
+
+        //we remove the traversable tiles, so in the next movement these are recalculated (calculateTilesInRange)
+        selectedUnit.traversableTiles = null;
+        selectedUnit.tilesInAttackRange = null;
+
+        setDropDown({ ...dropDown, open: false });
+
+        //update position
+        for (const tilePath of selectedUnit.path.reverse()) {
+            selectedUnit.move(tilePath.x, tilePath.y);
+            setGameData({ ...gameData });
+            await timer(250);
+        }
+
+        //insert new unit and unselect unit
+        gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
+        setSelectedUnit(null);
+
+        //unlock
+        setLock(false);
     }
 
     const onClickCancel = (tile) => {
+        selectedUnit.showRangeIndicator(false);
         selectedUnit.showPathIndicator(false);
-        setGameData({...gameData});
-        setDropDown({...dropDown, open: false})
+        setSelectedUnit(null);
+        setGameData({ ...gameData });
+        setDropDown({ ...dropDown, open: false })
     }
 
     const onClickUnit = (unit) => {
-        if(selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/){
-            if(selectedUnit){
-                selectedUnit.showRangeIndicator(false);
-                if(selectedUnit.path){
-                    selectedUnit.showPathIndicator(false);
-                    setGameData({...gameData});
+        if (!lock) {
+            if (selectedUnit === null || (unit.teamId === 0)/* TODO: instead check that unit is mine*/) {
+                if (selectedUnit) {
+                    selectedUnit.showRangeIndicator(false);
+                    if (selectedUnit.path) {
+                        selectedUnit.showPathIndicator(false);
+                        setGameData({ ...gameData });
+                    }
                 }
+                selectUnit(unit);
+            } else if (selectedUnit /* && unit is hostile */) {
+                // TODO: Show DropDown
             }
-            selectUnit(unit);
-        }else if(selectedUnit /* && unit is hostile */){
-            // TODO: Show DropDown
         }
     }
 
@@ -150,7 +189,7 @@ const Game = ({id}) => {
         // Set that the unit is selected
         unit.selected = true;
         // Calculate the movement and attack range
-        unit.calculateTilesInRange(gameData.map)
+        unit.calculateTilesInRange(gameData.map);
         // Show the attack and movement range
         unit.showRangeIndicator(true);
     }
@@ -160,41 +199,41 @@ const Game = ({id}) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary"/>
+                            <LinearProgress color="secondary" />
                         </ThemeProvider>
                     </div>
                     :
 
-                        <Map mapData={gameData.map}
-                             unitData={gameData.units}
-                             onClickTile={onClickTile}
-                             onClickUnit={onClickUnit}
-                             onMouseEnterTile={onMouseEnterTile}
-                        >
-                            <DropDown
-                                open={dropDown.open}
-                                showAttack={dropDown.showAttack}
-                                y={dropDown.y}
-                                x={dropDown.x}
-                                onClickWait={onClickWait}
-                                onClickCancel={onClickCancel}
-                                onClickAttack={onClickAttack}
-                                target={dropDown.target}
-                            />
-                        </Map>
+                    <Map mapData={gameData.map}
+                        unitData={gameData.units}
+                        onClickTile={onClickTile}
+                        onClickUnit={onClickUnit}
+                        onMouseEnterTile={onMouseEnterTile}
+                    >
+                        <DropDown
+                            open={dropDown.open}
+                            showAttack={dropDown.showAttack}
+                            y={dropDown.y}
+                            x={dropDown.x}
+                            onClickWait={onClickWait}
+                            onClickCancel={onClickCancel}
+                            onClickAttack={onClickAttack}
+                            target={dropDown.target}
+                        />
+                    </Map>
 
             }
 
             <div className={"surrenderFlagContainer"}>
                 <img className={"pixelated"} src={surrenderFlag}
-                     alt={"A white flag - press to surrender"}/>
+                    alt={"A white flag - press to surrender"} />
             </div>
 
             <ThemeProvider theme={defaultTheme}>

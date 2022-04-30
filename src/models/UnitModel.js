@@ -185,7 +185,6 @@ class UnitModel {
                 }
             });
         }
-
         this.traversableTiles = movableTiles;
     }
 
@@ -395,6 +394,11 @@ class UnitModel {
                 }
 
             })
+    }
+
+    move = (x, y) => {
+        this.x = x;
+        this.y = y;
     }
 
 }
