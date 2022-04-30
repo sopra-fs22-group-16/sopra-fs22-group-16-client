@@ -131,7 +131,7 @@ class UnitModel {
 
 
     calculatePathToUnit = (goalY, goalX, map) => {
-        // Check if movable is already calculated and that the goal is in range
+        // Check that the unit is actually attackable
         if (this.tilesInAttackRange == null || !this.tilesInAttackRange.includes(map[goalY][goalX])) return;
 
         // Check if the goal is already set and if it changed
@@ -223,6 +223,34 @@ class UnitModel {
         this.path = [];
     }
 
+    calculatePathtoAttackUnit = (goalY, goalX, map) => {
+        // check that path has been calcualted and it refers to the unit in question
+
+            // get the unit that is atatcked
+            let unitTarget = map[goalY][goalX].unit;
+
+            let positionTile;
+            let attackTile;
+            for (let step = 1; step < this.path.length; step++) {
+                let pathTile = this.path[step];
+                if (this.tilesInAttackRangeSpecificTile[pathTile.y] && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x]) {
+
+                    
+                    positionTile = step;
+                    attackTile = pathTile;
+                    
+                
+
+            }
+            
+            }
+            // the first occurence of unit - path updates to 
+            this.path = this.path.slice(positionTile);
+            this.pathGoal = [attackTile.y, attackTile.x];
+    
+}
+
+
     calculateTilesInRange = (map) => {
         if (this.traversableTiles === null || this.tilesInAttackRange === null) {
             this.#calculateMovementRange(map);
@@ -283,7 +311,6 @@ class UnitModel {
                 }
             });
         }
-
         this.traversableTiles = movableTiles;
     }
 
@@ -362,28 +389,6 @@ class UnitModel {
         this.tilesInAttackRange = tilesInAttackRange;
     }
 
-    /*
-    showDropDownMenu = (show, map) => {
-
-        // get position of the unit, dropdown should start under
-        let positionX = this.x;
-        let positionY = this.y;
-        let tile = map[positionX][positionY];
-
-        /*
-        //dropdown menu big icon starts underneath
-        const pathMenu = [[tile.y+1, tile.x], [tile.y+2, tile.x], [tile.y+3, tile.x]];
-
-        pathMenu.forEach((tile) => {
-            
-        tile.dropDown = DropDownType.attack_dark;
-
-        }
-        )  
-        
-
-    }
-    */
 
     showPathIndicator = (show) => {
         // Update the tiles that they show the attack range indicator
@@ -518,23 +523,16 @@ class UnitModel {
             })
     }
 
-    move = (goalY, goalX) => {
-        this.y = goalY;
-        this.x = goalX;
+    move = (x, y) => {
+        this.x = x;
+        this.y = y;
     }
 
     remove = () => {
-
-        //move player
-        this.x = null;
-        this.y = null;
-
+        this.x = 0;
+        this.y = 0;
     }
 
-    attack = (unitAttack) => {
-        this.move();
-        unitAttack.remove();
-    }
 }
 
 export default UnitModel;

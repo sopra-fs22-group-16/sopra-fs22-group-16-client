@@ -55,6 +55,7 @@ const DropDown = props => {
                         :
                         null
                 }
+                
                 <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
                     <img className={'light'} src={waitLight} alt={"wait"}/>
                     <img className={'dark'} src={waitDark} alt={''}/>
@@ -76,6 +77,8 @@ DropDown.propTypes = {
     y: PropTypes.number,
     x: PropTypes.number,
     showAttack: PropTypes.bool,
+    showWait: PropTypes.bool,
+    showAttackWait: PropTypes.bool,
     onClickAttack: PropTypes.func,
     onClickWait: PropTypes.func,
     onClickCancel: PropTypes.func,

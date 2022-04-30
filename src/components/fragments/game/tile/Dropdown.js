@@ -4,7 +4,7 @@ import { dropdownData } from "./data/dropdownData.js";
 
 const Dropdown = props => {
 
-    let dropdownBoxData = dropdownData["container"][props.size];
+    let dropdownBoxData = dropdownData["container"][props.type];
 
     if (props.size != 'none') {
         let dropdownStyle = {
@@ -25,7 +25,15 @@ const Dropdown = props => {
                 <div onClick={() => props.onClick('wait', props.tile)} style={waitStyle} className={'tile dropdown ' + props.size + ' buttons wait'}></div>
                 <div onClick={() => props.onClick('cancel', props.tile)} style={cancelStyle} className={'tile dropdown ' + props.size + ' buttons cancel'}></div>
                 {
-                    props.size === 'large' ? <div onClick={() => props.onClick('attack')} style={attackStyle} className={'tile dropdown ' + props.size + ' buttons attack'}></div> : null
+                    props.type === 'attack' ? <div onClick={() => props.onClick('attack')} style={attackStyle} className={'tile dropdown ' + props.size + ' buttons attack'}></div> : null
+                }
+
+                {
+                    props.type === 'wait' ? <div onClick={() => props.onClick('wait', props.tile)} style={waitStyle} className={'tile dropdown ' + props.size + ' buttons wait'}></div>: null
+                }
+                 {
+                    props.type === 'attack_wait' ? <div><div onClick={() => props.onClick('wait', props.tile)} style={waitStyle} className={'tile dropdown ' + props.size + ' buttons wait'}></div>
+                    <div onClick={() => props.onClick('attack')} style={attackStyle} className={'tile dropdown ' + props.size + ' buttons attack'}></div></div>: null
                 }
             </div>
         );

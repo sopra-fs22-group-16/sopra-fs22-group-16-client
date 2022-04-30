@@ -19,7 +19,7 @@ class TileModel {
         this.unit = null;
         this.arrowPart = ArrowPartType.none;
         this.arrowDirection = Direction.north;
-        this.dropdown = DropdownType.none;
+        this.dropDown = DropDownType.none;
         Object.assign(this, data);
     }
 }
