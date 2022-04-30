@@ -26,7 +26,7 @@ const Game = ({id}) => {
 
     const token = localStorage.getItem("token");
     //TODO: replace with storage
-    //const myTeam = localStorage.getItem(team);
+    //const myTeam = localStorage.getItem("team");
     const myTeam = 0;
 
     const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
