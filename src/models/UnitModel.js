@@ -1,7 +1,7 @@
-import { Direction } from "../components/fragments/game/unit/Direction";
-import { UnitTypes } from "../components/fragments/game/unit/data/UnitTypes";
-import { TileIndicatorType } from "../components/fragments/game/tile/types/TileIndicatorType";
-import { ArrowPartType } from "../components/fragments/game/tile/types/ArrowPartType";
+import {Direction} from "../components/fragments/game/unit/Direction";
+import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
+import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
+import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
 
 class UnitModel {
     constructor(y, x, data = {}) {
@@ -9,14 +9,14 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
-        //this.defense = 0;
-        //this.attackDamage = 0
-        this.defenseList = 0;
-        this.attackDamageList = 0;
+        this.defense = 0;
+        this.attackDamage = 0
+        //this.defenseList = 0;
+        //this.attackDamageList = 0;
         this.attackRange = 0;
         this.movementRange = 0;
-        this.commandList = [];
-        //this.commands = [];
+        //this.commandList = [];
+        this.commands = [];
         this.teamId = null;
         this.userId = null;
         Object.assign(this, data);

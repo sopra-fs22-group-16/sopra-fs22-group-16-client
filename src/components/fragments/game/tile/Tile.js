@@ -19,7 +19,7 @@ const Tile = props => {
         >
             <TileBackground type={props.tile.type} variant={props.tile.variant}/>
             <TileIndicator indicatorType={props.tile.indicatorType}/>
-            <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection} />
+            <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection}/>
         </div>
     );
 }

@@ -55,7 +55,6 @@ const DropDown = props => {
                         :
                         null
                 }
-                
                 <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
                     <img className={'light'} src={waitLight} alt={"wait"}/>
                     <img className={'dark'} src={waitDark} alt={''}/>

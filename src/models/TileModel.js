@@ -11,7 +11,6 @@ class TileModel {
         this.variant = null;
         this.traversable = null;
         this.traversingCost = null;
-        this.onClick = null;
         this.indicatorType = TileIndicatorType.none;
         this.unit = null;
         this.arrowPart = ArrowPartType.none;
