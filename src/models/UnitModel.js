@@ -117,9 +117,9 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a, b) => {
-                return a[2] - b[2]
-            });
+            frontier.sort((a, b) =>
+                a[2] - b[2]
+            );
 
         }
 
@@ -213,9 +213,8 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a, b) => {
-                return a[2] - b[2]
-            });
+            frontier.sort((a, b) => a[2] - b[2]
+            );
 
         }
 
@@ -388,14 +387,14 @@ class UnitModel {
     }
 
     #isTileInAttackRangeFromTile = (tile, target, map) => {
-        if(tile === target) return true;
+        if (tile === target) return true;
 
         let node = null;
         let frontier = [[tile, 0]]; // tile, distance
         let foundTile = false;
 
         while (frontier.length > 0) {
-            if(foundTile) break;
+            if (foundTile) break;
 
             node = frontier.shift();
             let tile = node[0];
@@ -411,7 +410,7 @@ class UnitModel {
             let childTile = null;
 
             tileOffset.forEach((tileOffset) => {
-                if(foundTile) return;
+                if (foundTile) return;
 
                 // Calculate the position of the child
                 let yPos = tile.y + tileOffset[0];
@@ -429,7 +428,7 @@ class UnitModel {
                     if (childDistance <= this.attackRange) {
                         // Add child to frontier
                         frontier.push([childTile, childDistance]);
-                        if(childTile === target) foundTile = true;
+                        if (childTile === target) foundTile = true;
                     }
 
                 }
@@ -580,21 +579,21 @@ class UnitModel {
 
     calculateOutgoingAttackDamage = (unit, gameMap) => {
 
-        if(!this.tilesInAttackRangeSpecificTile){
+        if (!this.tilesInAttackRangeSpecificTile) {
             this.calculateTilesInRange(gameMap);
         }
 
         let unitPosition = null;
-        if(this.path){
+        if (this.path) {
             unitPosition = gameMap[this.pathGoal[0]][this.pathGoal[1]];
-        }else{
+        } else {
             unitPosition = gameMap[this.y][this.x];
         }
 
         let hostilePosition = null;
-        if(unit.path){
+        if (unit.path) {
             hostilePosition = gameMap[unit.pathGoal[0]][unit.pathGoal[1]];
-        }else{
+        } else {
             hostilePosition = gameMap[unit.y][unit.x];
         }
 
@@ -603,21 +602,33 @@ class UnitModel {
 
             let otherUnitType = null;
             switch (unit.type) {
-                case 'archer' : otherUnitType = 0; break;
-                case 'knight' : otherUnitType = 1; break;
-                case 'war_elephant' : otherUnitType = 2; break;
+                case 'archer' :
+                    otherUnitType = 0;
+                    break;
+                case 'knight' :
+                    otherUnitType = 1;
+                    break;
+                case 'war_elephant' :
+                    otherUnitType = 2;
+                    break;
             }
 
             let myUnitType = null;
             switch (this.type) {
-                case 'archer' : myUnitType = 0; break;
-                case 'knight' : myUnitType = 1; break;
-                case 'war_elephant' : myUnitType = 2; break;
+                case 'archer' :
+                    myUnitType = 0;
+                    break;
+                case 'knight' :
+                    myUnitType = 1;
+                    break;
+                case 'war_elephant' :
+                    myUnitType = 2;
+                    break;
             }
 
             return (this.attackDamage[otherUnitType] / unit.defense[myUnitType]);
 
-        }else{
+        } else {
             return 0;
         }
     }
@@ -627,7 +638,7 @@ class UnitModel {
             if (this.type === 'war_elephant') {
                 if (this.path[1].x < this.x) {
                     this.viewDirection = Direction.west;
-                }else if (this.path[1].x > this.x) {
+                } else if (this.path[1].x > this.x) {
                     this.viewDirection = Direction.east;
                 }
             } else {
