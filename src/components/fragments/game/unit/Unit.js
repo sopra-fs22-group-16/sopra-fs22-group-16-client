@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";

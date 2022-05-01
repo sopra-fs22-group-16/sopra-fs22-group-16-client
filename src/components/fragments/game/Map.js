@@ -4,7 +4,6 @@ import Tile from "./tile/Tile";
 
 import "styles/views/game/Map.scss"
 import Unit from "./unit/Unit";
-import DropDown from "../../ui/DropDown";
 
 const Map = props => {
 
