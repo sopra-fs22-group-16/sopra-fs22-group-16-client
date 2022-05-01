@@ -9,13 +9,10 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
-        this.defense = 0;
-        this.attackDamage = 0
-        //this.defenseList = 0;
-        //this.attackDamageList = 0;
+        this.defense = [0, 0, 0]; // archer, knight, war_elephant
+        this.attackDamage = [0, 0, 0]; // archer, knight, war_elephant
         this.attackRange = 0;
         this.movementRange = 0;
-        //this.commandList = [];
         this.commands = [];
         this.teamId = null;
         this.userId = null;
@@ -32,6 +29,7 @@ class UnitModel {
         this.tilesInAttackRangeSpecificTile = null;
         this.pathGoal = null
         this.path = null;
+        this.maxHealth = this.health;
 
     }
 
@@ -119,7 +117,9 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a, b) => { return a[2] - b[2] });
+            frontier.sort((a, b) => {
+                return a[2] - b[2]
+            });
 
         }
 
@@ -213,7 +213,9 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a, b) => { return a[2] - b[2] });
+            frontier.sort((a, b) => {
+                return a[2] - b[2]
+            });
 
         }
 
@@ -225,29 +227,26 @@ class UnitModel {
     calculatePathtoAttackUnit = (goalY, goalX, map) => {
         // check that path has been calcualted and it refers to the unit in question
 
-            // get the unit that is atatcked
-            let unitTarget = map[goalY][goalX].unit;
+        // get the unit that is atatcked
+        let tileTarget = map[goalY][goalX];
 
-            let positionTile;
-            let attackTile;
-            for (let step = 1; step < this.path.length; step++) {
-                let pathTile = this.path[step];
-                if (this.tilesInAttackRangeSpecificTile[pathTile.y] && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x]) {
-
-                    
-                    positionTile = step;
-                    attackTile = pathTile;
-                    
-                
-
+        let positionTile;
+        let attackTile;
+        for (let step = 1; step < this.path.length; step++) {
+            let pathTile = this.path[step];
+            if (this.tilesInAttackRangeSpecificTile[pathTile.y]
+                && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x]
+                && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x].includes(tileTarget)) {
+                positionTile = step;
+                attackTile = pathTile;
             }
-            
-            }
-            // the first occurence of unit - path updates to 
-            this.path = this.path.slice(positionTile);
-            this.pathGoal = [attackTile.y, attackTile.x];
-    
-}
+
+        }
+        // the first occurence of unit - path updates to
+        this.path = this.path.slice(positionTile);
+        this.pathGoal = [attackTile.y, attackTile.x];
+
+    }
 
 
     calculateTilesInRange = (map) => {
@@ -388,6 +387,58 @@ class UnitModel {
         this.tilesInAttackRange = tilesInAttackRange;
     }
 
+    #isTileInAttackRangeFromTile = (tile, target, map) => {
+        if(tile === target) return true;
+
+        let node = null;
+        let frontier = [[tile, 0]]; // tile, distance
+        let foundTile = false;
+
+        while (frontier.length > 0) {
+            if(foundTile) break;
+
+            node = frontier.shift();
+            let tile = node[0];
+            let distance = node[1];
+
+            // If we reached maxRange we do not have to look at children of the tile
+            // as they would all have greater distance than max range
+            if (distance >= this.attackRange) continue;
+
+            // Check each tile up, down, left, right
+            let tileOffset = [[-1, 0], [1, 0], [0, -1], [0, 1]];
+
+            let childTile = null;
+
+            tileOffset.forEach((tileOffset) => {
+                if(foundTile) return;
+
+                // Calculate the position of the child
+                let yPos = tile.y + tileOffset[0];
+                let xPos = tile.x + tileOffset[1];
+
+                // Check if tile is in map
+                if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
+                    // get child tile
+                    childTile = map[yPos][xPos];
+
+                    // Calculate the distance to the child
+                    let childDistance = distance + childTile.traversingCost;
+
+                    // Check that child is in range
+                    if (childDistance <= this.attackRange) {
+                        // Add child to frontier
+                        frontier.push([childTile, childDistance]);
+                        if(childTile === target) foundTile = true;
+                    }
+
+                }
+            });
+
+        }
+
+        return foundTile;
+    }
 
     showPathIndicator = (show) => {
         // Update the tiles that they show the attack range indicator
@@ -527,10 +578,48 @@ class UnitModel {
         this.y = y;
     }
 
-    // TODO: remove this
-    remove = () => {
-        this.x = 0;
-        this.y = 0;
+    calculateOutgoingAttackDamage = (unit, gameMap) => {
+
+        if(!this.tilesInAttackRangeSpecificTile){
+            this.calculateTilesInRange(gameMap);
+        }
+
+        let unitPosition = null;
+        if(this.path){
+            unitPosition = gameMap[this.pathGoal[0]][this.pathGoal[1]];
+        }else{
+            unitPosition = gameMap[this.y][this.x];
+        }
+
+        let hostilePosition = null;
+        if(unit.path){
+            hostilePosition = gameMap[unit.pathGoal[0]][unit.pathGoal[1]];
+        }else{
+            hostilePosition = gameMap[unit.y][unit.x];
+        }
+
+        // Check if other unit is in attack range
+        if (this.#isTileInAttackRangeFromTile(unitPosition, hostilePosition, gameMap)) {
+
+            let otherUnitType = null;
+            switch (unit.type) {
+                case 'archer' : otherUnitType = 0; break;
+                case 'knight' : otherUnitType = 1; break;
+                case 'war_elephant' : otherUnitType = 2; break;
+            }
+
+            let myUnitType = null;
+            switch (this.type) {
+                case 'archer' : myUnitType = 0; break;
+                case 'knight' : myUnitType = 1; break;
+                case 'war_elephant' : myUnitType = 2; break;
+            }
+
+            return (this.attackDamage[otherUnitType] / unit.defense[myUnitType]);
+
+        }else{
+            return 0;
+        }
     }
 
 }

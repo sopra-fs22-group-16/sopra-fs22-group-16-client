@@ -24,22 +24,6 @@ const Unit = props => {
             break;
     }
 
-    let maxHealth = null;
-    switch (props.unit.type) {
-        case "archer":
-            maxHealth = 100;
-            break;
-        case "knight":
-            maxHealth = 125;
-            break;
-        case "war_elephant":
-            maxHealth = 150;
-            break;
-        default:
-            console.log("Type " + props.unit.type + " not provided or does not match!");
-            break;
-    }
-
     // TODO: Set animation dynamically when performing command
 
     let unitStyle = {
@@ -57,7 +41,7 @@ const Unit = props => {
         top: -90,
         right: -9,
         height: '5px',
-        width: 30 * props.unit.health / maxHealth + 'px',
+        width: 30 * props.unit.health / props.unit.maxHealth + 'px',
         background: unitColor === "red" ? '#873535': '#516899',
     }
 
