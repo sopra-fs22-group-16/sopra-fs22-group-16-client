@@ -9,7 +9,7 @@ const Unit = props => {
 
     let tileSize = 48;
 
-    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection.name);
+    let animationState = "idle_" + props.unit.viewDirection.name;
 
     let unitColor = "";
     switch (props.unit.teamId) {
@@ -21,22 +21,6 @@ const Unit = props => {
             break;
         default:
             console.log("Team id " + props.unit.teamId + " not provided or does not match!");
-            break;
-    }
-
-    let maxHealth = null;
-    switch (props.unit.type) {
-        case "archer":
-            maxHealth = 100;
-            break;
-        case "knight":
-            maxHealth = 125;
-            break;
-        case "war_elephant":
-            maxHealth = 150;
-            break;
-        default:
-            console.log("Type " + props.unit.type + " not provided or does not match!");
             break;
     }
 
@@ -57,7 +41,7 @@ const Unit = props => {
         top: -90,
         right: -9,
         height: '5px',
-        width: 30 * props.unit.health / maxHealth + 'px',
+        width: 30 * props.unit.health / props.unit.maxHealth + 'px',
         background: unitColor === "red" ? '#873535': '#516899',
     }
 

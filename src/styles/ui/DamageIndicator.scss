@@ -1,0 +1,61 @@
+.damageIndicator {
+  position: absolute;
+  width: 48px;
+  height: 48px;
+}
+
+.leftBackground {
+  position: absolute;
+  top: 0;
+  right: 48px;
+}
+
+.rightBackground {
+  position: absolute;
+  top: 0;
+  left: 48px;
+}
+
+.number {
+  position: absolute;
+  top: 15px;
+
+  &.left {
+    &.first {
+      left: -6px;
+    }
+
+    &.second {
+      left: -18px;
+    }
+
+    &.third {
+      left: -30px;
+    }
+
+    &.fourth {
+      left: -42px;
+    }
+
+  }
+
+  &.right {
+    &.first {
+      left: 45px;
+    }
+
+    &.second {
+      left: 57px;
+    }
+
+    &.third {
+      left: 69px;
+    }
+
+    &.fourth {
+      left: 81px;
+    }
+  }
+
+
+}
