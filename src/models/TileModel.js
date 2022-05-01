@@ -1,6 +1,6 @@
 import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
 import PathPart from "./PathPart";
-import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
+import { ArrowPartType } from "../components/fragments/game/tile/types/ArrowPartType";
 import {Direction} from "../components/fragments/game/unit/Direction";
 
 class TileModel {
