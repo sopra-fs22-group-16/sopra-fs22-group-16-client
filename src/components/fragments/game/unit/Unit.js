@@ -58,7 +58,7 @@ const Unit = props => {
         right: -9,
         height: '5px',
         width: 30 * props.unit.health / maxHealth + 'px',
-        background: unitColor
+        background: unitColor === "red" ? '#873535': '#516899',
     }
 
     return (
@@ -66,7 +66,7 @@ const Unit = props => {
             <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
             <img src={healthSource} style={healthBoxStyle} alt={''} />
-            <div style={healthBarStyle}></div>
+            <div style={healthBarStyle}/>
         </div>
     );
 }
