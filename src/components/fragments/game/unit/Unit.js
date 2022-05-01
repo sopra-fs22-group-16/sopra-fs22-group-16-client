@@ -9,7 +9,7 @@ const Unit = props => {
 
     let tileSize = 48;
 
-    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection.name);
+    let animationState = "idle_" + props.unit.viewDirection.name;
 
     let unitColor = "";
     switch (props.unit.teamId) {

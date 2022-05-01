@@ -622,6 +622,29 @@ class UnitModel {
         }
     }
 
+    calculateIdleDirection = () => {
+        if (this.path.length > 1) {
+            if (this.type === 'war_elephant') {
+                if (this.path[1].x < this.x) {
+                    this.viewDirection = Direction.west;
+                }else if (this.path[1].x > this.x) {
+                    this.viewDirection = Direction.east;
+                }
+            } else {
+                if (this.path[1].y >= this.y && this.pathGoal[1] >= this.x) {
+                    this.viewDirection = Direction.southEast;
+                } else if (this.path[1].y >= this.y && this.pathGoal[1] <= this.x) {
+                    this.viewDirection = Direction.southWest;
+                } else if (this.path[1].y <= this.y && this.pathGoal[1] <= this.x) {
+                    this.viewDirection = Direction.northEast;
+                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
+                    this.viewDirection = Direction.northWest;
+                }
+
+            }
+        }
+    }
+
 }
 
 export default UnitModel;

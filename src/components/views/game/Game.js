@@ -18,6 +18,7 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
+import {Direction} from "../../fragments/game/unit/Direction";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -113,6 +114,7 @@ const Game = ({id}) => {
                 setDamageIndicator({...damageIndicator, open: false});
 
                 selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
+                selectedUnit.calculateIdleDirection();
                 selectedUnit.showPathIndicator(true);
                 setGameData({...gameData});
                 if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
@@ -172,16 +174,19 @@ const Game = ({id}) => {
             let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
             let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
 
-            //TODO: Maybe there is a batter way than splicing the array, does some weired things, as redraw is called for all units etc.
+            // TODO: make call to backend
+            // Also possible to do things below, after receiving update from backend.
+            // That would also ensure that the information stays consistent.
 
+            // TODO: Maybe there is a batter way than splicing the array, does some weired things, as redraw is called for all units etc.
             unit.health -= outGoingDamage;
-            if(unit.health <= 0){
+            if (unit.health <= 0) {
                 gameData.map[unit.y][unit.x].unit = null;
                 gameData.units.splice(gameData.units.indexOf(unit), 1);
             }
 
             selectedUnit.health -= inGoingDamage;
-            if(selectedUnit.health <= 0){
+            if (selectedUnit.health <= 0) {
                 gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
                 gameData.units.splice(gameData.units.indexOf(selectedUnit), 1);
             }
@@ -276,14 +281,13 @@ const Game = ({id}) => {
                     if (selectedUnit.traversableTiles !== null) {
                         selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
                         selectedUnit.calculatePathtoAttackUnit(unit.y, unit.x, gameData.map);
+                        selectedUnit.calculateIdleDirection();
                     }
 
                     let leftRed = myTeam === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
 
                     let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
-                    console.log(outGoingDamage)
                     let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
-                    console.log(inGoingDamage)
 
                     let outGoingPercentage = Math.min(100 / unit.health * outGoingDamage, 100);
                     let inGoingPercentage = Math.min(100 / selectedUnit.health * inGoingDamage, 100);
@@ -291,12 +295,19 @@ const Game = ({id}) => {
                     let leftPercentage = inGoingPercentage;
                     let rightPercentage = outGoingPercentage;
 
-                    if(myTeam === 0 && leftRed || myTeam === 1 && !leftRed){
+                    if (myTeam === 0 && leftRed || myTeam === 1 && !leftRed) {
                         leftPercentage = outGoingPercentage;
                         rightPercentage = inGoingPercentage;
                     }
 
-                    setDamageIndicator({open: true, y: (tile.y - 2) * 48, x: tile.x * 48, leftDamage: leftPercentage, rightDamage: rightPercentage, leftRed: leftRed})
+                    setDamageIndicator({
+                        open: true,
+                        y: (tile.y - 2) * 48,
+                        x: tile.x * 48,
+                        leftDamage: leftPercentage,
+                        rightDamage: rightPercentage,
+                        leftRed: leftRed
+                    })
                     setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile})
                     selectedUnit.showPathIndicator(true);
                     setGameData({...gameData});
