@@ -135,11 +135,22 @@ const Game = ({ id }) => {
                 await timer(250);
             }
 
+            tile.unit.remove();
+            gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
+            // TODO: complete attack
             //attack - arrow does not remove!
             selectedUnit.move(tile.x, tile.y);
-            tile.unit.remove();
+            gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
             selectedUnit.showPathIndicator(false);
             selectedUnit.showRangeIndicator(false);
+            gameData.units.forEach((unit) => {
+                unit.selected = false;
+                unit.tilesInAttackRange = null;
+                unit.tilesInAttackRangeSpecificTile = null;
+                unit.traversableTiles = null;
+                unit.path = null;
+                unit.pathGoal = null;
+            })
             setDropDown({...dropDown, open: false});
             setGameData({...gameData});
         }
@@ -219,10 +230,12 @@ const Game = ({ id }) => {
             if(selectedUnit.tilesInAttackRange.includes(tile)){
                 setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x+1) * 48, target: tile})
             };
+            if (selectedUnit.path === null){
+                selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
+                selectedUnit.calculatePathtoAttackUnit(unit.y, unit.x, gameData.map);
+                selectedUnit.showPathIndicator(true);
             
-            selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
-            selectedUnit.calculatePathtoAttackUnit(unit.y, unit.x, gameData.map);
-            selectedUnit.showPathIndicator(true);
+                }
             setGameData({...gameData});
             
         }

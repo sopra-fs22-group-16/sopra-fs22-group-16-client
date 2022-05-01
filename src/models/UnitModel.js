@@ -527,6 +527,7 @@ class UnitModel {
         this.y = y;
     }
 
+    // TODO: remove this
     remove = () => {
         this.x = 0;
         this.y = 0;
