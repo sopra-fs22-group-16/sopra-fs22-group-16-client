@@ -34,6 +34,7 @@ const Unit = props => {
     let healthBoxStyle = {
         position: 'relative',
         top: -70,
+        pointerEvents : 'none'
     }
 
     let healthBarStyle = {
@@ -42,7 +43,8 @@ const Unit = props => {
         right: -9,
         height: '5px',
         width: 30 * props.unit.health / props.unit.maxHealth + 'px',
-        background: unitColor === "red" ? '#873535': '#516899',
+        background: unitColor === "red" ? '#873535' : '#516899',
+        pointerEvents : 'none'
     }
 
     return (
@@ -50,7 +52,7 @@ const Unit = props => {
             <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
             <img src={healthSource} style={healthBoxStyle} alt={''} />
-            <div style={healthBarStyle}/>
+            <div style={healthBarStyle} />
         </div>
     );
 }
