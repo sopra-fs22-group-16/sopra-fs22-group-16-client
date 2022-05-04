@@ -9,7 +9,7 @@ const Unit = props => {
 
     let tileSize = 48;
 
-    const [animationState, setAnimationState] = useState("idle_" + props.unit.viewDirection.name);
+    let animationState = "idle_" + props.unit.viewDirection.name;
 
     let unitColor = "";
     switch (props.unit.teamId) {
@@ -24,22 +24,6 @@ const Unit = props => {
             break;
     }
 
-    let maxHealth = null;
-    switch (props.unit.type) {
-        case "archer":
-            maxHealth = 100;
-            break;
-        case "knight":
-            maxHealth = 125;
-            break;
-        case "war_elephant":
-            maxHealth = 150;
-            break;
-        default:
-            console.log("Type " + props.unit.type + " not provided or does not match!");
-            break;
-    }
-
     // TODO: Set animation dynamically when performing command
 
     let unitStyle = {
@@ -50,6 +34,7 @@ const Unit = props => {
     let healthBoxStyle = {
         position: 'relative',
         top: -70,
+        pointerEvents : 'none'
     }
 
     let healthBarStyle = {
@@ -57,8 +42,9 @@ const Unit = props => {
         top: -90,
         right: -9,
         height: '5px',
-        width: 30 * props.unit.health / maxHealth + 'px',
-        background: unitColor === "red" ? '#873535': '#516899',
+        width: 30 * props.unit.health / props.unit.maxHealth + 'px',
+        background: unitColor === "red" ? '#873535' : '#516899',
+        pointerEvents : 'none'
     }
 
     return (
@@ -66,7 +52,7 @@ const Unit = props => {
             <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
             <img src={healthSource} style={healthBoxStyle} alt={''} />
-            <div style={healthBarStyle}/>
+            <div style={healthBarStyle} />
         </div>
     );
 }

@@ -17,6 +17,8 @@ import "styles/views/game/Game.scss"
 // MockData
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
+import DamageIndicator from "../../ui/DamageIndicator";
+import {Direction} from "../../fragments/game/unit/Direction";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -34,6 +36,15 @@ const Game = ({id}) => {
     const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
 
     const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
+    const [damageIndicator, setDamageIndicator] = useState({
+        open: false,
+        y: 0,
+        x: 0,
+        leftDamage: 0,
+        rightDamage: 0,
+        leftRed: true
+    });
+
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -91,19 +102,16 @@ const Game = ({id}) => {
     }, []);
 
 
-    const onMouseEnterTile = (tile) => {
-
-    }
-
-
     const onClickTile = (tile) => {
         if (!lock) {
-            if (selectedUnit && selectedUnit.traversableTiles.includes(tile)) {
+            if (selectedUnit && selectedUnit.traversableTiles && selectedUnit.traversableTiles.includes(tile)) {
                 // Show path to traversable tile
                 selectedUnit.showPathIndicator(false);
                 setDropDown({...dropDown, open: false})
+                setDamageIndicator({...damageIndicator, open: false});
 
                 selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
+                selectedUnit.calculateIdleDirection();
                 selectedUnit.showPathIndicator(true);
                 setGameData({...gameData});
                 if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
@@ -119,6 +127,7 @@ const Game = ({id}) => {
                 selectedUnit.showPathIndicator(false);
                 setSelectedUnit(null);
                 setDropDown({...dropDown, open: false})
+                setDamageIndicator({...damageIndicator, open: false});
                 setGameData({...gameData});
             }
         }
@@ -132,19 +141,20 @@ const Game = ({id}) => {
             //lock other actions while attacking
             setLock(true);
 
+            let unit = tile.unit;
+
             gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
 
             selectedUnit.showPathIndicator(false);
             selectedUnit.showRangeIndicator(false);
             setDropDown({...dropDown, open: false});
+            setDamageIndicator({...damageIndicator, open: false});
 
             for (const tile of selectedUnit.path.reverse()) {
                 selectedUnit.move(tile.x, tile.y);
                 setGameData({...gameData});
                 await timer(250);
             }
-
-            // TODO: complete attack
 
             gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
 
@@ -157,6 +167,28 @@ const Game = ({id}) => {
                 unit.pathGoal = null;
             })
 
+            // Do attack
+            let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
+            let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
+
+            // TODO: make call to backend
+            // Also possible to do things below, after receiving update from backend.
+            // That would also ensure that the information stays consistent.
+
+            // TODO: Maybe there is a batter way than splicing the array, does some weired things, as redraw is called for all units etc.
+            unit.health -= outGoingDamage;
+            if (unit.health <= 0) {
+                gameData.map[unit.y][unit.x].unit = null;
+                gameData.units.splice(gameData.units.indexOf(unit), 1);
+            }
+
+            selectedUnit.health -= inGoingDamage;
+            if (selectedUnit.health <= 0) {
+                gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
+                gameData.units.splice(gameData.units.indexOf(selectedUnit), 1);
+            }
+
+
             setSelectedUnit(null);
 
             //unlock
@@ -168,6 +200,7 @@ const Game = ({id}) => {
             selectedUnit.tilesInAttackRange = selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x];
             selectedUnit.showRangeIndicator(true);
             setDropDown({...dropDown, open: false});
+            setDamageIndicator({...damageIndicator, open: false});
             setGameData({...gameData});
 
         }
@@ -216,6 +249,7 @@ const Game = ({id}) => {
         setSelectedUnit(null);
         setGameData({...gameData});
         setDropDown({...dropDown, open: false})
+        setDamageIndicator({...damageIndicator, open: false});
     }
 
 
@@ -224,6 +258,9 @@ const Game = ({id}) => {
             if (unit.teamId === myTeam) {
                 if (selectedUnit) {
                     selectedUnit.showRangeIndicator(false);
+                    setDropDown({...dropDown, open: false})
+                    setDamageIndicator({...damageIndicator, open: false});
+
                     if (selectedUnit.path) {
                         selectedUnit.showPathIndicator(false);
                         setGameData({...gameData});
@@ -237,12 +274,37 @@ const Game = ({id}) => {
 
                 if (selectedUnit.tilesInAttackRange.includes(tile)) {
                     selectedUnit.showPathIndicator(false)
-                    
+
                     if (selectedUnit.traversableTiles !== null) {
                         selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
                         selectedUnit.calculatePathtoAttackUnit(unit.y, unit.x, gameData.map);
+                        selectedUnit.calculateIdleDirection();
                     }
 
+                    let leftRed = myTeam === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
+
+                    let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
+                    let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
+
+                    let outGoingPercentage = Math.min(100 / unit.health * outGoingDamage, 100);
+                    let inGoingPercentage = Math.min(100 / selectedUnit.health * inGoingDamage, 100);
+
+                    let leftPercentage = inGoingPercentage;
+                    let rightPercentage = outGoingPercentage;
+
+                    if (myTeam === 0 && leftRed || myTeam === 1 && !leftRed) {
+                        leftPercentage = outGoingPercentage;
+                        rightPercentage = inGoingPercentage;
+                    }
+
+                    setDamageIndicator({
+                        open: true,
+                        y: (tile.y - 2) * 48,
+                        x: tile.x * 48,
+                        leftDamage: leftPercentage,
+                        rightDamage: rightPercentage,
+                        leftRed: leftRed
+                    })
                     setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile})
                     selectedUnit.showPathIndicator(true);
                     setGameData({...gameData});
@@ -285,8 +347,14 @@ const Game = ({id}) => {
                          unitData={gameData.units}
                          onClickTile={onClickTile}
                          onClickUnit={onClickUnit}
-                         onMouseEnterTile={onMouseEnterTile}
                     >
+                        <DamageIndicator open={damageIndicator.open}
+                                         y={damageIndicator.y}
+                                         x={damageIndicator.x}
+                                         leftDamage={damageIndicator.leftDamage}
+                                         rightDamage={damageIndicator.rightDamage}
+                                         leftRed={damageIndicator.leftRed}
+                        />
                         <DropDown
                             open={dropDown.open}
                             showAttack={dropDown.showAttack}
