@@ -86,11 +86,6 @@ const Game = ({id}) => {
 
                     delete unit.position;
                     let unitModel = new UnitModel(y, x, unit);
-                    if (unitModel.type === UnitTypes.war_elephant) {
-                        unitModel.viewDirection = unitModel.teamId ? Direction.west : Direction.east;
-                    } else {
-                        unitModel.viewDirection = unitModel.teamId ? Direction.southWest : Direction.southEast;
-                    }
                     mapArray[y][x].unit = unitModel;
                     unitArray.push(unitModel);
                 });
@@ -335,7 +330,6 @@ const Game = ({id}) => {
             } else {
                 if (selectedUnit.type === UnitTypes.war_elephant) {
                     selectedUnit.viewDirection = Direction.west;
-                    console.log("WEST");
                 } else {
                     if (goingSouth) {
                         selectedUnit.viewDirection = Direction.southWest;
@@ -388,7 +382,6 @@ const Game = ({id}) => {
                         selectedUnit.calculatePathToUnit(unit.y, unit.x, gameData.map);
                         selectedUnit.calculatePathtoAttackUnit(unit.y, unit.x, gameData.map);
                         selectedUnit.calculateIdleDirection();
-                        console.log("E");
                     }
 
                     let leftRed = myTeam === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
