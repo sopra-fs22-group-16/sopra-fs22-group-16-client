@@ -18,11 +18,7 @@ class UnitModel {
         this.userId = null;
         Object.assign(this, data);
         // if teamId === 0 (red) look southWest/west else teamId === 1 (blue) look southEast/east
-        if (this.type === UnitTypes.war_elephant) {
-            this.viewDirection = this.teamId ? Direction.west : Direction.east;
-        } else {
-            this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
-        }
+        this.viewDirection = null;
         this.selected = false;
         this.traversableTiles = null;
         this.tilesInAttackRange = null;
@@ -30,7 +26,10 @@ class UnitModel {
         this.pathGoal = null
         this.path = null;
         this.maxHealth = this.health;
-
+        this.oldX = x;
+        this.oldY = y;
+        this.movementSpeed = 500;
+        this.animation = "idle";
     }
 
     calculatePathToTile = (goalY, goalX, map) => {
@@ -573,6 +572,8 @@ class UnitModel {
     }
 
     move = (x, y) => {
+        this.oldX = this.x;
+        this.oldY = this.y;
         this.x = x;
         this.y = y;
     }

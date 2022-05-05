@@ -1,15 +1,17 @@
 import PropTypes from "prop-types";
-import React, { useState } from "react";
+import React, {useState} from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";
 import healthSource from "styles/images/ui/healthbar/health_bar.png";
+import {keyframes} from "@emotion/react";
+import Keyframes from "../../../../helpers/Keyframes";
 
 const Unit = props => {
 
     let tileSize = 48;
 
-    let animationState = "idle_" + props.unit.viewDirection.name;
+    let animationState = props.unit.animation + "_" + props.unit.viewDirection.name;
 
     let unitColor = "";
     switch (props.unit.teamId) {
@@ -24,12 +26,18 @@ const Unit = props => {
             break;
     }
 
-    // TODO: Set animation dynamically when performing command
-
     let unitStyle = {
         top: props.unit.y * tileSize,
-        left: props.unit.x * tileSize
+        left: props.unit.x * tileSize,
     }
+
+    unitStyle.animation =
+        "run"+props.unit.y+''+props.unit.x +' '
+        + (props.unit.movementSpeed * (Math.abs(props.unit.oldX-props.unit.x) + Math.abs(props.unit.oldY-props.unit.y)))  + 'ms '
+        + 'linear '
+        + '1';
+
+
 
     let healthBoxStyle = {
         position: 'relative',
@@ -49,9 +57,18 @@ const Unit = props => {
 
     return (
         <div className={'unitContainer'} style={unitStyle} onClick={() => props.onClick(props.unit)}>
-            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
-            <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
-            <img src={healthSource} style={healthBoxStyle} alt={''} />
+            <Keyframes name={"run"+props.unit.y+''+props.unit.x}
+                       from={{
+                           left: props.unit.oldX * tileSize + 'px',
+                           top: props.unit.oldY * tileSize + 'px'
+                       }}
+                       to={{
+                           left: (props.unit.x) * tileSize + 'px',
+                           top: (props.unit.y) * tileSize + 'px',
+                       }}/>
+            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState}/>
+            <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
+            <img src={healthSource} style={healthBoxStyle} alt={''}/>
             <div style={healthBarStyle} />
         </div>
     );
