@@ -652,9 +652,9 @@ class UnitModel {
                 } else if (this.path[1].y >= this.y && this.pathGoal[1] <= this.x) {
                     this.viewDirection = Direction.southWest;
                 } else if (this.path[1].y <= this.y && this.pathGoal[1] <= this.x) {
-                    this.viewDirection = Direction.northEast;
-                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
                     this.viewDirection = Direction.northWest;
+                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
+                    this.viewDirection = Direction.northEast;
                 }
 
             }
