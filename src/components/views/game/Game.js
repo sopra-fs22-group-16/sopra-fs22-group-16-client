@@ -364,6 +364,7 @@ const Game = ({ id }) => {
 
 
     const onClickUnit = (unit) => {
+        //ifc(!lock && unit.selected === false){
         if (!lock) {
             if (unit.teamId === myTeam) {
                 if (selectedUnit) {
