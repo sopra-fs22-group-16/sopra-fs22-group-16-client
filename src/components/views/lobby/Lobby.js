@@ -190,11 +190,7 @@ const Lobby = ({ id }) => {
     }
 
     useEffect(() => {
-        async function fetchData() {
-            obtainAndLoadLobbyInfo();
-        }
-
-        fetchData();
+        obtainAndLoadLobbyInfo();
     }, [id, token]);
 
     return (
