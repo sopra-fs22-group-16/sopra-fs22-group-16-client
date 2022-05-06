@@ -149,7 +149,7 @@ const Game = ({ id }) => {
             setLock(true);
 
             // Set that the unit is selected
-            selectedUnit.selected = true;
+            selectedUnit.performedAction = true;
 
             let unit = tile.unit;
 
@@ -214,7 +214,7 @@ const Game = ({ id }) => {
             setLock(true);
 
             // Set that the unit is selected
-            selectedUnit.selected = true;
+            selectedUnit.performedAction = true;
 
             //delete unit from map array
             gameData.map[selectedUnit.y][selectedUnit.x].unit = null;
@@ -364,7 +364,7 @@ const Game = ({ id }) => {
 
 
     const onClickUnit = (unit) => {
-        //if(!lock && unit.selected === false){
+        //if(!lock && unit.performedAction === false){
         if (!lock) {
             if (unit.teamId === myTeam) {
                 if (selectedUnit) {

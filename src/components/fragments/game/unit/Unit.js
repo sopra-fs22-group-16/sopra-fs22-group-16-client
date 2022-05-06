@@ -83,7 +83,7 @@ const Unit = props => {
             <img src={healthSource} style={healthBoxStyle} alt={''}/>
             <div style={healthBarStyle} />
             {
-                props.unit.teamId == myTeam && props.unit.selected == false ? <img src={markerSource} style={markerStyle} alt={''} /> : null
+                props.unit.teamId == myTeam && props.unit.performedAction == false ? <img src={markerSource} style={markerStyle} alt={''} /> : null
             }
         </div>
     );
