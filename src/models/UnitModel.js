@@ -30,7 +30,10 @@ class UnitModel {
         this.pathGoal = null
         this.path = null;
         this.maxHealth = this.health;
-
+        this.oldX = x;
+        this.oldY = y;
+        this.movementSpeed = 500;
+        this.animation = "idle";
     }
 
     calculatePathToTile = (goalY, goalX, map) => {
@@ -573,6 +576,8 @@ class UnitModel {
     }
 
     move = (x, y) => {
+        this.oldX = this.x;
+        this.oldY = this.y;
         this.x = x;
         this.y = y;
     }
@@ -647,9 +652,9 @@ class UnitModel {
                 } else if (this.path[1].y >= this.y && this.pathGoal[1] <= this.x) {
                     this.viewDirection = Direction.southWest;
                 } else if (this.path[1].y <= this.y && this.pathGoal[1] <= this.x) {
-                    this.viewDirection = Direction.northEast;
-                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
                     this.viewDirection = Direction.northWest;
+                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
+                    this.viewDirection = Direction.northEast;
                 }
 
             }

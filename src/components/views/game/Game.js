@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
-import {ThemeProvider} from "@emotion/react";
 import {defaultTheme} from "styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
@@ -19,6 +18,9 @@ import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
 import {Direction} from "../../fragments/game/unit/Direction";
+import Keyframes from "../../../helpers/Keyframes";
+import {ThemeProvider} from "@emotion/react";
+import {UnitTypes} from "../../fragments/game/unit/data/UnitTypes";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -150,22 +152,11 @@ const Game = ({id}) => {
             setDropDown({...dropDown, open: false});
             setDamageIndicator({...damageIndicator, open: false});
 
-            for (const tile of selectedUnit.path.reverse()) {
-                selectedUnit.move(tile.x, tile.y);
-                setGameData({...gameData});
-                await timer(250);
-            }
+            await executePathMovement();
 
             gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
 
-            gameData.units.forEach((unit) => {
-                unit.selected = false;
-                unit.tilesInAttackRange = null;
-                unit.tilesInAttackRangeSpecificTile = null;
-                unit.traversableTiles = null;
-                unit.path = null;
-                unit.pathGoal = null;
-            })
+            cleanUpUnits();
 
             // Do attack
             let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
@@ -227,12 +218,9 @@ const Game = ({id}) => {
 
             setDropDown({...dropDown, open: false});
 
-            //update position
-            for (const tilePath of selectedUnit.path.reverse()) {
-                selectedUnit.move(tilePath.x, tilePath.y);
-                setGameData({...gameData});
-                await timer(250);
-            }
+            await executePathMovement();
+
+            cleanUpUnits();
 
             //insert new unit and unselect unit
             gameData.map[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
@@ -242,6 +230,118 @@ const Game = ({id}) => {
             setLock(false);
         }
     }
+
+    const cleanUpUnits = () => {
+        // Clear all previously calculated data
+        gameData.units.forEach((unit) => {
+            unit.selected = false;
+            unit.tilesInAttackRange = null;
+            unit.tilesInAttackRangeSpecificTile = null;
+            unit.traversableTiles = null;
+            unit.path = null;
+            unit.pathGoal = null;
+        })
+    }
+
+    const executePathMovement = async () => {
+        //set animation
+        selectedUnit.animation = "run";
+
+        //update position
+        let startViewDirection = selectedUnit.viewDirection;
+        let oldX = selectedUnit.x;
+        let oldY = selectedUnit.y;
+        let xCounter = 0;
+        let yCounter = 0;
+        let goingSouth = oldY <= selectedUnit.pathGoal[0];
+        let goingEast = oldX === selectedUnit.pathGoal[1] ? selectedUnit.viewDirection.name.includes("east") : oldX < selectedUnit.pathGoal[1];
+        for (const tilePath of selectedUnit.path.reverse()) {
+            if (oldX !== tilePath.x) {
+                if (yCounter !== 0) {
+                    await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
+                    yCounter = 0;
+                }
+                goingEast = oldX < tilePath.x;
+                ++xCounter;
+                oldX = tilePath.x;
+            } else if (oldY !== tilePath.y) {
+                if (xCounter !== 0) {
+                    await performMovement(oldY, oldX, xCounter, false, goingSouth, goingEast);
+                    xCounter = 0;
+                }
+                goingSouth = oldY < tilePath.y;
+                ++yCounter;
+                oldY = tilePath.y;
+            }
+        }
+
+        // Check if there is left over movement
+        if (xCounter !== 0) {
+            await performMovement(oldY, oldX, xCounter, false, goingSouth, goingEast);
+        } else if (yCounter !== 0) {
+            await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
+        }
+
+        //reset animation
+        selectedUnit.animation = "idle";
+        if ((selectedUnit.type === UnitTypes.WAR_ELEPHANT) &&
+            (selectedUnit.viewDirection === Direction.north || selectedUnit.viewDirection === Direction.south)) {
+            selectedUnit.viewDirection = startViewDirection;
+        }
+    }
+
+    const performMovement = async (y, x, steps, verticalMovement, goingSouth, goingEast) => {
+        if (verticalMovement) {
+            if (goingSouth) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
+                    selectedUnit.viewDirection = Direction.south;
+                } else {
+                    if (goingEast) {
+                        selectedUnit.viewDirection = Direction.southEast;
+                    } else {
+                        selectedUnit.viewDirection = Direction.southWest;
+                    }
+                }
+            } else {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
+                    selectedUnit.viewDirection = Direction.north;
+                } else {
+                    if (goingEast) {
+                        selectedUnit.viewDirection = Direction.northEast;
+                    } else {
+                        selectedUnit.viewDirection = Direction.northWest;
+                    }
+                }
+            }
+        } else {
+            if (goingEast) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
+                    selectedUnit.viewDirection = Direction.east;
+                } else {
+                    if (goingSouth) {
+                        selectedUnit.viewDirection = Direction.southEast;
+                    } else {
+                        selectedUnit.viewDirection = Direction.northEast;
+                    }
+                }
+            } else {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
+                    selectedUnit.viewDirection = Direction.west;
+                } else {
+                    if (goingSouth) {
+                        selectedUnit.viewDirection = Direction.southWest;
+                    } else {
+                        selectedUnit.viewDirection = Direction.northWest;
+                    }
+                }
+            }
+        }
+        selectedUnit.move(x, y);
+        setGameData({...gameData});
+        let time = (selectedUnit.movementSpeed * steps);
+        await timer(time);
+    }
+
 
     const onClickCancel = (tile) => {
         selectedUnit.showRangeIndicator(false);
