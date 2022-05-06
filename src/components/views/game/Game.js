@@ -11,17 +11,14 @@ import TileModel from "models/TileModel";
 import {useHistory} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
-
-import "styles/views/game/Game.scss"
-
-// MockData
-import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import Keyframes from "../../../helpers/Keyframes";
-import {ThemeProvider} from "@emotion/react";
 import {UnitTypes} from "../../fragments/game/unit/data/UnitTypes";
+
+import "styles/views/game/Game.scss"
+import {Direction} from "../../fragments/game/unit/Direction";
+
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -37,7 +34,7 @@ const Game = ({id}) => {
     console.log("playerId: " + playerId);
 
     // TODO: get team id
-    const teamId = 0;
+    const teamId = playerId;
     console.log("teamId: " + teamId);
 
 
@@ -67,7 +64,7 @@ const Game = ({id}) => {
         async function fetchData() {
             try {
 
-                const response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
+                const response = await api.get(`/v1/game/match/${id}`, {headers: {'token': token || ''}});
 
                 let mapData = response.data.gameMap.tiles;
                 let unitData = response.data.units;
@@ -485,7 +482,8 @@ const Game = ({id}) => {
             </div>
 
             <ThemeProvider theme={defaultTheme}>
-                <HoldToConfirmPopUp open={showTurnPopUp} turn={gameData.turn} player={"PlAyeR-?"} onComplete={() => setShowTurnPopUp(false)}/>
+                <HoldToConfirmPopUp open={showTurnPopUp} turn={gameData.turn} player={"PlAyeR-?"}
+                                    onComplete={() => setShowTurnPopUp(false)}/>
                 <CustomPopUp open={getDataFailed} information={"Could not get game data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')
