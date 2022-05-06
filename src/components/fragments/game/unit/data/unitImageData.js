@@ -107,13 +107,13 @@ export const unitImageData = {
                 time: 2,
                 yOffset: '-24px',
             },
-            idle_north_east: {
+            idle_north_west: {
                 y: '96px',
                 frames: 2,
                 time: 2,
                 yOffset: '-24px',
             },
-            idle_north_west: {
+            idle_north_east: {
                 y: '144px',
                 frames: 2,
                 time: 2,

@@ -9,8 +9,8 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
-        this.defenseList = [0, 0, 0]; // archer, knight, war_elephant
-        this.attackDamageList = [0, 0, 0]; // archer, knight, war_elephant
+        this.defense = [0, 0, 0]; // archer, knight, war_elephant
+        this.attackDamage = [0, 0, 0]; // archer, knight, war_elephant
         this.attackRange = 0;
         this.movementRange = 0;
         this.commands = [];
@@ -30,7 +30,10 @@ class UnitModel {
         this.pathGoal = null
         this.path = null;
         this.maxHealth = this.health;
-
+        this.oldX = x;
+        this.oldY = y;
+        this.movementSpeed = 500;
+        this.animation = "idle";
     }
 
     calculatePathToTile = (goalY, goalX, map) => {
@@ -573,6 +576,8 @@ class UnitModel {
     }
 
     move = (x, y) => {
+        this.oldX = this.x;
+        this.oldY = this.y;
         this.x = x;
         this.y = y;
     }
@@ -626,7 +631,7 @@ class UnitModel {
                     break;
             }
 
-            return (this.attackDamageList[otherUnitType] / unit.defenseList[myUnitType]);
+            return (this.attackDamage[otherUnitType] / unit.defense[myUnitType]);
 
         } else {
             return 0;
@@ -647,9 +652,9 @@ class UnitModel {
                 } else if (this.path[1].y >= this.y && this.pathGoal[1] <= this.x) {
                     this.viewDirection = Direction.southWest;
                 } else if (this.path[1].y <= this.y && this.pathGoal[1] <= this.x) {
-                    this.viewDirection = Direction.northEast;
-                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
                     this.viewDirection = Direction.northWest;
+                } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
+                    this.viewDirection = Direction.northEast;
                 }
 
             }
