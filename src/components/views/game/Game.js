@@ -284,7 +284,7 @@ const Game = ({id}) => {
 
         //reset animation
         selectedUnit.animation = "idle";
-        if ((selectedUnit.type === UnitTypes.war_elephant) &&
+        if ((selectedUnit.type === UnitTypes.WAR_ELEPHANT) &&
             (selectedUnit.viewDirection === Direction.north || selectedUnit.viewDirection === Direction.south)) {
             selectedUnit.viewDirection = startViewDirection;
         }
@@ -293,7 +293,7 @@ const Game = ({id}) => {
     const performMovement = async (y, x, steps, verticalMovement, goingSouth, goingEast) => {
         if (verticalMovement) {
             if (goingSouth) {
-                if (selectedUnit.type === UnitTypes.war_elephant) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
                     selectedUnit.viewDirection = Direction.south;
                 } else {
                     if (goingEast) {
@@ -303,7 +303,7 @@ const Game = ({id}) => {
                     }
                 }
             } else {
-                if (selectedUnit.type === UnitTypes.war_elephant) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
                     selectedUnit.viewDirection = Direction.north;
                 } else {
                     if (goingEast) {
@@ -315,7 +315,7 @@ const Game = ({id}) => {
             }
         } else {
             if (goingEast) {
-                if (selectedUnit.type === UnitTypes.war_elephant) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
                     selectedUnit.viewDirection = Direction.east;
                 } else {
                     if (goingSouth) {
@@ -325,7 +325,7 @@ const Game = ({id}) => {
                     }
                 }
             } else {
-                if (selectedUnit.type === UnitTypes.war_elephant) {
+                if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
                     selectedUnit.viewDirection = Direction.west;
                 } else {
                     if (goingSouth) {
