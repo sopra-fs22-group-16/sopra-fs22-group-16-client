@@ -9,8 +9,8 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
-        this.defenseList = [0, 0, 0]; // archer, knight, war_elephant
-        this.attackDamageList = [0, 0, 0]; // archer, knight, war_elephant
+        this.defense = [0, 0, 0]; // archer, knight, war_elephant
+        this.attackDamage = [0, 0, 0]; // archer, knight, war_elephant
         this.attackRange = 0;
         this.movementRange = 0;
         this.commands = [];
@@ -626,7 +626,7 @@ class UnitModel {
                     break;
             }
 
-            return (this.attackDamageList[otherUnitType] / unit.defenseList[myUnitType]);
+            return (this.attackDamage[otherUnitType] / unit.defense[myUnitType]);
 
         } else {
             return 0;
