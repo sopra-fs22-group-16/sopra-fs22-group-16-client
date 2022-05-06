@@ -62,13 +62,10 @@ const Game = ({id}) => {
 
                 let response;
 
-                //response = api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
+                response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
-                // Set Mock map data
-                response = jsonTileMockData;
-
-                let mapData = response.map;
-                let unitData = response.units;
+                let mapData = response.data.gameMap.tiles;
+                let unitData = response.data.units;
 
                 let mapArray = [];
                 let unitArray = [];
@@ -91,8 +88,8 @@ const Game = ({id}) => {
                 });
 
                 setGameData({
-                    gameType: response.gameType,
-                    gameMode: response.gameMode,
+                    gameType: response.data.gameType,
+                    gameMode: response.data.gameMode,
                     map: mapArray,
                     units: unitArray
                 });

@@ -1,101 +1,101 @@
 export const backgroundData = {
-    border: {
-        flat: {
+    BORDER: {
+        FLAT: {
             path: "/tiles/border/flat.png",
         },
-        top: {
+        TOP: {
             path: "/tiles/border/top.png",
         }
     },
-    grass: {
-        flat: {
+    GRASS: {
+        FLAT: {
             path: "/tiles/grass/flat.png",
         },
-        grassy: {
+        GRASSY: {
             path: "/tiles/grass/grassy.png",
         },
-        leafy: {
+        LEAFY: {
             path: "/tiles/grass/leafy.png",
         },
-        leafy_edge_top: {
+        LEAFY_EDGE_TOP: {
             path: "/tiles/grass/leafy_edge_top.png",
         },
-        leafy_edge_bottom: {
+        LEAFY_EDGE_BOTTOM: {
             path: "/tiles/grass/leafy_edge_bottom.png",
         },
-        leafy_edge_left: {
+        LEAFY_EDGE_LEFT: {
             path: "/tiles/grass/leafy_edge_left.png",
         },
-        leafy_edge_right: {
+        LEAFY_EDGE_RIGHT: {
             path: "/tiles/grass/leafy_edge_right.png",
         },
-        leafy_corner_top_left: {
+        LEAFY_CORNER_TOP_LEFT: {
             path: "/tiles/grass/leafy_corner_top_left.png",
         },
-        leafy_corner_top_right: {
+        LEAFY_CORNER_TOP_RIGHT: {
             path: "/tiles/grass/leafy_corner_top_right.png",
         },
-        leafy_corner_bottom_left: {
+        LEAFY_CORNER_BOTTOM_LEFT: {
             path: "/tiles/grass/leafy_corner_bottom_left.png",
         },
-        leafy_corner_bottom_right: {
+        LEAFY_CORNER_BOTTOM_RIGHT: {
             path: "/tiles/grass/leafy_corner_bottom_right.png",
         },
-        leafy_edge_diagonal_top_left: {
+        LEAFY_EDGE_DIAGONAL_TOP_LEFT: {
             path: "/tiles/grass/leafy_edge_diagonal_top_left.png",
         },
-        leafy_edge_diagonal_top_right: {
+        LEAFY_EDGE_DIAGONAL_TOP_RIGHT: {
             path: "/tiles/grass/leafy_edge_diagonal_top_right.png",
         },
-        leafy_edge_diagonal_bottom_left: {
+        LEAFY_EDGE_DIAGONAL_BOTTOM_LEFT: {
             path: "/tiles/grass/leafy_edge_diagonal_bottom_left.png",
         },
-        leafy_edge_diagonal_bottom_right: {
+        LEAFY_EDGE_DIAGONAL_BOTTOM_RIGHT: {
             path: "/tiles/grass/leafy_edge_diagonal_bottom_right.png",
         },
     },
-    bridge: {
-        middle: {
+    BRIDGE: {
+        MIDDLE: {
             path: "/tiles/bridge/middle.png",
         },
-        top: {
+        TOP: {
             path: "/tiles/bridge/top.png",
         },
-        bottom: {
+        BOTTOM: {
             path: "/tiles/bridge/bottom.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        left: {
+        LEFT: {
             path: "/tiles/bridge/left.png",
         },
-        right: {
+        RIGHT: {
             path: "/tiles/bridge/right.png",
         },
-        top_left: {
+        TOP_LEFT: {
             path: "/tiles/bridge/top_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        top_right: {
+        TOP_RIGHT: {
             path: "/tiles/bridge/top_right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        bottom_left: {
+        BOTTOM_LEFT: {
             path: "/tiles/bridge/bottom_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        bottom_right: {
+        BOTTOM_RIGHT: {
             path: "/tiles/bridge/bottom_right.png",
             animation: {
                 frames: 2,
@@ -104,102 +104,102 @@ export const backgroundData = {
         }
 
     },
-    river: {
-        flat: {
+    RIVER: {
+        FLAT: {
             path: "/tiles/river/flat.png",
         },
-        top: {
+        TOP: {
             path: "/tiles/river/top.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        bottom: {
+        BOTTOM: {
             path: "/tiles/river/bottom.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        left: {
+        LEFT: {
             path: "/tiles/river/left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        right: {
+        RIGHT: {
             path: "/tiles/river/right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_top_left: {
+        CORNER_TOP_LEFT: {
             path: "/tiles/river/corner_top_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_top_right: {
+        CORNER_TOP_RIGHT: {
             path: "/tiles/river/corner_top_right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_bottom_left: {
+        CORNER_BOTTOM_LEFT: {
             path: "/tiles/river/corner_bottom_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_bottom_right: {
+        CORNER_BOTTOM_RIGHT: {
             path: "/tiles/river/corner_bottom_right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_inverted_top_left: {
+        CORNER_INVERTED_TOP_LEFT: {
             path: "/tiles/river/corner_inverted_top_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_inverted_top_right: {
+        CORNER_INVERTED_TOP_RIGHT: {
             path: "/tiles/river/corner_inverted_top_right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_inverted_bottom_left: {
+        CORNER_INVERTED_BOTTOM_LEFT: {
             path: "/tiles/river/corner_inverted_bottom_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        corner_inverted_bottom_right: {
+        CORNER_INVERTED_BOTTOM_RIGHT: {
             path: "/tiles/river/corner_inverted_bottom_right.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        border_left: {
+        BORDER_LEFT: {
             path: "/tiles/river/border_left.png",
             animation: {
                 frames: 2,
                 time: 2,
             }
         },
-        border_right: {
+        BORDER_RIGHT: {
             path: "/tiles/river/border_right.png",
             animation: {
                 frames: 2,

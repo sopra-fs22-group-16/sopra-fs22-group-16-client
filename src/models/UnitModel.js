@@ -18,7 +18,7 @@ class UnitModel {
         this.userId = null;
         Object.assign(this, data);
         // if teamId === 0 (red) look southWest/west else teamId === 1 (blue) look southEast/east
-        if (this.type === UnitTypes.war_elephant) {
+        if (this.type === UnitTypes.WAR_ELEPHANT) {
             this.viewDirection = this.teamId ? Direction.west : Direction.east;
         } else {
             this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
@@ -607,26 +607,26 @@ class UnitModel {
 
             let otherUnitType = null;
             switch (unit.type) {
-                case 'archer' :
+                case 'ARCHER' :
                     otherUnitType = 0;
                     break;
-                case 'knight' :
+                case 'KNIGHT' :
                     otherUnitType = 1;
                     break;
-                case 'war_elephant' :
+                case 'WAR_ELEPHANT' :
                     otherUnitType = 2;
                     break;
             }
 
             let myUnitType = null;
             switch (this.type) {
-                case 'archer' :
+                case 'ARCHER' :
                     myUnitType = 0;
                     break;
-                case 'knight' :
+                case 'KNIGHT' :
                     myUnitType = 1;
                     break;
-                case 'war_elephant' :
+                case 'WAR_ELEPHANT' :
                     myUnitType = 2;
                     break;
             }
@@ -640,7 +640,7 @@ class UnitModel {
 
     calculateIdleDirection = () => {
         if (this.path.length > 1) {
-            if (this.type === 'war_elephant') {
+            if (this.type === 'WAR_ELEPHANT') {
                 if (this.path[1].x < this.x) {
                     this.viewDirection = Direction.west;
                 } else if (this.path[1].x > this.x) {
