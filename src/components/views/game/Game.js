@@ -10,7 +10,6 @@ import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
 import {useHistory} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import {api} from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
@@ -18,7 +17,7 @@ import "styles/views/game/Game.scss"
 import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
-import {Direction} from "../../fragments/game/unit/Direction";
+import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -378,6 +377,7 @@ const Game = ({id}) => {
             </div>
 
             <ThemeProvider theme={defaultTheme}>
+                <HoldToConfirmPopUp open={true} onComplete={() => {console.log("COMPLETE!")}}/>
                 <CustomPopUp open={getDataFailed} information={"Could not get game data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')
