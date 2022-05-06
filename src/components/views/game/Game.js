@@ -10,11 +10,11 @@ import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
 import {useHistory} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
+import {api} from "../../../helpers/api";
 
 import "styles/views/game/Game.scss"
 
 // MockData
-import jsonTileMockData from "./jsonTileMockData";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
@@ -28,11 +28,16 @@ const Game = ({id}) => {
     const history = useHistory();
 
     const token = localStorage.getItem("token");
-    //TODO: replace with storage
-    //const myTeam = localStorage.getItem("team");
-    const myTeam = 0;
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', map: [[]], units: []});
+    const playerId = parseInt(localStorage.getItem("playerId"));
+    console.log("playerId: " + playerId);
+
+    // TODO: get team id
+    const teamId = 0;
+    console.log("teamId: " + teamId);
+
+
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, players: [], map: [[]], units: []});
 
     const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
     const [damageIndicator, setDamageIndicator] = useState({
@@ -49,6 +54,7 @@ const Game = ({id}) => {
 
     const [lock, setLock] = useState(false);
 
+    const [showTurnPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
@@ -57,15 +63,12 @@ const Game = ({id}) => {
         async function fetchData() {
             try {
 
-                let response;
+                const response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
-                //response = api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
+                console.log(response.data);
 
-                // Set Mock map data
-                response = jsonTileMockData;
-
-                let mapData = response.map;
-                let unitData = response.units;
+                let mapData = response.data.gameMap.tiles;
+                let unitData = response.data.units;
 
                 let mapArray = [];
                 let unitArray = [];
@@ -88,11 +91,16 @@ const Game = ({id}) => {
                 });
 
                 setGameData({
-                    gameType: response.gameType,
-                    gameMode: response.gameMode,
+                    gameType: response.data.gameType,
+                    gameMode: response.data.gameMode,
+                    turn: 0,
+                    players: [],
+                    turnId: 0,
                     map: mapArray,
                     units: unitArray
                 });
+
+                setShowTurnPopUp(true);
 
             } catch (error) {
                 console.log(error);
@@ -257,7 +265,7 @@ const Game = ({id}) => {
 
     const onClickUnit = (unit) => {
         if (!lock) {
-            if (unit.teamId === myTeam) {
+            if (unit.userId === playerId) {
                 if (selectedUnit) {
                     selectedUnit.showRangeIndicator(false);
                     setDropDown({...dropDown, open: false})
@@ -270,7 +278,7 @@ const Game = ({id}) => {
                 }
                 selectUnit(unit);
 
-            } else if (selectedUnit && unit.teamId !== myTeam) {
+            } else if (selectedUnit && unit.teamId !== teamId) {
 
                 const tile = gameData.map[unit.y][unit.x];
 
@@ -283,7 +291,7 @@ const Game = ({id}) => {
                         selectedUnit.calculateIdleDirection();
                     }
 
-                    let leftRed = myTeam === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
+                    let leftRed = teamId === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
 
                     let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
                     let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
@@ -294,7 +302,7 @@ const Game = ({id}) => {
                     let leftPercentage = inGoingPercentage;
                     let rightPercentage = outGoingPercentage;
 
-                    if (myTeam === 0 && leftRed || myTeam === 1 && !leftRed) {
+                    if (teamId === 0 && leftRed || teamId === 1 && !leftRed) {
                         leftPercentage = outGoingPercentage;
                         rightPercentage = inGoingPercentage;
                     }
@@ -377,7 +385,7 @@ const Game = ({id}) => {
             </div>
 
             <ThemeProvider theme={defaultTheme}>
-                <HoldToConfirmPopUp open={true} onComplete={() => {console.log("COMPLETE!")}}/>
+                <HoldToConfirmPopUp open={showTurnPopUp} turn={gameData.turn} player={"PlAyeR-?"} onComplete={() => setShowTurnPopUp(false)}/>
                 <CustomPopUp open={getDataFailed} information={"Could not get game data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')

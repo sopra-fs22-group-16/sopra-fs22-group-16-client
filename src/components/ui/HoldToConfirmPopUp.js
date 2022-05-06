@@ -20,15 +20,18 @@ const HoldToConfirmPopUp = props => {
     const startCounter = () => {
         if (intervalRef.current) return;
         intervalRef.current = setInterval(() => {
+            let prev;
             setProgress((prevProgress) => {
+                prev = prevProgress;
                 if (prevProgress >= 100) {
-                    props.onComplete();
-                    stopCounter();
                     return prevProgress;
                 } else {
                     return (prevProgress + 1);
                 }
             });
+            if (prev >= 100) {
+                props.onComplete();
+            }
 
         }, timeToCompleteMs / 100);
     };

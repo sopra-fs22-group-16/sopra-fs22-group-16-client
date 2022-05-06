@@ -1,5 +1,5 @@
 export const unitImageData = {
-    knight: {
+    KNIGHT: {
         blue: {
             path: "/units/knight/knight_blue.png",
         },
@@ -86,7 +86,7 @@ export const unitImageData = {
             }
         }
     },
-    archer: {
+    ARCHER: {
         blue: {
             path: "/units/archer/archer_blue.png",
         },
@@ -159,7 +159,7 @@ export const unitImageData = {
             }
         }
     },
-    war_elephant: {
+    WAR_ELEPHANT: {
         blue: {
             path: "/units/war_elephant/war_elephant_blue.png",
         },
