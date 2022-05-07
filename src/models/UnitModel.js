@@ -23,7 +23,7 @@ class UnitModel {
         } else {
             this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
         }
-        this.selected = false;
+        this.performedAction = false;
         this.traversableTiles = null;
         this.tilesInAttackRange = null;
         this.tilesInAttackRangeSpecificTile = null;

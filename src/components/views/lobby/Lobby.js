@@ -134,7 +134,7 @@ const Lobby = ({ id }) => {
             history.push(`/game/${id}`);
         }
         else {
-            window.location = window.location.href;
+            obtainAndLoadLobbyInfo();
         }
     }
 
@@ -162,35 +162,35 @@ const Lobby = ({ id }) => {
         }
     }
 
-    useEffect(() => {
-        async function fetchData() {
-            try {
+    const obtainAndLoadLobbyInfo = async () => {
+        try {
 
-                const apiResponse = await api.get(`/v1/game/lobby/${id}`,
-                    {
-                        headers: { 'token': token }
-                    }
-                );
+            const apiResponse = await api.get(`/v1/game/lobby/${id}`,
+                {
+                    headers: { 'token': token }
+                }
+            );
 
-                const apiResponsePlayers = apiResponse.data.players;
+            const apiResponsePlayers = apiResponse.data.players;
 
-                //set different values obtained from the API
-                setGameMode(apiResponse.data.gameMode);
-                setVisibility(apiResponse.data.visibility);
-                setPresentPlayers(apiResponsePlayers.length);
-                setIsHost(apiResponse.data.hostId === parseInt(localStorage.getItem("playerId")));
-                setReadyPlayers(apiResponsePlayers.filter(p => p.ready === true).length);
-                setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
-                setName(apiResponse.data.name);
-                setPlayers(apiResponse.data.players);
-                setInvitationCode(apiResponse.data.invitationCode);
+            //set different values obtained from the API
+            setGameMode(apiResponse.data.gameMode);
+            setVisibility(apiResponse.data.visibility);
+            setPresentPlayers(apiResponsePlayers.length);
+            setIsHost(apiResponse.data.hostId === parseInt(localStorage.getItem("playerId")));
+            setReadyPlayers(apiResponsePlayers.filter(p => p.ready === true).length);
+            setTotalPlayers(apiResponse.data.gameMode === 'ONE_VS_ONE' ? 2 : 4);
+            setName(apiResponse.data.name);
+            setPlayers(apiResponse.data.players);
+            setInvitationCode(apiResponse.data.invitationCode);
 
-            } catch (error) {
-                setGetDataFailed(true);
-            }
+        } catch (error) {
+            setGetDataFailed(true);
         }
+    }
 
-        fetchData();
+    useEffect(() => {
+        obtainAndLoadLobbyInfo();
     }, [id, token]);
 
     return (
@@ -201,6 +201,7 @@ const Lobby = ({ id }) => {
                     // Only show update link to host
                     isHost ? <Link
                         className="lobby link"
+                        onClick={() => notReady()}
                         to={`${id}/update`}>
                         update lobby information</Link> : null
                 }
