@@ -11,7 +11,7 @@ const HoldToConfirmPopUp = props => {
     const [progress, setProgress] = useState(0);
     const intervalRef = useRef(null);
 
-    const timeToCompleteMs = 2000;
+    const timeToCompleteMs = 1000;
 
     useEffect(() => {
         return () => stopCounter(); // when App is unmounted we should stop counter
@@ -34,7 +34,7 @@ const HoldToConfirmPopUp = props => {
                 props.onComplete();
             }
 
-        }, timeToCompleteMs / 100);
+        }, props.timeToCompleteInMs / 100);
     };
 
     const stopCounter = () => {
@@ -66,10 +66,12 @@ const HoldToConfirmPopUp = props => {
 HoldToConfirmPopUp.propTypes = {
     open: PropTypes.bool,
     onComplete: PropTypes.func,
+    timeToCompleteInMs: PropTypes.number
 }
 
 HoldToConfirmPopUp.defaultProps = {
     open: false,
+    timeToCompleteInMs: 1000,
 };
 
 export default HoldToConfirmPopUp;
