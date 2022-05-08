@@ -45,7 +45,7 @@ const DropDown = props => {
     return (
         props.open ?
             <div style={dropDownPosition} className={'dropDown'}>
-                <img className={'dropDownImage'} src={props.showAttack ? dropDownLarge : dropDownSmall} alt={''}/>
+                <img className={'dropDownImage'} src={(props.showAttack && props.showWait) ? dropDownLarge : dropDownSmall} alt={''}/>
                 {
                     props.showAttack ?
                         <div className={'selection first'} onClick={onClickAttack}>
@@ -55,11 +55,17 @@ const DropDown = props => {
                         :
                         null
                 }
-                <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
-                    <img className={'light'} src={waitLight} alt={"wait"}/>
-                    <img className={'dark'} src={waitDark} alt={''}/>
-                </div>
-                <div className={'selection ' + (props.showAttack ? 'third' : 'second')} onClick={onClickCancel}>
+                {
+                    props.showWait ?
+                        <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
+                            <img className={'light'} src={waitLight} alt={"wait"}/>
+                            <img className={'dark'} src={waitDark} alt={''}/>
+                        </div>
+                        :
+                        null
+                }
+
+                <div className={'selection ' + ((props.showWait && props.showAttack) ? 'third' : 'second')} onClick={onClickCancel}>
                     <img className={'light'} src={cancelLight} alt={"cancel"}/>
                     <img className={'dark'} src={cancelDark} alt={''}/>
                 </div>
@@ -76,6 +82,7 @@ DropDown.propTypes = {
     y: PropTypes.number,
     x: PropTypes.number,
     showAttack: PropTypes.bool,
+    showWait: PropTypes.bool,
     onClickAttack: PropTypes.func,
     onClickWait: PropTypes.func,
     onClickCancel: PropTypes.func,
