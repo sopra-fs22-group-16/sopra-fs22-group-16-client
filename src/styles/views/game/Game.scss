@@ -64,3 +64,23 @@
     line-height: 36px;
     color: #365144;
 }
+
+.turnIndicatorContainer {
+
+
+
+    &.turn {
+        margin-top: 0;
+        font-size: xx-large;
+        font-weight: bold;
+    }
+
+    &.player {
+        font-size: x-large;
+        margin-bottom: 30px
+    }
+
+    &.information {
+        margin-bottom: 0;
+    }
+}

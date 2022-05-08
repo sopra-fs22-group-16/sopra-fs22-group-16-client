@@ -30,6 +30,7 @@ const HoldToConfirmPopUp = props => {
                 }
             });
             if (prev >= 100) {
+                stopCounter();
                 props.onComplete();
             }
 
@@ -46,8 +47,13 @@ const HoldToConfirmPopUp = props => {
 
     return (
         <CustomPopUp
-            information={<div><h1>Turn {props.turn}</h1><h2>{props.player}</h2><p>Hold your left Mouse to Start</p>
-            </div>} open={props.open} onMouseDown={startCounter} onMouseUp={stopCounter}>
+            information={props.children} open={props.open}
+            onMouseDown={startCounter}
+            onMouseUp={stopCounter}
+            onTouchStart={startCounter}
+            onTouchEnd={stopCounter}
+            onTouchCancel={stopCounter}
+        >
             <ThemeProvider theme={defaultTheme}>
                 <div style={{width: '100%'}}>
                     <LinearProgress color="primary" variant={"determinate"} value={progress}/>
@@ -59,15 +65,11 @@ const HoldToConfirmPopUp = props => {
 
 HoldToConfirmPopUp.propTypes = {
     open: PropTypes.bool,
-    turn: PropTypes.number,
-    player: PropTypes.string,
     onComplete: PropTypes.func,
 }
 
 HoldToConfirmPopUp.defaultProps = {
     open: false,
-    turn: 0,
-    player: "Player-?",
 };
 
 export default HoldToConfirmPopUp;
