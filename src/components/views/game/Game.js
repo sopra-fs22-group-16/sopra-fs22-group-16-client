@@ -35,8 +35,9 @@ const Game = ({id}) => {
 
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
+    let playerIdCurrentTurn = localStorage.getItem("playerIdCurrentTurn");
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, playerIdTurn: 0, players: {}, map: [[]], units: []});
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, players: {}, map: [[]], units: []});
     const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
     const [damageIndicator, setDamageIndicator] = useState({
         open: false,
@@ -97,11 +98,12 @@ const Game = ({id}) => {
             // TODO: When api response is updated on the server
             //  set the turn, playerIdTurn, and players array based on the response
 
+            setPlayerIdCurrentTurn(0);
+
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
                 turn: 0,
-                playerIdTurn: "0",
                 players: {
                     "0": {
                         name: "player-0",
@@ -422,7 +424,7 @@ const Game = ({id}) => {
                     let leftPercentage = inGoingPercentage;
                     let rightPercentage = outGoingPercentage;
 
-                    if (teamId === 0 && leftRed || teamId === 1 && !leftRed) {
+                    if ((teamId === 0 && leftRed) || (teamId === 1 && !leftRed)) {
                         leftPercentage = outGoingPercentage;
                         rightPercentage = inGoingPercentage;
                     }
@@ -454,6 +456,11 @@ const Game = ({id}) => {
         unit.showRangeIndicator(true);
     }
 
+    const setPlayerIdCurrentTurn = (id) => {
+        playerIdCurrentTurn = id;
+        localStorage.setItem("playerIdCurrentTurn", id);
+    }
+
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
         Object.keys(msg).forEach((key) => {
@@ -461,10 +468,10 @@ const Game = ({id}) => {
                 case 'turnInfo':
                     let data = new TurnData(msg[key]);
                     setShowTurnPopUp(true);
+                    setPlayerIdCurrentTurn(data.playerId);
                     setGameData({
                         ...gameData,
-                        turn: data.turn,
-                        playerIdTurn: data.playerId,
+                        turn: data.turn
                     })
                     break;
                 default:
@@ -555,7 +562,7 @@ const Game = ({id}) => {
                         onComplete={() => setShowTurnPopUp(false)}>
                         <div className={"turnIndicatorContainer"}>
                             <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
-                            <h2 style={{color: gameData.players[gameData.playerIdTurn].teamId === 0 ? '#873535' : '#516899'}} className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdTurn].name}</h2>
+                            <h2 style={{color: gameData.players[playerIdCurrentTurn].teamId === 0 ? '#873535' : '#516899'}} className={"turnIndicatorContainer player"}>{gameData.players[playerIdCurrentTurn].name}</h2>
                             <p className={"turnIndicatorContainer information"}>Hold to Start</p>
                         </div>
                     </HoldToConfirmPopUp>
