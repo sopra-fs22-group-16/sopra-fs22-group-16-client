@@ -1,63 +1,66 @@
 @mixin transform($val) {
-  -webkit-transform: $val;
-  -moz-transform: $val;
-  -ms-transform: $val;
-  transform: $val;
+    -webkit-transform: $val;
+    -moz-transform: $val;
+    -ms-transform: $val;
+    transform: $val;
 }
 
 #gameContainer {
-  width: 100vw;
-  height: 100vh;
-  overflow: hidden;
-  position: relative;
-
-  background: #c9b27d; /* border color */
+    width: 100vw;
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+    background: #c9b27d; /* border color */
 }
 
 .loadingContainer {
-  position: absolute;
-  bottom: 0;
-  width: 100vw;
-  justify-content: center;
+    position: absolute;
+    bottom: 0;
+    width: 100vw;
+    justify-content: center;
 }
 
-.surrenderFlagContainer{
-  position: absolute;
-  bottom: -24px;
-  left: -57px;
+.surrenderFlagContainer {
+    position: absolute;
+    bottom: -24px;
+    left: -57px;
+    min-width: 162px;
+    min-height: 120px;
 
-  min-width: 162px;
-  min-height: 120px;
-
-  img {
-    width: 162px;
-    height: 120px;
-  }
+    img {
+        width: 162px;
+        height: 120px;
+    }
 }
 
 .surrenderFlagContainer:hover img {
-  @include transform(rotateZ(25deg) rotateY(0deg));
-
-  animation: wave 2s infinite ease-in-out -0.5s;
-
-  transform-origin: 50% 100%;
+    @include transform(rotateZ(25deg) rotateY(0deg));
+    animation: wave 2s infinite ease-in-out -0.5s;
+    transform-origin: 50% 100%;
 }
 
 @keyframes wave {
-  0% {
-    @include transform(rotateZ(25deg) rotateY(0deg));
+    0% {
+        @include transform(rotateZ(25deg) rotateY(0deg));
+    }
 
-  }
-  50% {
-    @include transform(rotateZ(-25deg) rotateY(180deg));
-  }
+    50% {
+        @include transform(rotateZ(-25deg) rotateY(180deg));
+    }
 }
 
 .pixelated {
-  // Disable antialiasing on images
-  image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
-  image-rendering: -moz-crisp-edges; /* Firefox                        */
-  image-rendering: -o-crisp-edges; /* Opera                          */
-  image-rendering: pixelated; /* Chrome */
-  -ms-interpolation-mode: nearest-neighbor; /* IE8+ */
+    // Disable antialiasing on images
+    image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
+    image-rendering: -moz-crisp-edges; /* Firefox                        */
+    image-rendering: -o-crisp-edges; /* Opera                          */
+    image-rendering: pixelated; /* Chrome */
+    -ms-interpolation-mode: nearest-neighbor; /* IE8+ */
+}
+
+.winnerWindow {
+    font-weight: 700;
+    font-size: 3em;
+    line-height: 36px;
+    color: #365144;
 }
