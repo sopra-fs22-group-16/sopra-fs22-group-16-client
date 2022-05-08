@@ -9,8 +9,6 @@ import Keyframes from "../../../../helpers/Keyframes";
 
 const Unit = props => {
 
-    useEffect(() => {}, [props.unit.x, props.unit.y])
-
     const playerId = parseInt(localStorage.getItem("playerId"));
 
     let tileSize = 48;
@@ -28,10 +26,6 @@ const Unit = props => {
         default:
             console.log("Team id " + props.unit.teamId + " not provided or does not match!");
             break;
-    }
-
-    const componentDidUpdate = (prevProps) => {
-        console.log(prevProps)
     }
 
     let unitStyle = {
