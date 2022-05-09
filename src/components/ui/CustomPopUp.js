@@ -15,6 +15,9 @@ const CustomPopUp = props => {
             onMouseDown={props.onMouseDown}
             onMouseUp={props.onMouseUp}
             onClick={props.onClick}
+            onTouchStart={props.onTouchStart}
+            onTouchEnd={props.onTouchEnd}
+            onTouchCancel={props.onTouchCancel}
         >
             <div className={"popUpContainer"}>
                 <Stack
@@ -39,6 +42,9 @@ CustomPopUp.propTypes = {
     onClick: PropTypes.func,
     onMouseDown: PropTypes.func,
     onMouseUp: PropTypes.func,
+    onTouchStart: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchCancel: PropTypes.func,
 }
 
 export default CustomPopUp;

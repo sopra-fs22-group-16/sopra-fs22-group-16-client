@@ -5,14 +5,12 @@ import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";
 import healthSource from "styles/images/ui/healthbar/health_bar.png";
 import markerSource from "styles/images/ui/marker.png";
-import {keyframes} from "@emotion/react";
 import Keyframes from "../../../../helpers/Keyframes";
 
 const Unit = props => {
 
-    //TODO: replace with storage
-    //const myTeam = localStorage.getItem("team");
-    const myTeam = 0;
+    const playerId = parseInt(localStorage.getItem("playerId"));
+    let playerIdCurrentTurn = parseInt(localStorage.getItem("playerIdCurrentTurn"));
 
     let tileSize = 48;
 
@@ -60,11 +58,13 @@ const Unit = props => {
         pointerEvents : 'none'
     }
 
-    let markerStyle = {
-        position: 'relative',
+    let markerContainerStyle = {
         top: -135,
         right: -14,
-        pointerEvents: 'none'
+    }
+
+    let markerStyle = {
+        animation: "unitMarkerMovement " + (1.0 + Math.random()) + "s infinite ease-in-out " + Math.random() +"s",
     }
 
     return (
@@ -82,8 +82,11 @@ const Unit = props => {
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
             <img src={healthSource} style={healthBoxStyle} alt={''}/>
             <div style={healthBarStyle} />
-            {
-                props.unit.teamId == myTeam && props.unit.performedAction == false ? <img src={markerSource} style={markerStyle} alt={''} /> : null
+            { (props.unit.userId === playerId && props.unit.performedAction === false && props.unit.userId === playerIdCurrentTurn) ?
+                <div className={"unitMarkerContainer"} style={markerContainerStyle}>
+                    <img className={"unitMaker"} style={markerStyle} src={markerSource} alt={''} />
+                </div>
+                : null
             }
         </div>
     );

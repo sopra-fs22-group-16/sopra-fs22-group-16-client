@@ -1,43 +1,44 @@
-import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
+import React, {useEffect, useState} from "react";
+import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
-import { defaultTheme } from "styles/themes/defaulTheme";
-import { LinearProgress } from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
+import {defaultTheme} from "styles/themes/defaulTheme";
+import {LinearProgress} from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import { Button } from "components/ui/Button";
+import {Button} from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import { useHistory } from "react-router-dom";
+import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import { api } from "../../../helpers/api";
+import {api} from "../../../helpers/api";
+import {Direction} from "../../fragments/game/unit/Direction";
+import Socket from "../../socket/Socket";
+import DropDown from "../../ui/DropDown";
+import DamageIndicator from "../../ui/DamageIndicator";
+import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
+import {UnitTypes} from "../../fragments/game/unit/data/UnitTypes";
+import TurnData from "../../../models/TurnData";
 
 import "styles/views/game/Game.scss"
 
-// MockData
-import jsonTileMockData from "./jsonTileMockData";
-import DropDown from "../../ui/DropDown";
-import DamageIndicator from "../../ui/DamageIndicator";
-import { Direction } from "../../fragments/game/unit/Direction";
-import Keyframes from "../../../helpers/Keyframes";
-import { ThemeProvider } from "@emotion/react";
-import { UnitTypes } from "../../fragments/game/unit/data/UnitTypes";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
 }
 
-const Game = ({ id }) => {
+const Game = ({id}) => {
 
     const history = useHistory();
+    const location = useLocation();
 
     const token = localStorage.getItem("token");
-    //TODO: replace with storage
-    //const myTeam = localStorage.getItem("team");
-    const myTeam = 0;
 
-    const [gameData, setGameData] = useState({ gameMode: '', gameType: '', map: [[]], units: [] });
+    const playerId = parseInt(localStorage.getItem("playerId"));
+    const teamId = playerId; // TODO: Get Team Id
+    let playerIdCurrentTurn = localStorage.getItem("playerIdCurrentTurn");
 
-    const [dropDown, setDropDown] = useState({ open: false, showAttack: false, y: 0, x: 0, target: null });
+    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, players: {}, map: [[]], units: []});
+    const [dropDown, setDropDown] = useState({open: false, showAttack: false, y: 0, x: 0, target: null});
     const [damageIndicator, setDamageIndicator] = useState({
         open: false,
         y: 0,
@@ -49,8 +50,10 @@ const Game = ({ id }) => {
 
 
     const [selectedUnit, setSelectedUnit] = useState(null);
+
     const [lock, setLock] = useState(false);
 
+    const [showTurnPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
@@ -60,53 +63,71 @@ const Game = ({ id }) => {
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
 
-
     useEffect(() => {
-        async function fetchData() {
-            try {
-
-                let response;
-
-                response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
-
-                let mapData = response.data.gameMap.tiles;
-                let unitData = response.data.units;
-
-                let mapArray = [];
-                let unitArray = [];
-
-                mapData.forEach((row, y) => {
-                    mapArray.push([]);
-                    row.forEach((tile, x) => {
-                        mapArray[y].push(new TileModel(y, x, mapData[y][x]));
-                    });
-                });
-
-                unitData.forEach((unit) => {
-                    let y = unit.position.y;
-                    let x = unit.position.x;
-
-                    delete unit.position;
-                    let unitModel = new UnitModel(y, x, unit);
-                    mapArray[y][x].unit = unitModel;
-                    unitArray.push(unitModel);
-                });
-
-                setGameData({
-                    gameType: response.data.gameType,
-                    gameMode: response.data.gameMode,
-                    map: mapArray,
-                    units: unitArray
-                });
-
-            } catch (error) {
-                console.log(error);
-                setGetDataFailed(true);
-            }
-        }
-
-        fetchData();
+        obtainAndLoadGameData();
     }, []);
+
+    const obtainAndLoadGameData = async () => {
+        try {
+
+            const response = await api.get(`/v1/game/match/${id}`, {headers: {'token': token || ''}});
+
+            let mapData = response.data.gameMap.tiles;
+            let unitData = response.data.units;
+
+            let mapArray = [];
+            let unitArray = [];
+
+            mapData.forEach((row, y) => {
+                mapArray.push([]);
+                row.forEach((tile, x) => {
+                    mapArray[y].push(new TileModel(y, x, mapData[y][x]));
+                });
+            });
+
+            unitData.forEach((unit) => {
+                let y = unit.position.y;
+                let x = unit.position.x;
+
+                delete unit.position;
+                let unitModel = new UnitModel(y, x, unit);
+                mapArray[y][x].unit = unitModel;
+                unitArray.push(unitModel);
+            });
+
+            // TODO: When api response is updated on the server
+            //  set the turn, playerIdTurn, and players array based on the response
+
+            setPlayerIdCurrentTurn(0);
+
+            setGameData({
+                gameType: response.data.gameType,
+                gameMode: response.data.gameMode,
+                turn: 0,
+                players: {
+                    "0": {
+                        name: "player-0",
+                        teamId: 0,
+                    },
+                    "1": {
+                        name: "player-1",
+                        teamId: 1,
+                    }
+                },
+                map: mapArray,
+                units: unitArray
+            });
+
+            setShowTurnPopUp(true);
+
+            console.log(unitArray)
+            console.log(token)
+
+        } catch (error) {
+            console.log(error);
+            setGetDataFailed(true);
+        }
+    }
 
 
     const onClickTile = (tile) => {
@@ -114,18 +135,18 @@ const Game = ({ id }) => {
             if (selectedUnit && selectedUnit.traversableTiles && selectedUnit.traversableTiles.includes(tile)) {
                 // Show path to traversable tile
                 selectedUnit.showPathIndicator(false);
-                setDropDown({ ...dropDown, open: false })
-                setDamageIndicator({ ...damageIndicator, open: false });
+                setDropDown({...dropDown, open: false})
+                setDamageIndicator({...damageIndicator, open: false});
 
                 selectedUnit.calculatePathToTile(tile.y, tile.x, gameData.map);
                 selectedUnit.calculateIdleDirection();
                 selectedUnit.showPathIndicator(true);
-                setGameData({ ...gameData });
+                setGameData({...gameData});
                 if (selectedUnit.tilesInAttackRangeSpecificTile[tile.y] && selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x]) {
-                    setDropDown({ open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                    setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile})
                 } else {
                     // Show small drop down as no unit is in range
-                    setDropDown({ open: true, showAttack: false, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                    setDropDown({open: true, showAttack: false, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile})
                 }
 
             } else if (selectedUnit && (!tile.traversableTiles?.includes(tile) && !tile.tilesInAttackRange?.includes(tile))) {
@@ -133,9 +154,9 @@ const Game = ({ id }) => {
                 selectedUnit.showRangeIndicator(false);
                 selectedUnit.showPathIndicator(false);
                 setSelectedUnit(null);
-                setDropDown({ ...dropDown, open: false })
-                setDamageIndicator({ ...damageIndicator, open: false });
-                setGameData({ ...gameData });
+                setDropDown({...dropDown, open: false})
+                setDamageIndicator({...damageIndicator, open: false});
+                setGameData({...gameData});
             }
         }
     }
@@ -157,8 +178,8 @@ const Game = ({ id }) => {
 
             selectedUnit.showPathIndicator(false);
             selectedUnit.showRangeIndicator(false);
-            setDropDown({ ...dropDown, open: false });
-            setDamageIndicator({ ...damageIndicator, open: false });
+            setDropDown({...dropDown, open: false});
+            setDamageIndicator({...damageIndicator, open: false});
 
             await executePathMovement();
 
@@ -198,9 +219,9 @@ const Game = ({ id }) => {
             selectedUnit.traversableTiles = null;
             selectedUnit.tilesInAttackRange = selectedUnit.tilesInAttackRangeSpecificTile[tile.y][tile.x];
             selectedUnit.showRangeIndicator(true);
-            setDropDown({ ...dropDown, open: false });
-            setDamageIndicator({ ...damageIndicator, open: false });
-            setGameData({ ...gameData });
+            setDropDown({...dropDown, open: false});
+            setDamageIndicator({...damageIndicator, open: false});
+            setGameData({...gameData});
 
         }
     }
@@ -227,7 +248,7 @@ const Game = ({ id }) => {
             selectedUnit.traversableTiles = null;
             selectedUnit.tilesInAttackRange = null;
 
-            setDropDown({ ...dropDown, open: false });
+            setDropDown({...dropDown, open: false});
 
             await executePathMovement();
 
@@ -347,39 +368,39 @@ const Game = ({ id }) => {
             }
         }
         selectedUnit.move(x, y);
-        setGameData({ ...gameData });
+        setGameData({...gameData});
         let time = (selectedUnit.movementSpeed * steps);
         await timer(time);
     }
 
 
-    const onClickCancel = (tile) => {
+    const onClickCancel = () => {
         selectedUnit.showRangeIndicator(false);
         selectedUnit.showPathIndicator(false);
         setSelectedUnit(null);
-        setGameData({ ...gameData });
-        setDropDown({ ...dropDown, open: false })
-        setDamageIndicator({ ...damageIndicator, open: false });
+        setGameData({...gameData});
+        setDropDown({...dropDown, open: false})
+        setDamageIndicator({...damageIndicator, open: false});
     }
 
 
     const onClickUnit = (unit) => {
         //if(!lock && unit.performedAction === false){
         if (!lock) {
-            if (unit.teamId === myTeam) {
+            if (unit.userId === playerId) {
                 if (selectedUnit) {
                     selectedUnit.showRangeIndicator(false);
-                    setDropDown({ ...dropDown, open: false })
-                    setDamageIndicator({ ...damageIndicator, open: false });
+                    setDropDown({...dropDown, open: false})
+                    setDamageIndicator({...damageIndicator, open: false});
 
                     if (selectedUnit.path) {
                         selectedUnit.showPathIndicator(false);
-                        setGameData({ ...gameData });
+                        setGameData({...gameData});
                     }
                 }
                 selectUnit(unit);
 
-            } else if (selectedUnit && unit.teamId !== myTeam) {
+            } else if (selectedUnit && unit.teamId !== teamId) {
 
                 const tile = gameData.map[unit.y][unit.x];
 
@@ -392,7 +413,7 @@ const Game = ({ id }) => {
                         selectedUnit.calculateIdleDirection();
                     }
 
-                    let leftRed = myTeam === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
+                    let leftRed = teamId === 0 ? (selectedUnit.x > unit.x) : (selectedUnit.x <= unit.x);
 
                     let outGoingDamage = selectedUnit.calculateOutgoingAttackDamage(unit, gameData.map);
                     let inGoingDamage = unit.calculateOutgoingAttackDamage(selectedUnit, gameData.map) / 3;
@@ -403,7 +424,7 @@ const Game = ({ id }) => {
                     let leftPercentage = inGoingPercentage;
                     let rightPercentage = outGoingPercentage;
 
-                    if (myTeam === 0 && leftRed || myTeam === 1 && !leftRed) {
+                    if ((teamId === 0 && leftRed) || (teamId === 1 && !leftRed)) {
                         leftPercentage = outGoingPercentage;
                         rightPercentage = inGoingPercentage;
                     }
@@ -416,9 +437,9 @@ const Game = ({ id }) => {
                         rightDamage: rightPercentage,
                         leftRed: leftRed
                     })
-                    setDropDown({ open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile })
+                    setDropDown({open: true, showAttack: true, y: tile.y * 48, x: (tile.x + 1) * 48, target: tile})
                     selectedUnit.showPathIndicator(true);
-                    setGameData({ ...gameData });
+                    setGameData({...gameData});
 
                 }
             }
@@ -433,6 +454,31 @@ const Game = ({ id }) => {
         unit.calculateTilesInRange(gameData.map);
         // Show the attack and movement range
         unit.showRangeIndicator(true);
+    }
+
+    const setPlayerIdCurrentTurn = (id) => {
+        playerIdCurrentTurn = id;
+        localStorage.setItem("playerIdCurrentTurn", id);
+    }
+
+    // refresh view when receiving a message from the socket
+    const onMessage = (msg) => {
+        Object.keys(msg).forEach((key) => {
+            switch (key) {
+                case 'turnInfo':
+                    let data = new TurnData(msg[key]);
+                    setShowTurnPopUp(true);
+                    setPlayerIdCurrentTurn(data.playerId);
+                    setGameData({
+                        ...gameData,
+                        turn: data.turn
+                    })
+                    break;
+                default:
+                    console.log(JSON.stringify(msg));
+                    setErrorMessage("Unknown Message received from Server!")
+            }
+        });
     }
 
     const confirmSurrender = () => {
@@ -462,29 +508,29 @@ const Game = ({ id }) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary" />
+                            <LinearProgress color="secondary"/>
                         </ThemeProvider>
                     </div>
                     :
 
                     <Map mapData={gameData.map}
-                        unitData={gameData.units}
-                        onClickTile={onClickTile}
-                        onClickUnit={onClickUnit}
+                         unitData={gameData.units}
+                         onClickTile={onClickTile}
+                         onClickUnit={onClickUnit}
                     >
                         <DamageIndicator open={damageIndicator.open}
-                            y={damageIndicator.y}
-                            x={damageIndicator.x}
-                            leftDamage={damageIndicator.leftDamage}
-                            rightDamage={damageIndicator.rightDamage}
-                            leftRed={damageIndicator.leftRed}
+                                         y={damageIndicator.y}
+                                         x={damageIndicator.x}
+                                         leftDamage={damageIndicator.leftDamage}
+                                         rightDamage={damageIndicator.rightDamage}
+                                         leftRed={damageIndicator.leftRed}
                         />
                         <DropDown
                             open={dropDown.open}
@@ -502,17 +548,34 @@ const Game = ({ id }) => {
 
             <div
                 className={"surrenderFlagContainer"}
-                onClick={() => setSurrender(true)}            >
+                onClick={() => setSurrender(true)}>
                 <img
                     className={"pixelated"}
                     src={surrenderFlag}
-                    alt={"A white flag - press to surrender"} />
+                    alt={"A white flag - press to surrender"}/>
             </div>
-
             <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={getDataFailed} information={"Could not get game data - Please try again later!"}>
+                {
+                    Object.keys(gameData.players).length !== 0 ?
+                    <HoldToConfirmPopUp
+                        open={showTurnPopUp}
+                        onComplete={() => setShowTurnPopUp(false)}>
+                        <div className={"turnIndicatorContainer"}>
+                            <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
+                            <h2 style={{color: gameData.players[playerIdCurrentTurn].teamId === 0 ? '#873535' : '#516899'}} className={"turnIndicatorContainer player"}>{gameData.players[playerIdCurrentTurn].name}</h2>
+                            <p className={"turnIndicatorContainer information"}>Hold to Start</p>
+                        </div>
+                    </HoldToConfirmPopUp>
+                        : null
+                }
+                <CustomPopUp open={getDataFailed} information={"Could not get game data!"}>
                     <Button onClick={() =>
-                        history.push('/home')
+                        window.location.reload()
+                    }>
+                        Retry
+                    </Button>
+                    <Button onClick={() =>
+                        goHome()
                     }>
                         Return Home
                     </Button>
@@ -562,6 +625,10 @@ const Game = ({ id }) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
+            <Socket
+                topics={location.pathname}
+                onMessage={onMessage}
+            />
         </div>
     );
 }
