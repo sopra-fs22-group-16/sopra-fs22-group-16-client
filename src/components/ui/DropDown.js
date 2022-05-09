@@ -6,8 +6,8 @@ import dropDownArrow from "styles/images/ui/dropdown/dropdown_arrow.png"
 import attackLight from "styles/images/ui/dropdown/attack_light.png";
 import attackDark from "styles/images/ui/dropdown/attack_dark.png";
 
-import waitLight from "styles/images/ui/dropdown/wait_light.png";
-import waitDark from "styles/images/ui/dropdown/wait_dark.png";
+import moveLight from "styles/images/ui/dropdown/move_light.png";
+import moveDark from "styles/images/ui/dropdown/move_dark.png";
 
 import cancelLight from "styles/images/ui/dropdown/cancel_light.png"
 import cancelDark from "styles/images/ui/dropdown/cancel_dark.png"
@@ -58,8 +58,8 @@ const DropDown = props => {
                 {
                     props.showWait ?
                         <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
-                            <img className={'light'} src={waitLight} alt={"wait"}/>
-                            <img className={'dark'} src={waitDark} alt={''}/>
+                            <img className={'light'} src={moveLight} alt={"wait"}/>
+                            <img className={'dark'} src={moveDark} alt={''}/>
                         </div>
                         :
                         null

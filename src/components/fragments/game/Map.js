@@ -168,9 +168,8 @@ const Map = props => {
     }
 
     const onClickWait = async (tile) => {
-
         // pressing wait on the tile with unit is the same as attack
-        if (!tile.unit) {
+        if (selectedUnit.traversableTiles.includes(props.mapData[selectedUnit.pathGoal[0]][selectedUnit.pathGoal[1]])) {
 
             //lock other actions while moving
             setLock(true);
