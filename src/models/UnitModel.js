@@ -131,16 +131,15 @@ class UnitModel {
         this.path = [];
     }
 
-
     calculatePathToUnit = (goalY, goalX, map) => {
-        // Check that the unit is actually attackable
+
+        // Check that the unit is actually in attack range
         if (this.tilesInAttackRange == null || !this.tilesInAttackRange.includes(map[goalY][goalX])) return;
 
         // Check if the goal is already set and if it changed
         if (this.pathGoal != null && (this.pathGoal[0] === goalY && this.pathGoal[1] === goalX)) return;
 
-
-        this.pathGoal = [goalY, goalX];
+        this.pathGoal = [this.y, this.x];
         this.path = null;
 
         // more or less implementation of A*
@@ -149,10 +148,11 @@ class UnitModel {
         let node = [tile, 0, 0, null]; // [tile, g(x), f(x) = g(x) + h(x), parent]
 
         // Check if the goal is the tile the unit stands on
-        if (this.y === goalY && this.x === goalX) {
+       if (this.tilesInAttackRangeSpecificTile[this.y]?.[this.x]?.includes(map[goalY][goalX])) {
             this.path = [tile];
             return;
         }
+
         let frontier = [node]; // array sorted by f(x)
         let reached = [tile];
 
@@ -179,9 +179,10 @@ class UnitModel {
                     childTile = map[yPos][xPos];
 
                     // Check if childTile is in movableTiles
-                    if (this.tilesInAttackRange.includes(childTile)) {
+                    if (this.traversableTiles.includes(childTile)) {
 
-                        if (childTile.y === goalY && childTile.x === goalX) {
+                        if (this.tilesInAttackRangeSpecificTile[childTile.y]?.[childTile.x]?.includes(map[goalY][goalX])) {
+                            this.pathGoal = [childTile.y, childTile.x];
                             this.path = [];
                             this.path.push(childTile);
                             this.path.push(tile);
@@ -216,40 +217,16 @@ class UnitModel {
             }
 
             // After all children have been added sort by f(x)
-            frontier.sort((a, b) => a[2] - b[2]
+            frontier.sort((a, b) =>
+                a[2] - b[2]
             );
 
         }
 
         // If no path was found return empty array
-        this.pathGoal = [goalY, goalX];
+        this.pathGoal = [this.x, this.y];
         this.path = [];
     }
-
-    calculatePathtoAttackUnit = (goalY, goalX, map) => {
-        // check that path has been calcualted and it refers to the unit in question
-
-        // get the unit that is atatcked
-        let tileTarget = map[goalY][goalX];
-
-        let positionTile;
-        let attackTile;
-        for (let step = 1; step < this.path.length; step++) {
-            let pathTile = this.path[step];
-            if (this.tilesInAttackRangeSpecificTile[pathTile.y]
-                && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x]
-                && this.tilesInAttackRangeSpecificTile[pathTile.y][pathTile.x].includes(tileTarget)) {
-                positionTile = step;
-                attackTile = pathTile;
-            }
-
-        }
-        // the first occurence of unit - path updates to
-        this.path = this.path.slice(positionTile);
-        this.pathGoal = [attackTile.y, attackTile.x];
-
-    }
-
 
     calculateTilesInRange = (map) => {
         if (this.traversableTiles === null || this.tilesInAttackRange === null) {
@@ -575,7 +552,7 @@ class UnitModel {
             })
     }
 
-    move = (x, y) => {
+    move = (y, x) => {
         this.oldX = this.x;
         this.oldY = this.y;
         this.x = x;
@@ -660,6 +637,11 @@ class UnitModel {
             }
         }
     }
+
+    canAttackFromTile = (tile) => {
+        return (this.tilesInAttackRangeSpecificTile[tile.y] && this.tilesInAttackRangeSpecificTile[tile.y][tile.x]);
+    }
+
 
 }
 

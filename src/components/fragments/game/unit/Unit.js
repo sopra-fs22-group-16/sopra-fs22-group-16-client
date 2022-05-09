@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";
@@ -10,7 +10,6 @@ import Keyframes from "../../../../helpers/Keyframes";
 const Unit = props => {
 
     const playerId = parseInt(localStorage.getItem("playerId"));
-    let playerIdCurrentTurn = parseInt(localStorage.getItem("playerIdCurrentTurn"));
 
     let tileSize = 48;
 
@@ -64,7 +63,7 @@ const Unit = props => {
     }
 
     let markerStyle = {
-        animation: "unitMarkerMovement " + (1.0 + Math.random()) + "s infinite ease-in-out " + Math.random() +"s",
+        animation: "unitMarkerMovement 1.5s infinite ease-in-out",
     }
 
     return (
@@ -82,7 +81,7 @@ const Unit = props => {
             <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
             <img src={healthSource} style={healthBoxStyle} alt={''}/>
             <div style={healthBarStyle} />
-            { (props.unit.userId === playerId && props.unit.performedAction === false && props.unit.userId === playerIdCurrentTurn) ?
+            { props.showMarker ?
                 <div className={"unitMarkerContainer"} style={markerContainerStyle}>
                     <img className={"unitMaker"} style={markerStyle} src={markerSource} alt={''} />
                 </div>
@@ -95,6 +94,7 @@ const Unit = props => {
 Unit.propTypes = {
     unit: PropTypes.instanceOf(UnitModel).isRequired,
     onClick: PropTypes.func.isRequired,
+    showMarker: PropTypes.bool,
 }
 
 export default Unit;
