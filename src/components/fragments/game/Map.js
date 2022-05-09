@@ -236,6 +236,10 @@ const Map = props => {
             await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
         }
 
+        // set old position to current position else animation get triggered every redraw
+        selectedUnit.oldY = selectedUnit.y;
+        selectedUnit.oldX = selectedUnit.x;
+
         //reset animation
         selectedUnit.animation = "idle";
         if ((selectedUnit.type === UnitTypes.WAR_ELEPHANT) &&
