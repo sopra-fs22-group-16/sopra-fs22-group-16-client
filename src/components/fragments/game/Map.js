@@ -103,6 +103,7 @@ const Map = props => {
             if (selectedUnit && selectedUnit.traversableTiles?.includes(tile)) {
                 // Hide the old path
                 selectedUnit.showPathIndicator(false);
+                hideDropDownsAndPopUps();
 
                 // Calculate the new path and view direction to the tile
                 selectedUnit.calculatePathToTile(tile.y, tile.x, props.mapData);
