@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from 'helpers/api';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
 import { defaultTheme } from "styles/themes/defaulTheme";
@@ -9,13 +9,15 @@ import { ThemeProvider } from "@emotion/react";
 
 import 'styles/views/PublicLobbies.scss';
 import CustomPopUp from "components/ui/CustomPopUp";
+import Socket from "components/socket/Socket";
 import UserModel from "models/UserModel";
 
 const PublicLobbies = () => {
-    const history = useHistory();
-    const [lobbyData, setLobbyData] = useState(null);
 
-    // PopUps
+    const history = useHistory();
+    const location = useLocation();
+
+    const [lobbyData, setLobbyData] = useState(null);
     const [isJoining, setJoining] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
@@ -29,18 +31,22 @@ const PublicLobbies = () => {
     }
 
     useEffect(() => {
-        async function fetchData() {
-            try {
-                const response = await api.get('/v1/game/lobby');
-                setLobbyData(response.data);
-
-            } catch (error) {
-                setGetDataFailed(true);
-            }
-        }
-
-        fetchData();
+        obtainAndLoadLobbyInfo();
     }, []);
+
+    const onMessage = (msg) => {
+        obtainAndLoadLobbyInfo();
+    }
+
+    const obtainAndLoadLobbyInfo = async () => {
+        try {
+            const response = await api.get('/v1/game/lobby');
+            setLobbyData(response.data);
+
+        } catch (error) {
+            setGetDataFailed(true);
+        }
+    }
 
     async function joinLobbyWithId(id) {
         try {
@@ -98,8 +104,8 @@ const PublicLobbies = () => {
                     <thead>
                         <tr className="top">
 
-                            <th>Lobby name</th>
-                            <th>game mode</th>
+                            <th>NAME</th>
+                            <th>MODE</th>
                             <th>players</th>
                             <th>capacity</th>
                         </tr>
@@ -149,6 +155,10 @@ const PublicLobbies = () => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
+            <Socket
+                topics={location.pathname}
+                onMessage={onMessage}
+            />
         </BaseContainer>
     );
 };
