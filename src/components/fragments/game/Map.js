@@ -168,9 +168,8 @@ const Map = props => {
     }
 
     const onClickWait = async (tile) => {
-
         // pressing wait on the tile with unit is the same as attack
-        if (!tile.unit) {
+        if (selectedUnit.traversableTiles.includes(props.mapData[selectedUnit.pathGoal[0]][selectedUnit.pathGoal[1]])) {
 
             //lock other actions while moving
             setLock(true);
@@ -236,6 +235,10 @@ const Map = props => {
         } else if (yCounter !== 0) {
             await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
         }
+
+        // set old position to current position else animation get triggered every redraw
+        selectedUnit.oldY = selectedUnit.y;
+        selectedUnit.oldX = selectedUnit.x;
 
         //reset animation
         selectedUnit.animation = "idle";

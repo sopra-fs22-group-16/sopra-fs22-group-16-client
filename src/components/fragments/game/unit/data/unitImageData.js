@@ -6,6 +6,12 @@ export const unitImageData = {
         red: {
             path: "/units/knight/knight_red.png",
         },
+        orange: {
+            path: "/units/knight/knight_orange.png",
+        },
+        turquoise: {
+            path: "/units/knight/knight_turquoise.png",
+        },
         shadowPath: "/units/knight/knight_shadow.png",
         animations: {
             run_north_east: {
@@ -56,34 +62,6 @@ export const unitImageData = {
                 time: 3,
                 yOffset: '-24px',
             },
-            attack_north: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            },
-            attack_south: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            },
-            attack_east: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            },
-            attack_west: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            }
         }
     },
     ARCHER: {
@@ -92,6 +70,12 @@ export const unitImageData = {
         },
         red: {
             path: "/units/archer/archer_red.png",
+        },
+        orange: {
+            path: "/units/archer/archer_orange.png",
+        },
+        turquoise: {
+            path: "/units/archer/archer_turquoise.png",
         },
         shadowPath: "/units/archer/archer_shadow.png",
         animations: {
@@ -143,20 +127,6 @@ export const unitImageData = {
                 time: 1,
                 yOffset: '-24px',
             },
-            attack_east: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            },
-            attack_west: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-24px',
-            }
         }
     },
     WAR_ELEPHANT: {
@@ -165,6 +135,12 @@ export const unitImageData = {
         },
         red: {
             path: "/units/war_elephant/war_elephant_red.png",
+        },
+        orange: {
+            path: "/units/war_elephant/war_elephant_orange.png",
+        },
+        turquoise: {
+            path: "/units/war_elephant/war_elephant_turquoise.png",
         },
         shadowPath: "/units/war_elephant/war_elephant_shadow.png",
         animations: {
@@ -204,37 +180,6 @@ export const unitImageData = {
                 time: 2,
                 yOffset: '-9px',
             },
-            attack_north: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-9px',
-            },
-            attack_south: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-9px',
-            },
-            attack_east: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-9px',
-            },
-            attack_west: {
-                //TODO: Temporary animation - create Animation
-                y: '240px',
-                frames: 8,
-                time: 2,
-                yOffset: '-9px',
-            }
-
         }
     }
-
-
 }
