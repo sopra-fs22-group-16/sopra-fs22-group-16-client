@@ -1,4 +1,4 @@
-import React, { useState} from "react";
+import React, { useState, useEffect} from "react";
 import {api} from "../../../helpers/api";
 import PropTypes from "prop-types";
 import Tile from "./tile/Tile";
@@ -22,7 +22,8 @@ const Map = props => {
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
     const token = localStorage.getItem("token");
-    const socketMove = props.socketUpdateMove;
+    const [socketMove, setSocketMove] = useState(null);
+    const [socketHealth, setSocketHealth] = useState(null);
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -38,6 +39,16 @@ const Map = props => {
         leftRed: true
     });
     const [errorMessage, setErrorMessage] = useState("");
+
+    // let map know of changes in socket values
+    useEffect(
+        () => {
+          //alert("response on Map!");
+          setSocketMove(props.socketMove);
+          setSocketHealth(props.socketHealth);
+        },
+        [props.socketMove, props.socketHealth]
+      );
 
     const onClickUnit = (unit) => {
         //if(!lock && unit.performedAction === false && props.playerIdCurrentTurn === playerId){
@@ -156,14 +167,16 @@ const Map = props => {
             try {
 
             const requestBody = {
-                    "start": {"x": selectedUnit.x, "y": selectedUnit.y},
-                    "end": {"x": tile.unit.x, "y": tile.unit.y}
+                    "attacker": {"x": selectedUnit.x, "y": selectedUnit.y},
+                    "defender": {"x": tile.unit.x, "y": tile.unit.y},
+                    "attackerDestination": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
                 };
 
     
                 // attack command specified
             await api.put(`/v1/game/match/${props.id}/command/attack`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
+            /*
             // TODO: remove this call - right now in server, the attack does not move the unit at the same time, but they plan to 
             const requestBodyWait = {
                     "start": {"x": selectedUnit.x, "y": selectedUnit.y},
@@ -172,7 +185,8 @@ const Map = props => {
 
     
             // attack command specified
-            await api.put(`/v1/game/match/${props.id}/command/wait`, JSON.stringify(requestBodyWait), {headers: {'token': token || ''}});
+            await api.put(`/v1/game/match/${props.id}/command`, JSON.stringify(requestBodyWait), {headers: {'token': token || ''}});
+            */
 
 
             await executePathMovement();
@@ -225,12 +239,12 @@ const Map = props => {
             try{
                 const requestBody = {
                     "start": {"x": selectedUnit.x, "y": selectedUnit.y},
-                    "end": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
+                    "destination": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
                 };
 
     
                 // attack command specified
-                await api.put(`/v1/game/match/${props.id}/command/wait`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+                await api.put(`/v1/game/match/${props.id}/command/move`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
                 // I am guessing that movements should not happen unless the server allows it
                 await executePathMovement();

@@ -41,13 +41,14 @@ const Game = ({id}) => {
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
 
-    // variables that are null that are populated by socket
+    // variables to be sent to Map as props from socket
     const[socketMove, setSocketMove] = useState(null);
     const[socketHealth, setSocketHealth] = useState(null);
 
     useEffect(() => {
         obtainAndLoadGameData();
     }, []);
+
 
     const obtainAndLoadGameData = async () => {
         try {
@@ -80,11 +81,12 @@ const Game = ({id}) => {
             // TODO: When api response is updated on the server
             //  set the turn, playerIdTurn, and players array based on the response
 
+            // I just added a flip right now to replace the socket
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
-                turn: 0,
-                playerIdCurrentTurn: 0,
+                turn: response.data.turn,
+                playerIdCurrentTurn: response.data.playerIdCurrentTurn,
                 players: {
                     0: {
                         name: "player-0",
@@ -107,47 +109,37 @@ const Game = ({id}) => {
         }
     }
 
+
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
+        console.log(msg);
         setSocketMove(msg.move);
         setSocketHealth(msg.health);
-        
-        /*
-        Object.keys(msg).forEach((key) => {
-            switch (key) {
-                case 'turnInfo':
-                    let data = new TurnData(msg[key]);
-                    setShowTurnPopUp(true);
-                    setGameData({
-                        ...gameData,
-                        turn: data.turn,
-                        playerIdCurrentTurn: data.playerId
-                    })
-                    break;
-                          
-                default:
-                   */ 
+       
                     console.log(msg.health);
-                    if(msg.health) {
-                        console.log(msg.health[0]);
-                        let healthDataDefend = new HealthData(msg.health[0]);
-                        console.log(healthDataDefend);
-                        //let healthDataAttack = new HealthData(msg.health[1]);
-                        updateHealth(healthDataDefend);
-                        //updateHealth(healthDataAttack);
-                        }
-                    
                     
                     // TODO: move to map so that it turns the elephant through map
-                    else if(msg.health === null && gameData.turn !== playerId) {
+                    if(gameData.playerIdCurrentTurn !== playerId) {
                         let unitStart = new PositionData(msg.move.start);
-                        let unitEnd = new PositionData(msg.move.end);
+                        let unitEnd = new PositionData(msg.move.destination);
                         gameData.map[unitStart.y][unitStart.x].unit.move(unitEnd.y, unitEnd.x);
                         }
+                    
+                    if(msg.health) {
+                            let healthDataDefend = new HealthData(msg.health[0]);
+                            let healthDataAttack = new HealthData(msg.health[1]);
+                            updateHealth(healthDataDefend);
+                            updateHealth(healthDataAttack);
+                            }
+                    
 
-                    // I think turn change should go after the movement if posi
-                        
-                    //setErrorMessage("Unknown Message received from Server!");
+                    // I think turn change should go after the movement, I just put a fake switch here
+                    //setErrorMessage("Your opponent has moved!");
+                    let changeTurn = gameData.playerIdCurrentTurn == 1? 0: 1;
+                    setGameData({
+                        ...gameData,
+                        playerIdCurrentTurn: changeTurn
+                    })
             }
             
 
@@ -158,9 +150,9 @@ const Game = ({id}) => {
 
         // remove the unit
         if(healthData.health <= 0) {
-            unitHealth.move(null, null);
+            unitHealth = null;
         } else {
-        // decrease
+        // decrease health accordingly
         unitHealth.health = healthData.health;
         }
         }
@@ -212,8 +204,8 @@ const Game = ({id}) => {
                         mapData={gameData.map}
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
-                        socketUpdateHealth = {socketHealth}
-                        socketUpdateMove = {socketMove}
+                        //socketUpdateHealth = {socketHealth}
+                        //socketUpdateMove = {socketMove}
                     />
 
             }
