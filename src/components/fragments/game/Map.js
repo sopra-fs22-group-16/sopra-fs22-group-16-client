@@ -1,6 +1,8 @@
 import React, { useState} from "react";
+import {api} from "../../../helpers/api";
 import PropTypes from "prop-types";
 import Tile from "./tile/Tile";
+import PositionData from "models/PositionData";
 
 import "styles/views/game/Map.scss"
 import Unit from "./unit/Unit";
@@ -8,6 +10,8 @@ import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
 import {UnitTypes} from "./unit/data/UnitTypes";
 import {Direction} from "./unit/Direction";
+import CustomPopUp from "components/ui/CustomPopUp";
+import {Button} from "components/ui/Button";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -17,6 +21,8 @@ const Map = props => {
 
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
+    const token = localStorage.getItem("token");
+    const socketMove = props.socketUpdateMove;
 
     const [selectedUnit, setSelectedUnit] = useState(null);
 
@@ -31,6 +37,7 @@ const Map = props => {
         rightDamage: 0,
         leftRed: true
     });
+    const [errorMessage, setErrorMessage] = useState("");
 
     const onClickUnit = (unit) => {
         //if(!lock && unit.performedAction === false && props.playerIdCurrentTurn === playerId){
@@ -98,6 +105,7 @@ const Map = props => {
 
     }
 
+
     const onClickTile = (tile) => {
         if (!lock) {
             if (selectedUnit && selectedUnit.traversableTiles?.includes(tile)) {
@@ -145,18 +153,48 @@ const Map = props => {
             hideUnitIndicators(selectedUnit);
             hideDropDownsAndPopUps();
 
+            try {
+
+            const requestBody = {
+                    "start": {"x": selectedUnit.x, "y": selectedUnit.y},
+                    "end": {"x": tile.unit.x, "y": tile.unit.y}
+                };
+
+    
+                // attack command specified
+            await api.put(`/v1/game/match/${props.id}/command/attack`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+
+            // TODO: remove this call - right now in server, the attack does not move the unit at the same time, but they plan to 
+            const requestBodyWait = {
+                    "start": {"x": selectedUnit.x, "y": selectedUnit.y},
+                    "end": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
+            };
+
+    
+            // attack command specified
+            await api.put(`/v1/game/match/${props.id}/command/wait`, JSON.stringify(requestBodyWait), {headers: {'token': token || ''}});
+
+
             await executePathMovement();
 
             props.mapData[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
 
             cleanUpUnits();
 
-            // TODO: make call to backend
-
             setSelectedUnit(null);
 
             //unlock
             setLock(false);
+            }
+            catch(error) {
+
+                if (error.response.status === 403) {
+                    setErrorMessage("Are you sure it's your turn to play?");
+                }
+                else {
+                    setErrorMessage("Something went wrong with communicating to server!")
+                }
+            }
 
         } else {
             selectedUnit.showRangeIndicator(false);
@@ -168,7 +206,6 @@ const Map = props => {
     }
 
     const onClickWait = async (tile) => {
-
         // pressing wait on the tile with unit is the same as attack
         if (!tile.unit) {
 
@@ -185,16 +222,37 @@ const Map = props => {
             hideUnitIndicators(selectedUnit);
             hideDropDownsAndPopUps();
 
-            await executePathMovement();
+            try{
+                const requestBody = {
+                    "start": {"x": selectedUnit.x, "y": selectedUnit.y},
+                    "end": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
+                };
 
-            cleanUpUnits();
+    
+                // attack command specified
+                await api.put(`/v1/game/match/${props.id}/command/wait`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
-            //insert new unit and unselect unit
-            props.mapData[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
-            setSelectedUnit(null);
+                // I am guessing that movements should not happen unless the server allows it
+                await executePathMovement();
 
-            //unlock
-            setLock(false);
+                cleanUpUnits();
+    
+                //insert new unit and unselect unit
+                props.mapData[selectedUnit.y][selectedUnit.x].unit = selectedUnit;
+                setSelectedUnit(null);
+    
+                //unlock
+                setLock(false);
+                }
+                catch (error){
+                    if (error.response.status === 403) {
+                    setErrorMessage("Are you sure it's your turn to play?");
+                }
+                else {
+                    setErrorMessage("Something went wrong with communicating to server!")
+                }
+            }
+
         }
     }
 
@@ -213,7 +271,7 @@ const Map = props => {
         for (const tilePath of selectedUnit.path.reverse()) {
             if (oldX !== tilePath.x) {
                 if (yCounter !== 0) {
-                    await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
+                    await performMovement(oldY, oldX, yCounter, selectedUnit, true, goingSouth, goingEast);
                     yCounter = 0;
                 }
                 goingEast = oldX < tilePath.x;
@@ -221,7 +279,7 @@ const Map = props => {
                 oldX = tilePath.x;
             } else if (oldY !== tilePath.y) {
                 if (xCounter !== 0) {
-                    await performMovement(oldY, oldX, xCounter, false, goingSouth, goingEast);
+                    await performMovement(oldY, oldX, xCounter, selectedUnit, false, goingSouth, goingEast);
                     xCounter = 0;
                 }
                 goingSouth = oldY < tilePath.y;
@@ -232,9 +290,9 @@ const Map = props => {
 
         // Check if there is left over movement
         if (xCounter !== 0) {
-            await performMovement(oldY, oldX, xCounter, false, goingSouth, goingEast);
+            await performMovement(oldY, oldX, xCounter, selectedUnit, false, goingSouth, goingEast);
         } else if (yCounter !== 0) {
-            await performMovement(oldY, oldX, yCounter, true, goingSouth, goingEast);
+            await performMovement(oldY, oldX, yCounter, selectedUnit, true, goingSouth, goingEast);
         }
 
         //reset animation
@@ -245,30 +303,30 @@ const Map = props => {
         }
     }
 
-    const performMovement = async (y, x, steps, verticalMovement, goingSouth, goingEast) => {
-        if (selectedUnit.type === UnitTypes.WAR_ELEPHANT) {
+    const performMovement = async (y, x, steps, unitMove, verticalMovement, goingSouth, goingEast) => {
+        if (unitMove.type === UnitTypes.WAR_ELEPHANT) {
             if(verticalMovement){
                 if (goingSouth) {
-                    selectedUnit.viewDirection = Direction.south;
+                    unitMove.viewDirection = Direction.south;
                 }else{
-                    selectedUnit.viewDirection = Direction.north;
+                    unitMove.viewDirection = Direction.north;
                 }
             }else{
                 if (goingEast) {
-                    selectedUnit.viewDirection = Direction.east;
+                    unitMove.viewDirection = Direction.east;
                 }else{
-                    selectedUnit.viewDirection = Direction.west;
+                    unitMove.viewDirection = Direction.west;
                 }
             }
         }else {
             if(goingSouth && goingEast){
-                selectedUnit.viewDirection = Direction.southEast;
+                unitMove.viewDirection = Direction.southEast;
             }else if(goingSouth && !goingEast){
-                selectedUnit.viewDirection = Direction.southWest;
+                unitMove.viewDirection = Direction.southWest;
             }else if(!goingSouth && goingEast){
-                selectedUnit.viewDirection = Direction.northEast;
+                unitMove.viewDirection = Direction.northEast;
             }else if(!goingSouth && !goingEast){
-                selectedUnit.viewDirection = Direction.northWest;
+                unitMove.viewDirection = Direction.northWest;
             }
         }
 
@@ -280,6 +338,18 @@ const Map = props => {
         let time = (selectedUnit.movementSpeed * steps);
         await timer(time);
     }
+
+    /*
+    // different function because not on the selected unit
+    const performSocketMovement = (socketMove) => {
+
+        let unitStart = new PositionData(msg.move.start);
+        let unitEnd = new PositionData(msg.move.end);
+                        gameData.map[unitStart.y][unitStart.x].unit.move(unitEnd.y, unitEnd.x);
+        
+        const unitSocket = gameData.map[unitStart.y][unitStart.x].unit;
+    } 
+    */
 
     const onClickCancel = () => {
         hideUnitIndicators(selectedUnit);
@@ -365,6 +435,13 @@ const Map = props => {
                 onClickAttack={onClickAttack}
                 target={dropDown.target}
             />
+            <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                    <Button onClick={() =>
+                        setErrorMessage("")
+                    }>
+                        Close
+                    </Button>
+                </CustomPopUp>
         </div>
     );
 

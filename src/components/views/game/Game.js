@@ -14,6 +14,8 @@ import {api} from "../../../helpers/api";
 import Socket from "../../socket/Socket";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
 import TurnData from "../../../models/TurnData";
+import PositionData from "models/PositionData";
+import HealthData from "models/HealthData";
 
 import "styles/views/game/Game.scss"
 
@@ -38,6 +40,10 @@ const Game = ({id}) => {
     //TODO: set the values with the information received from the server (socket)
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
+
+    // variables that are null that are populated by socket
+    const[socketMove, setSocketMove] = useState(null);
+    const[socketHealth, setSocketHealth] = useState(null);
 
     useEffect(() => {
         obtainAndLoadGameData();
@@ -103,6 +109,10 @@ const Game = ({id}) => {
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
+        setSocketMove(msg.move);
+        setSocketHealth(msg.health);
+        
+        /*
         Object.keys(msg).forEach((key) => {
             switch (key) {
                 case 'turnInfo':
@@ -114,12 +124,48 @@ const Game = ({id}) => {
                         playerIdCurrentTurn: data.playerId
                     })
                     break;
+                          
                 default:
-                    console.log(JSON.stringify(msg));
-                    setErrorMessage("Unknown Message received from Server!")
+                   */ 
+                    console.log(msg.health);
+                    if(msg.health) {
+                        console.log(msg.health[0]);
+                        let healthDataDefend = new HealthData(msg.health[0]);
+                        console.log(healthDataDefend);
+                        //let healthDataAttack = new HealthData(msg.health[1]);
+                        updateHealth(healthDataDefend);
+                        //updateHealth(healthDataAttack);
+                        }
+                    
+                    
+                    // TODO: move to map so that it turns the elephant through map
+                    else if(msg.health === null && gameData.turn !== playerId) {
+                        let unitStart = new PositionData(msg.move.start);
+                        let unitEnd = new PositionData(msg.move.end);
+                        gameData.map[unitStart.y][unitStart.x].unit.move(unitEnd.y, unitEnd.x);
+                        }
+
+                    // I think turn change should go after the movement if posi
+                        
+                    //setErrorMessage("Unknown Message received from Server!");
             }
-        });
-    }
+            
+
+
+    const updateHealth = (healthData) => {
+        
+        let unitHealth =  gameData.map[healthData.unitPosition.y][healthData.unitPosition.x].unit;
+
+        // remove the unit
+        if(healthData.health <= 0) {
+            unitHealth.move(null, null);
+        } else {
+        // decrease
+        unitHealth.health = healthData.health;
+        }
+        }
+
+ 
 
     const confirmSurrender = () => {
         //TODO: call server to inform that the player has surrender and get information from server callback
@@ -162,9 +208,12 @@ const Game = ({id}) => {
                     :
 
                     <Map
+                        id = {id}
                         mapData={gameData.map}
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
+                        socketUpdateHealth = {socketHealth}
+                        socketUpdateMove = {socketMove}
                     />
 
             }
