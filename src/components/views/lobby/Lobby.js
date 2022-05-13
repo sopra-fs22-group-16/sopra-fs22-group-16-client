@@ -50,6 +50,7 @@ const Lobby = ({ id }) => {
     // PopUp
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
+    const [playerRemoved, setPlayerRemoved] = useState(false);
 
     const returnLobbies = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
@@ -134,6 +135,12 @@ const Lobby = ({ id }) => {
             history.push(`/game/${id}`);
         }
         else {
+            if (msg != "") {
+                // show a popup to the player if they are not in the lobby list of players
+                if (!msg.players.some(e => e.id === parseInt(localStorage.getItem("playerId")))) {
+                    setPlayerRemoved(true);
+                }
+            }
             obtainAndLoadLobbyInfo();
         }
     }
@@ -273,6 +280,16 @@ const Lobby = ({ id }) => {
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
                     <Button onClick={() =>
                         history.push('/home')
+                    }>
+                        Return Home
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp open={playerRemoved} information={"Sorry, you have been removed from this lobby due to a change of game size! You will be redirected back to the home page."}>
+                    <Button onClick={() => {
+                        localStorage.removeItem('token');
+                        localStorage.removeItem('playerId');
+                        history.push('/home')
+                    }
                     }>
                         Return Home
                     </Button>
