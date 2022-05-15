@@ -41,10 +41,6 @@ const Game = ({id}) => {
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
 
-    // variables to be sent to Map as props from socket
-    const[socketMove, setSocketMove] = useState(null);
-    const[socketHealth, setSocketHealth] = useState(null);
-
     useEffect(() => {
         obtainAndLoadGameData();
     }, []);
@@ -78,10 +74,6 @@ const Game = ({id}) => {
                 unitArray.push(unitModel);
             });
 
-            // TODO: When api response is updated on the server
-            //  set the turn, playerIdTurn, and players array based on the response
-
-            // I just added a flip right now to replace the socket
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
@@ -110,53 +102,17 @@ const Game = ({id}) => {
     }
 
 
-    // refresh view when receiving a message from the socket
-    const onMessage = (msg) => {
-        console.log(msg);
-        setSocketMove(msg.move);
-        setSocketHealth(msg.health);
-       
-                    console.log(msg.health);
-                    
-                    // TODO: move to map so that it turns the elephant through map
-                    if(gameData.playerIdCurrentTurn !== playerId) {
-                        let unitStart = new PositionData(msg.move.start);
-                        let unitEnd = new PositionData(msg.move.destination);
-                        gameData.map[unitStart.y][unitStart.x].unit.move(unitEnd.y, unitEnd.x);
-                        }
-                    
-                    if(msg.health) {
-                            let healthDataDefend = new HealthData(msg.health[0]);
-                            let healthDataAttack = new HealthData(msg.health[1]);
-                            updateHealth(healthDataDefend);
-                            updateHealth(healthDataAttack);
-                            }
-                    
-
-                    // I think turn change should go after the movement, I just put a fake switch here
-                    //setErrorMessage("Your opponent has moved!");
-                    let changeTurn = gameData.playerIdCurrentTurn == 1? 0: 1;
-                    setGameData({
-                        ...gameData,
-                        playerIdCurrentTurn: changeTurn
-                    })
-            }
-            
-
-
-    const updateHealth = (healthData) => {
-        
-        let unitHealth =  gameData.map[healthData.unitPosition.y][healthData.unitPosition.x].unit;
-
-        // remove the unit
-        if(healthData.health <= 0) {
-            unitHealth = null;
-        } else {
-        // decrease health accordingly
-        unitHealth.health = healthData.health;
-        }
-        }
-
+    const changeTurn = (turnInfo) => {
+        console.log(turnInfo);
+        console.log("turn updating");
+        setGameData({
+            ...gameData,
+            turn: turnInfo.turn,
+            playerIdCurrentTurn: turnInfo.playerId,
+        });
+        console.log(gameData.playerIdCurrentTurn);
+        setShowTurnPopUp(true);
+    }
  
 
     const confirmSurrender = () => {
@@ -204,8 +160,7 @@ const Game = ({id}) => {
                         mapData={gameData.map}
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
-                        //socketUpdateHealth = {socketHealth}
-                        //socketUpdateMove = {socketMove}
+                        onChangeTurn = {changeTurn}
                     />
 
             }
@@ -289,10 +244,6 @@ const Game = ({id}) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
-            <Socket
-                topics={location.pathname}
-                onMessage={onMessage}
-            />
         </div>
     );
 }
