@@ -1,6 +1,6 @@
 import PropTypes from "prop-types";
 import middle_blueLeft_redRight from "styles/images/ui/damageIndicator/damageIndicator_Middle_blueLeft_redRight.png";
-import middle_blueRight_redLeft from "styles/images/ui/damageIndicator/damageIndicator_Middle_redRight_blueLeft.png";
+import middle_redLeft_blueRight from "styles/images/ui/damageIndicator/damageIndicator_Middle_redLeft_blueRight.png";
 
 import leftSmall from "styles/images/ui/damageIndicator/damageIndicator_left_small.png"
 import leftMedium from "styles/images/ui/damageIndicator/damageIndicator_left_medium.png"
@@ -9,7 +9,6 @@ import leftLarge from "styles/images/ui/damageIndicator/damageIndicator_left_lar
 import rightSmall from "styles/images/ui/damageIndicator/damageIndicator_right_small.png"
 import rightMedium from "styles/images/ui/damageIndicator/damageIndicator_right_medium.png"
 import rightLarge from "styles/images/ui/damageIndicator/damageIndicator_right_large.png"
-
 
 import "styles/ui/DamageIndicator.scss";
 
@@ -87,7 +86,7 @@ const DamageIndicator = props => {
     return (
         props.open ?
             <div style={dropDownPosition} className={'damageIndicator'}>
-                <img src={props.leftRed ? middle_blueRight_redLeft : middle_blueLeft_redRight} alt={""}/>
+                <img src={props.leftRed ? middle_redLeft_blueRight : middle_blueLeft_redRight} alt={""}/>
                 <img src={leftBackgroundSource} className={'leftBackground'} alt={''}/>
                 <img src={rightBackgroundSource} className={'rightBackground'} alt={''}/>
                 <img src={"/ui/numbers/p_" + leftColor + '.png'} className={'number left first'} alt={''}/>

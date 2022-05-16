@@ -1,87 +1,72 @@
 @import 'styles/theme';
 
 .PublicLobbies {
-  &.container {
-    margin-top: 2em;
-    @include center;
-    flex-direction: column;
-  }
+    &.container {
+        margin-top: 2em;
+        @include center;
+        flex-direction: column;
+    }
 
-  &.h1 {
-    display: block;
-    text-align: center;
-    font-size: 2em;
-    padding-bottom: 2em;
-  }
+    &.h1 {
+        display: block;
+        text-align: center;
+        font-size: 2em;
+        padding-bottom: 2em;
+    }
 
-  &.table {
-    border: 1px solid;
-    border-radius: 5px;
-    text-align: center;
-    width: 90%;
-    max-width: 480px;
-    font-size: 10px;
-    margin: 0;
-    padding: 0;
-    //border-collapse: collapse;
-  }
+    &.table {
+        border: 1px solid;
+        border-radius: 5px;
+        text-align: center;
+        width: 90%;
+        max-width: 480px;
+        font-size: 10px;
+        //border-collapse: collapse;
+    }
 
-  &.table tr.top {
-    //outline: 1px solid #FBC12E;
-    border-radius: 5px;
-    color: #604C18;
-    text-transform: uppercase;
-  }
+    &.table tr.top {
+        //outline: 1px solid #FBC12E;
+        border-radius: 5px;
+        color: #604C18;
+        text-transform: uppercase;
+    }
+    //TODO: make the full lobbies grey
+    &.table tr {
+        height: 32px;
+    }
 
-  //TODO: make the full lobbies grey
-  &.table tr{
-    height: 32px;
-  }
+    &.table th {
+        font-size: 12px;
+        width: 80px;
+    }
 
-  &.table th {
-    border-spacing: 0;
-    width: 120px;
-    margin: 0;
-    padding: 0;
-  }
+    &.table td {
+        width: 80px;
+    }
+    // hover on clicking except the tr.top
+    &.table tr.non-full:hover {
+        background-color: #604C18;
+    }
+    // hover on clicking except the tr.top
+    &.table tr.full:hover {
+        background-color: #787878;
+    }
 
-  &.table td {
-    border-spacing: 0;
-    width: 120px;
-    margin: 0;
-    padding: 0;
-  }
+    &.table tr.full {
+        text-decoration: line-through;
+        color: #F0F0F0;
+    }
 
-  // hover on clicking except the tr.top
-  &.table tr.non-full:hover {
-    background-color: #604C18;
-  }
+    &.label {
+        color: $textColorLight;
+        margin-bottom: 10px;
+        text-transform: lowercase;
+        font-weight: 300;
+    }
 
-  // hover on clicking except the tr.top
-  &.table tr.full:hover {
-    background-color: #787878;
-  }
-
-  &.table tr.full {
-    text-decoration: line-through;
-    color: #F0F0F0;
-  }
-
-
-
-
-
-  &.label {
-    color: $textColorLight;
-    margin-bottom: 10px;
-    text-transform: lowercase;
-    font-weight: 300;
-  }
-
-  &.button-container {
-    display: flex;
-    margin-top: 1em;
-    width: 200px;
-  }
-
+    &.button-container {
+        display: flex;
+        margin-top: 1em;
+        width: 200px;
+    }
 }
