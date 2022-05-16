@@ -16,6 +16,7 @@ class UnitModel {
         this.commands = [];
         this.teamId = null;
         this.userId = null;
+        this.moved = false;
         Object.assign(this, data);
         // if teamId === 0 (red) look southWest/west else teamId === 1 (blue) look southEast/east
         if (this.type === UnitTypes.WAR_ELEPHANT) {
@@ -23,7 +24,7 @@ class UnitModel {
         } else {
             this.viewDirection = this.teamId ? Direction.southWest : Direction.southEast;
         }
-        this.performedAction = false;
+
         this.traversableTiles = null;
         this.tilesInAttackRange = null;
         this.tilesInAttackRangeSpecificTile = null;

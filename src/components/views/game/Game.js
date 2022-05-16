@@ -11,11 +11,7 @@ import TileModel from "models/TileModel";
 import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
-import Socket from "../../socket/Socket";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import TurnData from "../../../models/TurnData";
-import PositionData from "models/PositionData";
-import HealthData from "models/HealthData";
 
 import "styles/views/game/Game.scss"
 
@@ -29,7 +25,15 @@ const Game = ({id}) => {
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, playerIdCurrentTurn: 0, players: {}, map: [[]], units: []});
+    const [gameData, setGameData] = useState({
+        gameMode: '',
+        gameType: '',
+        turn: 0,
+        playerIdCurrentTurn: 0,
+        players: {},
+        map: [[]],
+        units: []
+    });
 
     const [showTurnPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -67,7 +71,6 @@ const Game = ({id}) => {
             unitData.forEach((unit) => {
                 let y = unit.position.y;
                 let x = unit.position.x;
-
                 delete unit.position;
                 let unitModel = new UnitModel(y, x, unit);
                 mapArray[y][x].unit = unitModel;
@@ -113,7 +116,7 @@ const Game = ({id}) => {
         console.log(gameData.playerIdCurrentTurn);
         setShowTurnPopUp(true);
     }
- 
+
 
     const confirmSurrender = () => {
         //TODO: call server to inform that the player has surrender and get information from server callback
@@ -156,11 +159,11 @@ const Game = ({id}) => {
                     :
 
                     <Map
-                        id = {id}
+                        id={id}
                         mapData={gameData.map}
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
-                        onChangeTurn = {changeTurn}
+                        onChangeTurn={changeTurn}
                     />
 
             }
@@ -176,15 +179,16 @@ const Game = ({id}) => {
             <ThemeProvider theme={defaultTheme}>
                 {
                     Object.keys(gameData.players).length !== 0 ?
-                    <HoldToConfirmPopUp
-                        open={showTurnPopUp}
-                        onComplete={() => setShowTurnPopUp(false)}>
-                        <div className={"turnIndicatorContainer"}>
-                            <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
-                            <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}} className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
-                            <p className={"turnIndicatorContainer information"}>Hold to Start</p>
-                        </div>
-                    </HoldToConfirmPopUp>
+                        <HoldToConfirmPopUp
+                            open={showTurnPopUp}
+                            onComplete={() => setShowTurnPopUp(false)}>
+                            <div className={"turnIndicatorContainer"}>
+                                <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
+                                <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}}
+                                    className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
+                                <p className={"turnIndicatorContainer information"}>Hold to Start</p>
+                            </div>
+                        </HoldToConfirmPopUp>
                         : null
                 }
                 <CustomPopUp open={getDataFailed} information={"Could not get game data!"}>
