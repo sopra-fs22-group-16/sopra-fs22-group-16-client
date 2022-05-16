@@ -9,8 +9,6 @@ import Keyframes from "../../../../helpers/Keyframes";
 
 const Unit = props => {
 
-    const playerId = parseInt(localStorage.getItem("playerId"));
-
     let tileSize = 48;
 
     let animationState = props.unit.animation + "_" + props.unit.viewDirection.name;
