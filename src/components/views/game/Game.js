@@ -11,9 +11,7 @@ import TileModel from "models/TileModel";
 import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
-import Socket from "../../socket/Socket";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import TurnData from "../../../models/TurnData";
 
 import "styles/views/game/Game.scss"
 
@@ -27,7 +25,15 @@ const Game = ({id}) => {
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
 
-    const [gameData, setGameData] = useState({gameMode: '', gameType: '', turn: 0, playerIdCurrentTurn: 0, players: {}, map: [[]], units: []});
+    const [gameData, setGameData] = useState({
+        gameMode: '',
+        gameType: '',
+        turn: 0,
+        playerIdCurrentTurn: 0,
+        players: {},
+        map: [[]],
+        units: []
+    });
 
     const [showTurnPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
@@ -42,6 +48,7 @@ const Game = ({id}) => {
     useEffect(() => {
         obtainAndLoadGameData();
     }, []);
+
 
     const obtainAndLoadGameData = async () => {
         try {
@@ -64,31 +71,18 @@ const Game = ({id}) => {
             unitData.forEach((unit) => {
                 let y = unit.position.y;
                 let x = unit.position.x;
-
                 delete unit.position;
                 let unitModel = new UnitModel(y, x, unit);
                 mapArray[y][x].unit = unitModel;
                 unitArray.push(unitModel);
             });
 
-            // TODO: When api response is updated on the server
-            //  set the turn, playerIdTurn, and players array based on the response
-
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
-                turn: 0,
-                playerIdCurrentTurn: 0,
-                players: {
-                    0: {
-                        name: "player-0",
-                        team: 0,
-                    },
-                    1: {
-                        name: "player-1",
-                        team: 1,
-                    }
-                },
+                turn: response.data.turn,
+                playerIdCurrentTurn: response.data.playerIdCurrentTurn,
+                players: response.data.players,
                 map: mapArray,
                 units: unitArray
             });
@@ -101,25 +95,19 @@ const Game = ({id}) => {
         }
     }
 
-    // refresh view when receiving a message from the socket
-    const onMessage = (msg) => {
-        Object.keys(msg).forEach((key) => {
-            switch (key) {
-                case 'turnInfo':
-                    let data = new TurnData(msg[key]);
-                    setShowTurnPopUp(true);
-                    setGameData({
-                        ...gameData,
-                        turn: data.turn,
-                        playerIdCurrentTurn: data.playerId
-                    })
-                    break;
-                default:
-                    console.log(JSON.stringify(msg));
-                    setErrorMessage("Unknown Message received from Server!")
-            }
+
+    const changeTurn = (turnInfo) => {
+        console.log(turnInfo);
+        console.log("turn updating");
+        setGameData({
+            ...gameData,
+            turn: turnInfo.turn,
+            playerIdCurrentTurn: turnInfo.playerId,
         });
+        console.log(gameData.playerIdCurrentTurn);
+        setShowTurnPopUp(true);
     }
+
 
     const confirmSurrender = () => {
         //TODO: call server to inform that the player has surrender and get information from server callback
@@ -162,9 +150,11 @@ const Game = ({id}) => {
                     :
 
                     <Map
+                        id={id}
                         mapData={gameData.map}
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
+                        onChangeTurn={changeTurn}
                     />
 
             }
@@ -180,15 +170,16 @@ const Game = ({id}) => {
             <ThemeProvider theme={defaultTheme}>
                 {
                     Object.keys(gameData.players).length !== 0 ?
-                    <HoldToConfirmPopUp
-                        open={showTurnPopUp}
-                        onComplete={() => setShowTurnPopUp(false)}>
-                        <div className={"turnIndicatorContainer"}>
-                            <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
-                            <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}} className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
-                            <p className={"turnIndicatorContainer information"}>Hold to Start</p>
-                        </div>
-                    </HoldToConfirmPopUp>
+                        <HoldToConfirmPopUp
+                            open={showTurnPopUp}
+                            onComplete={() => setShowTurnPopUp(false)}>
+                            <div className={"turnIndicatorContainer"}>
+                                <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
+                                <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}}
+                                    className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
+                                <p className={"turnIndicatorContainer information"}>Hold to Start</p>
+                            </div>
+                        </HoldToConfirmPopUp>
                         : null
                 }
                 <CustomPopUp open={getDataFailed} information={"Could not get game data!"}>
@@ -248,10 +239,6 @@ const Game = ({id}) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
-            <Socket
-                topics={location.pathname}
-                onMessage={onMessage}
-            />
         </div>
     );
 }
