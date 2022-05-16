@@ -82,16 +82,7 @@ const Game = ({id}) => {
                 gameMode: response.data.gameMode,
                 turn: response.data.turn,
                 playerIdCurrentTurn: response.data.playerIdCurrentTurn,
-                players: {
-                    0: {
-                        name: "player-0",
-                        team: 0,
-                    },
-                    1: {
-                        name: "player-1",
-                        team: 1,
-                    }
-                },
+                players: response.data.players,
                 map: mapArray,
                 units: unitArray
             });
