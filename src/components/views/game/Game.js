@@ -36,6 +36,7 @@ const Game = ({id}) => {
     });
 
     const [showTurnPopUp, setShowTurnPopUp] = useState(false);
+    const [surrenderPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
@@ -82,16 +83,7 @@ const Game = ({id}) => {
                 gameMode: response.data.gameMode,
                 turn: response.data.turn,
                 playerIdCurrentTurn: response.data.playerIdCurrentTurn,
-                players: {
-                    0: {
-                        name: "player-0",
-                        team: 0,
-                    },
-                    1: {
-                        name: "player-1",
-                        team: 1,
-                    }
-                },
+                players: response.data.players,
                 map: mapArray,
                 units: unitArray
             });
@@ -120,6 +112,7 @@ const Game = ({id}) => {
 
     const confirmSurrender = () => {
         //TODO: call server to inform that the player has surrender and get information from server callback
+        setShowSurrenderPopUp(true);
         setGameResult("DEFEAT");
         setWinner("player1");
 

@@ -6,8 +6,8 @@ import dropDownArrow from "styles/images/ui/dropdown/dropdown_arrow.png"
 import attackLight from "styles/images/ui/dropdown/attack_light.png";
 import attackDark from "styles/images/ui/dropdown/attack_dark.png";
 
-import waitLight from "styles/images/ui/dropdown/wait_light.png";
-import waitDark from "styles/images/ui/dropdown/wait_dark.png";
+import moveLight from "styles/images/ui/dropdown/move_light.png";
+import moveDark from "styles/images/ui/dropdown/move_dark.png";
 
 import cancelLight from "styles/images/ui/dropdown/cancel_light.png"
 import cancelDark from "styles/images/ui/dropdown/cancel_dark.png"
@@ -30,9 +30,9 @@ const DropDown = props => {
         }
     }
 
-    const onClickWait = () => {
-        if (props.onClickWait) {
-            props.onClickWait(props.target);
+    const onClickMove = () => {
+        if (props.onClickMove) {
+            props.onClickMove(props.target);
         }
     }
 
@@ -45,7 +45,7 @@ const DropDown = props => {
     return (
         props.open ?
             <div style={dropDownPosition} className={'dropDown'}>
-                <img className={'dropDownImage'} src={(props.showAttack && props.showWait) ? dropDownLarge : dropDownSmall} alt={''}/>
+                <img className={'dropDownImage'} src={(props.showAttack && props.showMove) ? dropDownLarge : dropDownSmall} alt={''}/>
                 {
                     props.showAttack ?
                         <div className={'selection first'} onClick={onClickAttack}>
@@ -56,16 +56,16 @@ const DropDown = props => {
                         null
                 }
                 {
-                    props.showWait ?
-                        <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickWait}>
-                            <img className={'light'} src={waitLight} alt={"wait"}/>
-                            <img className={'dark'} src={waitDark} alt={''}/>
+                    props.showMove ?
+                        <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickMove}>
+                            <img className={'light'} src={moveLight} alt={"move"}/>
+                            <img className={'dark'} src={moveDark} alt={''}/>
                         </div>
                         :
                         null
                 }
 
-                <div className={'selection ' + ((props.showWait && props.showAttack) ? 'third' : 'second')} onClick={onClickCancel}>
+                <div className={'selection ' + ((props.showMove && props.showAttack) ? 'third' : 'second')} onClick={onClickCancel}>
                     <img className={'light'} src={cancelLight} alt={"cancel"}/>
                     <img className={'dark'} src={cancelDark} alt={''}/>
                 </div>
@@ -82,9 +82,9 @@ DropDown.propTypes = {
     y: PropTypes.number,
     x: PropTypes.number,
     showAttack: PropTypes.bool,
-    showWait: PropTypes.bool,
+    showMove: PropTypes.bool,
     onClickAttack: PropTypes.func,
-    onClickWait: PropTypes.func,
+    onClickMove: PropTypes.func,
     onClickCancel: PropTypes.func,
     target: PropTypes.instanceOf(TileModel),
 }

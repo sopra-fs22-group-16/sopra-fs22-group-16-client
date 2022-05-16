@@ -24,7 +24,7 @@ const Countdown = props => {
                         duration={props.duration}
                         //with the list of colors it is possible to define a gradient
                         //which is defined for the intervals colorsTime (min: 2 values)
-                        colors={['#FBC12E', '#A30000']}
+                        colors={['#d7ae25', '#A30000']}
                         colorsTime={[props.duration, 0]}
                         size={props.size}
                         onComplete={() => props.onComplete()}
