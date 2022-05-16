@@ -269,7 +269,6 @@ const Map = props => {
     // TODO: resolve 
     const onMessage = async (msg) => {
         console.log(msg);
-        setSocketHealth(msg.unitHealths);
         //alert(props.playerIdCurrentTurn !== playerId);
 
         // only update health if the player is not moving, otherwise in respective move functions
