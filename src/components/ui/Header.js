@@ -5,8 +5,7 @@ import PropTypes from "prop-types";
 import "styles/ui/Header.scss";
 
 const username = localStorage.getItem("username")? localStorage.getItem("username"): null;
-//const userId = localStorage.getItem("userId");
-const userId = 1;
+const userId = localStorage.getItem("userId");
 
 
 const Header = props => (

@@ -18,9 +18,6 @@ const AppRouter = () => {
                 <Route exact path="/user/login">
                    <LoginUser />
                 </Route>
-                <Route exact path="user/1">
-                <User id= {1}/>
-                 </Route>
                 <Route exact path="/">
                     <Redirect to="/home" />
                 </Route>
