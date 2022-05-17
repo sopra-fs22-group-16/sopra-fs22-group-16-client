@@ -1,0 +1,76 @@
+@import 'styles/theme';
+
+
+.LoginRegisterUser {
+
+    &.h1 {
+        display: block;
+        text-align: center;
+        font-size: 2em;
+        padding-bottom: 2em;
+      }
+
+    table.user {
+        border: 2.5px solid $accent;
+        border-radius: 10px;
+        width: 320px;
+        margin-left: auto;
+        margin-right: auto;
+        margin-bottom: 20px;
+        border-spacing: 0;
+    }
+
+    table.user td {
+        text-align: left;
+        color: $accent;
+        height: 50px;
+        width: 35px;
+        font-size: 1.0em;
+        padding-left: 0.5em;
+    }
+
+    table.user th {
+        text-align: center;
+        color: $accentDark;
+        height: 20px;
+        width: 30px;
+        font-size: 1.2em;
+        border-right: 2.5px solid $accent;
+    }
+
+    &.input-name {
+        color: $accent;
+        background: $background;
+        border: 0.5px solid $accent;
+        border-radius: 7px;
+        height: 32px;
+        width: 180px;
+    }
+
+    &.buttons {
+        padding-top: 1.5em;
+        text-align: center;
+    }
+
+
+    &.link {
+        color: #4B72C2;
+        display: block;
+        text-align: center;
+        font-size: 0.8em;
+        padding-bottom: 4em;
+        text-decoration: none;
+
+        &.link:after {
+            content: "  \279C";
+            color: #4B72C2;
+            font-size: 1.2em;
+        }
+    }
+}
+
+::placeholder {
+    color: $accent;
+    opacity: 3;
+    padding-left: 1em;
+}

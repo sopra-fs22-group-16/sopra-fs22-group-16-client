@@ -36,7 +36,6 @@ const Game = ({id}) => {
     });
 
     const [showTurnPopUp, setShowTurnPopUp] = useState(false);
-    const [surrenderPopUp, setShowTurnPopUp] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
@@ -112,7 +111,6 @@ const Game = ({id}) => {
 
     const confirmSurrender = () => {
         //TODO: call server to inform that the player has surrender and get information from server callback
-        setShowSurrenderPopUp(true);
         setGameResult("DEFEAT");
         setWinner("player1");
 
@@ -206,15 +204,15 @@ const Game = ({id}) => {
                 <CustomPopUp open={surrender} information={"Do you really want to surrender?"}>
                     <Button
                         onClick={() =>
-                            setSurrender(false)
-                        }>
-                        CONTINUE
-                    </Button>
-                    <Button
-                        onClick={() =>
                             confirmSurrender()
                         }>
                         SURRENDER
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            setSurrender(false)
+                        }>
+                        RETURN TO GAME
                     </Button>
                 </CustomPopUp>
                 <CustomPopUp open={endGame} information="">
