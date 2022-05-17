@@ -4,7 +4,6 @@ import LobbyRouter from "components/routing/routers/LobbyRouter";
 import GameRouter from "components/routing/routers/GameRouter";
 import LoginUser from "components/views/LoginUser"
 import RegisterUser from "components/views/RegisterUser"
-import User from "components/views/User";
 
 import HomePage from "components/views/HomePage";
 
