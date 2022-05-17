@@ -1,6 +1,5 @@
 import PropTypes from "prop-types";
 import CustomPopUp from "./CustomPopUp";
-import DropDown from "./DropDown";
 import {defaultTheme} from "../../styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
@@ -10,8 +9,6 @@ const HoldToConfirmPopUp = props => {
 
     const [progress, setProgress] = useState(0);
     const intervalRef = useRef(null);
-
-    const timeToCompleteMs = 1000;
 
     useEffect(() => {
         return () => stopCounter(); // when App is unmounted we should stop counter
@@ -53,6 +50,7 @@ const HoldToConfirmPopUp = props => {
             onTouchStart={startCounter}
             onTouchEnd={stopCounter}
             onTouchCancel={stopCounter}
+            style={{cursor: 'pointer'}}
         >
             <ThemeProvider theme={defaultTheme}>
                 <div style={{width: '100%'}}>
