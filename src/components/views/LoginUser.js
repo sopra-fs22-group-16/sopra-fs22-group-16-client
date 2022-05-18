@@ -10,27 +10,10 @@ import UserModel from 'models/UserModel';
 import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
+import FormField from "components/ui/FormField"
 
 import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/LoginRegisterUser.scss';
-
-const FormField = props => {
-    return (
-      <div className="LoginRegisterUser lobby-name">
-        <input
-          className="LoginRegisterUser input-name"
-          placeholder="enter here.."
-          value={props.value}
-          onChange={e => props.onChange(e.target.value)}
-        />
-      </div>
-    );
-  };
-  
-  FormField.propTypes = {
-    value: PropTypes.string,
-    onChange: PropTypes.func
-  };
   
   const LoginUser = props => {
     const history = useHistory();
@@ -64,6 +47,7 @@ const FormField = props => {
                   <td>
             <FormField
               value={username}
+              type = "text"
               onChange={un => setUsername(un)}
             />
             </td>
@@ -75,6 +59,7 @@ const FormField = props => {
                   <td>
             <FormField
               value={password}
+              type = "password"
               onChange={un => setPassword(un)}
             />
             </td>
