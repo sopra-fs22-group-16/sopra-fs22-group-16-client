@@ -19,13 +19,18 @@ const ShareLobbyCode = ({ id }) => {
     const [getDataFailed, setGetDataFailed] = useState(false);
 
     const unblockRef = useRef(null);
-
     const allowedFilterList = [
         `/lobby/${id}/update`,
         `/lobby/${id}/invite-users`,
         `/lobby/${id}/share/qr`,
         `/lobby/${id}`
     ];
+
+    const beforeUnloadListener = (event) => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
 
     useEffect(() => {
         unblockRef.current = history.block((location) => {
@@ -44,11 +49,13 @@ const ShareLobbyCode = ({ id }) => {
                 return result;
             }
         );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
 
-    // On component unmount unblock history
+    // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
 
 

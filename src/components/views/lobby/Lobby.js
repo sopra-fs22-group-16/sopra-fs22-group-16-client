@@ -31,12 +31,22 @@ const FormName = props => {
 
 const Lobby = ({id}) => {
 
+    const history = useHistory();
+    const location = useLocation();
+
     const unblockRef = useRef(null);
     const allowedFilterList = [
         `/lobby/${id}/update`,
         `/lobby/${id}/invite-users`,
-        `/lobby/${id}/share/qr`
+        `/lobby/${id}/share/qr`,
+        `/lobby/${id}`
     ];
+
+    const beforeUnloadListener = (event) => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
 
     useEffect(() => {
         unblockRef.current = history.block((location) => {
@@ -55,15 +65,14 @@ const Lobby = ({id}) => {
                 return result;
             }
         );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
 
-    // On component unmount unblock history
+    // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
-
-    const history = useHistory();
-    const location = useLocation();
 
     //we get the information from the creation page
     const token = localStorage.getItem("token");
@@ -212,7 +221,7 @@ const Lobby = ({id}) => {
             setInvitationCode(apiResponse.data.invitationCode);
 
             // Check if a game is already running, then redirect to the game
-            if(apiResponse.data.gameRunning){
+            if (apiResponse.data.gameRunning) {
                 unblockRef?.current();
                 history.push(`/game/${id}`);
             }
@@ -309,8 +318,10 @@ const Lobby = ({id}) => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
-                    <Button onClick={() =>
-                        history.push('/home')
+                    <Button onClick={() => {
+                        unblockRef?.current();
+                        history.push('/home');
+                    }
                     }>
                         Return Home
                     </Button>
@@ -320,6 +331,7 @@ const Lobby = ({id}) => {
                     <Button onClick={() => {
                         localStorage.removeItem('token');
                         localStorage.removeItem('playerId');
+                        unblockRef?.current();
                         history.push('/home')
                     }
                     }>
