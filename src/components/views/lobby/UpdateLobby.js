@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useHistory } from 'react-router-dom';
 
 import { api } from 'helpers/api';
@@ -36,6 +36,38 @@ const UpdateLobby = ({ id }) => {
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
 
+    const unblockRef = useRef(null);
+
+    const allowedFilterList = [
+        `/lobby/${id}/update`,
+        `/lobby/${id}/invite-users`,
+        `/lobby/${id}/share/qr`,
+        `/lobby/${id}`
+    ];
+
+    useEffect(() => {
+        unblockRef.current = history.block((location) => {
+                // Check if new path is in allowed paths
+                if (allowedFilterList.includes(location.pathname)) {
+                    return true;
+                }
+
+                let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('playerId');
+                }
+                return result;
+            }
+        );
+    }, []);
+
+    // On component unmount unblock history
+    useEffect(() => () => {
+        unblockRef?.current();
+    }, []);
 
     useEffect(() => {
         async function fetchData() {
