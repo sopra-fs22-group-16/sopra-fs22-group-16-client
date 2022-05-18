@@ -11,19 +11,14 @@ const GameRouter = props => {
     return (
         <div>
             <Switch>
-                <Route exact path={`${props.base}`}>
-                    <Redirect to={'/home'} />
-                </Route>
-                <Switch>
-                    <TokenGuard>
-                        <Route exact path={`${props.base}/:id`} render={({ match }) => {
-                            const id = parseInt(match.params.id)
-                            return (
-                                <Game id={id} />
-                            )
-                        }} />
-                    </TokenGuard>
-                </Switch>
+                <TokenGuard>
+                    <Route exact path={`${props.base}/:id`} render={({ match }) => {
+                        const id = parseInt(match.params.id)
+                        return (
+                            <Game id={id} />
+                        )
+                    }} />
+                </TokenGuard>
             </Switch>
         </div>
     );

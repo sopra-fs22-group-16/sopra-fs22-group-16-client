@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
 import {ThemeProvider} from "@emotion/react";
@@ -19,6 +19,37 @@ const Game = ({id}) => {
 
     const history = useHistory();
     const location = useLocation();
+
+    const unblockRef = useRef(null);
+
+    const beforeUnloadListener = (event) => {
+        //TODO: Add API call to surrender
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
+
+    useEffect(() => {
+        unblockRef.current = history.block((location) => {
+                let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    //TODO: Add API call to surrender
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('playerId');
+                }
+                return result;
+            }
+        );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
+
+    // On component unmount unblock history, and remove event listeners
+    useEffect(() => () => {
+        unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
 
     const token = localStorage.getItem("token");
 
@@ -89,7 +120,6 @@ const Game = ({id}) => {
                 units: unitArray
             });
 
-
             setShowTurnPopUp(true);
 
         } catch (error) {
@@ -100,14 +130,11 @@ const Game = ({id}) => {
 
 
     const changeTurn = (turnInfo) => {
-        console.log(turnInfo);
-        console.log("turn updating");
         setGameData({
             ...gameData,
             turn: turnInfo.turn,
             playerIdCurrentTurn: turnInfo.playerId,
         });
-        console.log(gameData.playerIdCurrentTurn);
         setShowTurnPopUp(true);
     }
 
@@ -122,6 +149,8 @@ const Game = ({id}) => {
 
     const goStatistics = () => {
         //TODO: go to the statistics view
+        // If this is another component, add back the whitelist to history.block
+        // example in lobby
     }
 
     const playAgain = () => {
@@ -129,8 +158,10 @@ const Game = ({id}) => {
     }
 
     const goHome = () => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
         localStorage.removeItem('token');
         localStorage.removeItem('playerId');
+        unblockRef?.current();
         history.push('/home');
     }
 
@@ -187,7 +218,7 @@ const Game = ({id}) => {
                 }
                 <CustomPopUp open={getDataFailed} information={"Could not get game data!"}>
                     <Button onClick={() =>
-                        window.location.reload()
+                        obtainAndLoadGameData()
                     }>
                         Retry
                     </Button>
