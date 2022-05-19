@@ -20,6 +20,11 @@ const HomePage = () => {
         history.push('/lobby/create');
     }
 
+    const loginUser = () => {
+        // change status from ONLINE to OFFLINE
+        history.push('/user/login');
+    }
+
     return (
         <div className={"HomePage baseContainer"}>
             <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
@@ -40,6 +45,14 @@ const HomePage = () => {
                             onClick={() => goCreateLobby()}
                         >
                             CREATE LOBBY
+                        </Button>
+                    </div>
+                    <div className="HomePage button-container">
+                        <Button className = "primary-button register"
+                            width="100%"
+                            onClick={() => loginUser()}
+                        >
+                            SIGN IN/CREATE USER
                         </Button>
                     </div>
                 </div>

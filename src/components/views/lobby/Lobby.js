@@ -1,15 +1,15 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory, Link, useLocation } from 'react-router-dom';
-import { ThemeProvider } from "@emotion/react";
+import React, {useState, useEffect, useRef} from 'react';
+import {useHistory, Link, useLocation} from 'react-router-dom';
+import {ThemeProvider} from "@emotion/react";
 
-import { api } from 'helpers/api';
+import {api} from 'helpers/api';
 import CustomPopUp from "components/ui/CustomPopUp";
 import Socket from "components/socket/Socket";
 import BaseContainer from "components/ui/BaseContainer";
-import { Button } from 'components/ui/Button';
+import {Button} from 'components/ui/Button';
 import Countdown from 'components/ui/Countdown';
 
-import { defaultTheme } from "styles/themes/defaulTheme";
+import {defaultTheme} from "styles/themes/defaulTheme";
 import 'styles/views/lobby/Lobby.scss';
 
 // form for changing name
@@ -29,10 +29,50 @@ const FormName = props => {
     );
 };
 
-const Lobby = ({ id }) => {
+const Lobby = ({id}) => {
 
     const history = useHistory();
     const location = useLocation();
+
+    const unblockRef = useRef(null);
+    const allowedFilterList = [
+        `/lobby/${id}/update`,
+        `/lobby/${id}/invite-users`,
+        `/lobby/${id}/share/qr`,
+        `/lobby/${id}`
+    ];
+
+    const beforeUnloadListener = (event) => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
+
+    useEffect(() => {
+        unblockRef.current = history.block((location) => {
+                // Check if new path is in allowed paths
+                if (allowedFilterList.includes(location.pathname)) {
+                    return true;
+                }
+
+                let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('playerId');
+                }
+                return result;
+            }
+        );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
+
+    // On component unmount unblock history, and remove event listeners
+    useEffect(() => () => {
+        unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
 
     //we get the information from the creation page
     const token = localStorage.getItem("token");
@@ -53,16 +93,10 @@ const Lobby = ({ id }) => {
     const [playerRemoved, setPlayerRemoved] = useState(false);
 
     const returnLobbies = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-        localStorage.removeItem('token');
-        localStorage.removeItem('playerId');
-        history.push('/public-lobbies');
+        history.push('/lobby/join');
     }
 
     const returnHome = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-        localStorage.removeItem('token');
-        localStorage.removeItem('playerId');
         history.push('/home');
     }
 
@@ -73,13 +107,12 @@ const Lobby = ({ id }) => {
                 const requestBody = {
                     "ready": !user.ready
                 };
-                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
             }
         } catch (error) {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
         }
     }
-
 
 
     // set new name, let the user know if it's already taken (409)
@@ -90,17 +123,13 @@ const Lobby = ({ id }) => {
                     const requestBody = {
                         "name": playerName
                     };
-                    await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
-                }
-                catch (error) {
+                    await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+                } catch (error) {
                     if (error.response.status === 409) {
                         setErrorMessage("This name is already taken!");
-                    }
-
-                    else if (error.response.status === 400) {
+                    } else if (error.response.status === 400) {
                         setErrorMessage("The name should not be empty!");
-                    }
-                    else {
+                    } else {
                         setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
                     }
                 }
@@ -121,8 +150,7 @@ const Lobby = ({ id }) => {
                     </FormName>
                 </td>
             )
-        }
-        else {
+        } else {
             return (
                 <td>{user.name}</td>
             )
@@ -132,9 +160,10 @@ const Lobby = ({ id }) => {
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
         if (msg === "GameCreated") {
+            // Unblock history
+            unblockRef?.current();
             history.push(`/game/${id}`);
-        }
-        else {
+        } else {
             if (msg != "") {
                 // show a popup to the player if they are not in the lobby list of players
                 if (!msg.players.some(e => e.id === parseInt(localStorage.getItem("playerId")))) {
@@ -149,7 +178,7 @@ const Lobby = ({ id }) => {
     const createGame = async () => {
         if (isHost) {
             try {
-                await api.post(`/v1/game/match/${id}`, JSON.stringify({}), { headers: { 'token': token || '' } });
+                await api.post(`/v1/game/match/${id}`, JSON.stringify({}), {headers: {'token': token || ''}});
             } catch (error) {
                 setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
                 notReady();
@@ -163,7 +192,7 @@ const Lobby = ({ id }) => {
             const requestBody = {
                 "ready": false
             };
-            await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+            await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
         } catch (error) {
             setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
         }
@@ -174,7 +203,7 @@ const Lobby = ({ id }) => {
 
             const apiResponse = await api.get(`/v1/game/lobby/${id}`,
                 {
-                    headers: { 'token': token }
+                    headers: {'token': token}
                 }
             );
 
@@ -190,6 +219,12 @@ const Lobby = ({ id }) => {
             setName(apiResponse.data.name);
             setPlayers(apiResponse.data.players);
             setInvitationCode(apiResponse.data.invitationCode);
+
+            // Check if a game is already running, then redirect to the game
+            if (apiResponse.data.gameRunning) {
+                unblockRef?.current();
+                history.push(`/game/${id}`);
+            }
 
         } catch (error) {
             setGetDataFailed(true);
@@ -214,52 +249,57 @@ const Lobby = ({ id }) => {
                 }
                 <table className="lobby-info">
                     <tbody>
-                        <tr>
-                            <th>NAME</th>
-                            <td nowrap={"true"} style={{ overflow: 'hidden', 'maxWidth': '0' }}>{name}</td>
-                        </tr>
-                        <tr>
-                            <th>ACCESS</th>
-                            <td>{visibility === "PUBLIC" ? "public" : "private"}</td>
-                        </tr>
-                        <tr>
-                            <th>MODE</th>
-                            <td>{gameMode === "ONE_VS_ONE" ? "1v1" : "2v2"}</td>
-                        </tr>
-                        <tr>
-                            <th>PLAYERS</th>
-                            <td>{presentPlayers + '/' + totalPlayers}</td>
-                        </tr>
-                        <tr>
-                            <th>READY</th>
-                            <td>{readyPlayers + '/' + totalPlayers}</td>
-                        </tr>
+                    <tr>
+                        <th>NAME</th>
+                        <td nowrap={"true"} style={{overflow: 'hidden', 'maxWidth': '0'}}>{name}</td>
+                    </tr>
+                    <tr>
+                        <th>ACCESS</th>
+                        <td>{visibility === "PUBLIC" ? "public" : "private"}</td>
+                    </tr>
+                    <tr>
+                        <th>MODE</th>
+                        <td>{gameMode === "ONE_VS_ONE" ? "1v1" : "2v2"}</td>
+                    </tr>
+                    <tr>
+                        <th>PLAYERS</th>
+                        <td>{presentPlayers + '/' + totalPlayers}</td>
+                    </tr>
+                    <tr>
+                        <th>READY</th>
+                        <td>{readyPlayers + '/' + totalPlayers}</td>
+                    </tr>
                     </tbody>
                 </table>
                 <label className="lobby lobby-labels">Click on your row to update your information and player
                     status.</label>
                 <table className="player-view">
                     <tbody>
-                        <tr>
-                            <th>PLAYER</th>
-                            <th>TEAM</th>
-                            <th>STATUS</th>
-                        </tr>
-                        {players ? players.map((user) => {
-                            return (
-                                <tr key={user.id} style={user.id === parseInt(localStorage.getItem("playerId")) ? { background: '#787878' } : {}}>
-                                    {setClassName(user)}
-                                    <td>
-                                        <div className={'lobby teambox team' + user.team} />
-                                    </td>
-                                    <td>
-                                        <input id={user.id} className="lobby status" type="checkbox"
-                                            checked={user.ready}
-                                            onClick={() => changeStatus(user)} />
-                                    </td>
-                                </tr>
-                            )
-                        }) : null}
+                    <tr>
+                        <th>PLAYER</th>
+                        <th>TEAM</th>
+                        <th>STATUS</th>
+                    </tr>
+                    {players ? players.map((user) => {
+                        return (
+                            <tr key={user.id}
+                                style={user.id === parseInt(localStorage.getItem("playerId")) ? {background: '#787878'} : {}}>
+                                {setClassName(user)}
+                                <td>
+                                    <div className={'lobby teambox team' + user.team}/>
+                                </td>
+                                <td>
+                                    <input id={user.id} className="lobby status" type="checkbox"
+                                           checked={user.ready}
+                                           onClick={() => changeStatus(user)}
+                                           onChange={() => {
+                                           }}
+                                    />
+
+                                </td>
+                            </tr>
+                        )
+                    }) : null}
                     </tbody>
                 </table>
                 {
@@ -278,16 +318,20 @@ const Lobby = ({ id }) => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={getDataFailed} information={"Could not get lobby data - Please try again later!"}>
-                    <Button onClick={() =>
-                        history.push('/home')
+                    <Button onClick={() => {
+                        unblockRef?.current();
+                        history.push('/home');
+                    }
                     }>
                         Return Home
                     </Button>
                 </CustomPopUp>
-                <CustomPopUp open={playerRemoved} information={"Sorry, you have been removed from this lobby due to a change of game size! You will be redirected back to the home page."}>
+                <CustomPopUp open={playerRemoved}
+                             information={"Sorry, you have been removed from this lobby due to a change of game size! You will be redirected back to the home page."}>
                     <Button onClick={() => {
                         localStorage.removeItem('token');
                         localStorage.removeItem('playerId');
+                        unblockRef?.current();
                         history.push('/home')
                     }
                     }>

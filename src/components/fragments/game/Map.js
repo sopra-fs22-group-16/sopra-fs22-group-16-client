@@ -31,7 +31,7 @@ const Map = props => {
     const [dropDown, setDropDown] = useState({
         open: false,
         showAttack: false,
-        showWait: false,
+        showMove: false,
         y: 0,
         x: 0,
         target: null
@@ -77,7 +77,7 @@ const Map = props => {
                         setDropDown({
                             open: true,
                             showAttack: true,
-                            showWait: true,
+                            showMove: true,
                             y: tile.y * 48,
                             x: (tile.x + 1) * 48,
                             target: tile
@@ -86,7 +86,7 @@ const Map = props => {
                         setDropDown({
                             open: true,
                             showAttack: true,
-                            showWait: false,
+                            showMove: false,
                             y: tile.y * 48,
                             x: (tile.x + 1) * 48,
                             target: tile
@@ -145,7 +145,7 @@ const Map = props => {
                     setDropDown({
                         open: true,
                         showAttack: true,
-                        showWait: true,
+                        showMove: true,
                         y: tile.y * 48,
                         x: (tile.x + 1) * 48,
                         target: tile
@@ -155,7 +155,7 @@ const Map = props => {
                     setDropDown({
                         open: true,
                         showAttack: false,
-                        showWait: true,
+                        showMove: true,
                         y: tile.y * 48,
                         x: (tile.x + 1) * 48,
                         target: tile
@@ -221,7 +221,7 @@ const Map = props => {
         }
     }
 
-    const onClickWait = async (tile) => {
+    const onClickMove = async (tile) => {
         // pressing wait on the tile with unit is the same as attack
         if (selectedUnit.traversableTiles.includes(props.mapData[selectedUnit.pathGoal[0]][selectedUnit.pathGoal[1]])) {
 
@@ -516,10 +516,10 @@ const Map = props => {
             <DropDown
                 open={dropDown.open}
                 showAttack={dropDown.showAttack}
-                showWait={dropDown.showWait}
+                showMove={dropDown.showMove}
                 y={dropDown.y}
                 x={dropDown.x}
-                onClickWait={onClickWait}
+                onClickMove={onClickMove}
                 onClickCancel={onClickCancel}
                 onClickAttack={onClickAttack}
                 target={dropDown.target}
