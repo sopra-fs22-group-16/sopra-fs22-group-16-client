@@ -111,10 +111,11 @@ const Game = ({id}) => {
 
     const confirmSurrender = async() => {
         await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
-        setEndGame(true);
     }
 
     const receiveEndGame = (surrenderInfo) => {
+        console.log("game finished in game");
+        setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
         let result = loser == playerId? "DEFEAT": "WIN";
         let winner = loser == playerId? Math.abs(playerId-1): playerId;
