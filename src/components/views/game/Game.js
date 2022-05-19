@@ -109,12 +109,17 @@ const Game = ({id}) => {
     }
 
 
-    const confirmSurrender = () => {
-        //TODO: call server to inform that the player has surrender and get information from server callback
-        setGameResult("DEFEAT");
-        setWinner("player1");
-
+    const confirmSurrender = async() => {
+        await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
         setEndGame(true);
+    }
+
+    const receiveEndGame = (surrenderInfo) => {
+        let loser = surrenderInfo.surrenderedPlayer;
+        let result = loser == playerId? "DEFEAT": "WIN";
+        let winner = loser == playerId? Math.abs(playerId-1): playerId;
+        setGameResult(result);
+        setWinner(gameData.players[winner].name);
     }
 
     const goStatistics = () => {
@@ -155,6 +160,8 @@ const Game = ({id}) => {
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
                         onChangeTurn={changeTurn}
+                        onEndGame = {receiveEndGame}
+
                     />
 
             }

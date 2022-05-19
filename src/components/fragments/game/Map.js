@@ -265,11 +265,15 @@ const Map = props => {
     }
 
 
-    // refresh view when receiving a message from the socket
-    // TODO: resolve 
+    // refresh view when receiving a message from the socket 
     const onMessage = async (msg) => {
         console.log(msg);
-        //alert(props.playerIdCurrentTurn !== playerId);
+        //if the message is about defeat
+        if (msg.surrenderInfo) {
+            props.onEndGame(msg.surrenderInfo)
+        }
+
+        else {
 
         // only update health if the player is not moving, otherwise in respective move functions
         if (msg.move?.start && msg.move?.destination) {
@@ -314,6 +318,7 @@ const Map = props => {
             })
         }
     }
+}
 
 
     const updateHealth = (healthMessage) => {
