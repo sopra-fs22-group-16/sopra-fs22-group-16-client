@@ -33,7 +33,7 @@ const CreateLobby = () => {
     const [gameMode, setGameMode] = useState("ONE_VS_ONE");
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
-    const [creating, setCreating] = useState("");
+    const [creating, setCreating] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
     const token = null;
 

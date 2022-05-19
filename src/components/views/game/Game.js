@@ -23,7 +23,7 @@ const Game = ({id}) => {
     const token = localStorage.getItem("token");
 
     const playerId = parseInt(localStorage.getItem("playerId"));
-    const teamId = playerId; // TODO: Get Team Id
+    let teamId;
 
     const [gameData, setGameData] = useState({
         gameMode: '',
@@ -77,15 +77,18 @@ const Game = ({id}) => {
                 unitArray.push(unitModel);
             });
 
+            teamId = response.data.players[playerId].teamId;
+
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
-                turn: response.data.turn,
+                turn: response.data.turnNumber,
                 playerIdCurrentTurn: response.data.playerIdCurrentTurn,
                 players: response.data.players,
                 map: mapArray,
                 units: unitArray
             });
+
 
             setShowTurnPopUp(true);
 

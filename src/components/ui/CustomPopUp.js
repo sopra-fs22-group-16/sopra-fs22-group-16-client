@@ -2,12 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 import {Backdrop, Stack} from "@mui/material";
 import "styles/ui/CustomPopUp.scss";
+import HoldToConfirmPopUp from "./HoldToConfirmPopUp";
 
 const CustomPopUp = props => {
 
     return (
         <Backdrop
             sx={{
+                ...props.style,
                 color: '#fff',
                 zIndex: (theme) => theme.zIndex.drawer + 1
             }}
@@ -35,6 +37,11 @@ const CustomPopUp = props => {
 
 }
 
+HoldToConfirmPopUp.defaultProps = {
+    open: false,
+    style: {},
+};
+
 CustomPopUp.propTypes = {
     open: PropTypes.bool,
     information: PropTypes.any.isRequired,
@@ -45,6 +52,7 @@ CustomPopUp.propTypes = {
     onTouchStart: PropTypes.func,
     onTouchEnd: PropTypes.func,
     onTouchCancel: PropTypes.func,
+    style: PropTypes.object
 }
 
 export default CustomPopUp;
