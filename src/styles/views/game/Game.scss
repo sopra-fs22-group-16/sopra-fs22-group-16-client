@@ -1,3 +1,4 @@
+@import 'styles/theme';
 @mixin transform($val) {
     -webkit-transform: $val;
     -moz-transform: $val;
@@ -65,6 +66,13 @@
     color: #365144;
 }
 
+.loserWindow {
+    font-weight: 700;
+    font-size: 3em;
+    line-height: 36px;
+    color: #8c2016;
+}
+
 .turnIndicatorContainer {
 
 
@@ -83,4 +91,28 @@
     &.information {
         margin-bottom: 0;
     }
+}
+
+table.statistics {
+    border: 1.5px solid $accent;
+    border-radius: 8px;
+    align-self: center;
+    width: 200px;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: 0;
+}
+
+table.statistics td {
+    text-align: center;
+    color: $accent;
+    height: 20px;
+    font-size: 0.8em;
+}
+
+table.statistics th {
+    text-align: center;
+    color: darkgoldenrod;
+    height: 12px;
+    font-size: 0.7em;
 }

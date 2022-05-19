@@ -1,3 +1,4 @@
+import CanvasJSReact from "helpers/canvas.js.react";
 import React, {useEffect, useState} from "react";
 import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
@@ -12,18 +13,28 @@ import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
+import StatsData from "models/StatsData";
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 import "styles/views/game/Game.scss"
+import statisticsMockData from "./statisticsMockData";
+
+var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Game = ({id}) => {
 
     const history = useHistory();
     const location = useLocation();
+    const [dataGraphs, setDataGraphs] = useState(null);
 
     const token = localStorage.getItem("token");
 
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
+
+    // statistics add-ons
+    var CanvasJS = CanvasJSReact.CanvasJS;
+    var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
 
     const [gameData, setGameData] = useState({
         gameMode: '',
@@ -41,6 +52,7 @@ const Game = ({id}) => {
 
     const [surrender, setSurrender] = useState(false);
     const [endGame, setEndGame] = useState(false);
+    const [showStatistics, setShowStatistics] = useState(false);
     //TODO: set the values with the information received from the server (socket)
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
@@ -123,9 +135,129 @@ const Game = ({id}) => {
         setWinner(gameData.players[winner].name);
     }
 
-    const goStatistics = () => {
+    const goStatistics = async() => {
         //TODO: go to the statistics view
+        //const response = await api.get(`/v1/game/match/${id}/statistics`, {headers: {'token': token || ''}}); 
+        const response = statisticsMockData;
+        setShowStatistics(true);
+        convertTurnData(statisticsMockData);
+        
     }
+
+    const convertTurnData = (statisticsData) => {
+        const data = statisticsData.players;
+        console.log(data);
+        let playerArray = [];
+        let players = ["Player-0", "Player-1"]
+    
+        Object.keys(data).forEach(key => {
+            console.log(key+ "key");
+            let player = data[key];
+            console.log(player.unitsperTurn);
+            // player name
+            let playerName = players[key];
+            let turnArray = [];
+            player.unitsperTurn.forEach((turn) => {
+                let turnRow = { y: turn.units, label: turn.turn};
+                turnArray.push(turnRow);
+            });
+    
+            console.log(turnArray);
+            const playerObject = new StatsData(playerName, turnArray);
+            delete playerObject.x;
+            console.log(playerObject.x + " here");
+            console.log(playerObject);
+            playerArray.push(playerObject);
+        })
+    
+        console.log(playerArray);
+        setDataGraphs(playerArray);
+    
+    };
+
+
+    const StatisticsChart = () => {
+      
+    
+      const options = {
+        /*
+        title: {
+          text: "Turn information per player",
+          fontColor: "white",
+          font: "Noto-Sans",
+          fontWeight: "lighter"
+        },
+        */
+        backgroundColor: "#292420",
+        axisY : {
+            title: "Number of Units",
+            labelFontColor: "#dedace",
+            titleFontColor: "#dedace"
+        },
+        axisX : {
+            title: "Turn",
+            labelFontColor: "#dedace",
+            titleFontColor: "#dedace"
+        },
+
+        legend : {
+            title: "Players",
+            fontColor: "#dedace",
+            verticalAlign: "top",
+            cursor: "pointer",
+            itemclick: function (e) {
+                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
+                    e.dataSeries.visible = false;
+                } else {
+                    e.dataSeries.visible = true;
+                }
+
+                e.chart.render();
+            }
+        },
+
+        height: 200,
+        data: dataGraphs
+      };
+      
+      return(
+        <div>
+    <label color = "#dedace" > Turn information per player</label> 
+              <CanvasJSChart options = {options}
+                  /* onRef = {ref => this.chart = ref} */
+              />
+    <table className="statistics">
+        <thead>
+            <tr>
+                <th> Metric</th>
+                <th> Player-0</th>
+                <th> Player-1</th>
+            </tr>
+        </thead>
+                    <tbody>
+                        <tr>
+                            <th>UNITS/TURN</th>
+                            <td > 2</td>
+                            <td > 3</td>
+                        </tr>
+                        <tr>
+                            <th>KILLS/TURN</th>
+                            <td> 0.4</td>
+                            <td> 0.4</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL MOVES</th>
+                            <td> 40</td>
+                            <td> 35</td>
+                        </tr>
+                        </tbody>
+                        </table>
+            </div>
+      );
+      
+      };
+
+
 
     const playAgain = () => {
         //TODO: play another game
@@ -233,6 +365,24 @@ const Game = ({id}) => {
                         STATISTICS
                     </Button>
                     <Button
+                        onClick={() =>
+                            playAgain()
+                        }>
+                        PLAY AGAIN
+                    </Button>
+                    <Button
+                        className="return"
+                        onClick={() =>
+                            goHome()
+                        }>
+                        RETURN HOME
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp style = {{'width':'600'}}
+                open={showStatistics} information="">
+                    <label className={"winnerWindow"}> STATISTICS </label>
+                    <StatisticsChart/>
+                    <Button 
                         onClick={() =>
                             playAgain()
                         }>
