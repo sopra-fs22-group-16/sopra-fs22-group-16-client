@@ -159,20 +159,20 @@ const Lobby = ({id}) => {
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
-        console.log(msg);
-        if(msg.pullUpdate){
-            obtainAndLoadLobbyInfo();
-        }
-        if(msg.redirectToGame){
-            // Unblock history
-            unblockRef?.current();
-            history.push(`/game/${id}`);
-        }
-        if(msg.removedPlayerIdList){
+        if(msg.removedPlayerIdList?.includes(parseInt(localStorage.getItem("playerId")))){
             setPlayerRemoved(true);
-        }
-        if(msg.nameChangedOfPlayerWithId){
-            //TODO: Inform this player
+        }else{
+            if(msg.pullUpdate){
+                obtainAndLoadLobbyInfo();
+            }
+            if(msg.redirectToGame){
+                // Unblock history
+                unblockRef?.current();
+                history.push(`/game/${id}`);
+            }
+            if(msg.nameChangedOfPlayerWithId){
+                //TODO: Inform this player
+            }
         }
     }
 
