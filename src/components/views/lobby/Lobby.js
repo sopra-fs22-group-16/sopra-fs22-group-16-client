@@ -161,18 +161,14 @@ const Lobby = ({id}) => {
     const onMessage = (msg) => {
         if(msg.removedPlayerIdList?.includes(parseInt(localStorage.getItem("playerId")))){
             setPlayerRemoved(true);
-        }else{
-            if(msg.pullUpdate){
-                obtainAndLoadLobbyInfo();
-            }
-            if(msg.redirectToGame){
-                // Unblock history
-                unblockRef?.current();
-                history.push(`/game/${id}`);
-            }
-            if(msg.nameChangedOfPlayerWithId){
-                //TODO: Inform this player
-            }
+        }else if(msg.nameChangedOfPlayerWithId){
+            //TODO: Inform this player
+        }else if(msg.redirectToGame){
+            // Unblock history
+            unblockRef?.current();
+            history.push(`/game/${id}`);
+        } else if(msg.pullUpdate){
+            obtainAndLoadLobbyInfo();
         }
     }
 
