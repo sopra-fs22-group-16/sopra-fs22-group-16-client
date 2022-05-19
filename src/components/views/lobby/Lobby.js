@@ -159,20 +159,23 @@ const Lobby = ({id}) => {
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
-        if (msg === "GameCreated") {
+        console.log(msg);
+        if(msg.pullUpdate){
+            obtainAndLoadLobbyInfo();
+        }
+        if(msg.redirectToGame){
             // Unblock history
             unblockRef?.current();
             history.push(`/game/${id}`);
-        } else {
-            if (msg != "") {
-                // show a popup to the player if they are not in the lobby list of players
-                if (!msg.players.some(e => e.id === parseInt(localStorage.getItem("playerId")))) {
-                    setPlayerRemoved(true);
-                }
-            }
-            obtainAndLoadLobbyInfo();
+        }
+        if(msg.removedPlayerIdList){
+            setPlayerRemoved(true);
+        }
+        if(msg.nameChangedOfPlayerWithId){
+            //TODO: Inform this player
         }
     }
+
 
     //action after the countdown ends
     const createGame = async () => {
