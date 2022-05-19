@@ -15,12 +15,12 @@ const GameRouter = props => {
             </Route>
             <Switch>
                 <TokenGuard>
-                    <Route exact path={`${props.base}/:id`} render={({match}) => {
+                    <Route exact path={`${props.base}/:id`} render={({ match }) => {
                         const id = parseInt(match.params.id)
                         return (
-                            <Game id={id}/>
+                            <Game id={id} />
                         )
-                    }}/>
+                    }} />
                 </TokenGuard>
             </Switch>
         </Switch>
