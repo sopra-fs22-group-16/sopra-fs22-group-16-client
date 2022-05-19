@@ -207,15 +207,15 @@ const Game = ({id}) => {
                 <CustomPopUp open={surrender} information={"Do you really want to surrender?"}>
                     <Button
                         onClick={() =>
-                            setSurrender(false)
-                        }>
-                        CONTINUE
-                    </Button>
-                    <Button
-                        onClick={() =>
                             confirmSurrender()
                         }>
                         SURRENDER
+                    </Button>
+                    <Button
+                        onClick={() =>
+                            setSurrender(false)
+                        }>
+                        RETURN TO GAME
                     </Button>
                 </CustomPopUp>
                 <CustomPopUp open={endGame} information="">
