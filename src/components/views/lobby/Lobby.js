@@ -11,6 +11,7 @@ import Countdown from 'components/ui/Countdown';
 
 import {defaultTheme} from "styles/themes/defaulTheme";
 import 'styles/views/lobby/Lobby.scss';
+import LobbyMessageModel from "../../../models/LobbyMessageModel";
 
 // form for changing name
 const FormName = props => {
@@ -159,20 +160,20 @@ const Lobby = ({id}) => {
 
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
-        if (msg === "GameCreated") {
+        let message = new LobbyMessageModel(msg);
+        if(message.removedPlayerIdList?.includes(parseInt(localStorage.getItem("playerId")))){
+            setPlayerRemoved(true);
+        }else if(message.nameChangedOfPlayerWithId){
+            //TODO: Inform this player
+        }else if(message.redirectToGame){
             // Unblock history
             unblockRef?.current();
             history.push(`/game/${id}`);
-        } else {
-            if (msg != "") {
-                // show a popup to the player if they are not in the lobby list of players
-                if (!msg.players.some(e => e.id === parseInt(localStorage.getItem("playerId")))) {
-                    setPlayerRemoved(true);
-                }
-            }
+        } else if(message.pullUpdate){
             obtainAndLoadLobbyInfo();
         }
     }
+
 
     //action after the countdown ends
     const createGame = async () => {
