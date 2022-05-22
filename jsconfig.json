@@ -3,6 +3,5 @@
     "baseUrl": "src"
   },
   "include": [
-    "src"
-, "src/helpers/canvas.js.min.js"  ]
+    "src" ]
 }
