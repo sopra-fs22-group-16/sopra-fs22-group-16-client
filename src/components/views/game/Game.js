@@ -224,33 +224,6 @@ const Game = ({id}) => {
         console.log(playerUnitArray);
         let playerKillArray = statisticsData.killsPerPlayer;
         console.log(playerKillArray);
-        /*
-        Object.keys(data).forEach(key => {
-            console.log(key+ "key");
-            let player = data[key];
-            console.log(player.unitsPerPlayer);
-            console.log(player.killsPerPlayer);
-            // player name
-            /*
-            let turnArray = [];
-            let killArray = [];
-            player.unitsPerPlayer.forEach((turn) => {
-                let turnRow = turn.units;
-                turnArray.push(turnRow);
-            });
-
-            player.killsPerPlayer.forEach((turn) => {
-                let turnRow = turn.kills;
-                killArray.push(turnRow);
-            });
-            
-            let turnArray = player.unitsPerPlayer;
-            let killArray = player.killsPerPlayer;
-            console.log(turnArray);
-            playerArray.push(turnArray);
-            playerKillArray.push(killArray);
-          });
-          */
     
         const dataFinalUnits = [];
         const dataFinalKills = [];
@@ -291,7 +264,6 @@ const Game = ({id}) => {
 
 const StatisticsChart = () => {
 
-    let xTickTurns = Array.from(Array(15).keys());
 
     
       return(
@@ -317,7 +289,7 @@ const StatisticsChart = () => {
         :
         null   
      }
-      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}}/>
+      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0}clo />
       <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
           </LineChart> 
             </div>
