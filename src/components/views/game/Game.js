@@ -289,7 +289,7 @@ const StatisticsChart = () => {
         :
         null   
      }
-      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0}clo />
+      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0} />
       <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
           </LineChart> 
             </div>
