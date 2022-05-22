@@ -21,13 +21,13 @@ const statisticsMockData = {
 					{ turn: 1, kills: 3 },
 					{ turn: 2, kills: 3 },
 					{ turn: 3, kills: 3 },
-					{ turn: 4, units: 3 },
-					{ turn: 5, units: 2 },
-					{ turn: 6, units: 2 },
-					{ turn: 7, units: 2 },
-					{ turn: 8, units: 1 },
-					{ turn: 9, units: 1 },
-                    { turn: 10, units: 1}
+					{ turn: 4, kills: 3 },
+					{ turn: 5, kills: 2 },
+					{ turn: 6, kills: 2 },
+					{ turn: 7, kills: 2 },
+					{ turn: 8, kills: 1 },
+					{ turn: 9, kills: 1 },
+                    { turn: 10,kills: 1}
 				]
 
             },

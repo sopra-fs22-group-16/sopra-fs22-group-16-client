@@ -1,5 +1,5 @@
-import CanvasJSReact from "helpers/canvas.js.react";
-import React, {useEffect, useState} from "react";
+import CanvasJSReact from "helpers/canvasjs.react";
+import React, {useEffect, useState, Link} from "react";
 import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
 import {ThemeProvider} from "@emotion/react";
@@ -14,7 +14,7 @@ import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
 import StatsData from "models/StatsData";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label} from 'recharts';
 
 import "styles/views/game/Game.scss"
 import statisticsMockData from "./statisticsMockData";
@@ -25,7 +25,6 @@ const Game = ({id}) => {
 
     const history = useHistory();
     const location = useLocation();
-    const [dataGraphs, setDataGraphs] = useState(null);
 
     const token = localStorage.getItem("token");
 
@@ -53,9 +52,13 @@ const Game = ({id}) => {
     const [surrender, setSurrender] = useState(false);
     const [endGame, setEndGame] = useState(false);
     const [showStatistics, setShowStatistics] = useState(false);
+    const [stateGraph, setStateGraph] = useState("Units");
     //TODO: set the values with the information received from the server (socket)
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
+    const [dataGraphs, setDataGraphs] = useState(null);
+    const [dataGraphsKills, setDataGraphsKills] = useState(null);
+
 
     useEffect(() => {
         obtainAndLoadGameData();
@@ -137,13 +140,15 @@ const Game = ({id}) => {
 
     const goStatistics = async() => {
         //TODO: go to the statistics view
-        //const response = await api.get(`/v1/game/match/${id}/statistics`, {headers: {'token': token || ''}}); 
-        const response = statisticsMockData;
+        const response = await api.get(`/v1/game/match/${id}/stats`, {headers: {'token': token || ''}}); 
+        console.log(response.data)
+        //const response = statisticsMockData;
         setShowStatistics(true);
-        convertTurnData(statisticsMockData);
+        convertTurnDatav2(response.data);
         
     }
 
+    /*
     const convertTurnData = (statisticsData) => {
         const data = statisticsData.players;
         console.log(data);
@@ -174,89 +179,169 @@ const Game = ({id}) => {
         setDataGraphs(playerArray);
     
     };
+    */
+
+    const convertTurnDatav2 = (statisticsData) => {
+        console.log(statisticsData);
+        let playerArray = statisticsData.unitsPerPlayer;
+        console.log(playerArray);
+        let playerKillArray = statisticsData.killsPerPlayer;
+        console.log(playerKillArray);
+        /*
+        Object.keys(data).forEach(key => {
+            console.log(key+ "key");
+            let player = data[key];
+            console.log(player.unitsPerPlayer);
+            console.log(player.killsPerPlayer);
+            // player name
+            /*
+            let turnArray = [];
+            let killArray = [];
+            player.unitsPerPlayer.forEach((turn) => {
+                let turnRow = turn.units;
+                turnArray.push(turnRow);
+            });
+
+            player.killsPerPlayer.forEach((turn) => {
+                let turnRow = turn.kills;
+                killArray.push(turnRow);
+            });
+            
+            let turnArray = player.unitsPerPlayer;
+            let killArray = player.killsPerPlayer;
+            console.log(turnArray);
+            playerArray.push(turnArray);
+            playerKillArray.push(killArray);
+          });
+          */
+    
+        const dataFinalUnits = [];
+        const dataFinalKills = [];
+    
+        for (let i = 0; i < playerArray[0].length; i++) {
+        let d = {
+        turn: i+1,
+        Player0: playerArray[0][i],
+        Player1: playerArray[1][i]
+        };
+        let dKills = {
+            turn: i+1,
+            Player0: playerKillArray[0][i],
+            Player1: playerKillArray[1][i]
+            };
+
+
+     
+      dataFinalUnits.push(d);
+      dataFinalKills.push(dKills);
+    }
+    console.log(dataFinalUnits);
+    console.log(dataFinalKills);
+    setDataGraphs(dataFinalUnits);
+    setDataGraphsKills(dataFinalKills);
+    setMetricSums([statisticsData.averageUnitsPerTurn, statisticsData.averageKillsPerTurn, statisticsData.totalMoves]);
+    };
+
+    /*
+    const MenuCharts =() => {
+        return(
+        <div class = "menuContainer">
+            <label class = "statisticsLabel" onClick={() => setStateGraph("Units")}> Units per Turn</label> 
+            <label class = "statisticsLabel"> |</label> 
+            <label class = "statisticsLabel" onClick={() =>setStateGraph("Kills")}> Kills per Turn</label> 
+            </div>);
+    };
+    */
 
 
     const StatisticsChart = () => {
-      
     
-      const options = {
-        /*
-        title: {
-          text: "Turn information per player",
-          fontColor: "white",
-          font: "Noto-Sans",
-          fontWeight: "lighter"
-        },
-        */
-        backgroundColor: "#292420",
-        axisY : {
-            title: "Number of Units",
-            labelFontColor: "#dedace",
-            titleFontColor: "#dedace"
-        },
-        axisX : {
-            title: "Turn",
-            labelFontColor: "#dedace",
-            titleFontColor: "#dedace"
-        },
-
-        legend : {
-            title: "Players",
-            fontColor: "#dedace",
-            verticalAlign: "top",
-            cursor: "pointer",
-            itemclick: function (e) {
-                if (typeof (e.dataSeries.visible) === "undefined" || e.dataSeries.visible) {
-                    e.dataSeries.visible = false;
-                } else {
-                    e.dataSeries.visible = true;
-                }
-
-                e.chart.render();
-            }
-        },
-
-        height: 200,
-        data: dataGraphs
-      };
-      
       return(
-        <div>
-    <label color = "#dedace" > Turn information per player</label> 
-              <CanvasJSChart options = {options}
-                  /* onRef = {ref => this.chart = ref} */
-              />
-    <table className="statistics">
+<div>
+    <label class = "statisticsHeading2">  {"<   "}  </label>
+    <label class = "statisticsHeading"> Units per Turn</label>
+    <label class = "statisticsHeading" onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
+    <LineChart
+          width={250}
+          height={220}
+          data={dataGraphs}
+          margin={{ top: 10, right: 25, bottom: 5, left: -20 }}
+        >
+      <Tooltip />
+      <Line name = "Player-0" type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
+      <Line name = "Player-1" type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
+      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 5}} />
+      <YAxis tick={{fontSize: 5}} />
+          </LineChart> 
+            </div>
+      );
+      };
+
+      const StatisticsTable =() => {
+          return(
+              <div>
+        <table className="statistics">
         <thead>
             <tr>
-                <th> Metric</th>
-                <th> Player-0</th>
-                <th> Player-1</th>
+                <th> METRIC</th>
+                <th> YOUR VALUES</th>
             </tr>
         </thead>
                     <tbody>
                         <tr>
                             <th>UNITS/TURN</th>
                             <td > 2</td>
-                            <td > 3</td>
                         </tr>
                         <tr>
                             <th>KILLS/TURN</th>
-                            <td> 0.4</td>
                             <td> 0.4</td>
                         </tr>
                         <tr>
                             <th>TOTAL MOVES</th>
                             <td> 40</td>
-                            <td> 35</td>
                         </tr>
                         </tbody>
                         </table>
-            </div>
-      );
-      
+                        <button onClick={() => goStatistics()}></button>
+                        </div>
+          );
       };
 
+      const StatisticsChart2 = () => {
+      
+        return(
+          <div>
+               <label class = "statisticsHeading" onClick={() => setStateGraph("Units")}>  {"<"}  </label>
+              <label class = "statisticsHeading"> Kills per Turn</label>
+              <label class = "statisticsHeading2">  {"  >"}  </label>
+      <LineChart
+            width={250}
+            height={220}
+            data={dataGraphsKills}
+            margin={{ top: 10, right: 25, bottom: 5, left: -20 }}
+          >
+        <Tooltip />
+        <Line name = "Player-0" type="monotone" dataKey="Player0" stroke="pink" dot={false} />
+        <Line name = "Player-1" type="monotone" dataKey="Player1" stroke="orange" dot={false} />
+        <XAxis dataKey="turn" tick={{fontSize: 5}} />
+        <YAxis tick={{fontSize: 5}} />
+            </LineChart> 
+            </div>
+        );
+        
+        };
+
+
+      const SelectedTab = () => {
+        switch(stateGraph){
+            case 'Units':
+                return <StatisticsChart/>
+            case 'Kills':
+                return <StatisticsChart2 />
+            default:
+                return /* empty div maybe */
+        }
+    };
 
 
     const playAgain = () => {
@@ -359,6 +444,7 @@ const Game = ({id}) => {
                     <label className={"winnerWindow"}>{gameResult}</label>
                     <label>{winner} won the game</label>
                     <Button
+
                         onClick={() =>
                             goStatistics()
                         }>
@@ -380,8 +466,9 @@ const Game = ({id}) => {
                 </CustomPopUp>
                 <CustomPopUp style = {{'width':'600'}}
                 open={showStatistics} information="">
-                    <label className={"winnerWindow"}> STATISTICS </label>
-                    <StatisticsChart/>
+            <label className={"winnerWindow"}> STATISTICS </label>
+                    <SelectedTab/>
+                    <StatisticsTable/>
                     <Button 
                         onClick={() =>
                             playAgain()
