@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { api } from 'helpers/api';
@@ -17,6 +17,46 @@ const ShareLobbyCode = ({ id }) => {
 
     // PopUp
     const [getDataFailed, setGetDataFailed] = useState(false);
+
+    const unblockRef = useRef(null);
+    const allowedFilterList = [
+        `/lobby/${id}/update`,
+        `/lobby/${id}/invite-users`,
+        `/lobby/${id}/share/qr`,
+        `/lobby/${id}`
+    ];
+
+    const beforeUnloadListener = (event) => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
+
+    useEffect(() => {
+        unblockRef.current = history.block((location) => {
+                // Check if new path is in allowed paths
+                if (allowedFilterList.includes(location.pathname)) {
+                    return true;
+                }
+
+                let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('playerId');
+                }
+                return result;
+            }
+        );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
+
+    // On component unmount unblock history, and remove event listeners
+    useEffect(() => () => {
+        unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
 
 
     useEffect(() => {
@@ -43,9 +83,6 @@ const ShareLobbyCode = ({ id }) => {
     }
 
     const returnHome = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-        localStorage.removeItem('token');
-        localStorage.removeItem('playerId');
         history.push('/home');
     }
 
