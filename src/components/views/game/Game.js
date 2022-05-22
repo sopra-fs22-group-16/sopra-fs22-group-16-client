@@ -166,7 +166,7 @@ const Game = ({ id }) => {
         console.log("game finished in game");
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
-        let result = loser == playerId? "DEFEAT": "WIN";
+        let result = loser == playerId ? "DEFEAT" : "VICTORY";
         let winner = loser == playerId? Math.abs(playerId-1): playerId;
         setGameResult(result);
         setWinner(gameData.players[winner].name);
