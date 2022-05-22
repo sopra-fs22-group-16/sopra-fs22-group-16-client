@@ -1,21 +1,22 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Helmet} from "react-helmet";
+import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import Map from "components/fragments/game/Map";
-import {ThemeProvider} from "@emotion/react";
-import {defaultTheme} from "styles/themes/defaulTheme";
-import {LinearProgress} from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import { LinearProgress } from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import {useHistory, useLocation} from "react-router-dom";
+import { useHistory, useLocation } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import {api} from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
+import Confetti from 'react-confetti';
 
 import "styles/views/game/Game.scss"
 
-const Game = ({id}) => {
+const Game = ({ id }) => {
 
     const history = useHistory();
     const location = useLocation();
@@ -24,31 +25,31 @@ const Game = ({id}) => {
 
     const beforeUnloadListener = (event) => {
         //TODO: Add API call to surrender
-        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         localStorage.removeItem('token');
         localStorage.removeItem('playerId');
     };
 
     useEffect(() => {
         unblockRef.current = history.block((location) => {
-                let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
-                if (result) {
-                    //Handle leaving page
-                    //TODO: Add API call to surrender
-                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('playerId');
-                }
-                return result;
+            let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
+            if (result) {
+                //Handle leaving page
+                //TODO: Add API call to surrender
+                api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+                localStorage.removeItem('token');
+                localStorage.removeItem('playerId');
             }
+            return result;
+        }
         );
-        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.addEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
     // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
-        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.removeEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
     const token = localStorage.getItem("token");
@@ -84,7 +85,7 @@ const Game = ({id}) => {
     const obtainAndLoadGameData = async () => {
         try {
 
-            const response = await api.get(`/v1/game/match/${id}`, {headers: {'token': token || ''}});
+            const response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
             let mapData = response.data.gameMap.tiles;
             let unitData = response.data.units;
@@ -138,12 +139,30 @@ const Game = ({id}) => {
         setShowTurnPopUp(true);
     }
 
+    const gameOver = (gameOverInfo) => {
+        if (gameOverInfo.winners.includes(parseInt(playerId))) {
+            setGameResult("VICTORY");
+        }
+        else {
+            setGameResult("DEFEAT");
+        }
+        // if the game is 1v1, we show the name of the winner
+        if (gameOverInfo.winners.length == 1) {
+            setWinner(gameData.players[gameOverInfo.winners[0]].name);
+        }
+        // if 2v2, we show the team
+        else {
+            setWinner("Team" + gameData.players[gameOverInfo.winners[0]].teamId);
+        }
+        setEndGame(true);
+    }
+
 
     const confirmSurrender = async() => {
         await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
     }
 
-    const receiveEndGame = (surrenderInfo) => {
+    const receiveSurrender = (surrenderInfo) => {
         console.log("game finished in game");
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
@@ -164,7 +183,7 @@ const Game = ({id}) => {
     }
 
     const goHome = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         localStorage.removeItem('token');
         localStorage.removeItem('playerId');
         unblockRef?.current();
@@ -176,14 +195,14 @@ const Game = ({id}) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary"/>
+                            <LinearProgress color="secondary" />
                         </ThemeProvider>
                     </div>
 
@@ -195,8 +214,8 @@ const Game = ({id}) => {
                         unitData={gameData.units}
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
                         onChangeTurn={changeTurn}
-                        onEndGame = {receiveEndGame}
-
+                        onGameOver={gameOver}
+                        onSurrender = {receiveSurrender}
                     />
 
             }
@@ -207,7 +226,7 @@ const Game = ({id}) => {
                 <img
                     className={"pixelated"}
                     src={surrenderFlag}
-                    alt={"A white flag - press to surrender"}/>
+                    alt={"A white flag - press to surrender"} />
             </div>
             <ThemeProvider theme={defaultTheme}>
                 {
@@ -217,7 +236,7 @@ const Game = ({id}) => {
                             onComplete={() => setShowTurnPopUp(false)}>
                             <div className={"turnIndicatorContainer"}>
                                 <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
-                                <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}}
+                                <h2 style={{ color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899' }}
                                     className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
                                 <p className={"turnIndicatorContainer information"}>Hold to Start</p>
                             </div>
@@ -279,6 +298,22 @@ const Game = ({id}) => {
                         }>
                         RETURN HOME
                     </Button>
+                    {
+                        gameResult == "VICTORY" ?
+                            <Confetti
+                                drawShape={ctx => {
+                                    ctx.beginPath()
+                                    for (let i = 0; i < 22; i++) {
+                                        const angle = 0.35 * i
+                                        const x = (0.2 + (1.5 * angle)) * Math.cos(angle)
+                                        const y = (0.2 + (1.5 * angle)) * Math.sin(angle)
+                                        ctx.lineTo(x, y)
+                                    }
+                                    ctx.stroke()
+                                    ctx.closePath()
+                                }}
+                            /> : null
+                    }
                 </CustomPopUp>
             </ThemeProvider>
         </div>

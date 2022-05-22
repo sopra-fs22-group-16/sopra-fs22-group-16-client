@@ -1,5 +1,5 @@
-import React, {useState} from "react";
-import {api} from "../../../helpers/api";
+import React, { useState } from "react";
+import { api } from "../../../helpers/api";
 import PropTypes from "prop-types";
 import Tile from "./tile/Tile";
 import PositionData from "models/PositionData";
@@ -9,10 +9,10 @@ import "styles/views/game/Map.scss"
 import Unit from "./unit/Unit";
 import DropDown from "../../ui/DropDown";
 import DamageIndicator from "../../ui/DamageIndicator";
-import {UnitTypes} from "./unit/data/UnitTypes";
-import {Direction} from "./unit/Direction";
+import { UnitTypes } from "./unit/data/UnitTypes";
+import { Direction } from "./unit/Direction";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -190,13 +190,13 @@ const Map = props => {
             try {
 
                 const requestBody = {
-                    "attacker": {"x": selectedUnit.x, "y": selectedUnit.y},
-                    "defender": {"x": tile.unit.x, "y": tile.unit.y},
-                    "attackerDestination": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
+                    "attacker": { "x": selectedUnit.x, "y": selectedUnit.y },
+                    "defender": { "x": tile.unit.x, "y": tile.unit.y },
+                    "attackerDestination": { "x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0] }
                 };
 
                 // attack command specified
-                await api.put(`/v1/game/match/${props.id}/command/attack`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+                await api.put(`/v1/game/match/${props.id}/command/attack`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
 
             } catch (error) {
                 if (error.response?.status) {
@@ -240,13 +240,13 @@ const Map = props => {
 
             try {
                 const requestBody = {
-                    "start": {"x": selectedUnit.x, "y": selectedUnit.y},
-                    "destination": {"x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0]}
+                    "start": { "x": selectedUnit.x, "y": selectedUnit.y },
+                    "destination": { "x": selectedUnit.pathGoal[1], "y": selectedUnit.pathGoal[0] }
                 };
 
 
                 // attack command specified
-                await api.put(`/v1/game/match/${props.id}/command/move`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
+                await api.put(`/v1/game/match/${props.id}/command/move`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
 
 
             } catch (error) {
@@ -270,85 +270,87 @@ const Map = props => {
         console.log(msg);
         //if the message is about defeat
         if (msg.surrenderInfo) {
-            props.onEndGame(msg.surrenderInfo)
+            props.onSurrender(msg.surrenderInfo)
         }
-
         else {
+            // only update health if the player is not moving, otherwise in respective move functions
+            if (msg.move?.start && msg.move?.destination) {
+                let positionStart = new PositionData(msg.move.start);
+                let positionEnd = new PositionData(msg.move.destination);
+                // change unit to be the Unit from Units
+                let unitStart = null;
+                props.unitData.forEach((unit) => {
+                    if (positionStart.x === unit.x && positionStart.y === unit.y) {
+                        unitStart = unit;
+                    }
+                })
 
-        // only update health if the player is not moving, otherwise in respective move functions
-        if (msg.move?.start && msg.move?.destination) {
-            let positionStart = new PositionData(msg.move.start);
-            let positionEnd = new PositionData(msg.move.destination);
-            // change unit to be the Unit from Units
-            let unitStart = null;
-            props.unitData.forEach((unit) => {
-                if (positionStart.x === unit.x && positionStart.y === unit.y) {
-                    unitStart = unit;
-                }
-            })
+                unitStart.calculateTilesInRange(props.mapData);
+                unitStart.calculatePathToTile(positionEnd.y, positionEnd.x, props.mapData);
+                await executePathMovement(unitStart);
+                unitStart.moved = true;
 
-            unitStart.calculateTilesInRange(props.mapData);
-            unitStart.calculatePathToTile(positionEnd.y, positionEnd.x, props.mapData);
-            await executePathMovement(unitStart);
-            unitStart.moved = true;
+                props.mapData[positionStart.y][positionStart.x].unit = null;
+                props.mapData[positionEnd.y][positionEnd.x].unit = unitStart;
 
-            props.mapData[positionStart.y][positionStart.x].unit = null;
-            props.mapData[positionEnd.y][positionEnd.x].unit = unitStart;
+                cleanUpUnits();
 
-            cleanUpUnits();
+                setSelectedUnit(null);
+                //unlock
+                setLock(false);
+            }
 
-            setSelectedUnit(null);
-            //unlock
-            setLock(false);
-        }
+            if (msg.unitHealths) {
+                // after it is done, update health
+                updateHealth(msg.unitHealths);
+            }
 
-        if (msg.unitHealths) {
-            // after it is done, update health
-            updateHealth(msg.unitHealths);
-        }
+            // Force a redraw
+            setDropDown({ ...dropDown, open: false });
 
-        // Force a redraw
-        setDropDown({...dropDown, open: false});
+            if (msg.gameOverInfo) {
+                props.onGameOver(msg.gameOverInfo);
+            }
 
-        //update turn and reset all performed action
-        if (msg.turnInfo) {
-            props.onChangeTurn(msg.turnInfo);
-            props.unitData.forEach((unit) => {
-                unit.moved = false;
-            })
+            //update turn and reset all performed action
+            if (msg.turnInfo) {
+                props.onChangeTurn(msg.turnInfo);
+                props.unitData.forEach((unit) => {
+                    unit.moved = false;
+                })
+            }
         }
     }
-}
 
 
     const updateHealth = (healthMessage) => {
 
         healthMessage.forEach((healthUnit) => {
-                let healthDataUnit = new HealthData(healthUnit);
-                // change unit to be the Unit from Units
-                let unitPosition = null;
-                props.unitData.forEach((unit) => {
-                    if (healthDataUnit.unitPosition.x === unit.x && healthDataUnit.unitPosition.y === unit.y) {
-                        unitPosition = unit;
-                    }
-                })
-
-                if (unitPosition) {
-
-                    if (healthDataUnit.health <= 0) {
-                        props.mapData[healthDataUnit.unitPosition.y][healthDataUnit.unitPosition.x].unit = null;
-                        unitPosition.health = 0;
-                        // Remove unit from unit array
-                        props.unitData.splice(props.unitData.indexOf(unitPosition), 1);
-                    } else {
-
-                        unitPosition.health = healthDataUnit.health;
-                    }
-                } else {
-                    console.log("unit not found");
+            let healthDataUnit = new HealthData(healthUnit);
+            // change unit to be the Unit from Units
+            let unitPosition = null;
+            props.unitData.forEach((unit) => {
+                if (healthDataUnit.unitPosition.x === unit.x && healthDataUnit.unitPosition.y === unit.y) {
+                    unitPosition = unit;
                 }
+            })
 
+            if (unitPosition) {
+
+                if (healthDataUnit.health <= 0) {
+                    props.mapData[healthDataUnit.unitPosition.y][healthDataUnit.unitPosition.x].unit = null;
+                    unitPosition.health = 0;
+                    // Remove unit from unit array
+                    props.unitData.splice(props.unitData.indexOf(unitPosition), 1);
+                } else {
+
+                    unitPosition.health = healthDataUnit.health;
+                }
+            } else {
+                console.log("unit not found");
             }
+
+        }
         )
     }
 
@@ -439,7 +441,7 @@ const Map = props => {
 
         props.unitData.sort((a, b) => a.y - b.y);
         //FIXME: FIND A BETTER WAY TO FORCE A REDRAW
-        setDropDown({...dropDown, open: false});
+        setDropDown({ ...dropDown, open: false });
         let time = (unitMove.movementSpeed * steps);
         await timer(time);
     }
@@ -459,8 +461,8 @@ const Map = props => {
     }
 
     const hideDropDownsAndPopUps = () => {
-        setDropDown({...dropDown, open: false})
-        setDamageIndicator({...damageIndicator, open: false});
+        setDropDown({ ...dropDown, open: false })
+        setDamageIndicator({ ...damageIndicator, open: false });
     }
 
     const cleanUpUnits = () => {
@@ -482,7 +484,7 @@ const Map = props => {
                     row.map((tile, x) => (
                         <td key={x}>
                             <Tile tile={tile}
-                                  onClick={onClickTile}
+                                onClick={onClickTile}
                             />
                         </td>
                     ))
@@ -496,9 +498,9 @@ const Map = props => {
     if (props.unitData) {
         units = props.unitData.map((unit, id) => (
             <Unit key={id}
-                  unit={unit}
-                  onClick={onClickUnit}
-                  showMarker={unit.userId === playerId && unit.moved === false && unit.userId === props.playerIdCurrentTurn}
+                unit={unit}
+                onClick={onClickUnit}
+                showMarker={unit.userId === playerId && unit.moved === false && unit.userId === props.playerIdCurrentTurn}
             />
         ));
     }
@@ -507,16 +509,16 @@ const Map = props => {
         <div className={"mapContainer"}>
             <table cellPadding={0} cellSpacing={0} border={0} id={"map"}>
                 <tbody>
-                {tiles}
+                    {tiles}
                 </tbody>
             </table>
             {units}
             <DamageIndicator open={damageIndicator.open}
-                             y={damageIndicator.y}
-                             x={damageIndicator.x}
-                             leftDamage={damageIndicator.leftDamage}
-                             rightDamage={damageIndicator.rightDamage}
-                             leftRed={damageIndicator.leftRed}
+                y={damageIndicator.y}
+                x={damageIndicator.x}
+                leftDamage={damageIndicator.leftDamage}
+                rightDamage={damageIndicator.rightDamage}
+                leftRed={damageIndicator.leftRed}
             />
             <DropDown
                 open={dropDown.open}
