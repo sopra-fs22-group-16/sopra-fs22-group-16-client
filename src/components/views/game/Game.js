@@ -13,13 +13,10 @@ import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import StatsData from "models/StatsData";
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Label} from 'recharts';
+import { LineChart, Label, Line, XAxis, YAxis, Tooltip} from 'recharts';
 
 import "styles/views/game/Game.scss"
-import statisticsMockData from "./statisticsMockData";
 
-var CanvasJSChart = CanvasJSReact.CanvasJSChart;
 
 const Game = ({id}) => {
 
@@ -30,10 +27,6 @@ const Game = ({id}) => {
 
     const playerId = parseInt(localStorage.getItem("playerId"));
     const teamId = playerId; // TODO: Get Team Id
-
-    // statistics add-ons
-    var CanvasJS = CanvasJSReact.CanvasJS;
-    var CanvasJSStockChart = CanvasJSReact.CanvasJSStockChart;
 
     const [gameData, setGameData] = useState({
         gameMode: '',
@@ -52,13 +45,17 @@ const Game = ({id}) => {
     const [surrender, setSurrender] = useState(false);
     const [endGame, setEndGame] = useState(false);
     const [showStatistics, setShowStatistics] = useState(false);
-    const [stateGraph, setStateGraph] = useState("Units");
     //TODO: set the values with the information received from the server (socket)
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
-    const [dataGraphs, setDataGraphs] = useState(null);
-    const [dataGraphsKills, setDataGraphsKills] = useState(null);
 
+    // graphing Mettrics
+    const [stateGraph, setStateGraph] = useState("Units");
+    const [dataGraphsUnits, setDataGraphsUnits] = useState(null);
+    const [dataGraphsKills, setDataGraphsKills] = useState(null);
+    const [graphLabel, setGraphLabel] = useState(null);
+    const [dataGraphs, setDataGraphs] = useState(null);
+    const [metricSums, setMetricSums] = useState([null, null, null]);
 
     useEffect(() => {
         obtainAndLoadGameData();
@@ -144,12 +141,23 @@ const Game = ({id}) => {
         console.log(response.data)
         //const response = statisticsMockData;
         setShowStatistics(true);
-        convertTurnDatav2(response.data);
+        convertTurnData(response.data);
         
     }
 
+    const playAgain = () => {
+        //TODO: play another game
+    }
+
+    const goHome = () => {
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+        history.push('/home');
+    }
+
     /*
-    const convertTurnData = (statisticsData) => {
+    const convertTurnData_old = (statisticsData) => {
         const data = statisticsData.players;
         console.log(data);
         let playerArray = [];
@@ -170,8 +178,6 @@ const Game = ({id}) => {
             console.log(turnArray);
             const playerObject = new StatsData(playerName, turnArray);
             delete playerObject.x;
-            console.log(playerObject.x + " here");
-            console.log(playerObject);
             playerArray.push(playerObject);
         })
     
@@ -181,10 +187,13 @@ const Game = ({id}) => {
     };
     */
 
-    const convertTurnDatav2 = (statisticsData) => {
+    const convertTurnData = (statisticsData) => {
+
+        //export averages
+        setMetricSums([statisticsData.averageUnitsPerTurn, statisticsData.averageKillsPerTurn, statisticsData.totalMoves]);
         console.log(statisticsData);
-        let playerArray = statisticsData.unitsPerPlayer;
-        console.log(playerArray);
+        let playerUnitArray = statisticsData.unitsPerPlayer;
+        console.log(playerUnitArray);
         let playerKillArray = statisticsData.killsPerPlayer;
         console.log(playerKillArray);
         /*
@@ -217,61 +226,71 @@ const Game = ({id}) => {
     
         const dataFinalUnits = [];
         const dataFinalKills = [];
+
     
-        for (let i = 0; i < playerArray[0].length; i++) {
-        let d = {
+        for (let i = 0; i < playerUnitArray[0].length; i++) {
+        let unitsData = {
         turn: i+1,
-        Player0: playerArray[0][i],
-        Player1: playerArray[1][i]
+        Player0: playerUnitArray[0][i],
+        Player1: playerUnitArray[1][i]
         };
-        let dKills = {
+
+
+        let killsData = {
             turn: i+1,
             Player0: playerKillArray[0][i],
             Player1: playerKillArray[1][i]
             };
+    
+       if (gameData.gameType == "TWO_VS_TWO") 
+            {
+                // add the other two players
+                unitsData['Player3'] = playerUnitArray[2][i];
+                unitsData['Player4'] = playerUnitArray[3][i];
+                killsData['Player3'] = playerKillArray[2][i];
+                killsData['Player4'] = playerKillArray[3][i];
+            }
 
 
      
-      dataFinalUnits.push(d);
-      dataFinalKills.push(dKills);
+    dataFinalUnits.push(unitsData);
+    dataFinalKills.push(killsData);
     }
-    console.log(dataFinalUnits);
-    console.log(dataFinalKills);
-    setDataGraphs(dataFinalUnits);
+    setDataGraphsUnits(dataFinalUnits);
     setDataGraphsKills(dataFinalKills);
-    setMetricSums([statisticsData.averageUnitsPerTurn, statisticsData.averageKillsPerTurn, statisticsData.totalMoves]);
     };
 
-    /*
-    const MenuCharts =() => {
-        return(
-        <div class = "menuContainer">
-            <label class = "statisticsLabel" onClick={() => setStateGraph("Units")}> Units per Turn</label> 
-            <label class = "statisticsLabel"> |</label> 
-            <label class = "statisticsLabel" onClick={() =>setStateGraph("Kills")}> Kills per Turn</label> 
-            </div>);
-    };
-    */
 
+const StatisticsChart = () => {
 
-    const StatisticsChart = () => {
+    let xTickTurns = Array.from(Array(15).keys());
+
     
       return(
 <div>
-    <label class = "statisticsHeading2">  {"<   "}  </label>
-    <label class = "statisticsHeading"> Units per Turn</label>
-    <label class = "statisticsHeading" onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
+    <label class = {stateGraph == "Units"? "statisticsHeadingFaded": "statisticsHeading"} onClick={() =>  setStateGraph("Units")}>  {"<  "}  </label>
+    <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
+    <label class = {stateGraph == "Units" ? "statisticsHeading": "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
     <LineChart
-          width={250}
+          width={270}
           height={220}
-          data={dataGraphs}
-          margin={{ top: 10, right: 25, bottom: 5, left: -20 }}
+          data={stateGraph == "Units"? dataGraphsUnits: dataGraphsKills}
+          margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
         >
       <Tooltip />
       <Line name = "Player-0" type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
       <Line name = "Player-1" type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
-      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 5}} />
-      <YAxis tick={{fontSize: 5}} />
+      {
+      gameData.gameType == "TWO_VS_TWO"?
+      <div>
+        <Line name = "Player-2" type="monotone" dataKey="Player2" stroke="green" dot={false} />
+        <Line name = "Player-3" type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
+        </div>
+        :
+        null   
+     }
+      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}}/>
+      <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
           </LineChart> 
             </div>
       );
@@ -290,69 +309,22 @@ const Game = ({id}) => {
                     <tbody>
                         <tr>
                             <th>UNITS/TURN</th>
-                            <td > 2</td>
+                            <td > {metricSums[0]? metricSums[0].toFixed(2) : null}</td>
                         </tr>
                         <tr>
                             <th>KILLS/TURN</th>
-                            <td> 0.4</td>
+                            <td> {metricSums[1]? metricSums[1].toFixed(2) : null}</td>
                         </tr>
                         <tr>
                             <th>TOTAL MOVES</th>
-                            <td> 40</td>
+                            <td> {metricSums[2]}</td>
                         </tr>
                         </tbody>
                         </table>
-                        <button onClick={() => goStatistics()}></button>
                         </div>
           );
       };
 
-      const StatisticsChart2 = () => {
-      
-        return(
-          <div>
-               <label class = "statisticsHeading" onClick={() => setStateGraph("Units")}>  {"<"}  </label>
-              <label class = "statisticsHeading"> Kills per Turn</label>
-              <label class = "statisticsHeading2">  {"  >"}  </label>
-      <LineChart
-            width={250}
-            height={220}
-            data={dataGraphsKills}
-            margin={{ top: 10, right: 25, bottom: 5, left: -20 }}
-          >
-        <Tooltip />
-        <Line name = "Player-0" type="monotone" dataKey="Player0" stroke="pink" dot={false} />
-        <Line name = "Player-1" type="monotone" dataKey="Player1" stroke="orange" dot={false} />
-        <XAxis dataKey="turn" tick={{fontSize: 5}} />
-        <YAxis tick={{fontSize: 5}} />
-            </LineChart> 
-            </div>
-        );
-        
-        };
-
-
-      const SelectedTab = () => {
-        switch(stateGraph){
-            case 'Units':
-                return <StatisticsChart/>
-            case 'Kills':
-                return <StatisticsChart2 />
-            default:
-                return /* empty div maybe */
-        }
-    };
-
-
-    const playAgain = () => {
-        //TODO: play another game
-    }
-
-    const goHome = () => {
-        localStorage.removeItem('token');
-        localStorage.removeItem('playerId');
-        history.push('/home');
-    }
 
     return (
         <div id={"gameContainer"}>
@@ -467,7 +439,7 @@ const Game = ({id}) => {
                 <CustomPopUp style = {{'width':'600'}}
                 open={showStatistics} information="">
             <label className={"winnerWindow"}> STATISTICS </label>
-                    <SelectedTab/>
+                    <StatisticsChart/>
                     <StatisticsTable/>
                     <Button 
                         onClick={() =>
