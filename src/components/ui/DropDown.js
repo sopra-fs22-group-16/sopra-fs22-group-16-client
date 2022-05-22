@@ -57,10 +57,12 @@ const DropDown = props => {
                 }
                 {
 
+
                     props.showMove ?
                         <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickMove}>
                             <img className={'light'} src={moveLight} alt={"move"}/>
                             <img className={'dark'} src={moveDark} alt={''}/>
+
                         </div>
                         :
                         null
