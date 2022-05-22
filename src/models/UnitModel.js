@@ -9,6 +9,7 @@ class UnitModel {
         this.x = x;
         this.type = null;
         this.health = 0;
+        this.maxHealth = 0;
         this.defense = [0, 0, 0]; // archer, knight, war_elephant
         this.attackDamage = [0, 0, 0]; // archer, knight, war_elephant
         this.attackRange = 0;
@@ -30,7 +31,6 @@ class UnitModel {
         this.tilesInAttackRangeSpecificTile = null;
         this.pathGoal = null
         this.path = null;
-        this.maxHealth = this.health;
         this.oldX = x;
         this.oldY = y;
         this.movementSpeed = 500;

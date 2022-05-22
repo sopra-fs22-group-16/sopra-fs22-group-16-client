@@ -12,6 +12,12 @@
     overflow: hidden;
     position: relative;
     background: #c9b27d; /* border color */
+
+    -webkit-user-select: none;
+    -khtml-user-select: none;
+    -moz-user-select: none;
+    -o-user-select: none;
+    user-select: none;
 }
 
 .loadingContainer {
@@ -31,6 +37,12 @@
     img {
         width: 162px;
         height: 120px;
+
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+        user-drag: none;
     }
 }
 

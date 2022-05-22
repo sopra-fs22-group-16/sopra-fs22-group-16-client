@@ -1,5 +1,4 @@
-import CanvasJSReact from "helpers/canvasjs.react";
-import React, {useEffect, useState, Link} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import {Helmet} from "react-helmet";
 import Map from "components/fragments/game/Map";
 import {ThemeProvider} from "@emotion/react";
@@ -23,10 +22,41 @@ const Game = ({id}) => {
     const history = useHistory();
     const location = useLocation();
 
+    const unblockRef = useRef(null);
+
+    const beforeUnloadListener = (event) => {
+        //TODO: Add API call to surrender
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        localStorage.removeItem('token');
+        localStorage.removeItem('playerId');
+    };
+
+    useEffect(() => {
+        unblockRef.current = history.block((location) => {
+                let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    //TODO: Add API call to surrender
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('playerId');
+                }
+                return result;
+            }
+        );
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
+
+    // On component unmount unblock history, and remove event listeners
+    useEffect(() => () => {
+        unblockRef?.current();
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+    }, []);
+
     const token = localStorage.getItem("token");
 
     const playerId = parseInt(localStorage.getItem("playerId"));
-    const teamId = playerId; // TODO: Get Team Id
+    let teamId;
 
     const [gameData, setGameData] = useState({
         gameMode: '',
@@ -53,8 +83,6 @@ const Game = ({id}) => {
     const [stateGraph, setStateGraph] = useState("Units");
     const [dataGraphsUnits, setDataGraphsUnits] = useState(null);
     const [dataGraphsKills, setDataGraphsKills] = useState(null);
-    const [graphLabel, setGraphLabel] = useState(null);
-    const [dataGraphs, setDataGraphs] = useState(null);
     const [metricSums, setMetricSums] = useState([null, null, null]);
 
     useEffect(() => {
@@ -89,10 +117,12 @@ const Game = ({id}) => {
                 unitArray.push(unitModel);
             });
 
+            teamId = response.data.players[playerId].teamId;
+
             setGameData({
                 gameType: response.data.gameType,
                 gameMode: response.data.gameMode,
-                turn: response.data.turn,
+                turn: response.data.turnNumber,
                 playerIdCurrentTurn: response.data.playerIdCurrentTurn,
                 players: response.data.players,
                 map: mapArray,
@@ -109,14 +139,11 @@ const Game = ({id}) => {
 
 
     const changeTurn = (turnInfo) => {
-        console.log(turnInfo);
-        console.log("turn updating");
         setGameData({
             ...gameData,
             turn: turnInfo.turn,
             playerIdCurrentTurn: turnInfo.playerId,
         });
-        console.log(gameData.playerIdCurrentTurn);
         setShowTurnPopUp(true);
     }
 
@@ -153,6 +180,7 @@ const Game = ({id}) => {
         api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
         localStorage.removeItem('token');
         localStorage.removeItem('playerId');
+        unblockRef?.current();
         history.push('/home');
     }
 
@@ -381,7 +409,7 @@ const StatisticsChart = () => {
                 }
                 <CustomPopUp open={getDataFailed} information={"Could not get game data!"}>
                     <Button onClick={() =>
-                        window.location.reload()
+                        obtainAndLoadGameData()
                     }>
                         Retry
                     </Button>

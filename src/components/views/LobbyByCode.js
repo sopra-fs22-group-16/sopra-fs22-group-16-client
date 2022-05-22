@@ -26,8 +26,8 @@ const FormField = props => {
 
 const LobbyByCode = () => {
     const history = useHistory();
-    const [codeInput, setCodeInput] = useState(null);
-    const lengthCode = 10;;
+    const [codeInput, setCodeInput] = useState("");
+    const lengthCode = 10;
     const [isJoining, setJoining] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
