@@ -12,7 +12,7 @@ import DamageIndicator from "../../ui/DamageIndicator";
 import {UnitTypes} from "./unit/data/UnitTypes";
 import {Direction} from "./unit/Direction";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 
 function timer(ms) {
     return new Promise(res => setTimeout(res, ms));
@@ -269,7 +269,6 @@ const Map = props => {
     // TODO: resolve 
     const onMessage = async (msg) => {
         console.log(msg);
-        //alert(props.playerIdCurrentTurn !== playerId);
 
         // only update health if the player is not moving, otherwise in respective move functions
         if (msg.move?.start && msg.move?.destination) {
@@ -304,7 +303,11 @@ const Map = props => {
         }
 
         // Force a redraw
-        setDropDown({...dropDown, open: false});
+        setDropDown({ ...dropDown, open: false });
+
+        if (msg.gameOverInfo) {
+            props.onGameOver(msg.gameOverInfo);
+        }
 
         //update turn and reset all performed action
         if (msg.turnInfo) {
