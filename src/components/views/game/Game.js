@@ -283,13 +283,12 @@ null
 
 const StatisticsChart = () => {
 
-    
-      return(
+return(
 <div>
     <label class = {stateGraph == "Units"? "statisticsHeadingFaded": "statisticsHeading"} onClick={() =>  setStateGraph("Units")}>  {"<  "}  </label>
     <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
     <label class = {stateGraph == "Units" ? "statisticsHeading": "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
-    {stateGraph == "Units"?
+    {stateGraph == "Units" ?
 
     <LineChart
           width={270}
@@ -298,8 +297,8 @@ const StatisticsChart = () => {
           margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
         >
       <Tooltip />
-      <Line name = {gameData.players[0].name} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
-      <Line name = {gameData.players[1].name} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
+      <Line name = {gameData.players[0] ? gameData.players[0].name : null} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
+      <Line name = {gameData.players[1] ? gameData.players[1].name : null} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
       {
       gameData.gameType == "TWO_VS_TWO"?
       <div>
@@ -319,7 +318,7 @@ const StatisticsChart = () => {
       );
       };
 
-      const StatisticsTable =() => {
+    const StatisticsTable =() => {
           return(
               <div>
         <table className="statistics">
