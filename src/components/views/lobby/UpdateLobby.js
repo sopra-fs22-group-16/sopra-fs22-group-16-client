@@ -130,7 +130,12 @@ const UpdateLobby = ({id}) => {
                     // conflict in lobby name
                     if (error.response.status === 409) {
                         setErrorMessage("Lobby name assignment is not possible - name already taken!");
-                    } else {
+                    }
+                    else if (error.response.status === 400) {
+                        setErrorMessage("All players in the lobby have to be registered in order to play a ranked game.");
+                        setGameType("UNRANKED");
+                    }
+                    else {
                         setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.")
                     }
                 } else {
