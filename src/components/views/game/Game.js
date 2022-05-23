@@ -12,7 +12,7 @@ import {useHistory, useLocation} from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import {api} from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import { LineChart, Label, Line, XAxis, YAxis, Tooltip} from 'recharts';
+import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar, Text} from 'recharts';
 
 import "styles/views/game/Game.scss"
 
@@ -184,36 +184,6 @@ const Game = ({id}) => {
         history.push('/home');
     }
 
-    /*
-    const convertTurnData_old = (statisticsData) => {
-        const data = statisticsData.players;
-        console.log(data);
-        let playerArray = [];
-        let players = ["Player-0", "Player-1"]
-    
-        Object.keys(data).forEach(key => {
-            console.log(key+ "key");
-            let player = data[key];
-            console.log(player.unitsperTurn);
-            // player name
-            let playerName = players[key];
-            let turnArray = [];
-            player.unitsperTurn.forEach((turn) => {
-                let turnRow = { y: turn.units, label: turn.turn};
-                turnArray.push(turnRow);
-            });
-    
-            console.log(turnArray);
-            const playerObject = new StatsData(playerName, turnArray);
-            delete playerObject.x;
-            playerArray.push(playerObject);
-        })
-    
-        console.log(playerArray);
-        setDataGraphs(playerArray);
-    
-    };
-    */
 
     const convertTurnData = (statisticsData) => {
 
@@ -262,8 +232,56 @@ const Game = ({id}) => {
     };
 
 
-const StatisticsChart = () => {
+    
+const BarChartKills =() => {
 
+    return(
+
+    <BarChart 
+    width={270}
+    height={220}
+    data={stateGraph == "Units"? dataGraphsUnits: dataGraphsKills}
+    margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
+  >
+
+<YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
+    <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0} />
+    <Tooltip />
+    <Bar 
+      dataKey="Player0" 
+      fill="#873535" 
+      name = {gameData.players[0].name}
+    />
+
+    <Bar 
+      dataKey="Player1" 
+      fill="#516899"  
+      name = {gameData.players[1].name}
+    />
+    {gameData.gameType == "TWO_VS_TWO"?
+
+    <div>
+    <Bar 
+      dataKey="Player2" 
+      fill="green" 
+      name = {gameData.players[2].name}
+    />
+
+    <Bar 
+      dataKey="Player3" 
+      fill="yellow"  
+      name = {gameData.players[3].name}
+    />
+    </div>
+    :
+null
+}
+
+  </BarChart>
+    );
+}
+
+const StatisticsChart = () => {
 
     
       return(
@@ -271,20 +289,22 @@ const StatisticsChart = () => {
     <label class = {stateGraph == "Units"? "statisticsHeadingFaded": "statisticsHeading"} onClick={() =>  setStateGraph("Units")}>  {"<  "}  </label>
     <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
     <label class = {stateGraph == "Units" ? "statisticsHeading": "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
+    {stateGraph == "Units"?
+
     <LineChart
           width={270}
           height={220}
-          data={stateGraph == "Units"? dataGraphsUnits: dataGraphsKills}
+          data={dataGraphsUnits}
           margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
         >
       <Tooltip />
-      <Line name = "Player-0" type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
-      <Line name = "Player-1" type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
+      <Line name = {gameData.players[0].name} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
+      <Line name = {gameData.players[1].name} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
       {
       gameData.gameType == "TWO_VS_TWO"?
       <div>
-        <Line name = "Player-2" type="monotone" dataKey="Player2" stroke="green" dot={false} />
-        <Line name = "Player-3" type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
+        <Line name = {gameData.players[2].name} type="monotone" dataKey="Player2" stroke="green" dot={false} />
+        <Line name = {gameData.players[3].name} type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
         </div>
         :
         null   
@@ -292,6 +312,9 @@ const StatisticsChart = () => {
       <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0} />
       <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
           </LineChart> 
+          :
+    <BarChartKills/>
+    }
             </div>
       );
       };
