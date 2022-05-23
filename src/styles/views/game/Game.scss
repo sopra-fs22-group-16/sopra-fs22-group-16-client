@@ -109,7 +109,7 @@ table.statistics {
     border: 1.5px solid $accent;
     border-radius: 8px;
     align-self: center;
-    width: 200px;
+    width: 180px;
     margin-left: auto;
     margin-right: auto;
     border-spacing: 0;
@@ -119,13 +119,13 @@ table.statistics td {
     text-align: center;
     color: $accent;
     height: 20px;
-    font-size: 0.8em;
+    font-size: 0.7em;
 }
 
 table.statistics th {
     text-align: center;
     color: darkgoldenrod;
-    height: 12px;
+    height: 10px;
     font-size: 0.7em;
 }
 
@@ -137,7 +137,8 @@ table.statistics th {
 
 .statisticsHeading {
     color:grey;
-    font-size: 0.9em;
+    font-size: 18px;
+    margin: 0.15em;
     margin-top: 0em;
     margin-bottom: 15px; 
 }
@@ -145,6 +146,6 @@ table.statistics th {
     color:rgb(57, 57, 57);
     font-size: 0.9em;
     margin-top: 0em;
-    margin: 0.2em;
+    margin: 0.15em;
     margin-bottom: 15px;
 }

@@ -302,9 +302,9 @@ const StatisticsChart = () => {
 
 return(
 <div>
-    <label class = {stateGraph == "Units"? "statisticsHeadingFaded": "statisticsHeading"} onClick={() =>  setStateGraph("Units")}>  {"<  "}  </label>
+<label class={stateGraph == "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
     <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
-    <label class = {stateGraph == "Units" ? "statisticsHeading": "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")}>  {"  >"}  </label> 
+<label class={stateGraph == "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
     {stateGraph == "Units" ?
 
     <LineChart
@@ -325,8 +325,8 @@ return(
         :
         null   
      }
-      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0} />
-      <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
+      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 8}} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2: 5)} />
+      <YAxis tick={{fontSize: 8}} ticks={[1, 2, 3]}/>
           </LineChart> 
           :
     <BarChartKills/>
@@ -342,17 +342,17 @@ return(
         <thead>
             <tr>
                 <th> METRIC</th>
-                <th> YOUR VALUES</th>
+                <th> FINAL VALUES</th>
             </tr>
         </thead>
                     <tbody>
                         <tr>
                             <th>UNITS/TURN</th>
-                            <td > {metricSums[0]? metricSums[0].toFixed(2) : null}</td>
+                            <td > {metricSums[0]? metricSums[0].toFixed(2) : 0}</td>
                         </tr>
                         <tr>
                             <th>KILLS/TURN</th>
-                            <td> {metricSums[1]? metricSums[1].toFixed(2) : null}</td>
+                            <td> {metricSums[1]? metricSums[1].toFixed(2) : 0.00}</td>
                         </tr>
                         <tr>
                             <th>TOTAL MOVES</th>
