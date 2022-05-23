@@ -18,6 +18,7 @@
     "react-router-dom": "^5.3.0",
     "react-scripts": "^5.0.0",
     "react-stomp": "^5.1.0",
+    "recharts": "^2.1.10",
     "sockjs": "^0.3.24"
   },
   "scripts": {

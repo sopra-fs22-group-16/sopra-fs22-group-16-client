@@ -1,3 +1,4 @@
+@import 'styles/theme';
 @mixin transform($val) {
     -webkit-transform: $val;
     -moz-transform: $val;
@@ -77,6 +78,13 @@
     color: #365144;
 }
 
+.loserWindow {
+    font-weight: 700;
+    font-size: 3em;
+    line-height: 36px;
+    color: #8c2016;
+}
+
 .turnIndicatorContainer {
 
 
@@ -95,4 +103,49 @@
     &.information {
         margin-bottom: 0;
     }
+}
+
+table.statistics {
+    border: 1.5px solid $accent;
+    border-radius: 8px;
+    align-self: center;
+    width: 180px;
+    margin-left: auto;
+    margin-right: auto;
+    border-spacing: 0;
+}
+
+table.statistics td {
+    text-align: center;
+    color: $accent;
+    height: 20px;
+    font-size: 0.7em;
+}
+
+table.statistics th {
+    text-align: center;
+    color: darkgoldenrod;
+    height: 10px;
+    font-size: 0.7em;
+}
+
+.statisticsLabel {
+    color:grey;
+    font-size: 0.5em;
+    margin-top: 0em;
+}
+
+.statisticsHeading {
+    color:grey;
+    font-size: 18px;
+    margin: 0.15em;
+    margin-top: 0em;
+    margin-bottom: 15px; 
+}
+.statisticsHeadingFaded {
+    color:rgb(57, 57, 57);
+    font-size: 0.9em;
+    margin-top: 0em;
+    margin: 0.15em;
+    margin-bottom: 15px;
 }
