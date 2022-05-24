@@ -9,7 +9,6 @@ import {ThemeProvider} from "@emotion/react";
 import CustomPopUp from "components/ui/CustomPopUp";
 
 import 'styles/views/Leaderboard.scss';
-import RegisteredUserModel from "../../models/RegisteredUserModel";
 
 import ArrowUpwardIcon from '@mui/icons-material/ArrowUpward';
 import ArrowDownwardIcon from '@mui/icons-material/ArrowDownward';
@@ -74,6 +73,7 @@ const Leaderboard = () => {
             );
         }
     );
+
     // Fill rest with Spacers
     for (let i = leaderboardData.length; i < usersPerPage; ++i) {
         content.push(
