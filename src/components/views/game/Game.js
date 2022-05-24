@@ -249,7 +249,7 @@ const Game = ({ id }) => {
     };
 
 
-    
+
 const BarChartKills =() => {
 
     return(

@@ -14,6 +14,10 @@ import FormField from "components/ui/FormField"
 
 import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/LoginRegisterUser.scss';
+
+function timeout(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
   
   const LoginUser = props => {
     const history = useHistory();
@@ -25,12 +29,37 @@ import 'styles/views/LoginRegisterUser.scss';
     const[errorMessage, setErrorMessage] = useState("");
   
     const doLogin = async () => {
-    
-    localStorage.setItem("username", username);
-    setErrorMessage("server not integrated yet!");
-    history.push('/lobby/join');
+        try {
+ 
+            const requestBody = JSON.stringify({username, password});
+            const response = await api.post('/v1/login', requestBody);
+            
+            // logged-in data is just token
+            const loggedInUser = response.data;
+            localStorage.setItem("username", username);
+            localStorage.setItem("token", loggedInUser.token);
+            setCreating(true);
+            await timeout(4000);
+            
+            // TODO: take to the user page
+            history.push('/home');
+        }
+        
+       catch(error) {
+           setCreating(false);
+           console.log(error);
+           if(error.response.status == 404) {
+               setErrorMessage("This username does not match an account. Do you want to register instead?")
+           }
+           else if(error.response.status == 401) {
+            setErrorMessage("Your password seems to be incorrect. Please try again!")
+        }
+           else {
+        setErrorMessage("Something is wrong!");
+           }
+       }
     };
-
+  
     const returnHome = () => {
         history.push('/home');
     };
@@ -88,7 +117,7 @@ import 'styles/views/LoginRegisterUser.scss';
                 </div>
         </div>
         <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={creating} information={"Creating Lobby"}>
+                <CustomPopUp open={creating} information={"Your log-in was successful. Please wait for your page..."}>
                     <div style={{ width: '100%' }}>
                         <LinearProgress color="primary" />
                     </div>
