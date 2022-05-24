@@ -8,22 +8,21 @@ import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import { api } from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar, Text} from 'recharts';
+import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar} from 'recharts';
 import Confetti from 'react-confetti';
 import "styles/views/game/Game.scss"
 
 const Game = ({ id }) => {
 
     const history = useHistory();
-    const location = useLocation();
 
     const unblockRef = useRef(null);
 
-    const beforeUnloadListener = (event) => {
+    const beforeUnloadListener = () => {
         //TODO: Add API call to surrender
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         localStorage.removeItem('token');
@@ -31,7 +30,7 @@ const Game = ({ id }) => {
     };
 
     useEffect(() => {
-        unblockRef.current = history.block((location) => {
+        unblockRef.current = history.block(() => {
             let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
             if (result) {
                 //Handle leaving page
@@ -154,7 +153,7 @@ const Game = ({ id }) => {
             setGameResult("DEFEAT");
         }
         // if the game is 1v1, we show the name of the winner
-        if (gameOverInfo.winners.length == 1) {
+        if (gameOverInfo.winners.length === 1) {
             setWinner(gameData.players[gameOverInfo.winners[0]].name);
         }
         // if 2v2, we show the team
@@ -173,8 +172,8 @@ const Game = ({ id }) => {
         console.log("game finished in game");
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
-        let result = loser == playerId ? "DEFEAT" : "VICTORY";
-        let winner = loser == playerId? Math.abs(playerId-1): playerId;
+        let result = loser === playerId ? "DEFEAT" : "VICTORY";
+        let winner = loser === playerId? Math.abs(playerId-1): playerId;
         setGameResult(result);
         setWinner(gameData.players[winner].name);
     }
@@ -190,7 +189,8 @@ const Game = ({ id }) => {
     }
 
     const playAgain = () => {
-        //TODO: play another game
+        unblockRef?.current();
+        history.push(`/lobby/${id}`);
     }
 
     const goHome = () => {
@@ -230,7 +230,7 @@ const Game = ({ id }) => {
             Player1: playerKillArray[1][i]
             };
     
-       if (gameData.gameType == "TWO_VS_TWO") 
+       if (gameData.gameType === "TWO_VS_TWO")
             {
                 // add the other two players
                 unitsData['Player3'] = playerUnitArray[2][i];
@@ -257,7 +257,7 @@ const BarChartKills =() => {
     <BarChart 
     width={270}
     height={220}
-    data={stateGraph == "Units"? dataGraphsUnits: dataGraphsKills}
+    data={stateGraph === "Units"? dataGraphsUnits: dataGraphsKills}
     margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
   >
 
@@ -275,7 +275,7 @@ const BarChartKills =() => {
       fill="#516899"  
       name = {gameData.players[1].name}
     />
-    {gameData.gameType == "TWO_VS_TWO"?
+    {gameData.gameType === "TWO_VS_TWO"?
 
     <div>
     <Bar 
@@ -302,10 +302,10 @@ const StatisticsChart = () => {
 
 return(
 <div>
-<label class={stateGraph == "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
-    <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
-<label class={stateGraph == "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
-    {stateGraph == "Units" ?
+<label className={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
+    <label className = "statisticsHeading"> {stateGraph === "Units"? "Units per Turn" :"Kills per Turn"} </label>
+<label className={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
+    {stateGraph === "Units" ?
 
     <LineChart
           width={270}
@@ -317,7 +317,7 @@ return(
       <Line name = {gameData.players[0] ? gameData.players[0].name : null} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
       <Line name = {gameData.players[1] ? gameData.players[1].name : null} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
       {
-      gameData.gameType == "TWO_VS_TWO"?
+      gameData.gameType === "TWO_VS_TWO"?
       <div>
         <Line name = {gameData.players[2].name} type="monotone" dataKey="Player2" stroke="green" dot={false} />
         <Line name = {gameData.players[3].name} type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
@@ -475,7 +475,7 @@ return(
                         RETURN HOME
                     </Button>
                     {
-                        gameResult == "VICTORY" ?
+                        gameResult === "VICTORY" ?
                             <Confetti
                                 drawShape={ctx => {
                                     ctx.beginPath()
