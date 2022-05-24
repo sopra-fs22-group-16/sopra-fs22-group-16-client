@@ -18,14 +18,20 @@ import {Pagination} from "@mui/material";
 
 const Leaderboard = () => {
 
-    const usersPerPage = 10;
+    const usersPerPage = 5;
 
     const history = useHistory();
     const location = useLocation();
 
     const [activeTab, setActiveTab] = useState("RANKED_SCORE");
     const [ascending, setAscending] = useState(false);
-    const [leaderboardData, setLeaderboardData] = useState({page: 0, length: 0, limit: 10, total: 0, users: []});
+    const [leaderboardData, setLeaderboardData] = useState({
+        page: 0,
+        length: 0,
+        limit: usersPerPage,
+        total: 0,
+        users: []
+    });
 
     const [errorMessage, setErrorMessage] = useState("");
     const [getDataFailed, setGetDataFailed] = useState(false);
@@ -68,11 +74,19 @@ const Leaderboard = () => {
             );
         }
     );
+    for (let i = leaderboardData.length; i < usersPerPage; ++i) {
+        content.push(
+            <UserInfo
+                key={(leaderboardData.length + i)}
+                place={""}
+                userData={{username: "", rankedScore: "", wins: "", losses: ""}}
+            />);
+    }
 
     const onClickTab = (tab) => {
-        if(tab === activeTab){
+        if (tab === activeTab) {
             setAscending((prevState => !prevState));
-        }else{
+        } else {
             setAscending(false);
             setActiveTab(tab);
         }
@@ -81,22 +95,22 @@ const Leaderboard = () => {
     let rsIcon = <ArrowUpwardIcon color={"secondary"}/>;
     let winsIcon = <ArrowUpwardIcon color={"secondary"}/>;
     let lossesIcon = <ArrowUpwardIcon color={"secondary"}/>;
-    if(activeTab === "RANKED_SCORE"){
-        if(ascending){
+    if (activeTab === "RANKED_SCORE") {
+        if (ascending) {
             rsIcon = <ArrowUpwardIcon/>;
-        }else{
+        } else {
             rsIcon = <ArrowDownwardIcon/>;
         }
-    }else if(activeTab === "WINS"){
-        if(ascending){
+    } else if (activeTab === "WINS") {
+        if (ascending) {
             winsIcon = <ArrowUpwardIcon/>;
-        }else{
+        } else {
             winsIcon = <ArrowDownwardIcon/>;
         }
-    }else if(activeTab === "LOSSES"){
-        if(ascending){
+    } else if (activeTab === "LOSSES") {
+        if (ascending) {
             lossesIcon = <ArrowUpwardIcon/>;
-        }else{
+        } else {
             lossesIcon = <ArrowDownwardIcon/>;
         }
     }
@@ -112,10 +126,26 @@ const Leaderboard = () => {
                         <tr className="">
 
                             <th/>
-                            <th><div className={"container"}><div>NAME</div> <ArrowUpwardIcon style={{visibility: "hidden"}}/></div></th>
-                            <th onClick={() => onClickTab("RANKED_SCORE")} className={"clickable"}><div className={"container"}><div>RS</div>{rsIcon}</div></th>
-                            <th onClick={() => onClickTab("WINS")} className={"clickable"}><div className={"container"}><div>WINS</div>{winsIcon}</div></th>
-                            <th onClick={() => onClickTab("LOSSES")} className={"clickable"}><div className={"container"}><div>LOSSES</div>{lossesIcon}</div></th>
+                            <th>
+                                <div className={"container"}>
+                                    <div>NAME</div>
+                                    <ArrowUpwardIcon style={{visibility: "hidden"}}/></div>
+                            </th>
+                            <th onClick={() => onClickTab("RANKED_SCORE")} className={"clickable"}>
+                                <div className={"container"}>
+                                    <div>RS</div>
+                                    {rsIcon}</div>
+                            </th>
+                            <th onClick={() => onClickTab("WINS")} className={"clickable"}>
+                                <div className={"container"}>
+                                    <div>WINS</div>
+                                    {winsIcon}</div>
+                            </th>
+                            <th onClick={() => onClickTab("LOSSES")} className={"clickable"}>
+                                <div className={"container"}>
+                                    <div>LOSSES</div>
+                                    {lossesIcon}</div>
+                            </th>
                         </tr>
                         </thead>
                         <tbody>
@@ -124,8 +154,9 @@ const Leaderboard = () => {
                     </table>
 
                     <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(e, pageNumber) => {
-                        leaderboardData.page = (pageNumber-1);
-                        obtainAndLoadUserInfo()}} shape="rounded" color="primary"/>
+                        leaderboardData.page = (pageNumber - 1);
+                        obtainAndLoadUserInfo();
+                    }} shape="rounded" color="primary"/>
 
                     <div className="Leaderboard button-container">
                         <Button className=""
@@ -136,8 +167,6 @@ const Leaderboard = () => {
                             RETURN HOME
                         </Button>
                     </div>
-
-
 
 
                 </div>
