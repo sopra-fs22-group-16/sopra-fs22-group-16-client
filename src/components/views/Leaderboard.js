@@ -74,13 +74,12 @@ const Leaderboard = () => {
             );
         }
     );
+    // Fill rest with Spacers
     for (let i = leaderboardData.length; i < usersPerPage; ++i) {
         content.push(
-            <UserInfo
-                key={(leaderboardData.length + i)}
-                place={""}
-                userData={{username: "", rankedScore: "", wins: "", losses: ""}}
-            />);
+            <tr key={(leaderboardData.length + i)}>
+                <td colSpan="5"/>
+            </tr>);
     }
 
     const onClickTab = (tab) => {
