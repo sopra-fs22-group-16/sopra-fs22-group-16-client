@@ -34,6 +34,7 @@ const LoginUser = props => {
 
             // logged-in data is just token
             const loggedInUser = response.data;
+            localStorage.setItem("username", username);
             localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", loggedInUser.token);
             setCreating(true);
@@ -45,11 +46,10 @@ const LoginUser = props => {
 
         catch (error) {
             setCreating(false);
-            console.log(error);
-            if (error.response.status == 404) {
+            if (error.response.status === 404) {
                 setErrorMessage("This username does not match an account. Do you want to register instead?")
             }
-            else if (error.response.status == 401) {
+            else if (error.response.status === 401) {
                 setErrorMessage("Your password seems to be incorrect. Please try again!")
             }
             else {

@@ -63,7 +63,6 @@ const CreateLobby = () => {
 
                 // Store the token and playerId into the local storage,
                 // if the player is registered, we maintain their token.
-                console.log(isRegistered);
                 if (!isRegistered) {
                     localStorage.setItem('token', user.token);
                 }

@@ -30,6 +30,7 @@ const RegisterUser = () => {
 
             // retrieves user data
             const registeredUser = new RegisteredUserModel(response.data);
+            localStorage.setItem("username", username);
             localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", registeredUser.token);
             setCreating(true);
@@ -41,8 +42,7 @@ const RegisterUser = () => {
 
         catch (error) {
             setCreating(false);
-            console.log(error);
-            if (error.response.status == 409) {
+            if (error.response.status === 409) {
                 setErrorMessage("This username is already taken!")
             }
             else {
