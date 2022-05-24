@@ -11,17 +11,14 @@ const HomePage = () => {
     const history = useHistory();
 
     const goJoinLobby = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/lobby/join');
     }
 
     const goCreateLobby = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/lobby/create');
     }
 
     const loginUser = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/user/login');
     }
 

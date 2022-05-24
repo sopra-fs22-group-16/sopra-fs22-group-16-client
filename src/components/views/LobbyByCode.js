@@ -25,6 +25,10 @@ const FormField = props => {
 };
 
 const LobbyByCode = () => {
+
+    const token = localStorage.getItem('token');
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+
     const history = useHistory();
     const [codeInput, setCodeInput] = useState("");
     const lengthCode = 10;
@@ -53,11 +57,13 @@ const LobbyByCode = () => {
 
 
             //call to the backend to post the player with the attempted password
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': '' } });
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
-            localStorage.setItem('token', user.token);
+            if (!isRegistered) {
+                localStorage.setItem('token', user.token);
+            }
             localStorage.setItem('playerId', user.id);
 
             setJoining(isJoining);

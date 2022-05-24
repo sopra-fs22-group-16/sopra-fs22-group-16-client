@@ -14,6 +14,9 @@ import UserModel from "models/UserModel";
 
 const PublicLobbies = () => {
 
+    const token = localStorage.getItem('token');
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+
     const history = useHistory();
     const location = useLocation();
 
@@ -52,11 +55,13 @@ const PublicLobbies = () => {
         try {
 
             setJoining(true);
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify({}), { headers: { 'token': '' } });
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify({}), { headers: { 'token': token || '' } });
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
-            localStorage.setItem('token', user.token);
+            if (!isRegistered) {
+                localStorage.setItem('token', user.token);
+            }
             localStorage.setItem('playerId', user.id);
 
             history.push({ pathname: '/lobby/' + id })

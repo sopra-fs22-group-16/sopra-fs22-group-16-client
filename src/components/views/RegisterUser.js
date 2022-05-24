@@ -16,101 +16,97 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-  
-  const RegisterUser = () => {
+const RegisterUser = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
     const [creating, setCreating] = useState("");
-    const[errorMessage, setErrorMessage] = useState("");
-  
+    const [errorMessage, setErrorMessage] = useState("");
+
     const doLogin = async () => {
         try {
- 
-            
-            const requestBody = JSON.stringify({username, password});
+            const requestBody = JSON.stringify({ username, password });
             const response = await api.post('/v1/users', requestBody);
-            
+
             // retrieves user data
             const registeredUser = new RegisteredUserModel(response.data);
-            localStorage.setItem("username", username);
+            localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", registeredUser.token);
-            console.log("success");
             setCreating(true);
             await timeout(4000);
-            
+
             // TODO: take to the user page
             history.push('/home');
         }
-        
-       catch(error) {
-           setCreating(false);
-           console.log(error);
-           if(error.response.status == 409) {
-               setErrorMessage("This username is already taken!")
-           }
-           else {
-        setErrorMessage("Something is wrong!");
-           }
-       }
+
+        catch (error) {
+            setCreating(false);
+            console.log(error);
+            if (error.response.status == 409) {
+                setErrorMessage("This username is already taken!")
+            }
+            else {
+                setErrorMessage("Something is wrong!");
+            }
+        }
     };
 
     const returnHome = () => {
         history.push('/home');
     };
-  
+
     return (
-      <BaseContainer>
-        <div className="LoginRegisterUser">
-        <h1 className = "LoginRegisterUser h1">Create a new account</h1>
-          <table className="user">
-              <tr>
-                  <th>
-                      username
-                  </th>
-                  <td>
-            <FormField
-              type = "text"
-              value={username}
-              onChange={un => setUsername(un)}
-            />
-            </td>
-            </tr>
-            <tr>
-                  <th>
-                      password
-                  </th>
-                  <td>
-            <FormField
-              type = "password"
-              value={password}
-              onChange={un => setPassword(un)}
-            />
-            </td>
-            </tr>
-            </table>
-            <Link className="LoginRegisterUser link"
+        <BaseContainer>
+            <div className="LoginRegisterUser">
+                <h1 className="LoginRegisterUser h1">Create a new account</h1>
+                <table className="user">
+                    <tr>
+                        <th>
+                            username
+                        </th>
+                        <td>
+                            <FormField
+                                type="text"
+                                value={username}
+                                onChange={un => setUsername(un)}
+                            />
+                        </td>
+                    </tr>
+                    <tr>
+                        <th>
+                            password
+                        </th>
+                        <td>
+                            <FormField
+                                type="password"
+                                value={password}
+                                onChange={un => setPassword(un)}
+                            />
+                        </td>
+                    </tr>
+                </table>
+                <Link className="LoginRegisterUser link"
                     to={{
                         pathname: '/user/login'
                     }}>
                     Already have an account? Sign in</Link>
-            <div className="LoginRegisterUser buttons">
-              <Button className = "primary-button"
-                disabled={!username || !password}
-                onClick={() => doLogin()}
-              >
-               REGISTER
-              </Button>
-              </div>
-              <div className="LoginRegisterUser buttons">
+                <div className="LoginRegisterUser buttons">
+                    <Button className="primary-button"
+                        disabled={!username || !password}
+                        onClick={() => doLogin()}
+                    >
+                        REGISTER
+                    </Button>
+                </div>
+                <div className="LoginRegisterUser buttons">
                     <Button className="secondary-button return"
                         onClick={() => returnHome()}
                     >
                         RETURN HOME
                     </Button>
                 </div>
-        </div>
-        <ThemeProvider theme={defaultTheme}>
+            </div>
+            <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
                     <Button onClick={() =>
                         setErrorMessage("")
@@ -124,12 +120,8 @@ function timeout(ms) {
                     </div>
                 </CustomPopUp>
             </ThemeProvider>
-      </BaseContainer>
+        </BaseContainer>
     );
-  };
-  
-  /**
-   * You can get access to the history object's properties via the withRouter.
-   * withRouter will pass updated match, location, and history props to the wrapped component whenever it renders.
-   */
-  export default RegisterUser;
+};
+
+export default RegisterUser;
