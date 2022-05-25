@@ -8,17 +8,10 @@ import { ThemeProvider } from "@emotion/react";
 import CustomPopUp from "../ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 
-//const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 const isRegistered = true;
 const userId = localStorage.getItem("userId");
 
 
-/*
-<Link className="header userInfo"
-                    to={{
-                        pathname: '/user/'+userId
-                    }}>
-                    {username}</Link>*/
 
 const Header = props => {
 
