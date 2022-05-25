@@ -21,7 +21,7 @@
     }
 
     table.user td {
-        text-align: left;
+        text-align: center;
         color: $accent;
         height: 50px;
         width: 35px;
@@ -30,6 +30,7 @@
     }
 
     table.user th {
+        padding-right: 0.5em;
         text-align: center;
         color: $accentDark;
         height: 20px;

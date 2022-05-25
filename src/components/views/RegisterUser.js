@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, { useState} from 'react';
+import { useHistory, Link,  } from 'react-router-dom';
 import { LinearProgress } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { api } from 'helpers/api';
@@ -32,15 +32,16 @@ function timeout(ms) {
             const response = await api.post('/v1/users', requestBody);
             
             // retrieves user data
-            const registeredUser = new RegisteredUserModel(response.data);
+            //const registeredUser = new RegisteredUserModel(response.data);
             localStorage.setItem("username", username);
-            localStorage.setItem("token", registeredUser.token);
-            console.log("success");
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.id);
+            console.log(response.data);
             setCreating(true);
             await timeout(4000);
             
             // TODO: take to the user page
-            history.push('/home');
+            history.push(`/user/${response.data.id}`);
         }
         
        catch(error) {

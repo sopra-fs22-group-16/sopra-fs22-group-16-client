@@ -36,13 +36,16 @@ function timeout(ms) {
             
             // logged-in data is just token
             const loggedInUser = response.data;
+            console.log(response.data);
             localStorage.setItem("username", username);
+            localStorage.setItem("userId", loggedInUser.id);
             localStorage.setItem("token", loggedInUser.token);
             setCreating(true);
             await timeout(4000);
             
             // TODO: take to the user page
             history.push('/home');
+            history.push(`/user/${loggedInUser.id}`);
         }
         
        catch(error) {
