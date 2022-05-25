@@ -237,7 +237,7 @@ const Lobby = ({id}) => {
     }, [id, token]);
 
     return (
-        <BaseContainer>
+        <BaseContainer logOutBool = {true}>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 {

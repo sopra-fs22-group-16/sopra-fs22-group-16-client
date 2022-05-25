@@ -94,7 +94,7 @@ const ShareLobbyCode = ({ id }) => {
     }
 
     return (
-        <BaseContainer>
+        <BaseContainer lobbyBool = {false}>
             <div className="sharecode">
                 <label className="sharecode message">Invite other users to your lobby by sharing the following code:</label>
                 <div className="sharecode codecontainer">

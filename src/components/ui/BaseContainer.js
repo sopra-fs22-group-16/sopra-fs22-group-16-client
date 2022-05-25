@@ -5,8 +5,10 @@ import Header from "./Header";
 
 const BaseContainer = props => (
     <div>
-        <div {...props} className={`base-container ${props.className ?? ''}`}>
-            <Header/>
+        <div className={`base-container ${props.className ?? ''}`}>
+            <Header
+             logOutBool = {props.logOutBool}
+            />
             {props.children}
         </div>
     </div>
@@ -14,6 +16,7 @@ const BaseContainer = props => (
 
 BaseContainer.propTypes = {
     children: PropTypes.node,
+    logOutBool: PropTypes.bool
 };
 
 export default BaseContainer;

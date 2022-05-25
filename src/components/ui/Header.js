@@ -5,7 +5,8 @@ import PropTypes from "prop-types";
 import "styles/ui/Header.scss";
 import LogoutIcon from '@mui/icons-material/Logout';
 
-const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+//const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+const isRegistered = true;
 const userId = localStorage.getItem("userId");
 const notLobby = window.location.pathname == "/lobby" ? true : false;
 
@@ -31,7 +32,7 @@ const Header = props => (
     <div className="header headerContainer" style={{ height: props.height }}>
         <img src={HeaderImage} />
     {
-        (isRegistered)? 
+        (isRegistered && !(props.logOutBool))? 
 
         <LogoutIcon className = "header userInfo"
         onClick={() => logOut()}
@@ -45,7 +46,8 @@ const Header = props => (
     );
 
 Header.propTypes = {
-    height: PropTypes.string
+    height: PropTypes.string,
+    logOutBool: PropTypes.bool
 
 }
 
