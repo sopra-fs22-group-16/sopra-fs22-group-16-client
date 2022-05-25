@@ -145,7 +145,7 @@ const Lobby = ({ id }) => {
 
     // setting new Name - moving here to determine if the row is a form or not
     const setClassName = (user) => {
-        if (user.id === parseInt(localStorage.getItem("playerId"))) {
+        if (user.id === parseInt(localStorage.getItem("playerId")) && !isRegistered) {
             return (
                 <td>
                     <FormName
