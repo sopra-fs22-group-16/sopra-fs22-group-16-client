@@ -1,5 +1,5 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import {useHistory} from 'react-router-dom';
 
 import {Button} from 'components/ui/Button';
 import Header from "components/ui/Header";
@@ -20,6 +20,10 @@ const HomePage = () => {
 
     const loginUser = () => {
         history.push('/user/login');
+    }
+
+    const goLeaderboard = () => {
+        history.push('/leaderboard');
     }
 
     return (
@@ -44,13 +48,23 @@ const HomePage = () => {
                             CREATE LOBBY
                         </Button>
                     </div>
-                    <div className="HomePage button-container">
-                        <Button className = "primary-button register"
-                            width="100%"
-                            onClick={() => loginUser()}
-                        >
-                            SIGN IN/CREATE USER
-                        </Button>
+                    <div className={"HomePage userButton-container"}>
+                        <div className="HomePage button-container">
+                            <Button
+                                width="100%"
+                                onClick={() => goLeaderboard()}
+                            >
+                                LEADERBOARD
+                            </Button>
+                        </div>
+                        <div className="HomePage button-container">
+                            <Button className="primary-button register"
+                                    width="100%"
+                                    onClick={() => loginUser()}
+                            >
+                                SIGN IN/CREATE USER
+                            </Button>
+                        </div>
                     </div>
                 </div>
             </div>

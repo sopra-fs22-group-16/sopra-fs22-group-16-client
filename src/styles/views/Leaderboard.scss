@@ -1,0 +1,127 @@
+@import 'styles/theme';
+
+.Leaderboard {
+
+  &.container {
+    margin-top: 2em;
+    @include center;
+    flex-direction: column;
+  }
+
+  &.h1 {
+    display: block;
+    text-align: center;
+    font-size: 2em;
+    padding-bottom: 1.25em;
+  }
+
+  &.table {
+    border-spacing: 0;
+    margin-bottom: 25px;
+  }
+
+  &.table tr {
+    height: 32px;
+  }
+
+  &.table th {
+    font-size: 12px;
+    min-width: 50px;
+
+    .container {
+
+      display: flex;
+      align-items: center;
+      justify-content: center;
+
+      div {
+        float: left;
+        text-align: center;
+      }
+
+    }
+
+  }
+
+  &.table td {
+    min-width: 50px;
+    text-align: center;
+    overflow: hidden;
+    white-space: nowrap;
+    max-width: 110px;
+  }
+
+
+  &.button-container {
+    position: absolute;
+    bottom: 50px;
+    display: flex;
+    margin-top: 1em;
+    width: 200px;
+  }
+
+  .clickable {
+    cursor: pointer;
+  }
+
+  &.table tbody tr:not(:first-child):not(:last-child) td:last-child{
+    border-right:1px solid $textColorLight;
+  }
+
+  &.table tbody tr:not(:first-child):not(:last-child) td:first-child{
+    border-left:1px solid $textColorLight;
+  }
+
+  &.table tbody tr:first-child  td:not(:first-child):not(:last-child){
+    border-top:1px solid $textColorLight;
+  }
+
+  &.table tbody tr:last-child  td:not(:first-child):not(:last-child){
+    border-bottom:1px solid $textColorLight;
+  }
+
+  &.table tbody tr:last-child  td:first-child{
+    border-left:1px solid $textColorLight;
+    border-bottom:1px solid $textColorLight;
+    border-bottom-left-radius: 5px;
+  }
+
+  &.table tbody tr:last-child  td:last-child{
+    border-right:1px solid $textColorLight;
+    border-bottom:1px solid $textColorLight;
+    border-bottom-right-radius: 5px;
+  }
+
+  &.table tbody tr:first-child  td:first-child{
+    border-left:1px solid $textColorLight;
+    border-top:1px solid $textColorLight;
+    border-top-left-radius: 5px;
+  }
+
+  &.table tbody tr:first-child  td:last-child{
+    border-right:1px solid $textColorLight;
+    border-top:1px solid $textColorLight;
+    border-top-right-radius: 5px;
+  }
+
+  &.table thead th:first-child{
+    border-bottom:1px solid $textColorLight;
+    border-top:1px solid $textColorLight;
+    border-left: 1px solid $textColorLight;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+  }
+
+  &.table thead th:last-child{
+    border-bottom:1px solid $textColorLight;
+    border-top:1px solid $textColorLight;
+    border-right: 1px solid $textColorLight;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+  }
+
+  &.table thead th:not(:last-child):not(:first-child){
+    border-bottom:1px solid $textColorLight;
+    border-top:1px solid $textColorLight;
+  }
+}
