@@ -6,6 +6,7 @@ import LoginUser from "components/views/LoginUser"
 import RegisterUser from "components/views/RegisterUser"
 
 import HomePage from "components/views/HomePage";
+import Leaderboard from "../../views/Leaderboard";
 
 const AppRouter = () => {
     return (
@@ -16,6 +17,9 @@ const AppRouter = () => {
                 </Route>
                 <Route exact path="/user/login">
                    <LoginUser />
+                </Route>
+                <Route exact path="/leaderboard">
+                    <Leaderboard />
                 </Route>
                 <Route exact path="/">
                     <Redirect to="/home" />

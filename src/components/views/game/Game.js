@@ -24,7 +24,7 @@ const Game = ({ id }) => {
 
     const unblockRef = useRef(null);
 
-    const beforeUnloadListener = (event) => {
+    const beforeUnloadListener = () => {
         //TODO: Add API call to surrender
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
@@ -34,7 +34,7 @@ const Game = ({ id }) => {
     };
 
     useEffect(() => {
-        unblockRef.current = history.block((location) => {
+        unblockRef.current = history.block(() => {
             let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
             if (result) {
                 //Handle leaving page
