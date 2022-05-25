@@ -14,6 +14,7 @@ const ShareLobbyCode = ({ id }) => {
 
     const token = localStorage.getItem('token');
     const [code, setCode] = useState(null);
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 
     // PopUp
     const [getDataFailed, setGetDataFailed] = useState(false);
@@ -28,7 +29,9 @@ const ShareLobbyCode = ({ id }) => {
 
     const beforeUnloadListener = (event) => {
         api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-        localStorage.removeItem('token');
+        if (!isRegistered) {
+            localStorage.removeItem('token');
+        }
         localStorage.removeItem('playerId');
     };
 
@@ -43,7 +46,9 @@ const ShareLobbyCode = ({ id }) => {
                 if (result) {
                     //Handle leaving page
                     api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-                    localStorage.removeItem('token');
+                    if (!isRegistered) {
+                        localStorage.removeItem('token');
+                    }
                     localStorage.removeItem('playerId');
                 }
                 return result;

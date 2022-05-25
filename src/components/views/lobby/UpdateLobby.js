@@ -24,8 +24,8 @@ const FormField = props => {
 const UpdateLobby = ({id}) => {
 
     const history = useHistory();
-
     const token = localStorage.getItem('token');
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 
     const [name, setName] = useState('');
     const [gameMode, setGameMode] = useState(null);
@@ -46,7 +46,9 @@ const UpdateLobby = ({id}) => {
 
     const beforeUnloadListener = (event) => {
         api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-        localStorage.removeItem('token');
+        if (!isRegistered) {
+            localStorage.removeItem('token');
+        }
         localStorage.removeItem('playerId');
     };
 
@@ -61,7 +63,9 @@ const UpdateLobby = ({id}) => {
                 if (result) {
                     //Handle leaving page
                     api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-                    localStorage.removeItem('token');
+                    if (!isRegistered) {
+                        localStorage.removeItem('token');
+                    }
                     localStorage.removeItem('playerId');
                 }
                 return result;

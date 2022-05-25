@@ -35,7 +35,8 @@ const CreateLobby = () => {
     const [gameType, setGameType] = useState("UNRANKED");
     const [creating, setCreating] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
-    const token = null;
+    const token = localStorage.getItem('token');
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 
     const postLobby = async () => {
 
@@ -60,8 +61,11 @@ const CreateLobby = () => {
                 // Get the returned user and update a new object.
                 const user = new UserModel(response.data);
 
-                // Store the token and playerId into the local storage.
-                localStorage.setItem('token', user.token);
+                // Store the token and playerId into the local storage,
+                // if the player is registered, we maintain their token.
+                if (!isRegistered) {
+                    localStorage.setItem('token', user.token);
+                }
                 localStorage.setItem('playerId', user.playerId);
 
                 history.push({ pathname: '/lobby/' + user.lobby.id })
