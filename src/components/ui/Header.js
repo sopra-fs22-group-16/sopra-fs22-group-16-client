@@ -8,7 +8,7 @@ import { ThemeProvider } from "@emotion/react";
 import CustomPopUp from "../ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 
-const isRegistered = true;
+const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 const userId = localStorage.getItem("userId");
 
 
