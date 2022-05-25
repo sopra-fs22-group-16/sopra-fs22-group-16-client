@@ -36,17 +36,16 @@ const LobbyByCode = () => {
     const [errorMessage, setErrorMessage] = useState("");
 
 
-    const checkLength = (un) => {
-        setCodeInput(un);
-        const lobbySeparator = un.indexOf("-");
-        if (un.length - (lobbySeparator + 1) === lengthCode && lobbySeparator > 0) {
-            const id = un.substring(0, lobbySeparator);
-            ValidateCode(id);
+    const checkCode = async () => {
+        const lobbySeparator = codeInput.indexOf("-");
+        if (codeInput.length - (lobbySeparator + 1) === lengthCode && lobbySeparator > 0) {
+            const id = codeInput.substring(0, lobbySeparator);
+            validateCode(id);
         }
-        setCodeInput(null);
+        setCodeInput("");
     }
 
-    const ValidateCode = async (id) => {
+    const validateCode = async (id) => {
 
         try {
 
@@ -54,7 +53,6 @@ const LobbyByCode = () => {
             const requestBody = {
                 "invitationCode": codeInput,
             };
-
 
             //call to the backend to post the player with the attempted password
             const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
@@ -66,20 +64,23 @@ const LobbyByCode = () => {
             }
             localStorage.setItem('playerId', user.id);
 
-            setJoining(isJoining);
-            new Promise(resolve => setTimeout(resolve, 500));
+            setJoining(true);
+            //just to make more interesting the joining
+            await new Promise(r => setTimeout(r, 2000));
             history.push({ pathname: '/lobby/' + id });
+
         } catch (error) {
             if (error.response != null) {
                 // conflict in lobby name
                 if (error.response.status === 404) {
                     setErrorMessage("This lobby does not seem to be live!");
                 }
-
+                else if (error.response.status === 403) {
+                    setErrorMessage("This lobby is only available for registered users!");
+                }
                 else if (error.response.status === 409) {
                     setErrorMessage("This lobby is already full!");
                 }
-
                 else {
                     setErrorMessage("The password does not match the lobby!")
                 }
@@ -101,7 +102,7 @@ const LobbyByCode = () => {
 
                 <FormField
                     value={codeInput}
-                    onChange={un => checkLength(un)}
+                    onChange={e => setCodeInput(e)}
                 >
                 </FormField>
                 <Link className="LobbyByCode link"
@@ -109,6 +110,15 @@ const LobbyByCode = () => {
                         pathname: '/lobby/join/qr'
                     }}>
                     Join using a QR code instead</Link>
+                <div className="LobbyByCode button-container">
+                    <Button
+                        disabled={codeInput.length === 0}
+                        width="100%"
+                        onClick={() => checkCode()}
+                    >
+                        VALIDATE CODE
+                    </Button>
+                </div>
                 <div className="LobbyByCode button-container">
                     <Button
                         width="100%"

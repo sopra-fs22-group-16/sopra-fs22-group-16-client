@@ -8,25 +8,28 @@ import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import TileModel from "models/TileModel";
-import { useHistory, useLocation } from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import { api } from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar, Text} from 'recharts';
+import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar, Text } from 'recharts';
 import Confetti from 'react-confetti';
 import "styles/views/game/Game.scss"
 
 const Game = ({ id }) => {
 
     const history = useHistory();
-    const location = useLocation();
+
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 
     const unblockRef = useRef(null);
 
     const beforeUnloadListener = (event) => {
         //TODO: Add API call to surrender
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-        localStorage.removeItem('token');
+        if (!isRegistered) {
+            localStorage.removeItem('token');
+        }
         localStorage.removeItem('playerId');
     };
 
@@ -37,7 +40,9 @@ const Game = ({ id }) => {
                 //Handle leaving page
                 //TODO: Add API call to surrender
                 api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-                localStorage.removeItem('token');
+                if (!isRegistered) {
+                    localStorage.removeItem('token');
+                }
                 localStorage.removeItem('playerId');
             }
             return result;
@@ -154,7 +159,7 @@ const Game = ({ id }) => {
             setGameResult("DEFEAT");
         }
         // if the game is 1v1, we show the name of the winner
-        if (gameOverInfo.winners.length == 1) {
+        if (gameOverInfo.winners.length === 1) {
             setWinner(gameData.players[gameOverInfo.winners[0]].name);
         }
         // if 2v2, we show the team
@@ -165,28 +170,24 @@ const Game = ({ id }) => {
     }
 
 
-    const confirmSurrender = async() => {
-        await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
+    const confirmSurrender = async () => {
+        await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
     }
 
     const receiveSurrender = (surrenderInfo) => {
-        console.log("game finished in game");
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
-        let result = loser == playerId ? "DEFEAT" : "VICTORY";
-        let winner = loser == playerId? Math.abs(playerId-1): playerId;
+        let result = loser === playerId ? "DEFEAT" : "VICTORY";
+        let winner = loser === playerId ? Math.abs(playerId - 1) : playerId;
         setGameResult(result);
         setWinner(gameData.players[winner].name);
     }
 
-    const goStatistics = async() => {
-        //TODO: go to the statistics view
-        const response = await api.get(`/v1/game/match/${id}/stats`, {headers: {'token': token || ''}}); 
-        console.log(response.data)
-        //const response = statisticsMockData;
+    const goStatistics = async () => {
+        const response = await api.get(`/v1/game/match/${id}/stats`, { headers: { 'token': token || '' } });
         setShowStatistics(true);
         convertTurnData(response.data);
-        
+
     }
 
     const playAgain = () => {
@@ -195,7 +196,9 @@ const Game = ({ id }) => {
 
     const goHome = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-        localStorage.removeItem('token');
+        if (!isRegistered) {
+            localStorage.removeItem('token');
+        }
         localStorage.removeItem('playerId');
         unblockRef?.current();
         history.push('/home');
@@ -211,27 +214,26 @@ const Game = ({ id }) => {
         console.log(playerUnitArray);
         let playerKillArray = statisticsData.killsPerPlayer;
         console.log(playerKillArray);
-    
+
         const dataFinalUnits = [];
         const dataFinalKills = [];
 
-    
+
         for (let i = 0; i < playerUnitArray[0].length; i++) {
-        let unitsData = {
-        turn: i+1,
-        Player0: playerUnitArray[0][i],
-        Player1: playerUnitArray[1][i]
-        };
-
-
-        let killsData = {
-            turn: i+1,
-            Player0: playerKillArray[0][i],
-            Player1: playerKillArray[1][i]
+            let unitsData = {
+                turn: i + 1,
+                Player0: playerUnitArray[0][i],
+                Player1: playerUnitArray[1][i]
             };
-    
-       if (gameData.gameType == "TWO_VS_TWO") 
-            {
+
+
+            let killsData = {
+                turn: i + 1,
+                Player0: playerKillArray[0][i],
+                Player1: playerKillArray[1][i]
+            };
+
+            if (gameData.gameType === "TWO_VS_TWO") {
                 // add the other two players
                 unitsData['Player3'] = playerUnitArray[2][i];
                 unitsData['Player4'] = playerUnitArray[3][i];
@@ -240,129 +242,129 @@ const Game = ({ id }) => {
             }
 
 
-     
-    dataFinalUnits.push(unitsData);
-    dataFinalKills.push(killsData);
-    }
-    setDataGraphsUnits(dataFinalUnits);
-    setDataGraphsKills(dataFinalKills);
+
+            dataFinalUnits.push(unitsData);
+            dataFinalKills.push(killsData);
+        }
+        setDataGraphsUnits(dataFinalUnits);
+        setDataGraphsKills(dataFinalKills);
     };
 
 
 
-const BarChartKills =() => {
+    const BarChartKills = () => {
 
-    return(
+        return (
 
-    <BarChart 
-    width={270}
-    height={220}
-    data={stateGraph == "Units"? dataGraphsUnits: dataGraphsKills}
-    margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
-  >
+            <BarChart
+                width={270}
+                height={220}
+                data={stateGraph === "Units" ? dataGraphsUnits : dataGraphsKills}
+                margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
+            >
 
-<YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
-    <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 4}} interval={0} />
-    <Tooltip />
-    <Bar 
-      dataKey="Player0" 
-      fill="#873535" 
-      name = {gameData.players[0].name}
-    />
+                <YAxis tick={{ fontSize: 5 }} ticks={[1, 2, 3]} />
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
+                <Tooltip />
+                <Bar
+                    dataKey="Player0"
+                    fill="#873535"
+                    name={gameData.players[0].name}
+                />
 
-    <Bar 
-      dataKey="Player1" 
-      fill="#516899"  
-      name = {gameData.players[1].name}
-    />
-    {gameData.gameType == "TWO_VS_TWO"?
+                <Bar
+                    dataKey="Player1"
+                    fill="#516899"
+                    name={gameData.players[1].name}
+                />
+                {gameData.gameType === "TWO_VS_TWO" ?
 
-    <div>
-    <Bar 
-      dataKey="Player2" 
-      fill="green" 
-      name = {gameData.players[2].name}
-    />
+                    <div>
+                        <Bar
+                            dataKey="Player2"
+                            fill="green"
+                            name={gameData.players[2].name}
+                        />
 
-    <Bar 
-      dataKey="Player3" 
-      fill="yellow"  
-      name = {gameData.players[3].name}
-    />
-    </div>
-    :
-null
-}
+                        <Bar
+                            dataKey="Player3"
+                            fill="yellow"
+                            name={gameData.players[3].name}
+                        />
+                    </div>
+                    :
+                    null
+                }
 
-  </BarChart>
-    );
-}
-
-const StatisticsChart = () => {
-
-return(
-<div>
-<label class={stateGraph == "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
-    <label class = "statisticsHeading"> {stateGraph == "Units"? "Units per Turn" :"Kills per Turn"} </label>
-<label class={stateGraph == "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
-    {stateGraph == "Units" ?
-
-    <LineChart
-          width={270}
-          height={220}
-          data={dataGraphsUnits}
-          margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
-        >
-      <Tooltip />
-      <Line name = {gameData.players[0] ? gameData.players[0].name : null} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
-      <Line name = {gameData.players[1] ? gameData.players[1].name : null} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
-      {
-      gameData.gameType == "TWO_VS_TWO"?
-      <div>
-        <Line name = {gameData.players[2].name} type="monotone" dataKey="Player2" stroke="green" dot={false} />
-        <Line name = {gameData.players[3].name} type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
-        </div>
-        :
-        null   
-     }
-      <XAxis name = "Turn" dataKey="turn" tick={{fontSize: 8}} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2: 5)} />
-      <YAxis tick={{fontSize: 8}} ticks={[1, 2, 3]}/>
-          </LineChart> 
-          :
-    <BarChartKills/>
+            </BarChart>
+        );
     }
-            </div>
-      );
-      };
 
-    const StatisticsTable =() => {
-          return(
-              <div>
-        <table className="statistics">
-        <thead>
-            <tr>
-                <th> METRIC</th>
-                <th> FINAL VALUES</th>
-            </tr>
-        </thead>
+    const StatisticsChart = () => {
+
+        return (
+            <div>
+                <label class={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
+                <label class="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
+                <label class={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
+                {stateGraph === "Units" ?
+
+                    <LineChart
+                        width={270}
+                        height={220}
+                        data={dataGraphsUnits}
+                        margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
+                    >
+                        <Tooltip />
+                        <Line name={gameData.players[0] ? gameData.players[0].name : null} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
+                        <Line name={gameData.players[1] ? gameData.players[1].name : null} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
+                        {
+                            gameData.gameType === "TWO_VS_TWO" ?
+                                <div>
+                                    <Line name={gameData.players[2].name} type="monotone" dataKey="Player2" stroke="green" dot={false} />
+                                    <Line name={gameData.players[3].name} type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
+                                </div>
+                                :
+                                null
+                        }
+                        <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
+                        <YAxis tick={{ fontSize: 8 }} ticks={[1, 2, 3]} />
+                    </LineChart>
+                    :
+                    <BarChartKills />
+                }
+            </div>
+        );
+    };
+
+    const StatisticsTable = () => {
+        return (
+            <div>
+                <table className="statistics">
+                    <thead>
+                        <tr>
+                            <th> METRIC</th>
+                            <th> FINAL VALUES</th>
+                        </tr>
+                    </thead>
                     <tbody>
                         <tr>
                             <th>UNITS/TURN</th>
-                            <td > {metricSums[0]? metricSums[0].toFixed(2) : 0}</td>
+                            <td > {metricSums[0] ? metricSums[0].toFixed(2) : 0}</td>
                         </tr>
                         <tr>
                             <th>KILLS/TURN</th>
-                            <td> {metricSums[1]? metricSums[1].toFixed(2) : 0.00}</td>
+                            <td> {metricSums[1] ? metricSums[1].toFixed(2) : 0.00}</td>
                         </tr>
                         <tr>
                             <th>TOTAL MOVES</th>
                             <td> {metricSums[2]}</td>
                         </tr>
-                        </tbody>
-                        </table>
-                        </div>
-          );
-      };
+                    </tbody>
+                </table>
+            </div>
+        );
+    };
 
 
     return (
@@ -390,7 +392,7 @@ return(
                         playerIdCurrentTurn={gameData.playerIdCurrentTurn}
                         onChangeTurn={changeTurn}
                         onGameOver={gameOver}
-                        onSurrender = {receiveSurrender}
+                        onSurrender={receiveSurrender}
                     />
 
             }
@@ -475,7 +477,7 @@ return(
                         RETURN HOME
                     </Button>
                     {
-                        gameResult == "VICTORY" ?
+                        gameResult === "VICTORY" ?
                             <Confetti
                                 drawShape={ctx => {
                                     ctx.beginPath()
@@ -491,12 +493,12 @@ return(
                             /> : null
                     }
                 </CustomPopUp>
-                <CustomPopUp style = {{'width':'600'}}
-                open={showStatistics} information="">
-            <label className={"winnerWindow"}> STATISTICS </label>
-                    <StatisticsChart/>
-                    <StatisticsTable/>
-                    <Button 
+                <CustomPopUp style={{ 'width': '600' }}
+                    open={showStatistics} information="">
+                    <label className={"winnerWindow"}> STATISTICS </label>
+                    <StatisticsChart />
+                    <StatisticsTable />
+                    <Button
                         onClick={() =>
                             playAgain()
                         }>

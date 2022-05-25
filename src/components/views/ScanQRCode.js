@@ -58,6 +58,9 @@ const ScanQRCode = props => {
                 if (error.response.status === 404) {
                     setErrorMessage("This lobby does not seem to be live!");
                 }
+                else if (error.response.status === 403) {
+                    setErrorMessage("This lobby is only available for registered users!");
+                }
                 else if (error.response.status === 409) {
                     setErrorMessage("This lobby is already full!");
                 }
