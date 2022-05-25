@@ -7,6 +7,7 @@ import RegisterUser from "components/views/RegisterUser"
 import RegisteredUser from "components/views/RegisteredUser"
 
 import HomePage from "components/views/HomePage";
+import Leaderboard from "../../views/Leaderboard";
 
 const AppRouter = () => {
     return (
@@ -24,6 +25,9 @@ const AppRouter = () => {
                             <RegisteredUser id={id} />
                         )
                     }} />
+                <Route exact path="/leaderboard">
+                    <Leaderboard />
+                </Route>
                 <Route exact path="/">
                     <Redirect to="/home" />
                 </Route>
