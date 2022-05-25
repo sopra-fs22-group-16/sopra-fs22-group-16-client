@@ -9,10 +9,26 @@ import 'styles/views/HomePage.scss';
 
 const HomePage = () => {
     const history = useHistory();
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const userId = localStorage.getItem("userId");
 
     const goJoinLobby = () => {
         // change status from ONLINE to OFFLINE
         history.push('/lobby/join');
+    }
+
+    const gotoUser = () => {
+
+        if(userId){
+
+            history.push(`/user/${userId}`);
+
+        }
+
+        else{
+            // this should be unreachable, so I didn't put any custom pop-up
+            console.log("error");
+        }
     }
 
     const goCreateLobby = () => {
@@ -25,7 +41,7 @@ const HomePage = () => {
         history.push('/user/login');
     }
 
-    const goLeaderboard = () => {
+    const gotoLeaderboard = () => {
         history.push('/leaderboard');
     }
 
@@ -55,19 +71,32 @@ const HomePage = () => {
                         <div className="HomePage button-container">
                             <Button
                                 width="100%"
-                                onClick={() => goLeaderboard()}
+                                onClick={() => gotoLeaderboard()}
                             >
                                 LEADERBOARD
                             </Button>
                         </div>
+                        {
+                            isRegistered?
+
                         <div className="HomePage button-container">
-                            <Button className="primary-button register"
+                            <Button className="primary-button"
                                     width="100%"
-                                    onClick={() => loginUser()}
-                            >
-                                SIGN IN/CREATE USER
+                                    onClick={() => gotoUser()}
+                        >
+                            PROFILE PAGE
                             </Button>
                         </div>
+                        :
+                        <div className="HomePage button-container">
+                        <Button className="primary-button register"
+                                width="100%"
+                                onClick={() => loginUser()}
+                                >
+                                    SIGN IN/CREATE USER
+                        </Button>
+                    </div>
+}
                     </div>
                 </div>
             </div>

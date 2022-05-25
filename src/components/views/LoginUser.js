@@ -38,7 +38,7 @@ function timeout(ms) {
             const loggedInUser = response.data;
             console.log(response.data);
             localStorage.setItem("username", username);
-            localStorage.setItem("userId", loggedInUser.id);
+            localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", loggedInUser.token);
             setCreating(true);
             await timeout(4000);
