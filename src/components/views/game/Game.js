@@ -12,7 +12,7 @@ import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
 import { api } from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar, Text } from 'recharts';
+import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar } from 'recharts';
 import Confetti from 'react-confetti';
 import "styles/views/game/Game.scss"
 
@@ -304,9 +304,9 @@ const Game = ({ id }) => {
 
         return (
             <div>
-                <label class={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
-                <label class="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
-                <label class={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
+                <label className={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
+                <label className="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
+                <label className={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
                 {stateGraph === "Units" ?
 
                     <LineChart
