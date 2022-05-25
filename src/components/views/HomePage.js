@@ -13,7 +13,6 @@ const HomePage = () => {
     const userId = localStorage.getItem("userId");
 
     const goJoinLobby = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/lobby/join');
     }
 
@@ -32,12 +31,10 @@ const HomePage = () => {
     }
 
     const goCreateLobby = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/lobby/create');
     }
 
     const loginUser = () => {
-        // change status from ONLINE to OFFLINE
         history.push('/user/login');
     }
 

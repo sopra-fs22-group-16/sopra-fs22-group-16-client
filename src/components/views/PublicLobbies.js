@@ -14,6 +14,9 @@ import UserModel from "models/UserModel";
 
 const PublicLobbies = () => {
 
+    const token = localStorage.getItem('token');
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+
     const history = useHistory();
     const location = useLocation();
 
@@ -52,11 +55,13 @@ const PublicLobbies = () => {
         try {
 
             setJoining(true);
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify({}), { headers: { 'token': '' } });
+            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify({}), { headers: { 'token': token || '' } });
 
             // Get the returned user and update a new object.
             const user = new UserModel(response.data);
-            localStorage.setItem('token', user.token);
+            if (!isRegistered) {
+                localStorage.setItem('token', user.token);
+            }
             localStorage.setItem('playerId', user.id);
 
             history.push({ pathname: '/lobby/' + id })
@@ -88,6 +93,7 @@ const PublicLobbies = () => {
                 mode={lobby.gameMode}
                 players={lobby.players}
                 visibility={lobby.visibility}
+                type={lobby.gameType}
                 joinLobby={joinLobbyWithId}
                 popUpFullLobby={() => setErrorMessage(`Lobby ${lobby.name} is full`)}
             />
@@ -106,8 +112,8 @@ const PublicLobbies = () => {
 
                             <th>NAME</th>
                             <th>MODE</th>
-                            <th>players</th>
-                            <th>capacity</th>
+                            <th>PLAYERS</th>
+                            <th>RANKED</th>
                         </tr>
                     </thead>
                 </table>
@@ -163,13 +169,14 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({ id, name, mode, players, visibility, joinLobby, popUpFullLobby }) => {
+const LobbyInfo = ({ id, name, mode, players, visibility, type, joinLobby, popUpFullLobby }) => {
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
 
     if (players > totalPlayers) return null;
-    const enabled = presentPlayers < totalPlayers;
+    const enabled = presentPlayers < totalPlayers && (isRegistered || (!isRegistered && type === "UNRANKED"));
     if (enabled) {
         return (
             <tr onClick={() => joinLobby(id)} className="non-full">
@@ -180,10 +187,18 @@ const LobbyInfo = ({ id, name, mode, players, visibility, joinLobby, popUpFullLo
                     {displayedMode}
                 </td>
                 <td>
-                    {presentPlayers}
+                    {presentPlayers + '/' + totalPlayers}
                 </td>
                 <td>
-                    {totalPlayers}
+                    {
+                        type === "RANKED" ?
+                            <span>
+                                &#x2714;
+                            </span> :
+                            <span>
+                                &#x2718;
+                            </span>
+                    }
                 </td>
             </tr>
         );
@@ -197,10 +212,18 @@ const LobbyInfo = ({ id, name, mode, players, visibility, joinLobby, popUpFullLo
                 {displayedMode}
             </td>
             <td>
-                {presentPlayers}
+                {presentPlayers + '/' + totalPlayers}
             </td>
             <td>
-                {totalPlayers}
+                {
+                    type === "RANKED" ?
+                        <span>
+                            &#x2714;
+                        </span> :
+                        <span>
+                            &#x2718;
+                        </span>
+                }
             </td>
         </tr>
     );
