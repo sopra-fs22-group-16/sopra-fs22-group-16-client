@@ -46,7 +46,7 @@ const HomePage = () => {
         <div className={"HomePage baseContainer"}>
             <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
             <div className="HomePage container">
-                <Header className={"HomePage image"}/>
+                <Header className={"HomePage image"} noLogoutBool = {false} isRegistered = {true}/>
                 <div className={"HomePage button-container-container"}>
                     <div className="HomePage button-container">
                         <Button

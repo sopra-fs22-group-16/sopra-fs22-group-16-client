@@ -7,7 +7,7 @@ const BaseContainer = props => (
     <div>
         <div className={`base-container ${props.className ?? ''}`}>
             <Header
-             logOutBool = {props.logOutBool}
+             noLogOutBool = {props.noLogOutBool}
             />
             {props.children}
         </div>
@@ -16,7 +16,8 @@ const BaseContainer = props => (
 
 BaseContainer.propTypes = {
     children: PropTypes.node,
-    logOutBool: PropTypes.bool
+    noLogOutBool: PropTypes.bool,
+    //isRegistered: PropTypes.bool
 };
 
 export default BaseContainer;

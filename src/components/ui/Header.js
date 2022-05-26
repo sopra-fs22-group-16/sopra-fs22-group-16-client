@@ -15,7 +15,10 @@ const userId = localStorage.getItem("userId");
 
 const Header = props => {
 
+    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
     const [errorMessage, setErrorMessage] = useState("");
+    const showLogOut = (isRegistered  && !(props.noLogOutBool == true))? true : false;
+    
 
     const logOut = () => {
 
@@ -25,21 +28,27 @@ const Header = props => {
         localStorage.removeItem('userId');
         localStorage.removeItem('isRegistered');
     }
+    
+    const LogoutIconHeader = () => {
+        if(showLogOut) {
+            return(
+            <LogoutIcon className = "header userInfo"
+            onClick={() => logOut()}
+            />
+            )
+        } 
+        else {
+            return(
+                <div> </div>
+            )
+        }
+    }
 
      return(
     <div>
     <div className="header headerContainer" style={{ height: props.height }}>
-        <img src={HeaderImage} />
-    {
-        (isRegistered && !(props.logOutBool))? 
-
-        <LogoutIcon className = "header userInfo"
-        onClick={() => logOut()}
-        />
-                    :
-        null
-
-    }
+        <img src={HeaderImage}/>
+        <LogoutIconHeader/>
     </div>
      <ThemeProvider theme={defaultTheme}>
      <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
@@ -56,7 +65,8 @@ const Header = props => {
 
 Header.propTypes = {
     height: PropTypes.string,
-    logOutBool: PropTypes.bool
+    logOutBool: PropTypes.bool,
+    isRegistered: PropTypes.bool,
 
 }
 

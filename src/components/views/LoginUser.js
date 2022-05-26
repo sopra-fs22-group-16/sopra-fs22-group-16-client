@@ -35,7 +35,7 @@ const LoginUser = props => {
             // logged-in data is just token
             const loggedInUser = response.data;
             console.log(response.data);
-            localStorage.setItem("username", username);
+            localStorage.setItem("userId", loggedInUser.id);
             localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", loggedInUser.token);
             setCreating(true);

@@ -28,8 +28,6 @@ const RegisterUser = () => {
             const response = await api.post('/v1/users', requestBody);
 
             // retrieves user data
-            //const registeredUser = new RegisteredUserModel(response.data);
-            localStorage.setItem("username", username);
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.id);
             localStorage.setItem("isRegistered", true);
