@@ -4,6 +4,7 @@ import {useHistory} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import Header from "components/ui/Header";
 import hannibal_background from 'styles/images/wargroove_bw_light.png'
+import info_icon from 'styles/images/info/info_icon.png'
 
 import 'styles/views/HomePage.scss';
 
@@ -40,6 +41,10 @@ const HomePage = () => {
 
     const gotoLeaderboard = () => {
         history.push('/leaderboard');
+    }
+
+    const goInfoPage = () => {
+        history.push('/info');
     }
 
     return (
@@ -96,6 +101,7 @@ const HomePage = () => {
 }
                     </div>
                 </div>
+                <img src={info_icon} onClick={() => goInfoPage()}  className={"HomePage infoIcon"} alt={""} />
             </div>
         </div>
     );

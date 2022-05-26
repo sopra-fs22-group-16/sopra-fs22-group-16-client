@@ -2,89 +2,90 @@
 
 .HomePage {
 
-  &.body {
-    margin: 0;
-  }
+    &.body {
+        margin: 0;
+    }
 
-  &.baseContainer {
-    position:relative;
-    overflow: hidden;
-  }
+    &.infoIcon {
+        position:absolute;
+        top: 20px;
+        left: 20px;
+        width: 40px;
+        height: 40px;
+    }
 
-  &.userButton-container {
-    margin-top: 20px;
-  }
+    &.baseContainer {
+        position: relative;
+        overflow: hidden;
+    }
 
-  &.button-container-container{
-    position: absolute;
-    width: 100%;
-    bottom: 10vh;
+    &.userButton-container {
+        margin-top: 20px;
+    }
 
-    align-items: center;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-  }
+    &.button-container-container {
+        position: absolute;
+        width: 100%;
+        bottom: 10vh;
+        align-items: center;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+    }
 
-  &.container {
-    position: relative;
-    top: 0;
-    left: 0;
-    min-width: 100vw;
-    min-height: 100vh;
-    padding-top: 20vh;
-  }
+    &.container {
+        position: relative;
+        top: 0;
+        left: 0;
+        min-width: 100vw;
+        min-height: 100vh;
+        padding-top: 20vh;
+    }
 
-  &.button-container {
-    display: flex;
-    margin-top: 1em;
-    width: 200px;
-  }
+    &.button-container {
+        display: flex;
+        margin-top: 1em;
+        width: 200px;
+    }
 
-  &.page-extender {
-    margin-bottom: 20em;
-  }
+    &.page-extender {
+        margin-bottom: 20em;
+    }
 
-  @mixin transform($val) {
-    -webkit-transform: $val;
-    -moz-transform: $val;
-    -ms-transform: $val;
-    transform: $val;
-  }
+    @mixin transform($val) {
+        -webkit-transform: $val;
+        -moz-transform: $val;
+        -ms-transform: $val;
+        transform: $val;
+    }
 
-  &.backgroundImage {
-    position: absolute;
-    top: -10%;
-    left: -10%;
-    height: 200vh;
+    &.backgroundImage {
+        position: absolute;
+        top: -10%;
+        left: -10%;
+        height: 200vh;
+        animation: move 60s infinite linear;
+    }
 
-    animation: move 60s infinite linear;
-  }
+    @keyframes move {
+        0% {
+            @include transform(translate(-10%, -10%));
+        }
 
-@keyframes move {
-  0% {
-    @include transform(translate(-10%, -10%));
+        25% {
+            @include transform(translate(-30%, -20%));
+        }
 
-  }
-  25% {
-    @include transform(translate(-30%, -20%));
+        50% {
+            @include transform(translate(-20%, -30%));
+        }
 
-  }
-  50% {
-    @include transform(translate(-20%, -30%));
+        75% {
+            @include transform(translate(0%, -20%));
+        }
 
-  }
-  75% {
-    @include transform(translate(0%, -20%));
-
-  }
-  100% {
-    @include transform(translate(-10%, -10%));
-
-  }
+        100% {
+            @include transform(translate(-10%, -10%));
+        }
+    }
 }
-
-
-}
-
-
