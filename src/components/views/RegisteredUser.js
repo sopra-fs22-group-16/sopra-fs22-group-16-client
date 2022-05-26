@@ -51,7 +51,9 @@ const RegisteredUser = ({ id }) => {
 
     const updateData = async () => {
         try {
-            const requestBody = JSON.stringify({ username, password });
+            const requestBody = {};
+            requestBody.username = username || userData.username;
+            requestBody.password = password || "";
             await api.put(
                 `/v1/users/${id}`,
                 requestBody,
