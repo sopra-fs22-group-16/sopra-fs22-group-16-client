@@ -5,6 +5,8 @@ import GameRouter from "components/routing/routers/GameRouter";
 
 import LoginUser from "components/views/LoginUser"
 import RegisterUser from "components/views/RegisterUser"
+import RegisteredUser from "components/views/RegisteredUser"
+
 import HomePage from "components/views/HomePage";
 import Leaderboard from "components/views/Leaderboard";
 import InfoPage from "components/views/InfoPage";
@@ -22,6 +24,12 @@ const AppRouter = () => {
                 <Route exact path="/info">
                     <InfoPage />
                 </Route>
+                <Route exact path={`/user/:id`} render={({ match }) => {
+                        const id = parseInt(match.params.id)
+                        return (
+                            <RegisteredUser id={id} />
+                        )
+                    }} />
                 <Route exact path="/leaderboard">
                     <Leaderboard />
                 </Route>

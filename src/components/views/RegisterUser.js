@@ -1,9 +1,8 @@
-import React, { useState } from 'react';
-import { useHistory, Link } from 'react-router-dom';
+import React, { useState} from 'react';
+import { useHistory, Link,  } from 'react-router-dom';
 import { LinearProgress } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { api } from 'helpers/api';
-import RegisteredUserModel from 'models/UserModel';
 import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
@@ -29,15 +28,15 @@ const RegisterUser = () => {
             const response = await api.post('/v1/users', requestBody);
 
             // retrieves user data
-            const registeredUser = new RegisteredUserModel(response.data);
-            localStorage.setItem("username", username);
+            localStorage.setItem("token", response.data.token);
+            localStorage.setItem("userId", response.data.id);
             localStorage.setItem("isRegistered", true);
-            localStorage.setItem("token", registeredUser.token);
+            console.log(response.data);
             setCreating(true);
             await timeout(4000);
 
             // TODO: take to the user page
-            history.push('/home');
+            history.push(`/user/${response.data.id}`);
         }
 
         catch (error) {

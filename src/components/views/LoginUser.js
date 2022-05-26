@@ -34,7 +34,8 @@ const LoginUser = props => {
 
             // logged-in data is just token
             const loggedInUser = response.data;
-            localStorage.setItem("username", username);
+            console.log(response.data);
+            localStorage.setItem("userId", loggedInUser.id);
             localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", loggedInUser.token);
             setCreating(true);
@@ -42,6 +43,7 @@ const LoginUser = props => {
 
             // TODO: take to the user page
             history.push('/home');
+            history.push(`/user/${loggedInUser.id}`);
         }
 
         catch (error) {
