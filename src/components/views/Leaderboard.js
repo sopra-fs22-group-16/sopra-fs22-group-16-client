@@ -60,6 +60,34 @@ const Leaderboard = () => {
         }
     }
 
+    const gotoUser = (userId) => {
+        history.push(`/user/${userId}`);
+    }
+
+    const UserInfo = ({place, userData}) => {
+        return (
+            <tr onClick={() => {
+                gotoUser(userData.id)
+            }}>
+                <td>
+                    {place}
+                </td>
+                <td>
+                    {userData.username}
+                </td>
+                <td>
+                    {userData.rankedScore}
+                </td>
+                <td>
+                    {userData.wins}
+                </td>
+                <td>
+                    {userData.losses}
+                </td>
+            </tr>
+        );
+    };
+
     let content
     content = leaderboardData.users.map((data, key) => {
             let offset = leaderboardData.page * usersPerPage;
@@ -188,27 +216,5 @@ const Leaderboard = () => {
     );
 };
 
-const UserInfo = ({place, userData}) => {
-    return (
-        <tr onClick={() => {
-        }}>
-            <td>
-                {place}
-            </td>
-            <td>
-                {userData.username}
-            </td>
-            <td>
-                {userData.rankedScore}
-            </td>
-            <td>
-                {userData.wins}
-            </td>
-            <td>
-                {userData.losses}
-            </td>
-        </tr>
-    );
-};
 
 export default Leaderboard;

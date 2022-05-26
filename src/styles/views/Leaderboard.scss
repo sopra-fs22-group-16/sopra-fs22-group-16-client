@@ -24,6 +24,10 @@
     height: 32px;
   }
 
+  &.table tbody tr:hover {
+    background-color: #604C18;
+}
+
   &.table th {
     font-size: 12px;
     min-width: 50px;
