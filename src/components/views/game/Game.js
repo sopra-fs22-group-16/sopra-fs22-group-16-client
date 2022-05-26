@@ -111,7 +111,7 @@ const Game = ({ id }) => {
 
             mapData.forEach((row, y) => {
                 mapArray.push([]);
-                row.forEach((x) => {
+                row.forEach((_tile, x) => {
                     mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                 });
             });
