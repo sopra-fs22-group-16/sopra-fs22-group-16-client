@@ -1,6 +1,5 @@
 import React, { useState , useEffect } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import { getInitColorSchemeScript, LinearProgress } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
 import { api } from 'helpers/api';
 import RegisteredUserModel from 'models/RegisteredUserModel'

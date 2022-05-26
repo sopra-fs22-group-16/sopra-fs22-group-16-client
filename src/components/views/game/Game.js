@@ -1,24 +1,24 @@
-import React, {useEffect, useRef, useState} from "react";
-import {Helmet} from "react-helmet";
+import React, { useEffect, useRef, useState } from "react";
+import { Helmet } from "react-helmet";
 import Map from "components/fragments/game/Map";
-import {ThemeProvider} from "@emotion/react";
-import {defaultTheme} from "styles/themes/defaulTheme";
-import {LinearProgress} from "@mui/material";
+import { ThemeProvider } from "@emotion/react";
+import { defaultTheme } from "styles/themes/defaulTheme";
+import { LinearProgress } from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
-import {Button} from "components/ui/Button";
+import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
 import animationsOn from "styles/images/ui/animationsOn.png"
 import animationsOff from "styles/images/ui/animationsOff.png"
 import TileModel from "models/TileModel";
-import {useHistory} from "react-router-dom";
+import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
-import {api} from "../../../helpers/api";
+import { api } from "../../../helpers/api";
 import HoldToConfirmPopUp from "../../ui/HoldToConfirmPopUp";
-import {BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar} from 'recharts';
+import { BarChart, LineChart, Line, XAxis, YAxis, Tooltip, Bar } from 'recharts';
 import Confetti from 'react-confetti';
 import "styles/views/game/Game.scss"
 
-const Game = ({id}) => {
+const Game = ({ id }) => {
 
     const history = useHistory();
 
@@ -27,8 +27,8 @@ const Game = ({id}) => {
     const unblockRef = useRef(null);
 
     const beforeUnloadListener = () => {
-        api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
-        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
         }
@@ -37,26 +37,26 @@ const Game = ({id}) => {
 
     useEffect(() => {
         unblockRef.current = history.block(() => {
-                let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
-                if (result) {
-                    //Handle leaving page
-                    api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
-                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-                    if (!isRegistered) {
-                        localStorage.removeItem('token');
-                    }
-                    localStorage.removeItem('playerId');
+            let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
+            if (result) {
+                //Handle leaving page
+                api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
+                api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+                if (!isRegistered) {
+                    localStorage.removeItem('token');
                 }
-                return result;
+                localStorage.removeItem('playerId');
             }
+            return result;
+        }
         );
-        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.addEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
     // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
-        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.removeEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
     const token = localStorage.getItem("token");
@@ -101,7 +101,7 @@ const Game = ({id}) => {
     const obtainAndLoadGameData = async () => {
         try {
 
-            const response = await api.get(`/v1/game/match/${id}`, {headers: {'token': token || ''}});
+            const response = await api.get(`/v1/game/match/${id}`, { headers: { 'token': token || '' } });
 
             let mapData = response.data.gameMap.tiles;
             let unitData = response.data.units;
@@ -111,7 +111,7 @@ const Game = ({id}) => {
 
             mapData.forEach((row, y) => {
                 mapArray.push([]);
-                row.forEach((tile, x) => {
+                row.forEach((x) => {
                     mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                 });
             });
@@ -174,20 +174,20 @@ const Game = ({id}) => {
 
 
     const confirmSurrender = async () => {
-        await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), {headers: {'token': token || ''}});
+        await api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
     }
 
     const receiveSurrender = (surrenderInfo) => {
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
         let result = loser === playerId ? "DEFEAT" : "VICTORY";
-        let winner = loser === playerId ? Math.abs(playerId - 1) : playerId;
+        let winner_ = loser === playerId ? Math.abs(playerId - 1) : playerId;
         setGameResult(result);
-        setWinner(gameData.players[winner].name);
+        setWinner(gameData.players[winner_].name);
     }
 
     const goStatistics = async () => {
-        const response = await api.get(`/v1/game/match/${id}/stats`, {headers: {'token': token || ''}});
+        const response = await api.get(`/v1/game/match/${id}/stats`, { headers: { 'token': token || '' } });
         setShowStatistics(true);
         convertTurnData(response.data);
 
@@ -199,7 +199,7 @@ const Game = ({id}) => {
     }
 
     const goHome = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
         }
@@ -253,6 +253,25 @@ const Game = ({id}) => {
         setDataGraphsKills(dataFinalKills);
     };
 
+    const XAxisWithInterval = () => {
+        if (metricSums[2] < 20) {
+            return (
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={0} />
+            );
+        }
+        else if (metricSums[2] < 40) {
+            return (
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={2} />
+            );
+        }
+        return (
+            <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                interval={5} />
+        );
+    }
+
 
     const BarChartKills = () => {
 
@@ -262,13 +281,12 @@ const Game = ({id}) => {
                 width={270}
                 height={220}
                 data={stateGraph === "Units" ? dataGraphsUnits : dataGraphsKills}
-                margin={{top: 20, right: 25, bottom: 0, left: -20}}
+                margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
             >
 
-                <YAxis tick={{fontSize: 5}} ticks={[1, 2, 3]}/>
-                <XAxis name="Turn" dataKey="turn" tick={{fontSize: 8}}
-                       interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)}/>
-                <Tooltip/>
+                <YAxis tick={{ fontSize: 5 }} ticks={[1, 2, 3]} />
+                <XAxisWithInterval />
+                <Tooltip />
                 <Bar
                     dataKey="Player0"
                     fill="#873535"
@@ -308,41 +326,36 @@ const Game = ({id}) => {
         return (
             <div>
                 <label className={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"}
-                       onClick={() => setStateGraph("Units")} style={{fontSize: 25 + 'px'}}>  &#x2190; </label>
+                    onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }}>  &#x2190; </label>
                 <label
                     className="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
                 <label className={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"}
-                       onClick={() => setStateGraph("Kills")} style={{fontSize: 25 + 'px'}}>  &#x2192;  </label>
+                    onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
                 {stateGraph === "Units" ?
 
                     <LineChart
                         width={270}
                         height={220}
                         data={dataGraphsUnits}
-                        margin={{top: 20, right: 25, bottom: 0, left: -20}}
+                        margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
                     >
-                        <Tooltip/>
+                        <Tooltip />
                         <Line name={gameData.players[0] ? gameData.players[0].name : null} type="monotone"
-                              dataKey="Player0" stroke="#873535" dot={false}/>
+                            dataKey="Player0" stroke="#873535" dot={false} />
                         <Line name={gameData.players[1] ? gameData.players[1].name : null} type="monotone"
-                              dataKey="Player1" stroke="#516899" dot={false}/>
-                        {
-                            gameData.gameType === "TWO_VS_TWO" ?
-                                <div>
-                                    <Line name={gameData.players[2].name} type="monotone" dataKey="Player2"
-                                          stroke="green" dot={false}/>
-                                    <Line name={gameData.players[3].name} type="monotone" dataKey="Player3"
-                                          stroke="yellow" dot={false}/>
-                                </div>
-                                :
-                                null
-                        }
-                        <XAxis name="Turn" dataKey="turn" tick={{fontSize: 8}}
-                               interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)}/>
-                        <YAxis tick={{fontSize: 8}} ticks={[1, 2, 3]}/>
+                            dataKey="Player1" stroke="#516899" dot={false} />
+                        {gameData.gameType === "TWO_VS_TWO" ?
+                            <div>
+                                <Line name={gameData.players[2].name} type="monotone" dataKey="Player2"
+                                    stroke="green" dot={false} />
+                                <Line name={gameData.players[3].name} type="monotone" dataKey="Player3"
+                                    stroke="yellow" dot={false} />
+                            </div> : null}
+                        <XAxisWithInterval />
+                        <YAxis tick={{ fontSize: 8 }} ticks={[1, 2, 3]} />
                     </LineChart>
                     :
-                    <BarChartKills/>
+                    <BarChartKills />
                 }
             </div>
         );
@@ -353,24 +366,24 @@ const Game = ({id}) => {
             <div>
                 <table className="statistics">
                     <thead>
-                    <tr>
-                        <th> METRIC</th>
-                        <th> FINAL VALUES</th>
-                    </tr>
+                        <tr>
+                            <th> METRIC</th>
+                            <th> FINAL VALUES</th>
+                        </tr>
                     </thead>
                     <tbody>
-                    <tr>
-                        <th>UNITS/TURN</th>
-                        <td> {metricSums[0] ? metricSums[0].toFixed(2) : 0}</td>
-                    </tr>
-                    <tr>
-                        <th>KILLS/TURN</th>
-                        <td> {metricSums[1] ? metricSums[1].toFixed(2) : 0.00}</td>
-                    </tr>
-                    <tr>
-                        <th>TOTAL MOVES</th>
-                        <td> {metricSums[2]}</td>
-                    </tr>
+                        <tr>
+                            <th>UNITS/TURN</th>
+                            <td> {metricSums[0] ? metricSums[0].toFixed(2) : 0}</td>
+                        </tr>
+                        <tr>
+                            <th>KILLS/TURN</th>
+                            <td> {metricSums[1] ? metricSums[1].toFixed(2) : 0.00}</td>
+                        </tr>
+                        <tr>
+                            <th>TOTAL MOVES</th>
+                            <td> {metricSums[2]}</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -383,14 +396,14 @@ const Game = ({id}) => {
             {/* Disable zooming, as it leads to white lines between tiles */}
             <Helmet>
                 <meta name="viewport"
-                      content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"/>
+                    content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             </Helmet>
 
             {
                 (gameData.map === [[]]) ?
                     <div className={"loadingContainer"}>
                         <ThemeProvider theme={defaultTheme}>
-                            <LinearProgress color="secondary"/>
+                            <LinearProgress color="secondary" />
                         </ThemeProvider>
                     </div>
 
@@ -415,7 +428,7 @@ const Game = ({id}) => {
                 <img
                     className={"pixelated"}
                     src={surrenderFlag}
-                    alt={"A white flag - press to surrender"}/>
+                    alt={"A white flag - press to surrender"} />
             </div>
             <div
                 className={"settingsContainer"}
@@ -425,12 +438,12 @@ const Game = ({id}) => {
                         <img
                             className={"pixelated"}
                             src={animationsOn}
-                            alt={"Show animations"}/>
+                            alt={"Show animations"} />
                         :
                         <img
                             className={"pixelated"}
                             src={animationsOff}
-                            alt={"Skip animations"}/>
+                            alt={"Skip animations"} />
                 }
             </div>
             <ThemeProvider theme={defaultTheme}>
@@ -441,7 +454,7 @@ const Game = ({id}) => {
                             onComplete={() => setShowTurnPopUp(false)}>
                             <div className={"turnIndicatorContainer"}>
                                 <h1 className={"turnIndicatorContainer turn"}>Turn {gameData.turn}</h1>
-                                <h2 style={{color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899'}}
+                                <h2 style={{ color: gameData.players[gameData.playerIdCurrentTurn].team === 0 ? '#873535' : '#516899' }}
                                     className={"turnIndicatorContainer player"}>{gameData.players[gameData.playerIdCurrentTurn].name}</h2>
                                 <p className={"turnIndicatorContainer information"}>Hold to Start</p>
                             </div>
@@ -521,11 +534,11 @@ const Game = ({id}) => {
                             /> : null
                     }
                 </CustomPopUp>
-                <CustomPopUp style={{'width': '600'}}
-                             open={showStatistics} information="">
+                <CustomPopUp style={{ 'width': '600' }}
+                    open={showStatistics} information="">
                     <label className={"winnerWindow"}> STATISTICS </label>
-                    <StatisticsChart/>
-                    <StatisticsTable/>
+                    <StatisticsChart />
+                    <StatisticsTable />
                     <Button
                         onClick={() =>
                             playAgain()

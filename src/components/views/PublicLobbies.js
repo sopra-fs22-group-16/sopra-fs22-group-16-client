@@ -37,7 +37,7 @@ const PublicLobbies = () => {
         obtainAndLoadLobbyInfo();
     }, []);
 
-    const onMessage = (msg) => {
+    const onMessage = () => {
         obtainAndLoadLobbyInfo();
     }
 
@@ -169,7 +169,7 @@ const PublicLobbies = () => {
     );
 };
 
-const LobbyInfo = ({ id, name, mode, players, visibility, type, joinLobby, popUpFullLobby }) => {
+const LobbyInfo = ({ id, name, mode, players, type, joinLobby, popUpFullLobby }) => {
     const displayedMode = mode === "ONE_VS_ONE" ? "1v1" : "2v2";
     const presentPlayers = players.length;
     const totalPlayers = mode === "ONE_VS_ONE" ? 2 : 4;

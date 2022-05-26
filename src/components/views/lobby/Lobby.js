@@ -45,7 +45,7 @@ const Lobby = ({ id }) => {
         `/lobby/${id}`
     ];
 
-    const beforeUnloadListener = (event) => {
+    const beforeUnloadListener = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
@@ -54,9 +54,9 @@ const Lobby = ({ id }) => {
     };
 
     useEffect(() => {
-        unblockRef.current = history.block((location) => {
+        unblockRef.current = history.block((loc) => {
             // Check if new path is in allowed paths
-            if (allowedFilterList.includes(location.pathname)) {
+            if (allowedFilterList.includes(loc.pathname)) {
                 return true;
             }
 
@@ -247,7 +247,7 @@ const Lobby = ({ id }) => {
     }, [id, token]);
 
     return (
-        <BaseContainer noLogOutBool = {true}>
+        <BaseContainer noLogOutBool={true}>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 {
@@ -303,10 +303,7 @@ const Lobby = ({ id }) => {
                                         <input id={user.id} className="lobby status" type="checkbox"
                                             checked={user.ready}
                                             onClick={() => changeStatus(user)}
-                                            onChange={() => {
-                                            }}
                                         />
-
                                     </td>
                                 </tr>
                             )
