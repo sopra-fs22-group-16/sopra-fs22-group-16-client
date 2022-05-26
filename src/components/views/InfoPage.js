@@ -39,12 +39,12 @@ const InfoPage = () => {
             <img src={map_example} className={"infopage image"} alt={""} />
             <div className="infopage text">By selecting each of the units still available, it is possible to display the
                 movement range (filled squares) and attack range (empty squares). By clicking on one of the tiles within the
-                movement range, a pop-up window will appear allowing the player to move the unit to the chosen location.
+                movement range, a pop-up window will appear, allowing the player to move the unit to the chosen location.
             </div>
             <img src={move_example} className={"infopage image"} alt={""} />
-            <div className="infopage text">If an enemy is in range when selecting a unit, the tiles where the enemys are will
-                be highlighted in red. There are two ways of attacking an enemy: first, we can click directly on the tile where the
-                enemy is and choose the option attack.
+            <div className="infopage text">If an enemy is in range when selecting a unit, the tiles where
+                the enemies are standing in red will be highlighted. There are two ways of attacking an enemy: first, we
+                can click directly on the tile where the enemy is and choose the option attack.
             </div>
             <img src={attack_example_1} className={"infopage image"} alt={""} />
             <div className="infopage text">In order to aid player strategy, prior to attacking a unit we can see the
@@ -60,8 +60,8 @@ const InfoPage = () => {
             <img src={attack_example_3} className={"infopage image"} alt={""} />
             <div className="infopage text">A pop-up will be shown to the players after the end of each player's turn, indicating
                 who is playing next. The game ends when a player eliminates all enemy units. A window will appear showing the
-                result to each player of the game. From this window will be possible to see statistics of the game, to play again,
-                or going back to the home page.
+                result of the game of each player. From this window it is possible to see statistics of the game, to play again,
+                or go back to the home page.
             </div>
             <img src={end_example} className={"infopage image"} alt={""} />
             <div className="infopage text">If a player wants to leave a game at any time, they can click on the surrender flag
