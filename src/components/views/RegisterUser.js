@@ -19,11 +19,14 @@ const RegisterUser = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const [creating, setCreating] = useState("");
+    const [creating, setCreating] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const doLogin = async () => {
         try {
+
+            setCreating(true);
+
             const requestBody = JSON.stringify({ username, password });
             const response = await api.post('/v1/users', requestBody);
 
@@ -32,20 +35,22 @@ const RegisterUser = () => {
             localStorage.setItem("userId", response.data.id);
             localStorage.setItem("isRegistered", true);
             console.log(response.data);
-            setCreating(true);
-            await timeout(4000);
+            await timeout(2000);
 
-            // TODO: take to the user page
-            history.push(`/user/${response.data.id}`);
+            history.push('/home');
         }
 
         catch (error) {
             setCreating(false);
-            if (error.response.status === 409) {
-                setErrorMessage("This username is already taken!")
-            }
-            else {
-                setErrorMessage("Something is wrong!");
+            if (error.response != null) {
+                if (error.response.status === 409) {
+                    setErrorMessage("This username is already taken!")
+                }
+                else {
+                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                }
+            } else {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
             }
         }
     };
@@ -113,7 +118,7 @@ const RegisterUser = () => {
                         Close
                     </Button>
                 </CustomPopUp>
-                <CustomPopUp open={creating} information={"Your registration was successful. Please wait for your page..."}>
+                <CustomPopUp open={creating} information={"Registering..."}>
                     <div style={{ width: '100%' }}>
                         <LinearProgress color="primary" />
                     </div>

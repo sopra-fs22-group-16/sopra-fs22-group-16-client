@@ -1,7 +1,7 @@
 import React from 'react';
-import {useHistory} from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 
-import {Button} from 'components/ui/Button';
+import { Button } from 'components/ui/Button';
 import Header from "components/ui/Header";
 import hannibal_background from 'styles/images/wargroove_bw_light.png'
 import info_icon from 'styles/images/info/info_icon.png'
@@ -18,17 +18,7 @@ const HomePage = () => {
     }
 
     const gotoUser = () => {
-
-        if(userId){
-
-            history.push(`/user/${userId}`);
-
-        }
-
-        else{
-            // this should be unreachable, so I didn't put any custom pop-up
-            console.log("error");
-        }
+        history.push(`/user/${userId}`);
     }
 
     const goCreateLobby = () => {
@@ -49,9 +39,9 @@ const HomePage = () => {
 
     return (
         <div className={"HomePage baseContainer"}>
-            <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
+            <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""} />
             <div className="HomePage container">
-                <Header className={"HomePage image"} noLogoutBool = {false} isRegistered = {isRegistered}/>
+                <Header className={"HomePage image"} noLogoutBool={false} isRegistered={isRegistered} />
                 <div className={"HomePage button-container-container"}>
                     <div className="HomePage button-container">
                         <Button
@@ -79,29 +69,29 @@ const HomePage = () => {
                             </Button>
                         </div>
                         {
-                            isRegistered?
+                            isRegistered ?
 
-                        <div className="HomePage button-container">
-                            <Button className="primary-button"
-                                    width="100%"
-                                    onClick={() => gotoUser()}
-                        >
-                            PROFILE PAGE
-                            </Button>
-                        </div>
-                        :
-                        <div className="HomePage button-container">
-                        <Button className="primary-button register"
-                                width="100%"
-                                onClick={() => loginUser()}
-                                >
-                                    SIGN IN/CREATE USER
-                        </Button>
-                    </div>
-}
+                                <div className="HomePage button-container">
+                                    <Button className="primary-button"
+                                        width="100%"
+                                        onClick={() => gotoUser()}
+                                    >
+                                        PROFILE PAGE
+                                    </Button>
+                                </div>
+                                :
+                                <div className="HomePage button-container">
+                                    <Button className="primary-button register"
+                                        width="100%"
+                                        onClick={() => loginUser()}
+                                    >
+                                        SIGN IN/CREATE USER
+                                    </Button>
+                                </div>
+                        }
                     </div>
                 </div>
-                <img src={info_icon} onClick={() => goInfoPage()}  className={"HomePage infoIcon"} alt={""} />
+                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""} />
             </div>
         </div>
     );
