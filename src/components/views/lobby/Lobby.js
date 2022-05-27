@@ -120,6 +120,17 @@ const Lobby = ({ id }) => {
         }
     }
 
+    const setNewPlayerName = (newName) => {
+
+        if(newName.length < 16) {
+            setNewPlayerName(newName);
+        }
+
+        else {
+            setErrorMessage("The name you are entering is too long! Please limit yourself to 15 characters.");
+        }
+    }
+
 
     // set new name, let the user know if it's already taken (409)
     const changeName = async (user) => {
