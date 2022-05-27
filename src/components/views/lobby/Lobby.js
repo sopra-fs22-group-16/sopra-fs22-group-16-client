@@ -132,6 +132,17 @@ const Lobby = ({id}) => {
         }
     }
 
+    const setNewPlayerName = (newName) => {
+
+        if(newName.length < 11) {
+            setPlayerName(newName);
+        }
+
+        else {
+            setErrorMessage("The name you are entering is too long! Please limit yourself to 10 characters.");
+        }
+    }
+
 
     // set new name, let the user know if it's already taken (409)
     const changeName = async (user) => {
@@ -172,7 +183,7 @@ const Lobby = ({id}) => {
                 <td>
                     <FormName
                         value={playerName === null ? user.name : playerName}
-                        onChange={newName => setPlayerName(newName)}
+                        onChange={newName => setNewPlayerName(newName)}
                         onClick={() => changeName(user)}
                     >
                     </FormName>
