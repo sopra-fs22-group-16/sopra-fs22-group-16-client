@@ -20,39 +20,36 @@ const LoginUser = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
-    const [creating, setCreating] = useState("");
+    const [logginIn, setLogginIn] = useState(false);
     const [errorMessage, setErrorMessage] = useState("");
 
     const doLogin = async () => {
         try {
+            setLogginIn(true);
 
             const requestBody = JSON.stringify({ username, password });
             const response = await api.post('/v1/login', requestBody);
 
-            // logged-in data is just token
             const loggedInUser = response.data;
-            console.log(response.data);
             localStorage.setItem("userId", loggedInUser.id);
             localStorage.setItem("isRegistered", true);
             localStorage.setItem("token", loggedInUser.token);
-            setCreating(true);
-            await timeout(4000);
+            await timeout(2000);
 
-            // TODO: take to the user page
             history.push('/home');
-            history.push(`/user/${loggedInUser.id}`);
         }
 
         catch (error) {
-            setCreating(false);
-            if (error.response.status === 404) {
-                setErrorMessage("This username does not match an account. Do you want to register instead?")
-            }
-            else if (error.response.status === 401) {
-                setErrorMessage("Your password seems to be incorrect. Please try again!")
-            }
-            else {
-                setErrorMessage("Something is wrong!");
+            setLogginIn(false);
+            if (error.response != null) {
+                if (error.response.status === 404) {
+                    setErrorMessage("Ups! Given credentials are wrong.")
+                }
+                else {
+                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                }
+            } else {
+                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
             }
         }
     };
@@ -113,7 +110,7 @@ const LoginUser = () => {
                 </div>
             </div>
             <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={creating} information={"Your log-in was successful. Please wait for your page..."}>
+                <CustomPopUp open={logginIn} information={"Logging in..."}>
                     <div style={{ width: '100%' }}>
                         <LinearProgress color="primary" />
                     </div>

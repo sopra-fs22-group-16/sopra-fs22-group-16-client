@@ -18,17 +18,7 @@ const HomePage = () => {
     }
 
     const gotoUser = () => {
-
-        if (userId) {
-
-            history.push(`/user/${userId}`);
-
-        }
-
-        else {
-            // this should be unreachable, so I didn't put any custom pop-up
-            console.log("error");
-        }
+        history.push(`/user/${userId}`);
     }
 
     const goCreateLobby = () => {
@@ -80,6 +70,7 @@ const HomePage = () => {
                         </div>
                         {
                             isRegistered ?
+
                                 <div className="HomePage button-container">
                                     <Button className="primary-button"
                                         width="100%"

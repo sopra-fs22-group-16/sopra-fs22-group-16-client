@@ -43,7 +43,7 @@ const InfoPage = () => {
             </div>
             <img src={move_example} className={"infopage image"} alt={""} />
             <div className="infopage text">If an enemy is in range when selecting a unit, the tiles where
-                the enemies are standing in red will be highlighted. There are two ways of attacking an enemy: first, we
+                the enemies are standing will be highlighted in red. There are two ways of attacking an enemy: first, we
                 can click directly on the tile where the enemy is and choose the option attack.
             </div>
             <img src={attack_example_1} className={"infopage image"} alt={""} />
