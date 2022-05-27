@@ -122,12 +122,12 @@ const Lobby = ({ id }) => {
 
     const setNewPlayerName = (newName) => {
 
-        if(newName.length < 16) {
-            setNewPlayerName(newName);
+        if(newName.length < 11) {
+            setPlayerName(newName);
         }
 
         else {
-            setErrorMessage("The name you are entering is too long! Please limit yourself to 15 characters.");
+            setErrorMessage("The name you are entering is too long! Please limit yourself to 10 characters.");
         }
     }
 
@@ -141,6 +141,7 @@ const Lobby = ({ id }) => {
                         "name": playerName
                     };
                     await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
+                    setErrorMessage("Your name has been updated!");
                 } catch (error) {
                     if (error.response.status === 409) {
                         setErrorMessage("This name is already taken!");
@@ -161,7 +162,7 @@ const Lobby = ({ id }) => {
                 <td>
                     <FormName
                         value={playerName === null ? user.name : playerName}
-                        onChange={newName => setPlayerName(newName)}
+                        onChange={newName => setNewPlayerName(newName)}
                         onClick={() => changeName(user)}
                     >
                     </FormName>
