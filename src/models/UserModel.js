@@ -1,10 +1,12 @@
-import LobbyModel from "./LobbyModel";
-
 class UserModel {
     constructor(data = {}) {
-        this.token = null;
-        this.lobby = new LobbyModel(data.lobby);
+        this.id = null;
+        this.name = null;
+        this.ready = null;
+        this.team = null;
+        this.token = null
         Object.assign(this, data);
     }
 }
+
 export default UserModel;

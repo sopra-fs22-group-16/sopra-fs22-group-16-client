@@ -46,6 +46,7 @@
         border-radius: 7px;
         height: 32px;
         width: 170px;
+        padding-left: 5px;
     }
 
     &.buttons {
@@ -60,7 +61,7 @@
     &.formtitle {
         font-weight: bold;
     }
-    
+
     &.link {
         color: #4B72C2;
         display: block;

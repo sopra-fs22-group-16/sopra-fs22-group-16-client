@@ -63,13 +63,11 @@ const HoldToConfirmPopUp = props => {
 
 HoldToConfirmPopUp.propTypes = {
     open: PropTypes.bool,
-    onComplete: PropTypes.func,
-    timeToCompleteInMs: PropTypes.number
+    onComplete: PropTypes.func
 }
 
 HoldToConfirmPopUp.defaultProps = {
     open: false,
-    timeToCompleteInMs: 1000,
 };
 
 export default HoldToConfirmPopUp;

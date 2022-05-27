@@ -1,27 +1,27 @@
-import React, { useState } from 'react';
-import { useHistory } from 'react-router-dom';
+import React, {useState} from 'react';
+import {useHistory} from 'react-router-dom';
 import QrReader from 'react-qr-reader'
-import { LinearProgress } from "@mui/material";
-import { ThemeProvider } from "@emotion/react";
+import {LinearProgress} from "@mui/material";
+import {ThemeProvider} from "@emotion/react";
 
-import { api } from 'helpers/api';
+import {api} from 'helpers/api';
 import UserModel from 'models/UserModel';
 import CustomPopUp from "components/ui/CustomPopUp";
-import { Button } from 'components/ui/Button';
+import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
 
-import { defaultTheme } from "styles/themes/defaulTheme";
+import {defaultTheme} from "styles/themes/defaulTheme";
 import 'styles/views/ScanQRCode.scss';
 
 const ScanQRCode = () => {
 
     const token = localStorage.getItem('token');
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
 
     const history = useHistory();
     const [result, setResult] = useState(null);
     const [isJoining, setJoining] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [error, setError] = useState({open: false, message: <div/>});
     const [isValidated, setIsValidated] = useState(false);
 
     const ValidateCode = async () => {
@@ -31,50 +31,25 @@ const ScanQRCode = () => {
         const lobbySeparator = codeInput.indexOf("-");
         const id = codeInput.substring(0, lobbySeparator);
 
-        try {
+        //request body sent to the backend to create a new lobby
+        const requestBody = {
+            "invitationCode": codeInput,
+        };
 
-            //request body sent to the backend to create a new lobby
-            const requestBody = {
-                "invitationCode": codeInput,
-            };
+        //call to the backend to post the player with the attempted password
+        const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
 
-            //call to the backend to post the player with the attempted password
-            const response = await api.post(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), { headers: { 'token': token || '' } });
-
-            // Get the returned user and update a new object.
-            const user = new UserModel(response.data);
-            if (!isRegistered) {
-                localStorage.setItem('token', user.token);
-            }
-            localStorage.setItem('playerId', user.id);
-
-            setJoining(true);
-            //just to make more interesting the joining
-            await new Promise(r => setTimeout(r, 2000));
-            history.push({ pathname: '/lobby/' + id });
-
-        } catch (error) {
-            if (error.response != null) {
-                if (error.response.status === 404) {
-                    setErrorMessage("This lobby does not seem to be live!");
-                }
-                else if (error.response.status === 403) {
-                    setErrorMessage("This lobby is only available for registered users!");
-                }
-                else if (error.response.status === 409) {
-                    setErrorMessage("This lobby is already full!");
-                }
-                else {
-                    setErrorMessage("The password does not match the lobby!")
-                }
-            } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
-            }
-
-            // if there's an error, we reset the values to scan again the qr code
-            setIsValidated(false);
-            setResult(null);
+        // Get the returned user and update a new object.
+        const user = new UserModel(response.data);
+        if (!isRegistered) {
+            localStorage.setItem('token', user.token);
         }
+        localStorage.setItem('playerId', user.id);
+
+        setJoining(true);
+        //just to make more interesting the joining
+        await new Promise(r => setTimeout(r, 2000));
+        history.push({pathname: '/lobby/' + id});
     }
 
     const goLobbies = () => {
@@ -93,26 +68,50 @@ const ScanQRCode = () => {
     }
 
     const handleQRError = () => {
-        setErrorMessage("Error in the scanning of the QR code!");
+        setError({open: true, message: <div> Error in the scanning of the QR code! </div>});
     }
 
     const handleQRScan = (data) => {
         if (result == null) {
             setResult(data);
-        }
-        else {
+        } else {
             //once the code is validated, we dont call again to the validation function
             if (!isValidated) {
-                ValidateCode();
+                ValidateCode().catch(handleErrorMessage);
                 setIsValidated(true);
             }
         }
     }
 
+    const handleErrorMessage = (e) => {
+        if (e.response != null) {
+            if (e.response.status === 404) {
+                setError({open: true, message: <div> This lobby does not seem to be live! </div>});
+            } else if (e.response.status === 403) {
+                setError({open: true, message: <div> This lobby is only available for registered users!</div>});
+            } else if (e.response.status === 409) {
+                setError({open: true, message: <div> This lobby is already full!</div>});
+            } else {
+                setError({open: true, message: <div> The code does not match the lobby!</div>})
+            }
+        } else {
+            setError({
+                open: true,
+                message: <div> Ups! Something happened. <br/> Try again and if the error persists, contact the
+                    administrator.</div>
+            });
+        }
+
+        // if there's an error, we reset the values to scan again the qr code
+        setIsValidated(false);
+        setResult(null);
+    }
+
     return (
         <BaseContainer>
             <div className="scanqr">
-                <label className="scanqr message">Please allow access to the camera first to be able to scan the QR code:</label>
+                <label className="scanqr message">Please allow access to the camera first to be able to scan the QR
+                    code:</label>
                 <div className="scanqr container">
                     <QrReader
                         className="scanqr scanner"
@@ -131,14 +130,12 @@ const ScanQRCode = () => {
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={isJoining} information={"Joining Lobby"}>
-                    <div style={{ width: '100%' }}>
-                        <LinearProgress color="primary" />
+                    <div style={{width: '100%'}}>
+                        <LinearProgress color="primary"/>
                     </div>
                 </CustomPopUp>
-                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
-                    <Button onClick={() =>
-                        setErrorMessage("")
-                    }>
+                <CustomPopUp open={error.open} information={error.message}>
+                    <Button onClick={() => setError({open: false, message: <div/>})}>
                         Close
                     </Button>
                 </CustomPopUp>

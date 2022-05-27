@@ -18,38 +18,31 @@ function timeout(ms) {
 
 const LoginUser = () => {
     const history = useHistory();
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
-    const [logginIn, setLogginIn] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [loggingIn, setLoggingIn] = useState(false);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
+    const [error, setError] = useState({open: false, message: <div/>});
 
     const doLogin = async () => {
         try {
-            setLogginIn(true);
+            setLoggingIn(true);
 
             const requestBody = JSON.stringify({ username, password });
             const response = await api.post('/v1/login', requestBody);
 
             const loggedInUser = response.data;
             localStorage.setItem("userId", loggedInUser.id);
-            localStorage.setItem("isRegistered", true);
+            localStorage.setItem("isRegistered", "true");
             localStorage.setItem("token", loggedInUser.token);
             await timeout(2000);
 
             history.push('/home');
-        }
-
-        catch (error) {
-            setLogginIn(false);
-            if (error.response != null) {
-                if (error.response.status === 404) {
-                    setErrorMessage("Ups! Given credentials are wrong.")
-                }
-                else {
-                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
-                }
+        } catch (error) {
+            setLoggingIn(false);
+            if (error.response.status === 404 || error.response.status === 401) {
+                setError({open: true, message: <div> The given credentials are wrong </div>})
             } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                setError({open: true, message: <div> Ups! Something wrong happened. <br /> Try again and if the error persists, contact the administrator. </div>});
             }
         }
     };
@@ -63,6 +56,7 @@ const LoginUser = () => {
             <div className="LoginRegisterUser">
                 <h1 className="LoginRegisterUser h1">Sign in to an existing account</h1>
                 <table className="user">
+                    <thead>
                     <tr>
                         <th>
                             username
@@ -75,28 +69,31 @@ const LoginUser = () => {
                             />
                         </td>
                     </tr>
-                    <tr>
-                        <th>
-                            password
-                        </th>
-                        <td>
-                            <FormField
-                                value={password}
-                                type="password"
-                                onChange={un => setPassword(un)}
-                            />
-                        </td>
-                    </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <th>
+                                password
+                            </th>
+                            <td>
+                                <FormField
+                                    value={password}
+                                    type="password"
+                                    onChange={un => setPassword(un)}
+                                />
+                            </td>
+                        </tr>
+                    </tbody>
                 </table>
                 <Link className="LoginRegisterUser link"
-                    to={{
-                        pathname: '/user/register'
-                    }}>
+                      to={{
+                          pathname: '/user/register'
+                      }}>
                     Don't have an account yet? Create an account here</Link>
                 <div className="LoginRegisterUser buttons">
                     <Button className="primary-button"
-                        disabled={!username || !password}
-                        onClick={() => doLogin()}
+                            disabled={!username || !password}
+                            onClick={() => doLogin()}
                     >
                         LOGIN
                     </Button>
@@ -110,14 +107,14 @@ const LoginUser = () => {
                 </div>
             </div>
             <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={logginIn} information={"Logging in..."}>
+                <CustomPopUp open={loggingIn} information={<div> Logging in... </div>}>
                     <div style={{ width: '100%' }}>
                         <LinearProgress color="primary" />
                     </div>
                 </CustomPopUp>
-                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                <CustomPopUp open={error.open} information={error.message}>
                     <Button onClick={() =>
-                        setErrorMessage("")
+                        setError({open: false, message: <div/>})
                     }>
                         Close
                     </Button>

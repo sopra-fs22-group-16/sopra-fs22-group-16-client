@@ -22,7 +22,7 @@ const Game = ({ id }) => {
 
     const history = useHistory();
 
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
 
     const unblockRef = useRef(null);
 

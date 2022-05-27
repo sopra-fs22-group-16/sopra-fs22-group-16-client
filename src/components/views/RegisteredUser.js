@@ -1,18 +1,18 @@
-import React, { useState, useEffect } from 'react';
-import { useHistory } from 'react-router-dom';
-import { ThemeProvider } from "@emotion/react";
-import { api } from 'helpers/api';
+import React, {useState, useEffect} from 'react';
+import {useHistory} from 'react-router-dom';
+import {ThemeProvider} from "@emotion/react";
+import {api} from 'helpers/api';
 import RegisteredUserModel from 'models/RegisteredUserModel'
 
 import CustomPopUp from "components/ui/CustomPopUp";
-import { Button } from 'components/ui/Button';
+import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
-import FormField from "components/ui/FormField"
 
-import { defaultTheme } from "styles/themes/defaulTheme";
+import {defaultTheme} from "styles/themes/defaulTheme";
 import 'styles/views/LoginRegisterUser.scss';
+import FormField from "../ui/FormField";
 
-const RegisteredUser = ({ id }) => {
+const RegisteredUser = ({id}) => {
 
     const history = useHistory();
     const [userData, setUserData] = useState({
@@ -22,16 +22,18 @@ const RegisteredUser = ({ id }) => {
         wins: null,
         losses: null
     });
-    const [errorMessage, setErrorMessage] = useState("");
     const [isEditing, setIsEditing] = useState(false);
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const token = localStorage.getItem('token');
     const userId = localStorage.getItem("userId");
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
+
+    const [error, setError] = useState({open: false, message: <div/>});
+    const [getDataFailed, setGetDataFailed] = useState({open: false, message: <div/>});
 
     useEffect(() => {
-        loadUserData();
+        loadUserData().catch(handleLoadUserDataError);
     }, []);
 
     const returnHome = () => {
@@ -39,13 +41,22 @@ const RegisteredUser = ({ id }) => {
     };
 
     const loadUserData = async () => {
-        try {
-            const response = await api.get(`/v1/users/${id}`);
-            const userInfo = new RegisteredUserModel(response.data);
-            setUserData(userInfo);
-        }
-        catch (error) {
-            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+        const response = await api.get(`/v1/users/${id}`);
+        const userInfo = new RegisteredUserModel(response.data);
+        setUserData(userInfo);
+    }
+
+    const handleLoadUserDataError = (e) => {
+        if (error.response != null) {
+            if (e.response?.status === 404) {
+                setGetDataFailed({open: true, message: <div> The user with the id {id} does not exist! </div>});
+            } else {
+                setGetDataFailed({
+                    open: true,
+                    message: <div> Ups! Something happened. <br/> Try again and if the error persists, contact the
+                        administrator. </div>
+                });
+            }
         }
     }
 
@@ -57,12 +68,19 @@ const RegisteredUser = ({ id }) => {
             await api.put(
                 `/v1/users/${id}`,
                 requestBody,
-                { headers: { 'token': token || '' } });
-            loadUserData();
+                {headers: {'token': token || ''}});
+            loadUserData().catch(handleLoadUserDataError);
             setIsEditing(false);
-        }
-        catch (error) {
-            setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+        } catch (e) {
+            if (e.response?.status === 409) {
+                setError({open: true, message: <div> This username is already taken! </div>})
+            } else {
+                setError({
+                    open: true,
+                    message: <div> Ups! Something happened. <br/> Try again and if the error persists, contact the
+                        administrator.</div>
+                });
+            }
         }
     }
 
@@ -71,6 +89,7 @@ const RegisteredUser = ({ id }) => {
             <div className="LoginRegisterUser">
                 <h1 className="LoginRegisterUser h1">User information</h1>
                 <table className="user">
+                    <tbody>
                     <tr>
                         <th>
                             username
@@ -103,8 +122,9 @@ const RegisteredUser = ({ id }) => {
                             {userData.losses}
                         </td>
                     </tr>
+                    </tbody>
                 </table>
-                <div className="LoginRegisterUser space" />
+                <div className="LoginRegisterUser space"/>
                 {
                     isRegistered && parseInt(userId) === id ?
                         <div className="LoginRegisterUser buttons">
@@ -117,10 +137,13 @@ const RegisteredUser = ({ id }) => {
                 </div>
             </div>
             <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
-                    <Button onClick={() =>
-                        setErrorMessage("")
-                    }>
+                <CustomPopUp open={getDataFailed.open} information={getDataFailed.message}>
+                    <Button onClick={() => setGetDataFailed({open: false, message: <div/>})}>
+                        Close
+                    </Button>
+                </CustomPopUp>
+                <CustomPopUp open={error.open} information={error.message}>
+                    <Button onClick={() => setError({open: false, message: <div/>})}>
                         Close
                     </Button>
                 </CustomPopUp>

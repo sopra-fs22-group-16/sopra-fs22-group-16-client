@@ -39,24 +39,19 @@ const Leaderboard = () => {
     }
 
     useEffect(() => {
-        obtainAndLoadUserInfo();
+        obtainAndLoadUserInfo().catch(() => setGetDataFailed(true));
     }, [activeTab, ascending]);
 
     const obtainAndLoadUserInfo = async () => {
-        try {
-            const response = await api.get(`/v1/users?`
-                + `sortBy=${activeTab}`
-                + `&ascending=${ascending ? "True" : "False"}`
-                + `&pageNumber=${leaderboardData.page}`
-                + `&perPage=${usersPerPage}`);
+        const response = await api.get(`/v1/users?`
+            + `sortBy=${activeTab}`
+            + `&ascending=${ascending ? "True" : "False"}`
+            + `&pageNumber=${leaderboardData.page}`
+            + `&perPage=${usersPerPage}`);
 
-            setLeaderboardData((previous) => {
-                return ({ ...response.data, page: previous.page })
-            });
-
-        } catch (error) {
-            setGetDataFailed(true);
-        }
+        setLeaderboardData((previous) => {
+            return ({ ...response.data, page: previous.page })
+        });
     }
 
     const gotoUser = (userId) => {
@@ -181,7 +176,7 @@ const Leaderboard = () => {
 
                     <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(pageNumber) => {
                         leaderboardData.page = (pageNumber - 1);
-                        obtainAndLoadUserInfo();
+                        obtainAndLoadUserInfo().catch(() => setGetDataFailed(true));
                     }} shape="rounded" color="primary" />
 
                     <div className="Leaderboard button-container">
