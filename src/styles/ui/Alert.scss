@@ -1,0 +1,50 @@
+@import 'styles/theme';
+
+@mixin transform($val) {
+  -webkit-transform: $val;
+  -moz-transform: $val;
+  -ms-transform: $val;
+  transform: $val;
+}
+
+.Alert {
+
+  &.container {
+    position: absolute;
+    top: 32px;
+    left: 5%;
+    width: 90vw;
+    padding: 8px;
+
+    background-color: #1e1f1f;
+
+    border:2.5px solid $textColorLight;
+    border-radius: 5px;
+
+    box-sizing: border-box;
+
+    text-align: center;
+
+  }
+
+  @keyframes slideOut {
+    0% {
+      @include transform(translateY(0%));
+    }
+
+    50% {
+      @include transform(translateY(0%));
+    }
+
+    100% {
+      @include transform(translateY(-200%));
+    }
+  }
+
+
+}
+
+
+
+
+

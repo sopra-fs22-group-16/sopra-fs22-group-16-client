@@ -44,7 +44,7 @@ HoldToConfirmPopUp.defaultProps = {
 
 CustomPopUp.propTypes = {
     open: PropTypes.bool,
-    information: PropTypes.any.isRequired,
+    information: PropTypes.node,
     children: PropTypes.node,
     onClick: PropTypes.func,
     onMouseDown: PropTypes.func,

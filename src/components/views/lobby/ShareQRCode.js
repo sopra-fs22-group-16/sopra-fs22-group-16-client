@@ -15,7 +15,7 @@ const ShareQRCode = ({ id }) => {
 
     const [QR, setQR] = useState(null);
     const token = localStorage.getItem("token");
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
 
     // PopUp
     const [getDataFailed, setGetDataFailed] = useState(false);

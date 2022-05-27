@@ -1,16 +1,17 @@
 import React from 'react';
-import { useHistory } from 'react-router-dom';
+import {Link, useHistory} from 'react-router-dom';
 
-import { Button } from 'components/ui/Button';
+import {Button} from 'components/ui/Button';
 import Header from "components/ui/Header";
 import hannibal_background from 'styles/images/wargroove_bw_light.png'
 import info_icon from 'styles/images/info/info_icon.png'
+import github_icon from 'styles/images/info/github_icon.png'
 
 import 'styles/views/HomePage.scss';
 
 const HomePage = () => {
     const history = useHistory();
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
     const userId = localStorage.getItem("userId");
 
     const goJoinLobby = () => {
@@ -39,9 +40,9 @@ const HomePage = () => {
 
     return (
         <div className={"HomePage baseContainer"}>
-            <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""} />
+            <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
             <div className="HomePage container">
-                <Header className={"HomePage image"} noLogoutBool={false} isRegistered={isRegistered} />
+                <Header className={"HomePage image"} noLogoutBool={false} isRegistered={isRegistered}/>
                 <div className={"HomePage button-container-container"}>
                     <div className="HomePage button-container">
                         <Button
@@ -73,8 +74,8 @@ const HomePage = () => {
 
                                 <div className="HomePage button-container">
                                     <Button className="primary-button"
-                                        width="100%"
-                                        onClick={() => gotoUser()}
+                                            width="100%"
+                                            onClick={() => gotoUser()}
                                     >
                                         PROFILE PAGE
                                     </Button>
@@ -82,8 +83,8 @@ const HomePage = () => {
                                 :
                                 <div className="HomePage button-container">
                                     <Button className="primary-button register"
-                                        width="100%"
-                                        onClick={() => loginUser()}
+                                            width="100%"
+                                            onClick={() => loginUser()}
                                     >
                                         SIGN IN/CREATE USER
                                     </Button>
@@ -91,7 +92,11 @@ const HomePage = () => {
                         }
                     </div>
                 </div>
-                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""} style={{ cursor: "pointer" }} />
+                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""}
+                     style={{cursor: "pointer"}}/>
+                <a target="_blank" href="https://github.com/sopra-fs22-group-16">
+                    <img src={github_icon} className={"HomePage githubIcon"} alt={""} style={{cursor: "pointer"}}/>
+                </a>
             </div>
         </div>
     );

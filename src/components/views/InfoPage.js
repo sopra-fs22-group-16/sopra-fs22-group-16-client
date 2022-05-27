@@ -26,6 +26,11 @@ const InfoPage = () => {
             <div className="infopage buttons">
                 <Button className="return" onClick={() => returnHome()}>RETURN HOME</Button>
             </div>
+            <div className="infopage text important">
+                <h2>!IMPORTANT!</h2>
+                While in a lobby or game, do not reload or leave the page.
+                To ensure continues game flow for the other players, you will be removed from the lobby or surrender the game automatically!
+            </div>
             <div className="infopage text">Hannibal is a turn-based strategy game in which players can play against each
                 other over the web. Users can create 1vs1 public or private games without registration. However, it is
                 possible to register to keep records of the games played and compete with other users to be at the top of the

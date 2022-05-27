@@ -1,22 +1,24 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { useHistory, Link } from 'react-router-dom';
-import { Button } from 'components/ui/Button';
-import { api } from 'helpers/api';
+import React, {useState, useEffect, useRef} from 'react';
+import {useHistory, Link} from 'react-router-dom';
+import {Button} from 'components/ui/Button';
+import {api} from 'helpers/api';
 import 'styles/views/lobby/ShareLobbyCode.scss';
 import BaseContainer from "components/ui/BaseContainer";
-import { defaultTheme } from "styles/themes/defaulTheme";
-import { ThemeProvider } from "@emotion/react";
+import {defaultTheme} from "styles/themes/defaulTheme";
+import {ThemeProvider} from "@emotion/react";
 import CustomPopUp from "components/ui/CustomPopUp";
+import Alert from "../../ui/Alert";
 
-const ShareLobbyCode = ({ id }) => {
+const ShareLobbyCode = ({id}) => {
 
     const history = useHistory();
 
     const token = localStorage.getItem('token');
-    const [code, setCode] = useState(null);
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const [code, setCode] = useState("");
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
 
     // PopUp
+    const [alert, setAlert] = useState({redraw: false, open: false, message: <div/>})
     const [getDataFailed, setGetDataFailed] = useState(false);
 
     const unblockRef = useRef(null);
@@ -28,7 +30,7 @@ const ShareLobbyCode = ({ id }) => {
     ];
 
     const beforeUnloadListener = () => {
-        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
         if (!isRegistered) {
             localStorage.removeItem('token');
         }
@@ -37,50 +39,46 @@ const ShareLobbyCode = ({ id }) => {
 
     useEffect(() => {
         unblockRef.current = history.block((location) => {
-            // Check if new path is in allowed paths
-            if (allowedFilterList.includes(location.pathname)) {
-                return true;
-            }
-
-            let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
-            if (result) {
-                //Handle leaving page
-                api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
-                if (!isRegistered) {
-                    localStorage.removeItem('token');
+                // Check if new path is in allowed paths
+                if (allowedFilterList.includes(location.pathname)) {
+                    return true;
                 }
-                localStorage.removeItem('playerId');
+
+                let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
+                if (result) {
+                    //Handle leaving page
+                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+                    if (!isRegistered) {
+                        localStorage.removeItem('token');
+                    }
+                    localStorage.removeItem('playerId');
+                }
+                return result;
             }
-            return result;
-        }
         );
-        window.addEventListener("beforeunload", beforeUnloadListener, { capture: true });
+        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
 
     // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
-        window.removeEventListener("beforeunload", beforeUnloadListener, { capture: true });
+        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
     }, []);
 
 
     useEffect(() => {
         async function fetchData() {
-            try {
-                //TODO I would introduce a separate on the backend for the request of the invitation code
-                const apiResponse = await api.get(`/v1/game/lobby/${id}`,
-                    {
-                        headers: { 'token': token }
-                    }
-                );
+            //TODO I would introduce a separate on the backend for the request of the invitation code
+            const apiResponse = await api.get(`/v1/game/lobby/${id}`,
+                {
+                    headers: {'token': token}
+                }
+            );
 
-                setCode(apiResponse.data.invitationCode);
-
-            } catch (error) {
-                setGetDataFailed(true);
-            }
+            setCode(apiResponse.data.invitationCode);
         }
-        fetchData();
+
+        fetchData().catch(() => setGetDataFailed(true));
     }, []);
 
     const goLobby = () => {
@@ -94,8 +92,10 @@ const ShareLobbyCode = ({ id }) => {
     const copyToClipBoard = async () => {
         try {
             await navigator.clipboard.writeText(code);
-        }
-        catch (err) {
+            setAlert((prev) => {
+                return {redraw: !prev.redraw, open: true, message: <div>Added to clipboard</div>}
+            });
+        } catch (err) {
             console.error('Async: Could not copy text: ', err);
         }
     }
@@ -103,7 +103,8 @@ const ShareLobbyCode = ({ id }) => {
     return (
         <BaseContainer noLogOutBool={true}>
             <div className="sharecode">
-                <label className="sharecode message">Invite other users to your lobby by sharing the following code:</label>
+                <label className="sharecode message">Invite other users to your lobby by sharing the following
+                    code:</label>
                 <div className="sharecode codecontainer">
                     <div className="sharecode code" onClick={() => copyToClipBoard()}>{code}</div>
                 </div>
@@ -112,7 +113,7 @@ const ShareLobbyCode = ({ id }) => {
                     to={`/lobby/${id}/share/qr`}>
                     Generate QR code
                 </Link>
-                <div className="sharecode space" />
+                <div className="sharecode space"/>
                 <div className="sharecode lobby-button">
                     <Button onClick={goLobby}>RETURN TO LOBBY</Button>
                 </div>
@@ -127,6 +128,7 @@ const ShareLobbyCode = ({ id }) => {
                     </Button>
                 </CustomPopUp>
             </ThemeProvider>
+            <Alert redraw={alert.redraw} open={alert.open}>{alert.message}</Alert>
         </BaseContainer>
     );
 };

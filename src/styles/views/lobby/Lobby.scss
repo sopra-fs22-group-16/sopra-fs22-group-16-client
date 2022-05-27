@@ -95,6 +95,7 @@
     &.status {
         width: 25px;
         height: 25px;
+        cursor: d;
     }
 
     &.link {
@@ -111,6 +112,12 @@
             font-size: 1.2em;
         }
     }
+
+    &.spacer{
+        height:32px;
+        width: 100%;
+    }
+
 }
 
 .buttonIn {
@@ -123,6 +130,7 @@
         background: $accent;
         right: 0px;
         width: 25px;
+        cursor: pointer;
     }
 
     &.name {

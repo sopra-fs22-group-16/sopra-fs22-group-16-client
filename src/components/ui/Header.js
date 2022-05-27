@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import HeaderImage from "styles/images/hannibal_header.png";
 import PropTypes from "prop-types";
 import "styles/ui/Header.scss";
-import LogoutIcon from '@mui/icons-material/Logout';
+import LogoutIcon from '@mui/icons-material/LogoutRounded';
 import { defaultTheme } from "../../styles/themes/defaulTheme";
 import { ThemeProvider } from "@emotion/react";
 import CustomPopUp from "components/ui/CustomPopUp";
@@ -16,10 +16,10 @@ function timeout(ms) {
 
 const Header = props => {
 
-    const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
+    const isRegistered = localStorage.getItem('isRegistered') === 'true';
     const [errorMessage, setErrorMessage] = useState("");
     const [loggingOut, setLoggingOut] = useState(false);
-    const showLogOut = isRegistered && !props.noLogOutBool ? true : false;
+    const showLogOut = isRegistered && !props.noLogOutBool;
 
     const logOut = async () => {
         localStorage.removeItem('token');
@@ -39,7 +39,7 @@ const Header = props => {
             )
         }
         else {
-          return (null)
+          return null;
         }
     }
 

@@ -17,10 +17,10 @@ function timeout(ms) {
 
 const RegisterUser = () => {
     const history = useHistory();
-    const [username, setUsername] = useState(null);
-    const [password, setPassword] = useState(null);
+    const [username, setUsername] = useState("");
+    const [password, setPassword] = useState("");
     const [creating, setCreating] = useState(false);
-    const [errorMessage, setErrorMessage] = useState("");
+    const [error, setError] = useState({open: false, message: <div/>});
 
     const doLogin = async () => {
         try {
@@ -33,8 +33,7 @@ const RegisterUser = () => {
             // retrieves user data
             localStorage.setItem("token", response.data.token);
             localStorage.setItem("userId", response.data.id);
-            localStorage.setItem("isRegistered", true);
-            console.log(response.data);
+            localStorage.setItem("isRegistered", "true");
             await timeout(2000);
 
             history.push('/home');
@@ -44,13 +43,12 @@ const RegisterUser = () => {
             setCreating(false);
             if (error.response != null) {
                 if (error.response.status === 409) {
-                    setErrorMessage("This username is already taken!")
-                }
-                else {
-                    setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                    setError({open: true, message: <div> This username is already taken! </div>})
+                } else {
+                    setError({open: true, message:<div> Ups! Something happened. <br/> Try again and if the error persists, contact the administrator. </div>});
                 }
             } else {
-                setErrorMessage("Ups! Something happened. Try again and if the error persists, contact the administrator.");
+                setError({open: true, message:<div> Ups! Something happened. <br/> Try again and if the error persists, contact the administrator. </div>});
             }
         }
     };
@@ -64,6 +62,7 @@ const RegisterUser = () => {
             <div className="LoginRegisterUser">
                 <h1 className="LoginRegisterUser h1">Create a new account</h1>
                 <table className="user">
+                    <thead>
                     <tr>
                         <th>
                             username
@@ -76,6 +75,8 @@ const RegisterUser = () => {
                             />
                         </td>
                     </tr>
+                    </thead>
+                    <tbody>
                     <tr>
                         <th>
                             password
@@ -88,39 +89,41 @@ const RegisterUser = () => {
                             />
                         </td>
                     </tr>
+                    </tbody>
                 </table>
                 <Link className="LoginRegisterUser link"
-                    to={{
-                        pathname: '/user/login'
-                    }}>
+                      to={{
+                          pathname: '/user/login'
+                      }}>
                     Already have an account? Sign in</Link>
                 <div className="LoginRegisterUser buttons">
                     <Button className="primary-button"
-                        disabled={!username || !password}
-                        onClick={() => doLogin()}
+                            disabled={!username || !password}
+                            onClick={() => doLogin()}
                     >
                         REGISTER
                     </Button>
                 </div>
                 <div className="LoginRegisterUser buttons">
                     <Button className="secondary-button return"
-                        onClick={() => returnHome()}
+                            onClick={() => returnHome()}
                     >
                         RETURN HOME
                     </Button>
                 </div>
             </div>
             <ThemeProvider theme={defaultTheme}>
-                <CustomPopUp open={errorMessage !== ''} information={errorMessage}>
+                <CustomPopUp open={error.open} information={error.message}>
                     <Button onClick={() =>
-                        setErrorMessage("")
+                        setError({open: false, message: <div/>})
                     }>
                         Close
                     </Button>
                 </CustomPopUp>
-                <CustomPopUp open={creating} information={"Registering..."}>
-                    <div style={{ width: '100%' }}>
-                        <LinearProgress color="primary" />
+                <CustomPopUp open={creating}
+                             information={<div>Registering...</div>}>
+                    <div style={{width: '100%'}}>
+                        <LinearProgress color="primary"/>
                     </div>
                 </CustomPopUp>
             </ThemeProvider>
