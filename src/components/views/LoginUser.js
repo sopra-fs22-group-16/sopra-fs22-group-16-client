@@ -16,7 +16,7 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const LoginUser = props => {
+const LoginUser = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);

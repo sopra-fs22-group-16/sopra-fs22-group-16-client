@@ -13,7 +13,7 @@ import BaseContainer from "components/ui/BaseContainer";
 import { defaultTheme } from "styles/themes/defaulTheme";
 import 'styles/views/ScanQRCode.scss';
 
-const ScanQRCode = props => {
+const ScanQRCode = () => {
 
     const token = localStorage.getItem('token');
     const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;

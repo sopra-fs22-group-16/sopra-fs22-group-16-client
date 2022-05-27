@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {useEffect} from "react";
+import React from "react";
 import TileModel from "../../../../models/TileModel";
 import TileBackground from "./TileBackground";
 import TileIndicator from "./TileIndicator";
@@ -15,11 +15,11 @@ const Tile = props => {
 
     return (
         <div className="tileContainer"
-             onClick={onClickTile}
+            onClick={onClickTile}
         >
-            <TileBackground type={props.tile.type} variant={props.tile.variant}/>
-            <TileIndicator indicatorType={props.tile.indicatorType}/>
-            <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection}/>
+            <TileBackground type={props.tile.type} variant={props.tile.variant} />
+            <TileIndicator indicatorType={props.tile.indicatorType} />
+            <PathIndicator pathPartType={props.tile.arrowPart} pathPartDirection={props.tile.arrowDirection} />
         </div>
     );
 }

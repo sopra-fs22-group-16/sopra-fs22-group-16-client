@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { api } from 'helpers/api';
-import { useHistory, useLocation } from 'react-router-dom';
+import { useHistory } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
 import { defaultTheme } from "styles/themes/defaulTheme";
@@ -20,7 +20,6 @@ const Leaderboard = () => {
     const usersPerPage = 5;
 
     const history = useHistory();
-    const location = useLocation();
 
     const [activeTab, setActiveTab] = useState("RANKED_SCORE");
     const [ascending, setAscending] = useState(false);
@@ -180,7 +179,7 @@ const Leaderboard = () => {
                         </tbody>
                     </table>
 
-                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(e, pageNumber) => {
+                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(pageNumber) => {
                         leaderboardData.page = (pageNumber - 1);
                         obtainAndLoadUserInfo();
                     }} shape="rounded" color="primary" />

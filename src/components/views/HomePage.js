@@ -91,7 +91,7 @@ const HomePage = () => {
                         }
                     </div>
                 </div>
-                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""} />
+                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""} style={{ cursor: "pointer" }} />
             </div>
         </div>
     );

@@ -9,6 +9,7 @@ import CustomPopUp from "components/ui/CustomPopUp";
 import { LinearProgress } from "@mui/material";
 import { Button } from 'components/ui/Button';
 
+
 function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
@@ -17,8 +18,8 @@ const Header = props => {
 
     const isRegistered = localStorage.getItem('isRegistered') === 'true' ? true : false;
     const [errorMessage, setErrorMessage] = useState("");
-    const showLogOut = (isRegistered && !(props.noLogOutBool == true)) ? true : false;
     const [loggingOut, setLoggingOut] = useState(false);
+    const showLogOut = isRegistered && !props.noLogOutBool ? true : false;
 
     const logOut = async () => {
         localStorage.removeItem('token');
@@ -38,14 +39,14 @@ const Header = props => {
             )
         }
         else {
-            return (null)
+          return (null)
         }
     }
 
     return (
         <div>
             <div className="header headerContainer" style={{ height: props.height }}>
-                <img src={HeaderImage} />
+                <img src={HeaderImage} alt={""} />
                 <LogoutIconHeader />
             </div>
             <ThemeProvider theme={defaultTheme}>
@@ -70,7 +71,6 @@ Header.propTypes = {
     height: PropTypes.string,
     logOutBool: PropTypes.bool,
     isRegistered: PropTypes.bool,
-
 }
 
 export default Header;
