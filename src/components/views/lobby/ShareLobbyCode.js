@@ -1,4 +1,4 @@
-import React, {useState, useEffect, useRef} from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { useHistory, Link } from 'react-router-dom';
 import { Button } from 'components/ui/Button';
 import { api } from 'helpers/api';
@@ -27,8 +27,8 @@ const ShareLobbyCode = ({ id }) => {
         `/lobby/${id}`
     ];
 
-    const beforeUnloadListener = (event) => {
-        api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
+    const beforeUnloadListener = () => {
+        api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
         }
@@ -37,30 +37,30 @@ const ShareLobbyCode = ({ id }) => {
 
     useEffect(() => {
         unblockRef.current = history.block((location) => {
-                // Check if new path is in allowed paths
-                if (allowedFilterList.includes(location.pathname)) {
-                    return true;
-                }
-
-                let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
-                if (result) {
-                    //Handle leaving page
-                    api.delete(`/v1/game/lobby/${id}/player`, {headers: {'token': token || ''}});
-                    if (!isRegistered) {
-                        localStorage.removeItem('token');
-                    }
-                    localStorage.removeItem('playerId');
-                }
-                return result;
+            // Check if new path is in allowed paths
+            if (allowedFilterList.includes(location.pathname)) {
+                return true;
             }
+
+            let result = window.confirm(`If you proceed you will leave the lobby? Are you sure you want to leave the page?`);
+            if (result) {
+                //Handle leaving page
+                api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
+                if (!isRegistered) {
+                    localStorage.removeItem('token');
+                }
+                localStorage.removeItem('playerId');
+            }
+            return result;
+        }
         );
-        window.addEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.addEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
     // On component unmount unblock history, and remove event listeners
     useEffect(() => () => {
         unblockRef?.current();
-        window.removeEventListener("beforeunload", beforeUnloadListener, {capture: true});
+        window.removeEventListener("beforeunload", beforeUnloadListener, { capture: true });
     }, []);
 
 
@@ -91,15 +91,17 @@ const ShareLobbyCode = ({ id }) => {
         history.push('/home');
     }
 
-    const copyToClipBoard = () => {
-        navigator.clipboard.writeText(code).then(() => { },
-            (err) => {
-                console.error('Async: Could not copy text: ', err);
-            });
+    const copyToClipBoard = async () => {
+        try {
+            await navigator.clipboard.writeText(code);
+        }
+        catch (err) {
+            console.error('Async: Could not copy text: ', err);
+        }
     }
 
     return (
-        <BaseContainer noLogOutBool = {true}>
+        <BaseContainer noLogOutBool={true}>
             <div className="sharecode">
                 <label className="sharecode message">Invite other users to your lobby by sharing the following code:</label>
                 <div className="sharecode codecontainer">

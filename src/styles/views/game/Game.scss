@@ -1,4 +1,5 @@
 @import 'styles/theme';
+
 @mixin transform($val) {
     -webkit-transform: $val;
     -moz-transform: $val;
@@ -11,7 +12,8 @@
     height: 100vh;
     overflow: hidden;
     position: relative;
-    background: #c9b27d; /* border color */
+    background: #c9b27d;
+    /* border color */
 
     -webkit-user-select: none;
     -khtml-user-select: none;
@@ -42,7 +44,6 @@
         -khtml-user-drag: none;
         -moz-user-drag: none;
         -o-user-drag: none;
-        user-drag: none;
     }
 }
 
@@ -62,13 +63,32 @@
     }
 }
 
+.settingsContainer {
+    position: absolute;
+    top: 16px;
+    left: 16px;
+    cursor: pointer;
+
+    img {
+        -webkit-user-drag: none;
+        -khtml-user-drag: none;
+        -moz-user-drag: none;
+        -o-user-drag: none;
+    }
+}
+
 .pixelated {
     // Disable antialiasing on images
-    image-rendering: optimizeSpeed; /* STOP SMOOTHING, GIVE ME SPEED  */
-    image-rendering: -moz-crisp-edges; /* Firefox                        */
-    image-rendering: -o-crisp-edges; /* Opera                          */
-    image-rendering: pixelated; /* Chrome */
-    -ms-interpolation-mode: nearest-neighbor; /* IE8+ */
+    image-rendering: optimizeSpeed;
+    /* STOP SMOOTHING, GIVE ME SPEED  */
+    image-rendering: -moz-crisp-edges;
+    /* Firefox                        */
+    image-rendering: -o-crisp-edges;
+    /* Opera                          */
+    image-rendering: pixelated;
+    /* Chrome */
+    -ms-interpolation-mode: nearest-neighbor;
+    /* IE8+ */
 }
 
 .winnerWindow {
@@ -130,22 +150,23 @@ table.statistics th {
 }
 
 .statisticsLabel {
-    color:grey;
+    color: grey;
     font-size: 0.5em;
     margin-top: 0em;
 }
 
 .statisticsHeading {
-    color:grey;
+    color: grey;
     font-size: 18px;
     margin: 0.15em;
     margin-top: 0em;
-    margin-bottom: 15px; 
+    margin-bottom: 15px;
 }
+
 .statisticsHeadingFaded {
-    color:rgb(57, 57, 57);
+    color: rgb(57, 57, 57);
     font-size: 0.9em;
-    margin-top: 0em;
     margin: 0.15em;
+    margin-top: 0em;
     margin-bottom: 15px;
 }

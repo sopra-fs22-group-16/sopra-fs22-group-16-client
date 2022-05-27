@@ -37,7 +37,7 @@ const DropDown = props => {
     }
 
     const onClickAttack = () => {
-        if(props.onClickAttack) {
+        if (props.onClickAttack) {
             props.onClickAttack(props.target);
         }
     }
@@ -45,39 +45,35 @@ const DropDown = props => {
     return (
         props.open ?
             <div style={dropDownPosition} className={'dropDown'}>
-                <img className={'dropDownImage'} src={(props.showAttack && props.showMove) ? dropDownLarge : dropDownSmall} alt={''}/>
+                <img className={'dropDownImage'} src={(props.showAttack && props.showMove) ? dropDownLarge : dropDownSmall} alt={''} />
                 {
                     props.showAttack ?
                         <div className={'selection first'} onClick={onClickAttack}>
-                            <img className={'light'} src={attackLight} alt={"attack"}/>
-                            <img className={'dark'} src={attackDark} alt={''}/>
+                            <img className={'light'} src={attackLight} alt={"attack"} />
+                            <img className={'dark'} src={attackDark} alt={''} />
                         </div>
                         :
                         null
                 }
                 {
-
-
                     props.showMove ?
-                        <div className={'selection '  + (props.showAttack ? 'second' : 'first')} onClick={onClickMove}>
-                            <img className={'light'} src={moveLight} alt={"move"}/>
-                            <img className={'dark'} src={moveDark} alt={''}/>
+                        <div className={'selection ' + (props.showAttack ? 'second' : 'first')} onClick={onClickMove}>
+                            <img className={'light'} src={moveLight} alt={"move"} />
+                            <img className={'dark'} src={moveDark} alt={''} />
 
                         </div>
                         :
                         null
                 }
-
                 <div className={'selection ' + ((props.showMove && props.showAttack) ? 'third' : 'second')} onClick={onClickCancel}>
-                    <img className={'light'} src={cancelLight} alt={"cancel"}/>
-                    <img className={'dark'} src={cancelDark} alt={''}/>
+                    <img className={'light'} src={cancelLight} alt={"cancel"} />
+                    <img className={'dark'} src={cancelDark} alt={''} />
                 </div>
-                <img className={'dropDownArrow'} src={dropDownArrow} alt={''}/>
+                <img className={'dropDownArrow'} src={dropDownArrow} alt={''} />
             </div>
             :
             null
     );
-
 }
 
 DropDown.propTypes = {

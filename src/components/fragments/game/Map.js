@@ -221,7 +221,7 @@ const Map = props => {
         }
     }
 
-    const onClickMove = async (tile) => {
+    const onClickMove = async () => {
         // pressing wait on the tile with unit is the same as attack
         if (selectedUnit.traversableTiles.includes(props.mapData[selectedUnit.pathGoal[0]][selectedUnit.pathGoal[1]])) {
 
@@ -271,8 +271,7 @@ const Map = props => {
         //if the message is about defeat
         if (msg.surrenderInfo) {
             props.onSurrender(msg.surrenderInfo)
-        }
-        else {
+        } else {
             // only update health if the player is not moving, otherwise in respective move functions
             if (msg.move?.start && msg.move?.destination) {
                 let positionStart = new PositionData(msg.move.start);
@@ -285,9 +284,17 @@ const Map = props => {
                     }
                 })
 
-                unitStart.calculateTilesInRange(props.mapData);
-                unitStart.calculatePathToTile(positionEnd.y, positionEnd.x, props.mapData);
-                await executePathMovement(unitStart);
+                if (props.performAnimation) {
+                    unitStart.calculateTilesInRange(props.mapData);
+                    unitStart.calculatePathToTile(positionEnd.y, positionEnd.x, props.mapData);
+                    await executePathMovement(unitStart);
+                } else {
+                    unitStart.move(positionEnd.y, positionEnd.x);
+                    unitStart.oldY = positionEnd.y;
+                    unitStart.oldX = positionEnd.x
+                    props.unitData.sort((a, b) => a.y - b.y);
+                }
+
                 unitStart.moved = true;
 
                 props.mapData[positionStart.y][positionStart.x].unit = null;
@@ -552,6 +559,7 @@ Map.propTypes = {
     unitData: PropTypes.array.isRequired,
     playerIdCurrentTurn: PropTypes.number,
     onChangeTurn: PropTypes.func,
+    performAnimation: PropTypes.bool
 }
 
 export default Map;

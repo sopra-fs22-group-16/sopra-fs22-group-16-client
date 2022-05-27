@@ -45,7 +45,7 @@ const Lobby = ({ id }) => {
         `/lobby/${id}`
     ];
 
-    const beforeUnloadListener = (event) => {
+    const beforeUnloadListener = () => {
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
@@ -54,9 +54,9 @@ const Lobby = ({ id }) => {
     };
 
     useEffect(() => {
-        unblockRef.current = history.block((location) => {
+        unblockRef.current = history.block((loc) => {
             // Check if new path is in allowed paths
-            if (allowedFilterList.includes(location.pathname)) {
+            if (allowedFilterList.includes(loc.pathname)) {
                 return true;
             }
 
@@ -177,17 +177,21 @@ const Lobby = ({ id }) => {
     // refresh view when receiving a message from the socket
     const onMessage = (msg) => {
         let message = new LobbyMessageModel(msg);
-        if (message.removedPlayerIdList?.includes(parseInt(localStorage.getItem("playerId")))) {
-            setPlayerRemoved(true);
-        } else if (message.nameChangedOfPlayerWithId) {
-            //TODO: Inform this player
-        } else if (message.redirectToGame) {
+        if (message.redirectToGame) {
             // Unblock history
             unblockRef?.current();
             history.push(`/game/${id}`);
-        } else if (message.pullUpdate) {
+        }
+        else {
+            if (message.removedPlayerIdList?.includes(parseInt(localStorage.getItem("playerId")))) {
+                setPlayerRemoved(true);
+            }
+            if (message.nameChangedOfPlayerWithId === parseInt(localStorage.getItem("playerId"))) {
+                setErrorMessage("Ups! We have changed your name for technical reasons.");
+            }
             obtainAndLoadLobbyInfo();
         }
+
     }
 
 
@@ -236,6 +240,7 @@ const Lobby = ({ id }) => {
             setName(apiResponse.data.name);
             setPlayers(apiResponse.data.players);
             setInvitationCode(apiResponse.data.invitationCode);
+            setPlayerName(apiResponse.data.players[parseInt(localStorage.getItem("playerId"))].name);
 
             // Check if a game is already running, then redirect to the game
             if (apiResponse.data.gameRunning) {
@@ -253,7 +258,7 @@ const Lobby = ({ id }) => {
     }, [id, token]);
 
     return (
-        <BaseContainer noLogOutBool = {true}>
+        <BaseContainer noLogOutBool={true}>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 {
@@ -309,10 +314,7 @@ const Lobby = ({ id }) => {
                                         <input id={user.id} className="lobby status" type="checkbox"
                                             checked={user.ready}
                                             onClick={() => changeStatus(user)}
-                                            onChange={() => {
-                                            }}
                                         />
-
                                     </td>
                                 </tr>
                             )
@@ -346,7 +348,9 @@ const Lobby = ({ id }) => {
                 <CustomPopUp open={playerRemoved}
                     information={"Sorry, you have been removed from this lobby due to a change of game size! You will be redirected back to the home page."}>
                     <Button onClick={() => {
-                        localStorage.removeItem('token');
+                        if (!isRegistered) {
+                            localStorage.removeItem('token');
+                        }
                         localStorage.removeItem('playerId');
                         unblockRef?.current();
                         history.push('/home')

@@ -7,6 +7,8 @@ import { LinearProgress } from "@mui/material";
 import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from "components/ui/Button";
 import surrenderFlag from "styles/images/surrenderFlag.png"
+import animationsOn from "styles/images/ui/animationsOn.png"
+import animationsOff from "styles/images/ui/animationsOff.png"
 import TileModel from "models/TileModel";
 import { useHistory } from "react-router-dom";
 import UnitModel from "../../../models/UnitModel";
@@ -25,7 +27,7 @@ const Game = ({ id }) => {
     const unblockRef = useRef(null);
 
     const beforeUnloadListener = () => {
-        //TODO: Add API call to surrender
+        api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
         api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
         if (!isRegistered) {
             localStorage.removeItem('token');
@@ -38,7 +40,7 @@ const Game = ({ id }) => {
             let result = window.confirm(`If you proceed you will loose the game? Are you sure you want to leave the page?`);
             if (result) {
                 //Handle leaving page
-                //TODO: Add API call to surrender
+                api.put(`/v1/game/match/${id}/command/surrender`, JSON.stringify({}), { headers: { 'token': token || '' } });
                 api.delete(`/v1/game/lobby/${id}/player`, { headers: { 'token': token || '' } });
                 if (!isRegistered) {
                     localStorage.removeItem('token');
@@ -83,6 +85,8 @@ const Game = ({ id }) => {
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
 
+    const [showAnimations, setShowAnimations] = useState(true);
+
     // graphing Mettrics
     const [stateGraph, setStateGraph] = useState("Units");
     const [dataGraphsUnits, setDataGraphsUnits] = useState(null);
@@ -107,7 +111,7 @@ const Game = ({ id }) => {
 
             mapData.forEach((row, y) => {
                 mapArray.push([]);
-                row.forEach((tile, x) => {
+                row.forEach((_tile, x) => {
                     mapArray[y].push(new TileModel(y, x, mapData[y][x]));
                 });
             });
@@ -154,8 +158,7 @@ const Game = ({ id }) => {
     const gameOver = (gameOverInfo) => {
         if (gameOverInfo.winners.includes(parseInt(playerId))) {
             setGameResult("VICTORY");
-        }
-        else {
+        } else {
             setGameResult("DEFEAT");
         }
         // if the game is 1v1, we show the name of the winner
@@ -178,9 +181,9 @@ const Game = ({ id }) => {
         setEndGame(true);
         let loser = surrenderInfo.surrenderedPlayer;
         let result = loser === playerId ? "DEFEAT" : "VICTORY";
-        let winner = loser === playerId ? Math.abs(playerId - 1) : playerId;
+        let winner_ = loser === playerId ? Math.abs(playerId - 1) : playerId;
         setGameResult(result);
-        setWinner(gameData.players[winner].name);
+        setWinner(gameData.players[winner_].name);
     }
 
     const goStatistics = async () => {
@@ -191,7 +194,8 @@ const Game = ({ id }) => {
     }
 
     const playAgain = () => {
-        //TODO: play another game
+        unblockRef?.current();
+        history.push(`/lobby/${id}`)
     }
 
     const goHome = () => {
@@ -242,7 +246,6 @@ const Game = ({ id }) => {
             }
 
 
-
             dataFinalUnits.push(unitsData);
             dataFinalKills.push(killsData);
         }
@@ -250,6 +253,24 @@ const Game = ({ id }) => {
         setDataGraphsKills(dataFinalKills);
     };
 
+    const XAxisWithInterval = () => {
+        if (metricSums[2] < 20) {
+            return (
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={0} />
+            );
+        }
+        else if (metricSums[2] < 40) {
+            return (
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={2} />
+            );
+        }
+        return (
+            <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                interval={5} />
+        );
+    }
 
 
     const BarChartKills = () => {
@@ -264,7 +285,7 @@ const Game = ({ id }) => {
             >
 
                 <YAxis tick={{ fontSize: 5 }} ticks={[1, 2, 3]} />
-                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
+                <XAxisWithInterval />
                 <Tooltip />
                 <Bar
                     dataKey="Player0"
@@ -304,9 +325,12 @@ const Game = ({ id }) => {
 
         return (
             <div>
-                <label className={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"} onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }} >  &#x2190; </label>
-                <label className="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
-                <label className={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"} onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
+                <label className={stateGraph === "Units" ? "statisticsHeadingFaded" : "statisticsHeading"}
+                    onClick={() => setStateGraph("Units")} style={{ fontSize: 25 + 'px' }}>  &#x2190; </label>
+                <label
+                    className="statisticsHeading"> {stateGraph === "Units" ? "Units per Turn" : "Kills per Turn"} </label>
+                <label className={stateGraph === "Units" ? "statisticsHeading" : "statisticsHeadingFaded"}
+                    onClick={() => setStateGraph("Kills")} style={{ fontSize: 25 + 'px' }}>  &#x2192;  </label>
                 {stateGraph === "Units" ?
 
                     <LineChart
@@ -316,18 +340,18 @@ const Game = ({ id }) => {
                         margin={{ top: 20, right: 25, bottom: 0, left: -20 }}
                     >
                         <Tooltip />
-                        <Line name={gameData.players[0] ? gameData.players[0].name : null} type="monotone" dataKey="Player0" stroke="#873535" dot={false} />
-                        <Line name={gameData.players[1] ? gameData.players[1].name : null} type="monotone" dataKey="Player1" stroke="#516899" dot={false} />
-                        {
-                            gameData.gameType === "TWO_VS_TWO" ?
-                                <div>
-                                    <Line name={gameData.players[2].name} type="monotone" dataKey="Player2" stroke="green" dot={false} />
-                                    <Line name={gameData.players[3].name} type="monotone" dataKey="Player3" stroke="yellow" dot={false} />
-                                </div>
-                                :
-                                null
-                        }
-                        <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }} interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
+                        <Line name={gameData.players[0] ? gameData.players[0].name : null} type="monotone"
+                            dataKey="Player0" stroke="#873535" dot={false} />
+                        <Line name={gameData.players[1] ? gameData.players[1].name : null} type="monotone"
+                            dataKey="Player1" stroke="#516899" dot={false} />
+                        {gameData.gameType === "TWO_VS_TWO" ?
+                            <div>
+                                <Line name={gameData.players[2].name} type="monotone" dataKey="Player2"
+                                    stroke="green" dot={false} />
+                                <Line name={gameData.players[3].name} type="monotone" dataKey="Player3"
+                                    stroke="yellow" dot={false} />
+                            </div> : null}
+                        <XAxisWithInterval />
                         <YAxis tick={{ fontSize: 8 }} ticks={[1, 2, 3]} />
                     </LineChart>
                     :
@@ -350,7 +374,7 @@ const Game = ({ id }) => {
                     <tbody>
                         <tr>
                             <th>UNITS/TURN</th>
-                            <td > {metricSums[0] ? metricSums[0].toFixed(2) : 0}</td>
+                            <td> {metricSums[0] ? metricSums[0].toFixed(2) : 0}</td>
                         </tr>
                         <tr>
                             <th>KILLS/TURN</th>
@@ -393,6 +417,7 @@ const Game = ({ id }) => {
                         onChangeTurn={changeTurn}
                         onGameOver={gameOver}
                         onSurrender={receiveSurrender}
+                        performAnimation={showAnimations}
                     />
 
             }
@@ -404,6 +429,22 @@ const Game = ({ id }) => {
                     className={"pixelated"}
                     src={surrenderFlag}
                     alt={"A white flag - press to surrender"} />
+            </div>
+            <div
+                className={"settingsContainer"}
+                onClick={() => setShowAnimations(prevState => !prevState)}>
+                {
+                    showAnimations ?
+                        <img
+                            className={"pixelated"}
+                            src={animationsOn}
+                            alt={"Show animations"} />
+                        :
+                        <img
+                            className={"pixelated"}
+                            src={animationsOff}
+                            alt={"Skip animations"} />
+                }
             </div>
             <ThemeProvider theme={defaultTheme}>
                 {
