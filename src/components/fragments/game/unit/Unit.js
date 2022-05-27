@@ -1,5 +1,5 @@
 import PropTypes from "prop-types";
-import React, {useEffect, useState} from "react";
+import React from "react";
 import UnitImage from "./UnitImage";
 import UnitShadow from "./UnitShadow";
 import UnitModel from "../../../../models/UnitModel";
@@ -32,8 +32,8 @@ const Unit = props => {
     }
 
     unitStyle.animation =
-        "run"+props.unit.y+''+props.unit.x +' '
-        + (props.unit.movementSpeed * (Math.abs(props.unit.oldX-props.unit.x) + Math.abs(props.unit.oldY-props.unit.y)))  + 'ms '
+        "run" + props.unit.y + '' + props.unit.x + ' '
+        + (props.unit.movementSpeed * (Math.abs(props.unit.oldX - props.unit.x) + Math.abs(props.unit.oldY - props.unit.y))) + 'ms '
         + 'linear '
         + '1';
 
@@ -42,7 +42,7 @@ const Unit = props => {
     let healthBoxStyle = {
         position: 'relative',
         top: -70,
-        pointerEvents : 'none'
+        pointerEvents: 'none'
     }
 
     let healthBarStyle = {
@@ -52,7 +52,7 @@ const Unit = props => {
         height: '5px',
         width: 30 * props.unit.health / props.unit.maxHealth + 'px',
         background: unitColor === "red" ? '#873535' : '#516899',
-        pointerEvents : 'none'
+        pointerEvents: 'none'
     }
 
     let markerContainerStyle = {
@@ -66,20 +66,20 @@ const Unit = props => {
 
     return (
         <div className={'unitContainer'} style={unitStyle} onClick={() => props.onClick(props.unit)}>
-            <Keyframes name={"run"+props.unit.y+''+props.unit.x}
-                       from={{
-                           left: props.unit.oldX * tileSize + 'px',
-                           top: props.unit.oldY * tileSize + 'px'
-                       }}
-                       to={{
-                           left: (props.unit.x) * tileSize + 'px',
-                           top: (props.unit.y) * tileSize + 'px',
-                       }}/>
-            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState}/>
-            <UnitImage type={props.unit.type} color={unitColor} animation={animationState}/>
-            <img src={healthSource} style={healthBoxStyle} alt={''}/>
+            <Keyframes name={"run" + props.unit.y + '' + props.unit.x}
+                from={{
+                    left: props.unit.oldX * tileSize + 'px',
+                    top: props.unit.oldY * tileSize + 'px'
+                }}
+                to={{
+                    left: (props.unit.x) * tileSize + 'px',
+                    top: (props.unit.y) * tileSize + 'px',
+                }} />
+            <UnitShadow type={props.unit.type} color={unitColor} animation={animationState} />
+            <UnitImage type={props.unit.type} color={unitColor} animation={animationState} />
+            <img src={healthSource} style={healthBoxStyle} alt={''} />
             <div style={healthBarStyle} />
-            { props.showMarker ?
+            {props.showMarker ?
                 <div className={"unitMarkerContainer"} style={markerContainerStyle}>
                     <img className={"unitMaker"} style={markerStyle} src={markerSource} alt={''} />
                 </div>

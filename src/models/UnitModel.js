@@ -1,7 +1,7 @@
-import {Direction} from "../components/fragments/game/unit/Direction";
-import {UnitTypes} from "../components/fragments/game/unit/data/UnitTypes";
-import {TileIndicatorType} from "../components/fragments/game/tile/types/TileIndicatorType";
-import {ArrowPartType} from "../components/fragments/game/tile/types/ArrowPartType";
+import { Direction } from "../components/fragments/game/unit/Direction";
+import { UnitTypes } from "../components/fragments/game/unit/data/UnitTypes";
+import { TileIndicatorType } from "../components/fragments/game/tile/types/TileIndicatorType";
+import { ArrowPartType } from "../components/fragments/game/tile/types/ArrowPartType";
 
 class UnitModel {
     constructor(y, x, data = {}) {
@@ -65,7 +65,7 @@ class UnitModel {
             // Get first element in frontier
             node = frontier.shift();
 
-            let tile = node[0];
+            let tile_ = node[0];
             let distance = node[1];
 
             // Check each tile up, down, left, right
@@ -73,10 +73,10 @@ class UnitModel {
 
             let childTile = null;
 
-            tileOffset.forEach((tileOffset) => {
+            tileOffset.forEach((tileOffset_) => {
                 // Calculate the position of the child
-                let yPos = tile.y + tileOffset[0];
-                let xPos = tile.x + tileOffset[1];
+                let yPos = tile_.y + tileOffset_[0];
+                let xPos = tile_.x + tileOffset_[1];
 
                 // Check if tile is in map
                 if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
@@ -89,7 +89,7 @@ class UnitModel {
                         if (childTile.y === goalY && childTile.x === goalX) {
                             this.path = [];
                             this.path.push(childTile);
-                            this.path.push(tile);
+                            this.path.push(tile_);
                             // go back up and add tiles to path
                             let parent = node[3];
                             while (parent != null) {
@@ -149,7 +149,7 @@ class UnitModel {
         let node = [tile, 0, 0, null]; // [tile, g(x), f(x) = g(x) + h(x), parent]
 
         // Check if the goal is the tile the unit stands on
-       if (this.tilesInAttackRangeSpecificTile[this.y]?.[this.x]?.includes(map[goalY][goalX])) {
+        if (this.tilesInAttackRangeSpecificTile[this.y]?.[this.x]?.includes(map[goalY][goalX])) {
             this.path = [tile];
             return;
         }
@@ -161,7 +161,7 @@ class UnitModel {
             // Get first element in frontier
             node = frontier.shift();
 
-            let tile = node[0];
+            let tile_ = node[0];
             let distance = node[1];
 
             // Check each tile up, down, left, right
@@ -169,10 +169,10 @@ class UnitModel {
 
             let childTile = null;
 
-            tileOffset.forEach((tileOffset) => {
+            tileOffset.forEach((tileOffset_) => {
                 // Calculate the position of the child
-                let yPos = tile.y + tileOffset[0];
-                let xPos = tile.x + tileOffset[1];
+                let yPos = tile_.y + tileOffset_[0];
+                let xPos = tile_.x + tileOffset_[1];
 
                 // Check if tile is in map
                 if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
@@ -186,7 +186,7 @@ class UnitModel {
                             this.pathGoal = [childTile.y, childTile.x];
                             this.path = [];
                             this.path.push(childTile);
-                            this.path.push(tile);
+                            this.path.push(tile_);
                             // go back up and add tiles to path
                             let parent = node[3];
                             while (parent != null) {
@@ -261,10 +261,10 @@ class UnitModel {
 
             let childTile = null;
 
-            tileOffset.forEach((tileOffset) => {
+            tileOffset.forEach((tileOffset_) => {
                 // Calculate the position of the child
-                let yPos = tile.y + tileOffset[0];
-                let xPos = tile.x + tileOffset[1];
+                let yPos = tile.y + tileOffset_[0];
+                let xPos = tile.x + tileOffset_[1];
 
                 // Check if tile is in map
                 if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
@@ -328,10 +328,10 @@ class UnitModel {
 
                 let childTile = null;
 
-                tileOffset.forEach((tileOffset) => {
+                tileOffset.forEach((tileOffset_) => {
                     // Calculate the position of the child
-                    let yPos = tile.y + tileOffset[0];
-                    let xPos = tile.x + tileOffset[1];
+                    let yPos = tile.y + tileOffset_[0];
+                    let xPos = tile.x + tileOffset_[1];
 
                     // Check if tile is in map
                     if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
@@ -378,7 +378,7 @@ class UnitModel {
             if (foundTile) break;
 
             node = frontier.shift();
-            let tile = node[0];
+            let tile_ = node[0];
             let distance = node[1];
 
             // If we reached maxRange we do not have to look at children of the tile
@@ -390,12 +390,12 @@ class UnitModel {
 
             let childTile = null;
 
-            tileOffset.forEach((tileOffset) => {
+            tileOffset.forEach((tileOffset_) => {
                 if (foundTile) return;
 
                 // Calculate the position of the child
-                let yPos = tile.y + tileOffset[0];
-                let xPos = tile.x + tileOffset[1];
+                let yPos = tile_.y + tileOffset_[0];
+                let xPos = tile_.x + tileOffset_[1];
 
                 // Check if tile is in map
                 if (yPos >= 0 && yPos < map.length && xPos >= 0 && xPos < map[yPos].length) {
@@ -585,26 +585,26 @@ class UnitModel {
 
             let otherUnitType = null;
             switch (unit.type) {
-                case 'ARCHER' :
+                case 'ARCHER':
                     otherUnitType = 0;
                     break;
-                case 'KNIGHT' :
+                case 'KNIGHT':
                     otherUnitType = 1;
                     break;
-                case 'WAR_ELEPHANT' :
+                case 'WAR_ELEPHANT':
                     otherUnitType = 2;
                     break;
             }
 
             let myUnitType = null;
             switch (this.type) {
-                case 'ARCHER' :
+                case 'ARCHER':
                     myUnitType = 0;
                     break;
-                case 'KNIGHT' :
+                case 'KNIGHT':
                     myUnitType = 1;
                     break;
-                case 'WAR_ELEPHANT' :
+                case 'WAR_ELEPHANT':
                     myUnitType = 2;
                     break;
             }
@@ -634,7 +634,6 @@ class UnitModel {
                 } else if (this.path[1].y <= this.y && this.pathGoal[1] >= this.x) {
                     this.viewDirection = Direction.northEast;
                 }
-
             }
         }
     }

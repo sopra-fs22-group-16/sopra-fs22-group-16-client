@@ -21,7 +21,7 @@ const DamageIndicator = props => {
     }
     let leftColor = 'blue';
     let rightColor = 'red';
-    if(props.leftRed){
+    if (props.leftRed) {
         leftColor = 'red';
         rightColor = 'blue';
     }
@@ -36,24 +36,24 @@ const DamageIndicator = props => {
     if (props.leftDamage >= 100) {
         leftBackgroundSource = leftLarge;
         leftNumber100Content =
-            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left fourth'} alt={''}/>
+            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left fourth'} alt={''} />
         leftNumber10Content =
-            <img src={'/ui/numbers/' + leftNumbers[1] + '_' + leftColor + '.png'} className={'number left third'} alt={''}/>
+            <img src={'/ui/numbers/' + leftNumbers[1] + '_' + leftColor + '.png'} className={'number left third'} alt={''} />
         leftNumber1Content =
-            <img src={'/ui/numbers/' + leftNumbers[2] + '_' + leftColor + '.png'} className={'number left second'} alt={''}/>
+            <img src={'/ui/numbers/' + leftNumbers[2] + '_' + leftColor + '.png'} className={'number left second'} alt={''} />
     } else if (props.leftDamage >= 10) {
         leftBackgroundSource = leftMedium;
         leftNumber10Content =
-            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left third'} alt={''}/>
+            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left third'} alt={''} />
         leftNumber1Content =
-            <img src={'/ui/numbers/' + leftNumbers[1] + '_' + leftColor + '.png'} className={'number left second'} alt={''}/>
-    } else if(props.leftDamage >= 0){
+            <img src={'/ui/numbers/' + leftNumbers[1] + '_' + leftColor + '.png'} className={'number left second'} alt={''} />
+    } else if (props.leftDamage >= 0) {
         leftBackgroundSource = leftSmall;
         leftNumber1Content =
-            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left second'} alt={''}/>
+            <img src={'/ui/numbers/' + leftNumbers[0] + '_' + leftColor + '.png'} className={'number left second'} alt={''} />
     }
 
-    let rightBackgroundSource= null;
+    let rightBackgroundSource = null;
     let rightNumber100Content = null;
     let rightNumber10Content = null;
     let rightNumber1Content = null;
@@ -63,33 +63,33 @@ const DamageIndicator = props => {
     if (props.rightDamage >= 100) {
         rightBackgroundSource = rightLarge;
         rightNumber100Content =
-            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''}/>
+            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''} />
         rightNumber10Content =
-            <img src={'/ui/numbers/' + rightNumbers[1] + '_' + rightColor + '.png'} className={'number right second'} alt={''}/>
+            <img src={'/ui/numbers/' + rightNumbers[1] + '_' + rightColor + '.png'} className={'number right second'} alt={''} />
         rightNumber1Content =
-            <img src={'/ui/numbers/' + rightNumbers[2] + '_' + rightColor + '.png'} className={'number right third'} alt={''}/>
-        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right fourth'} alt={''}/>
+            <img src={'/ui/numbers/' + rightNumbers[2] + '_' + rightColor + '.png'} className={'number right third'} alt={''} />
+        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right fourth'} alt={''} />
     } else if (props.rightDamage >= 10) {
         rightBackgroundSource = rightMedium;
         rightNumber10Content =
-            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''}/>
+            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''} />
         rightNumber1Content =
-            <img src={'/ui/numbers/' + rightNumbers[1] + '_' + rightColor + '.png'} className={'number right second'} alt={''}/>
-        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right third'} alt={''}/>
-    } else if(props.rightDamage >= 0){
+            <img src={'/ui/numbers/' + rightNumbers[1] + '_' + rightColor + '.png'} className={'number right second'} alt={''} />
+        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right third'} alt={''} />
+    } else if (props.rightDamage >= 0) {
         rightBackgroundSource = rightSmall;
         rightNumber1Content =
-            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''}/>
-        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right second'} alt={''}/>
+            <img src={'/ui/numbers/' + rightNumbers[0] + '_' + rightColor + '.png'} className={'number right first'} alt={''} />
+        rightPercentageContent = < img src={"/ui/numbers/p_" + rightColor + '.png'} className={'number right second'} alt={''} />
     }
 
     return (
         props.open ?
             <div style={dropDownPosition} className={'damageIndicator'}>
-                <img src={props.leftRed ? middle_redLeft_blueRight : middle_blueLeft_redRight} alt={""}/>
-                <img src={leftBackgroundSource} className={'leftBackground'} alt={''}/>
-                <img src={rightBackgroundSource} className={'rightBackground'} alt={''}/>
-                <img src={"/ui/numbers/p_" + leftColor + '.png'} className={'number left first'} alt={''}/>
+                <img src={props.leftRed ? middle_redLeft_blueRight : middle_blueLeft_redRight} alt={""} />
+                <img src={leftBackgroundSource} className={'leftBackground'} alt={''} />
+                <img src={rightBackgroundSource} className={'rightBackground'} alt={''} />
+                <img src={"/ui/numbers/p_" + leftColor + '.png'} className={'number left first'} alt={''} />
                 {leftNumber100Content}
                 {leftNumber10Content}
                 {leftNumber1Content}

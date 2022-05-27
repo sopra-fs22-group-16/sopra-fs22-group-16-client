@@ -1,12 +1,9 @@
 import React, { useState } from 'react';
 import { useHistory, Link } from 'react-router-dom';
-import QrReader from 'react-qr-reader'
 import { LinearProgress } from "@mui/material";
 import { ThemeProvider } from "@emotion/react";
-import PropTypes from "prop-types";
 
 import { api } from 'helpers/api';
-import UserModel from 'models/UserModel';
 import CustomPopUp from "components/ui/CustomPopUp";
 import { Button } from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
@@ -19,7 +16,7 @@ function timeout(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }
 
-const LoginUser = props => {
+const LoginUser = () => {
     const history = useHistory();
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);

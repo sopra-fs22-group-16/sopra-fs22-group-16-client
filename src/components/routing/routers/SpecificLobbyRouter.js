@@ -1,10 +1,9 @@
 import PropTypes from "prop-types";
-import {Switch, Redirect, Route, useLocation} from "react-router-dom";
+import { Switch, Route } from "react-router-dom";
 import Lobby from "../../views/lobby/Lobby";
 import UpdateLobby from "../../views/lobby/UpdateLobby";
 import ShareQRCode from "../../views/lobby/ShareQRCode";
 import ShareLobbyCode from "../../views/lobby/ShareLobbyCode";
-import CreateLobby from "../../views/CreateLobby";
 
 const SpecificLobbyRouter = props => {
     /**
