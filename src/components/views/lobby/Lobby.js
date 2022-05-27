@@ -22,6 +22,7 @@ const FormName = props => {
                 className="buttonIn name"
                 value={props.value}
                 onChange={e => props.onChange(e.target.value)}
+                maxLength={props.maxLength}
             />
             <button
                 className="buttonIn button"
@@ -139,7 +140,7 @@ const Lobby = ({id}) => {
         }
 
         else {
-            setErrorMessage("The name you are entering is too long! Please limit yourself to 10 characters.");
+            setError({open: true, message: <div>The name you are entering is too long! <br /> Please limit yourself to 10 characters. </div>});
         }
     }
 
@@ -353,6 +354,7 @@ const Lobby = ({id}) => {
                                            onChange={() => {
                                            }}
                                            onClick={() => changeStatus(user)}
+                                           maxLength={10}
                                     />
                                 </td>
                             </tr>
