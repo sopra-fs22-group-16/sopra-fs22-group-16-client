@@ -29,7 +29,7 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg" width="16" height="16" /> [**JavaScript**](https://www.javascript.com/)	
 
-<img src="" style='visibility:hidden;' width="16" height="16" /> [**REST**](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
+<img src="https://user-images.githubusercontent.com/91155454/170842503-3a531289-1afc-4b9c-87c1-cc120d9229ce.svg" style='visibility:hidden;' width="16" height="16" /> [**REST**](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [**Heroku**](https://www.heroku.com/)		
 
@@ -41,11 +41,11 @@ TODO:
 
 ## External Dependencies
 
-* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [**Mui**](https://mui.com/)		
+<img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [**Mui**](https://mui.com/)		
 
-* [**react-qr-scanner**](https://www.npmjs.com/package/react-qr-scanner)
+<img src="https://user-images.githubusercontent.com/91155454/170842620-fd6f8352-6f42-41c2-b35a-6c7157cc2727.svg" width="16" height="16" /> [**react-qr-scanner**](https://www.npmjs.com/package/react-qr-scanner)
 
-* [**sockjs-client**](https://www.npmjs.com/package/sockjs-client)	
+<img src="https://user-images.githubusercontent.com/91155454/170842854-9efaadbf-2d09-49c7-a738-d19fe8f9a257.png" width="16" height="16" /> [**sockjs-client**](https://www.npmjs.com/package/sockjs-client)	
 
 ## Getting started
 <p>
