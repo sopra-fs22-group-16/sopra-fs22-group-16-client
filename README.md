@@ -6,12 +6,14 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 ## Table of content
 
 - [Technologies](#technologies)
+- [High-level components](#high-level-components)
+- [External Dependencies](#external-dependencies)
 - [Getting started](#getting-started)
     - [Prerequisites and Installation](#prerequisites-and-installation)
 	- [Build](#build)
 	- [Testing](#testing)
 	- [Deployment](#deployment)
-- [External Dependencies](#external-dependencies)
+
 - [Illustrations](#illustrations)
 - [Roadmap](#roadmap)
 - [Authors](#authors)
@@ -33,7 +35,19 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [***GitHub***](https://github.com/)		
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [***Figma***](https://www.figma.com/)			
+<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [***Figma***](https://www.figma.com/)	
+
+## High-level components
+
+TODO:
+
+## External Dependencies
+
+* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
+
+* [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
+
+* [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
 
 ## Getting started
 <p>
@@ -80,14 +94,6 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### Deployment
 After each commit to the master branch, automatic Github Actions get executed which deploy our application to [Heroku](https://www.heroku.com/).
-
-## External Dependencies
-
-* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
-
-* [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
-
-* [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
 
 ## Illustrations
 
