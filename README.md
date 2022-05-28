@@ -78,8 +78,10 @@ After each commit to the master branch, automatic Github Actions get executed wh
 On the homepage of Hannibal, the user gets greeted by a modern designed interface, where the user gets a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
 
 To keep records of the games played and compete with other users with their ranked score, the user can register an account by pressing <code>SIGN IN/CREATE USER</code>. To view the score of the best users in all of Hannibal, the user can press the <code>LEADERBOARD</code> button to get to a leaderboard which the user can sort by wins, losses or ranked score.
-
+	
 <br clear="left"/>
+
+<br>
 
 ### Creating and joining a lobby
 
@@ -87,11 +89,27 @@ To keep records of the games played and compete with other users with their rank
 
 <p>
 
-<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/CreateLobby.png">
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/CreateLobby.png">
+
+<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/PublicLobbies.png">
+
+
+WHAT IS GOING ON?
+
+	
+</p>
+	
+<br clear="right"/>
+
+<br>
+
+<p>
+
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/JoinLobbyByCode.png">
 
 	
 	
-<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/PublicLobbies.png">
+<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/JoinLobbyByQRCode.png">
 
 </p>
 	
