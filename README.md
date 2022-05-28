@@ -46,5 +46,5 @@ To learn React, check out the [React documentation](https://reactjs.org/).
 > Thanks to Lucas Pelloni and Kyrill Hux for working on the template.
 
 ## License
-This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html).
-Which guarantees end users the freedoms to run, study, share and modify the software.
+This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html),
+which guarantees end users the freedoms to run, study, share and modify the software.
