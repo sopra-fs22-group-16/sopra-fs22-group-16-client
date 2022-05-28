@@ -33,9 +33,7 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [**Heroku**](https://www.heroku.com/)		
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [**GitHub**](https://github.com/)		
-
-<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [**Figma**](https://www.figma.com/)	
+<img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [**GitHub**](https://github.com/)	
 
 ## High-level components
 
