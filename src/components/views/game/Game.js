@@ -253,26 +253,6 @@ const Game = ({ id }) => {
         setDataGraphsKills(dataFinalKills);
     };
 
-    const XAxisWithInterval = () => {
-        if (metricSums[2] < 20) {
-            return (
-                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                    interval={0} />
-            );
-        }
-        else if (metricSums[2] < 40) {
-            return (
-                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                    interval={2} />
-            );
-        }
-        return (
-            <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                interval={5} />
-        );
-    }
-
-
     const BarChartKills = () => {
 
         return (
@@ -285,7 +265,8 @@ const Game = ({ id }) => {
             >
 
                 <YAxis tick={{ fontSize: 5 }} ticks={[1, 2, 3]} />
-                <XAxisWithInterval />
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
                 <Tooltip />
                 <Bar
                     dataKey="Player0"
@@ -351,7 +332,8 @@ const Game = ({ id }) => {
                                 <Line name={gameData.players[3].name} type="monotone" dataKey="Player3"
                                     stroke="yellow" dot={false} />
                             </div> : null}
-                        <XAxisWithInterval />
+                        <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                            interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
                         <YAxis tick={{ fontSize: 8 }} ticks={[1, 2, 3]} />
                     </LineChart>
                     :
