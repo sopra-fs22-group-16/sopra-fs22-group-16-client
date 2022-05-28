@@ -1,8 +1,6 @@
 # ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/logo/war_elephant_purple.png) SoPra FS22 - Hannibal Client
 
-<p style="text-align: justify;">
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard.
-</p>
 
 ## Table of content
 
@@ -24,7 +22,7 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 React, GitHub, Heroku, Mui, JavaScript, Rest, Figma, QR-Code component, socket component
 
 ## Getting started
-<p style="text-align: justify;">
+<p>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
 </p>
 
@@ -71,9 +69,20 @@ After each commit to the master branch, automatic Github Actions get executed wh
 
 ## Illustrations
 
+### Homepage
+
+<br clear="both"/>
+
 <img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Homepage.png">
 
+On the homepage of Hannibal, the user gets greeted by a modern designed interface, where the user gets a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
+
+To keep records of the games played and compete with other users with their ranked score, the user can register an account by pressing <code>SIGN IN/CREATE USER</code>. To view the score of the best users in all of Hannibal, the user can press the <code>LEADERBOARD</code> button to get to a leaderboard which the user can sort by wins, losses or ranked score.
+
 <br clear="left"/>
+
+### Creating and joining a lobby
+
 <br>
 
 <p>
@@ -87,6 +96,9 @@ After each commit to the master branch, automatic Github Actions get executed wh
 </p>
 	
 <br clear="right"/>
+
+
+
 <br>
 
 <img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Lobby.png">
