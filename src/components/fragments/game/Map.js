@@ -254,8 +254,7 @@ const Map = props => {
                 if (error.response.status === 403) {
                     setErrorMessage("Are you sure it's your turn to play?");
                 } else {
-                    setErrorMessage("Something went wrong with communicating to server!")
-                    console.log(error);
+                    setErrorMessage("Something went wrong with communicating to server!");
                 }
 
                 setLock(false);
@@ -267,7 +266,6 @@ const Map = props => {
 
     // refresh view when receiving a message from the socket 
     const onMessage = async (msg) => {
-        console.log(msg);
         //if the message is about defeat
         if (msg.surrenderInfo) {
             props.onSurrender(msg.surrenderInfo)
