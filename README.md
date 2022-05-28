@@ -1,4 +1,4 @@
-# ![Logo](https://raw.githubusercontent.com/sopra-fs22-group-16/sopra-fs22-group-16-client/master/public/favicon.ico) SoPra FS22 - Hannibal Client
+# ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/logo/war_elephant_purple.png) SoPra FS22 - Hannibal Client
 
 <p style="text-align: justify;">
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard.
@@ -70,6 +70,58 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 After each commit to the master branch, automatic Github Actions get executed which deploy our application to [Heroku](https://www.heroku.com/).
 
 ## Illustrations
+
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Homepage.png">
+
+<br clear="left"/>
+<br>
+
+<p>
+
+<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/CreateLobby.png">
+
+	
+	
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/PublicLobbies.png">
+
+</p>
+	
+<br clear="right"/>
+<br>
+
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Lobby.png">
+
+<br clear="both"/>
+<br>
+
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/StartOfGame.png">
+
+<br clear="both"/>
+
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/MovementAndAttackRange.png">
+
+<br clear="both"/>
+<br>
+
+<p>
+
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Victory.png">
+
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Defeat.png">
+
+</p>
+	
+<br clear="both"/>
+<br>
+
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/statisticsKPT.png">
+
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/statisticsUPT.png">
+
+</p>
+	
+<br clear="both"/>
+<br>
 
 ## Roadmap
 
