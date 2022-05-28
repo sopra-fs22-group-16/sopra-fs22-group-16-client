@@ -178,7 +178,7 @@ const Game = ({ id }) => {
             setWinner("Team" + gameData.players[gameOverInfo.winners[0]].teamId);
         }
         if (gameOverInfo.rankedScoreDeltas) {
-            setRankScore(gameOverInfo.rankedScoreDeltas[parseInt(playerId)][0] + gameOverInfo.rankedScoreDeltas[parseInt(playerId)][1]);
+            setRankScore(gameOverInfo.rankedScoreDeltas[parseInt(playerId)][0]);
             setDetaRankScore(gameOverInfo.rankedScoreDeltas[parseInt(playerId)][1]);
         }
         setEndGame(true);
@@ -196,7 +196,7 @@ const Game = ({ id }) => {
         let winner_ = loser === playerId ? Math.abs(playerId - 1) : playerId;
         setGameResult(result);
         if (surrenderInfo.rankedScoreDeltas) {
-            setRankScore(surrenderInfo.rankedScoreDeltas[parseInt(playerId)][0] + surrenderInfo.rankedScoreDeltas[parseInt(playerId)][1]);
+            setRankScore(surrenderInfo.rankedScoreDeltas[parseInt(playerId)][0]);
             setDetaRankScore(surrenderInfo.rankedScoreDeltas[parseInt(playerId)][1]);
         }
         setWinner(gameData.players[winner_].name);
