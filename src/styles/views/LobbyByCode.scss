@@ -2,7 +2,6 @@
 
 .LobbyByCode {
     &.container {
-        margin-top: 2em;
         @include center;
         flex-direction: column;
     }
@@ -13,6 +12,7 @@
         font-size: 1em;
         padding-top: 2em;
         padding-bottom: 2em;
+        width: 320px;
     }
 
     &.label {

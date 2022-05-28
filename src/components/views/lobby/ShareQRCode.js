@@ -91,7 +91,7 @@ const ShareQRCode = ({ id }) => {
     }
 
     return (
-        <BaseContainer noLogOutBool={true}>
+        <BaseContainer noHeaderIcons={true}>
             <div className="shareQR">
                 <label className="shareQR message">Show this QR code to other players to join your lobbby:</label>
                 <img className="shareQR code" src={`data:image/png;base64,${QR}`} alt="" />

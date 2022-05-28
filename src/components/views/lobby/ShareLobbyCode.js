@@ -101,7 +101,7 @@ const ShareLobbyCode = ({id}) => {
     }
 
     return (
-        <BaseContainer noLogOutBool={true}>
+        <BaseContainer noHeaderIcons={true}>
             <div className="sharecode">
                 <label className="sharecode message">Invite other users to your lobby by sharing the following
                     code:</label>
