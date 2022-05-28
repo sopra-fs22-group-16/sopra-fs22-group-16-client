@@ -23,19 +23,19 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 ## Technologies
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/npm.svg" width="16" height="16" />   [***npm***](https://www.npmjs.com) 	
+<img src="https://github.com/get-icon/geticon/blob/master/icons/npm.svg" width="16" height="16" />   [**npm**](https://www.npmjs.com) 	
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" />   [***React***](https://reactjs.org/) 	
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" />   [**React**](https://reactjs.org/) 	
 
-<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg" width="16" height="16" /> [***JavaScript***](https://www.javascript.com/)	
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg" width="16" height="16" /> [**JavaScript**](https://www.javascript.com/)	
 
-<img src="" style='visibility:hidden;' width="16" height="16" /> [***REST***](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
+<img src="" style='visibility:hidden;' width="16" height="16" /> [**REST**](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [***Heroku***](https://www.heroku.com/)		
+<img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [**Heroku**](https://www.heroku.com/)		
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [***GitHub***](https://github.com/)		
+<img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [**GitHub**](https://github.com/)		
 
-<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [***Figma***](https://www.figma.com/)	
+<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [**Figma**](https://www.figma.com/)	
 
 ## High-level components
 
@@ -43,11 +43,11 @@ TODO:
 
 ## External Dependencies
 
-* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
+* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [**Mui**](https://mui.com/)		
 
-* [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
+* [**react-qr-scanner**](https://www.npmjs.com/package/react-qr-scanner)
 
-* [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
+* [**sockjs-client**](https://www.npmjs.com/package/sockjs-client)	
 
 ## Getting started
 <p>
@@ -197,11 +197,11 @@ The user can return to the list of public lobbies or the homepage by using the t
 
 ## Authors
 
-* **Luis Torrejón Machado** - *???* - [luis-tm](https://github.com/luis-tm)
-* **Paul Luley** - *???* - [paolovic](https://github.com/paolovic)
-* **Maria Korobeynikova** - *???* - [mkorob](https://github.com/mkorob)
-* **Hilal Çomak** - *???* - [hilalcomak](https://github.com/hilalcomak)
-* **Alessio Brazerol** - *???* - [apple00juice](https://github.com/apple00juice)
+* **Luis Torrejón Machado**  - [luis-tm](https://github.com/luis-tm)
+* **Paul Luley**  - [paolovic](https://github.com/paolovic)
+* **Maria Korobeynikova** - [mkorob](https://github.com/mkorob)
+* **Hilal Çomak** - [hilalcomak](https://github.com/hilalcomak)
+* **Alessio Brazerol** - [apple00juice](https://github.com/apple00juice)
 
 ## License
 This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html), which guarantees end users the freedoms to run, study, share and modify the software.
