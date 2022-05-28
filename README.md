@@ -1,6 +1,7 @@
-# ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/logo/war_elephant_purple.png) SoPra FS22 - Hannibal Client
+# ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/logo/war_elephant_purple.png) SoPra FS22 - Hannibal Client ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/logo/war_elephant_purple_left.png)
 
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard.
+
 
 ## Table of content
 
@@ -19,7 +20,25 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 ## Technologies
 
-React, GitHub, Heroku, Mui, JavaScript, Rest, Figma, QR-Code component, socket component
+<img src="https://github.com/get-icon/geticon/blob/master/icons/npm.svg" width="16" height="16" />   [***npm***](https://www.npmjs.com) 	
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" />   [***React***](https://reactjs.org/) 	
+
+<img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg" width="16" height="16" /> [***JavaScript***](https://www.javascript.com/)	
+
+<img src="" style='visibility:hidden;' width="16" height="16" /> [***REST***](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
+
+<img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
+
+<img src="" width="16" height="16" /> [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
+
+<img src="" style='visibility:hidden;' width="16" height="16"/> [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
+
+<img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [***Heroku***](https://www.heroku.com/)		
+
+<img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [***GitHub***](https://github.com/)		
+
+<img src="https://github.com/get-icon/geticon/blob/master/icons/figma.svg" width="16" height="16" /> [***Figma***](https://www.figma.com/)			
 
 ## Getting started
 <p>
@@ -71,7 +90,7 @@ After each commit to the master branch, automatic Github Actions get executed wh
 
 <br clear="both"/>
 
-<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Homepage.png">
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Homepage.png">
 
 ### Homepage
 
@@ -87,9 +106,9 @@ To keep records of the games played and compete with other users with their rank
 
 <p>
 
-<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/CreateLobby.png">
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/CreateLobby.png">
 
-<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/PublicLobbies.png">
+<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/PublicLobbies.png">
 
 ### Creating and joining a lobby
 
@@ -109,9 +128,9 @@ Additionally, the user can return to the home screen by pressing <code>RETURN HO
 
 <p>
 
-<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/JoinLobbyByCode.png">
+<img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/JoinLobbyByCode.png">
 
-<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/JoinLobbyByQRCode.png">
+<img align="right" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/JoinLobbyByQRCode.png">
 
 ### Joining a lobby by code
 	
@@ -129,34 +148,34 @@ The user can return to the list of public lobbies or the homepage by using the t
 
 <br>
 
-<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Lobby.png">
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Lobby.png">
 
 <br clear="both"/>
 <br>
 
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/StartOfGame.png">
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/StartOfGame.png">
 
 <br clear="both"/>
 
-<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/MovementAndAttackRange.png">
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/MovementAndAttackRange.png">
 
 <br clear="both"/>
 <br>
 
 <p>
 
-<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Victory.png">
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Victory.png">
 
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/Defeat.png">
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Defeat.png">
 
 </p>
 	
 <br clear="both"/>
 <br>
 
-<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/statisticsKPT.png">
+<img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/statisticsKPT.png">
 
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/media/images/Illustrations/statisticsUPT.png">
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/statisticsUPT.png">
 
 </p>
 	
