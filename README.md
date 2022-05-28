@@ -21,6 +21,8 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 
 ## Technologies
 
+React, GitHub, Heroku, Mui, JavaScript, Rest, Figma, QR-Code component, socket component
+
 ## Getting started
 <p style="text-align: justify;">
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
