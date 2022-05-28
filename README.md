@@ -207,9 +207,7 @@ The user can return to the list of public lobbies or the homepage by using the t
 This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html), which guarantees end users the freedoms to run, study, share and modify the software.
 
 ## Acknowledgments
-* TODO: SOPRA TEMPLATE CLIENT
-* TODO: SOPRA TEMPLATE SERVER
-* Thanks to Lucas Pelloni and Kyrill Hux for working on the template.
+* This project is based on the [SoPra FS22 - Client Template](https://github.com/HASEL-UZH/sopra-fs22-template-client)
 * Thanks to **Melih Catal** - [melihcatal](https://github.com/melihcatal) who supported us as a Tutor and Scrum Master during this project.
 
 ## Links
