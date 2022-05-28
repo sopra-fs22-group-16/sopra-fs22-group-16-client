@@ -11,6 +11,7 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 	- [Build](#build)
 	- [Testing](#testing)
 	- [Deployment](#deployment)
+- [External Dependencies](#external-dependencies)
 - [Illustrations](#illustrations)
 - [Roadmap](#roadmap)
 - [Authors](#authors)
@@ -27,12 +28,6 @@ Hannibal is a turn-based strategy game in which players can play against each ot
 <img src="https://upload.wikimedia.org/wikipedia/commons/9/99/Unofficial_JavaScript_logo_2.svg" width="16" height="16" /> [***JavaScript***](https://www.javascript.com/)	
 
 <img src="" style='visibility:hidden;' width="16" height="16" /> [***REST***](https://en.wikipedia.org/wiki/Representational_state_transfer) 			
-
-<img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
-
-<img src="" width="16" height="16" /> [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
-
-<img src="" style='visibility:hidden;' width="16" height="16"/> [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/heroku-icon.svg" width="16" height="16" /> [***Heroku***](https://www.heroku.com/)		
 
@@ -85,6 +80,14 @@ See the section about [running tests](https://facebook.github.io/create-react-ap
 
 ### Deployment
 After each commit to the master branch, automatic Github Actions get executed which deploy our application to [Heroku](https://www.heroku.com/).
+
+## External Dependencies
+
+* <img src="https://github.com/get-icon/geticon/blob/master/icons/material-ui.svg" width="16" height="16" /> [***Mui***](https://mui.com/)		
+
+* [***react-qr-scanner***](https://www.npmjs.com/package/react-qr-scanner)
+
+* [***sockjs-client***](https://www.npmjs.com/package/sockjs-client)	
 
 ## Illustrations
 
@@ -183,6 +186,8 @@ The user can return to the list of public lobbies or the homepage by using the t
 <br>
 
 ## Roadmap
+
+<img src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Hannibalroadmap.png" width="100%"/>
 
 ## Authors
 
