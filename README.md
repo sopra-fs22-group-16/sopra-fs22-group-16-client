@@ -88,7 +88,7 @@ This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.h
 * TODO: SOPRA TEMPLATE CLIENT
 * TODO: SOPRA TEMPLATE SERVER
 * Thanks to Lucas Pelloni and Kyrill Hux for working on the template.
-* Thanks to Melih Catal who supported us as a Tutor and Scrum Master during this project.
+* Thanks to **Melih Catal** - [melihcatal](https://github.com/melihcatal) who supported us as a Tutor and Scrum Master during this project.
 
 ## Links
 * [Hannibal Client Website](https://sopra-fs22-group-16-client.herokuapp.com/)
