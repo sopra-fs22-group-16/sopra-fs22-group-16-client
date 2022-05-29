@@ -105,12 +105,12 @@ After each commit to the master branch, automatic Github Actions get executed wh
 <p>
 
 <img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Homepage.png">
-
+	
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/empty.png">
 	
 ### Homepage
 
-On the homepage of Hannibal, the user gets greeted by a modernly designed interface, where the user gets a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
+On the homepage of Hannibal, the user gets a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
 
 To keep records of the games played and compete with other users with their ranked score, the user can register an account by pressing <code>SIGN IN/CREATE USER</code>. To view the score of the best users in all of Hannibal, the user can press the <code>LEADERBOARD</code> button to get to a leaderboard which the user can sort by wins, losses or ranked score.
 
@@ -171,6 +171,12 @@ The user can return to the list of public lobbies or the homepage by using the t
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/empty.png">
 
+### Lobby
+	
+In the lobby, the user can see the current settings of the lobby. This includes the name (NAME), the visibility (ACCESS), the type (TYPE), the number of players and respectively the maximal number of players (PLAYERS) and the number of ready players (READY). Below the lobby information is a table with the players currently in the lobby. The name of the play, the team and ready status is stated in each table row. The user can change his name by selecting the input field and then pressing the yellow button on the left of it. The user can change his ready status by clicking on the checkbox in the user's row.
+
+The host of the lobby has access to three additional views. He can access them via the blue links above the lobby information and below the player table. With the above link, he has the possibility of changing the lobby settings. The link below the player's table allows the host to see the invitation code or the QR code.
+	
 </p>
 	
 <br clear="both"/>
