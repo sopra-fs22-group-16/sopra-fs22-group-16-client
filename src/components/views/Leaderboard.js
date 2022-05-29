@@ -140,7 +140,7 @@ const Leaderboard = () => {
         <BaseContainer>
             <ThemeProvider theme={defaultTheme}>
                 <div className="Leaderboard container">
-                    <label className="Leaderboard h1"> Leaderboard </label>
+                    <label className="PublicLobbies h1"> Leaderboard </label>
 
                     <table className="Leaderboard table">
                         <thead>
@@ -174,7 +174,8 @@ const Leaderboard = () => {
                         </tbody>
                     </table>
 
-                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(pageNumber) => {
+                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(event, pageNumber) => {
+                        console.log(pageNumber)
                         leaderboardData.page = (pageNumber - 1);
                         obtainAndLoadUserInfo().catch(() => setGetDataFailed(true));
                     }} shape="rounded" color="primary" />
