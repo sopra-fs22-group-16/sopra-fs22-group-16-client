@@ -69,8 +69,6 @@ const RegisterUser = () => {
         }
     }
 
-    veryverylongusername
-
     return (
         <BaseContainer>
             <div className="LoginRegisterUser">
