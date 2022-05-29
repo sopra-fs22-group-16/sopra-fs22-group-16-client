@@ -37,7 +37,7 @@ const Header = props => {
 
     const LogoutIconHeader = () => {
         return (
-            showLogOut ? <LogoutIcon className="header userInfo" onClick={() => logOut()}/> : null
+            showLogOut ? <LogoutIcon className="header userInfo" style={{ cursor: "pointer" }} onClick={() => logOut()}/> : null
         );
     }
 

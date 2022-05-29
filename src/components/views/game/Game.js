@@ -84,6 +84,8 @@ const Game = ({ id }) => {
     //TODO: set the values with the information received from the server (socket)
     const [gameResult, setGameResult] = useState(null);
     const [winner, setWinner] = useState(null);
+    const [rankScore, setRankScore] = useState(null);
+    const [deltaRankScore, setDetaRankScore] = useState(null);
 
     const [showAnimations, setShowAnimations] = useState(true);
 
@@ -140,7 +142,6 @@ const Game = ({ id }) => {
             setShowTurnPopUp(true);
 
         } catch (error) {
-            console.log(error);
             setGetDataFailed(true);
         }
     }
@@ -156,18 +157,29 @@ const Game = ({ id }) => {
     }
 
     const gameOver = (gameOverInfo) => {
-        if (gameOverInfo.winners.includes(parseInt(playerId))) {
+        console.log(gameOverInfo)
+        if (gameOverInfo.winners.length === 0) {
+            setGameResult("DRAW");
+        }
+        else if (gameOverInfo.winners.includes(parseInt(playerId))) {
             setGameResult("VICTORY");
         } else {
             setGameResult("DEFEAT");
         }
+        if (gameOverInfo.winners.length === 0) {
+            setWinner(null);
+        }
         // if the game is 1v1, we show the name of the winner
-        if (gameOverInfo.winners.length === 1) {
+        else if (gameOverInfo.winners.length === 1) {
             setWinner(gameData.players[gameOverInfo.winners[0]].name);
         }
         // if 2v2, we show the team
         else {
             setWinner("Team" + gameData.players[gameOverInfo.winners[0]].teamId);
+        }
+        if (gameOverInfo.rankedScoreDeltas) {
+            setRankScore(gameOverInfo.rankedScoreDeltas[parseInt(playerId)][0]);
+            setDetaRankScore(gameOverInfo.rankedScoreDeltas[parseInt(playerId)][1]);
         }
         setEndGame(true);
     }
@@ -183,6 +195,10 @@ const Game = ({ id }) => {
         let result = loser === playerId ? "DEFEAT" : "VICTORY";
         let winner_ = loser === playerId ? Math.abs(playerId - 1) : playerId;
         setGameResult(result);
+        if (surrenderInfo.rankedScoreDeltas) {
+            setRankScore(surrenderInfo.rankedScoreDeltas[parseInt(playerId)][0]);
+            setDetaRankScore(surrenderInfo.rankedScoreDeltas[parseInt(playerId)][1]);
+        }
         setWinner(gameData.players[winner_].name);
     }
 
@@ -213,11 +229,8 @@ const Game = ({ id }) => {
 
         //export averages
         setMetricSums([statisticsData.averageUnitsPerTurn, statisticsData.averageKillsPerTurn, statisticsData.totalMoves]);
-        console.log(statisticsData);
         let playerUnitArray = statisticsData.unitsPerPlayer;
-        console.log(playerUnitArray);
         let playerKillArray = statisticsData.killsPerPlayer;
-        console.log(playerKillArray);
 
         const dataFinalUnits = [];
         const dataFinalKills = [];
@@ -253,26 +266,6 @@ const Game = ({ id }) => {
         setDataGraphsKills(dataFinalKills);
     };
 
-    const XAxisWithInterval = () => {
-        if (metricSums[2] < 20) {
-            return (
-                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                    interval={0} />
-            );
-        }
-        else if (metricSums[2] < 40) {
-            return (
-                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                    interval={2} />
-            );
-        }
-        return (
-            <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
-                interval={5} />
-        );
-    }
-
-
     const BarChartKills = () => {
 
         return (
@@ -285,7 +278,8 @@ const Game = ({ id }) => {
             >
 
                 <YAxis tick={{ fontSize: 5 }} ticks={[1, 2, 3]} />
-                <XAxisWithInterval />
+                <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                    interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
                 <Tooltip />
                 <Bar
                     dataKey="Player0"
@@ -351,7 +345,8 @@ const Game = ({ id }) => {
                                 <Line name={gameData.players[3].name} type="monotone" dataKey="Player3"
                                     stroke="yellow" dot={false} />
                             </div> : null}
-                        <XAxisWithInterval />
+                        <XAxis name="Turn" dataKey="turn" tick={{ fontSize: 8 }}
+                            interval={metricSums[2] < 20 ? 0 : (metricSums[2] < 40 ? 2 : 5)} />
                         <YAxis tick={{ fontSize: 8 }} ticks={[1, 2, 3]} />
                     </LineChart>
                     :
@@ -389,6 +384,24 @@ const Game = ({ id }) => {
             </div>
         );
     };
+
+    const RankScore = () => {
+        if (deltaRankScore > 0) {
+            return (
+                <div>Rank score: <span style={{ color: "green" }}>{rankScore + " (+" + deltaRankScore + ")"}</span></div>
+            );
+        }
+        else if (deltaRankScore < 0) {
+            return (
+                <div>Rank score: <span style={{ color: "red" }}>{rankScore + " (" + deltaRankScore + ")"}</span></div>
+            );
+        }
+        else {
+            return (
+                <div>Rank score: <span style={{ color: "gray" }}>{rankScore + " (+" + deltaRankScore + ")"}</span></div>
+            );
+        }
+    }
 
 
     return (
@@ -496,7 +509,12 @@ const Game = ({ id }) => {
                 </CustomPopUp>
                 <CustomPopUp open={endGame} information="">
                     <label className={"winnerWindow"}>{gameResult}</label>
-                    <label>{winner} won the game</label>
+                    {
+                        winner ? <label>{winner} won the game</label> : null
+                    }
+                    {
+                        gameData.gameType === "RANKED" ? <RankScore /> : null
+                    }
                     <Button
 
                         onClick={() =>
