@@ -53,9 +53,32 @@ We performed multiple brainstorming sessions as a group and came up with differe
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [**GitHub**](https://github.com/)	
 
-## High-level components
+## High-level components (** WILL REDO**)
 
 The major components of the front end are the views. As they are the components, the user directly interacts with. Of the views, the most important are the `Game` and `Map` component and the `Lobby` component.
+
+### Registered Users
+infos about registerd user components
+
+```bash
+	important files 
+```
+
+### Lobby
+infos about lobby components
+
+```bash
+	important files 
+```
+
+### Game
+
+infos about game components
+
+```bash
+	important files 
+```
+
 
 The `Lobby` component manages the lobby and handles changes in lobby settings, addition, removal and state changes of players. The Lobby component also handles redirecting the user after the game started.
 
