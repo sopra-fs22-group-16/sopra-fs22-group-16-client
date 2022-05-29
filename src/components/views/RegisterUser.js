@@ -57,6 +57,20 @@ const RegisterUser = () => {
         history.push('/home');
     };
 
+    // lobby name limit to 8 characters
+    const setNewUsername = (un) => {
+
+        if(un.length < 11) {
+            setUsername(un);
+        }
+
+        else {
+            setError({open: true, message: <div>This username is too long! <br /> Please limit yourself to 10 characters. </div>});
+        }
+    }
+
+    veryverylongusername
+
     return (
         <BaseContainer>
             <div className="LoginRegisterUser">
@@ -71,7 +85,7 @@ const RegisterUser = () => {
                             <FormField
                                 type="text"
                                 value={username}
-                                onChange={un => setUsername(un)}
+                                onChange={un => setNewUsername(un)}
                             />
                         </td>
                     </tr>
