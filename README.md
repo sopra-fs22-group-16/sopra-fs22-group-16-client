@@ -53,40 +53,45 @@ We held multiple brainstorming sessions as a group and came up with different pr
 
 <img src="https://github.com/get-icon/geticon/blob/master/icons/github-icon.svg" width="16" height="16" /> [**GitHub**](https://github.com/)	
 
-## High-level components (** WILL REDO**)
+## High-level components
 
-The main components of the front end are the views, as these are the components the users directly interact with. The most important are the `Game`, `Map` and `Lobby` components.
+The main components of the front end are the views, as these are the components the users directly interact with. The main entry point of the application in the client is the [index.js](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/master/src/index.js) file.
 
 ### Registered Users
-infos about registerd user components
+
+We allow the user to register and login into an account in order to save information about the ranked games the user played. The user has the possibility to change his username and password in his own profile. We provide a leaderboard such that users can compare themself against other users. 
 
 ```bash
-	important files 
+	../components/views/RegisteredUser.js
+	../components/views/RegisterUser.js
+	../components/views/LoginUser.js
+	../components/views/Leaderboard.js
 ```
 
 ### Lobby
-infos about lobby components
+
+The user can create a lobby and has multiple possibilities to join a lobby. The user can either join via a list of public lobbies, join by code, or by QR code. For each of these exists a separate views. The lobby itself displays the current settings of the lobby and the players who entered it. There are views for updating the settings of the lobby, and displaying the lobby code and QR code.
 
 ```bash
-	important files 
+	../components/views/CreateLobby.js
+	../components/views/lobby/Lobby.js
+	../components/views/lobby/ShareLobbyCode.js
+	../components/views/lobby/ShareQRCode.js
+	../components/views/lobby/UpdateLobby.js
 ```
 
 ### Game
 
-infos about game components
+The main components in the game are the `Game` and `Map`. The `Game` and handles general input, such as whether animations are enabled and if the user wants to surrender. The `Map` component displays the map, delegates the `Unit` components and manages the input of the user. The map itself is composed of `Tile` components.
+The `Unit` component displays the units and manages the animation of a specific unit. The `Unit` and `Tile` are both composed of several subcomponents. Another important part of the game is the `UnitModel`, it manages the state of the units and calculates attack range, movement range and paths of the unit.
 
 ```bash
-	important files 
+	../components/views/game/Game.js
+	../components/fragments/game/Map.js
+	../components/fragments/game/unit/Unit.js
+	../components/fragments/game/tile/Tile.js
+	../models/UnitModel.js
 ```
-
-
-The `Lobby` component manages the lobby and handles changes in lobby settings, addition, removal and state changes of players. The Lobby component is also responsible for redirecting the user once the game has started.
-
-The `Game` component manages the game and handles general input, such as whether animations are enabled and if the user wants to surrender. The `Map` component displays the map, delegates the `Unit` components and manages the input of the user.
-
-Another major component is the `UnitModel` as it manages the state of the units and calculates attack range, movement range and paths in the game.
-
-The main entry point of the application in the client is the [index.js](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/master/src/index.js) file.
 
 ## External Dependencies
 
