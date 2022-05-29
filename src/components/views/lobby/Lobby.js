@@ -227,7 +227,7 @@ const Lobby = ({id}) => {
         if (isHost) {
             try {
                 await api.post(`/v1/game/match/${id}`, JSON.stringify({}), {headers: {'token': token || ''}});
-            } catch (error) {
+            } catch (e) {
                 setError({
                     open: true,
                     message: <div> Ups! Something happened. <br/> Try again and if the error persists, contact
