@@ -10,11 +10,11 @@ export default class Alert extends Component {
         }
     }
 
-    shouldComponentUpdate(nextProps, nextState, nextContext) {
+    shouldComponentUpdate(nextProps, nextState, _nextContext) {
         return (nextProps.redraw !== this.props.redraw || nextState.restartAnimation !== this.state.restartAnimation);
     }
 
-    componentDidUpdate(prevProps, prevState, snapshot) {
+    componentDidUpdate(_prevProps, prevState, _snapshot) {
         if(!this.state.restartAnimation && !prevState.restartAnimation){
             this.updateDuration()
         }

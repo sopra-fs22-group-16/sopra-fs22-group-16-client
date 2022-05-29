@@ -61,11 +61,11 @@ const PublicLobbies = () => {
             localStorage.setItem('playerId', user.id);
 
             history.push({pathname: '/lobby/' + id})
-        } catch (error) {
+        } catch (e) {
             setJoining(false);
-            if (error.response.status === 404) {
+            if (emptyState.response.status === 404) {
                 setError({open: true, message: <div> This lobby does not seem to be live! </div>});
-            } else if (error.response.status === 409) {
+            } else if (e.response.status === 409) {
                 setError({open: true, message: <div> This lobby is already full!</div>});
             } else {
                 setError({

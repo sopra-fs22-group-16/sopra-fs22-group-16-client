@@ -37,9 +37,9 @@ const LoginUser = () => {
             await timeout(2000);
 
             history.push('/home');
-        } catch (error) {
+        } catch (e) {
             setLoggingIn(false);
-            if (error.response.status === 404 || error.response.status === 401) {
+            if (e.response.status === 404 || e.response.status === 401) {
                 setError({open: true, message: <div> The given credentials are wrong </div>})
             } else {
                 setError({open: true, message: <div> Ups! Something wrong happened. <br /> Try again and if the error persists, contact the administrator. </div>});

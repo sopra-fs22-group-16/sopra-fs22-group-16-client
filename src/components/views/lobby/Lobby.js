@@ -124,7 +124,7 @@ const Lobby = ({id}) => {
                 };
                 await api.put(`/v1/game/lobby/${id}/player`, JSON.stringify(requestBody), {headers: {'token': token || ''}});
             }
-        } catch (error) {
+        } catch (e) {
             setError({
                 open: true,
                 message: <div>Ups! Something happened. <br/> Try again and if the error persists, contact the
@@ -157,10 +157,10 @@ const Lobby = ({id}) => {
                     setAlert((prev) => {
                         return {redraw: !prev.redraw, open: true, message: <div>Username updated</div>}
                     });
-                } catch (error) {
-                    if (error.response.status === 409) {
+                } catch (e) {
+                    if (e.response.status === 409) {
                         setError({open: true, message: <div> This name is already taken! </div>});
-                    } else if (error.response.status === 400) {
+                    } else if (e.response.status === 400) {
                         setError({open: true, message: <div> The name should not be empty! </div>});
                     } else {
                         setError({

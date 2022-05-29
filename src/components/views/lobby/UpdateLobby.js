@@ -128,16 +128,16 @@ const UpdateLobby = ({id}) => {
                 setAlert((prev) => {
                     return {redraw: !prev.redraw, open: true, message: <div>Lobby updated</div>}
                 });
-            } catch (error) {
-                if (error.response != null) {
+            } catch (e) {
+                if (e.response != null) {
                     // conflict in lobby name
-                    if (error.response.status === 409) {
+                    if (e.response.status === 409) {
                         setError({
                             open: true,
                             message: <div> Lobby name assignment is not possible <br/> This name is already taken!
                             </div>
                         });
-                    } else if (error.response.status === 400) {
+                    } else if (e.response.status === 400) {
                         setError({
                             open: true,
                             message: <div> All players in the lobby have to be registered in order to play a ranked

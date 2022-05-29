@@ -32,7 +32,6 @@ const CreateLobby = () => {
 
     const token = localStorage.getItem('token');
     const isRegistered = localStorage.getItem('isRegistered') === 'true';
-
     const [name, setName] = useState('');
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
@@ -53,7 +52,7 @@ const CreateLobby = () => {
                 const requestBody = {
                     "name": name,
                     "visibility": visibility,
-                    "gameMode": gameMode,
+                    "gameMode": "ONE_VS_ONE",
                     "gameType": gameType
                 };
 
