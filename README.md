@@ -26,6 +26,8 @@ The motivation of the game was to create something which is fun to play without 
 
 ## Technologies
 
+<img src="https://github.com/get-icon/geticon/blob/master/icons/nodejs-icon.svg" width="16" height="16" />   [**node.js**](https://www.npmjs.com) 	
+
 <img src="https://github.com/get-icon/geticon/blob/master/icons/npm.svg" width="16" height="16" />   [**npm**](https://www.npmjs.com) 	
 
 <img src="https://upload.wikimedia.org/wikipedia/commons/4/47/React.svg" width="16" height="16" />   [**React**](https://reactjs.org/) 	
