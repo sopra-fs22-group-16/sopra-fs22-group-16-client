@@ -198,6 +198,10 @@ The host of the lobby has access to three additional views. He can access them v
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/game.png">
 
+### Game
+	
+In the game, at the start of each turn, the turn number and the name of the player whose name it is gets shown. After holding for a certain amount of time, the pop up vanishes. The user can then see the map. If it is the turn of the player, the units are marked. Animations can be disabled by clicking the button in the top left corner. The user can surrender by pressing the flag in the bottom left corner. The user can select a unit by clicking on it.
+	
 </p>
 	
 <br clear="both"/>
