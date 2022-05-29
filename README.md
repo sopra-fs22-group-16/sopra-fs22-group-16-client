@@ -116,7 +116,6 @@ After each commit to the master branch, automatic Github Actions get executed wh
 
 <img align="left" width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Homepage.png">
 	
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/empty.png">
 	
 ### Homepage
 
@@ -178,8 +177,6 @@ The user can return to the list of public lobbies or the homepage by using the t
 <p>
 
 <img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Lobby.png">
-
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/empty.png">
 
 ### Lobby
 	
