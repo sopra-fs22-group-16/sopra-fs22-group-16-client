@@ -242,6 +242,8 @@ After all units of a player got destroyed or one player surrendered, the victory
 
 ### Statistics
 
+To allow the players to learn from the game they just played. The user can look at two different graphs. In units per turn the user can see the number of unit each player had in each turn. In kills per turn the player sees the number of kills performed by each player in each turn. Like in the victory and defeat view the user can either play again with <code>PLAY AGAIN</code> or return back to the home screen with <code>RETURN HOME</code>
+
 </p>
 	
 <br clear="both"/>
