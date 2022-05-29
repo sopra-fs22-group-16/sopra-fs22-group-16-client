@@ -52,6 +52,14 @@ TODO:
 
 <img src="https://user-images.githubusercontent.com/91155454/170842854-9efaadbf-2d09-49c7-a738-d19fe8f9a257.png" width="16" height="16" /> [**sockjs-client**](https://www.npmjs.com/package/sockjs-client)	
 
+<img src="https://avatars.githubusercontent.com/u/13690587?s=200&v=4" width="16" height="16" /> [**recharts**](https://github.com/recharts/recharts)	
+
+<img src="https://avatars.githubusercontent.com/u/1261928?s=200&v=4" width="16" height="16" /> [**react-helmet**](https://github.com/nfl/react-helmet)	
+
+<img src="https://avatars.githubusercontent.com/u/297461?v=4" width="16" height="16" /> [**react-confetti**](https://github.com/alampros/react-confetti)	
+
+<img src="https://avatars.githubusercontent.com/u/10707142?v=4" width="16" height="16" /> [**react-countdown-circle-timer**](https://github.com/vydimitrov/react-countdown-circle-timer)	
+
 ## Getting started
 <p>
 These instructions will get you a copy of the project up and running on your local machine for development and testing purposes. See deployment for notes on how to deploy the project on a live system.
