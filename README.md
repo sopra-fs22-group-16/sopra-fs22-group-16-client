@@ -92,7 +92,7 @@ Get the [Hannibal server](https://github.com/sopra-fs22-group-16/sopra-fs22-grou
 Get the client
 
 ```bash
-https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client.git
+git clone https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client.git
 ```
 
 and open the project with an IDE of your choice.
