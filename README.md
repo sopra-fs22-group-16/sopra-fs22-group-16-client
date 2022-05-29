@@ -50,7 +50,7 @@ The `Lobby` component manages the lobby and handles changes in lobby settings, a
 
 The `Game` component manages the game and handles general input, such as whether animations are enabled and if the user wants to surrender. The `Map` component displays the map, delegates the `Unit` components and manages the input of the user.
 
-Another major component is the `UnitModel` as it manages the state of the units and is responsible for calculating attack range, movement range and paths in the game.
+Another major component is the `UnitModel` as it manages the state of the units and calculates attack range, movement range and paths in the game.
 
 The main entry point of the application in the client is the [index.js](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/master/src/index.js) file.
 
