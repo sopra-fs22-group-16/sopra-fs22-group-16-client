@@ -10,7 +10,6 @@ import {ThemeProvider} from "@emotion/react";
 import LobbyModel from "../../models/LobbyModel";
 
 import 'styles/views/CreateLobby.scss';
-import Alert from "../ui/Alert";
 
 
 const FormField = props => {
