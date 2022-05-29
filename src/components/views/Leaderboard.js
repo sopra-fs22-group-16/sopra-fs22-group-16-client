@@ -174,7 +174,7 @@ const Leaderboard = () => {
                         </tbody>
                     </table>
 
-                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(pageNumber) => {
+                    <Pagination count={Math.ceil(leaderboardData.total / usersPerPage)} onChange={(_event, pageNumber) => {
                         leaderboardData.page = (pageNumber - 1);
                         obtainAndLoadUserInfo().catch(() => setGetDataFailed(true));
                     }} shape="rounded" color="primary" />
