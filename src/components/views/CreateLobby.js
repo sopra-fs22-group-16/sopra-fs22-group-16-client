@@ -83,7 +83,7 @@ const CreateLobby = () => {
                     } else if (e.response.status === 401) {
                         setError({
                             open: true,
-                            message: <div> It is necessary to be register in order to play a ranked game. </div>
+                            message: <div> It is necessary to be registered in order to play a ranked game. </div>
                         });
                         setGameType("UNRANKED");
                     } else if (e.response.status === 403) {
