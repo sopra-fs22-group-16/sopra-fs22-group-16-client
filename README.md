@@ -1,5 +1,16 @@
 # ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/logo/war_elephant_purple.png) SoPra FS22 - Hannibal Client ![Logo](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/logo/war_elephant_purple_left.png)
 
+<p align="center">
+	<img src="https://img.shields.io/github/issues-raw/sopra-fs22-group-16/sopra-fs22-group-16-client"/>
+	<img src="https://img.shields.io/github/milestones/progress/sopra-fs22-group-16/sopra-fs22-group-16-client/2"/>
+	<img src="https://img.shields.io/github/milestones/progress/sopra-fs22-group-16/sopra-fs22-group-16-client/3"/>
+	<img src="https://img.shields.io/github/milestones/progress/sopra-fs22-group-16/sopra-fs22-group-16-client/4"/>
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-16_sopra-fs22-hannibal-client&metric=bugs"/>
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-16_sopra-fs22-hannibal-client&metric=vulnerabilities"/>
+	<img src="https://sonarcloud.io/api/project_badges/measure?project=sopra-fs22-group-16_sopra-fs22-hannibal-client&metric=code_smells"/>
+	<img src="https://img.shields.io/github/license/sopra-fs22-group-16/sopra-fs22-group-16-client"/>
+</p>
+
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard. Because of the quick nature of the game (you can finish a game in roughly 20 turns). Hannibal is best suited to be played on mobile phones, but can also be played on the Desktop version.  
 
 ### Motivation
