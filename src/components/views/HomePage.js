@@ -1,11 +1,8 @@
 import React from 'react';
-import {Link, useHistory} from 'react-router-dom';
 
 import {Button} from 'components/ui/Button';
 import Header from "components/ui/Header";
-import hannibal_background from 'styles/images/wargroove_bw_light.png'
-import info_icon from 'styles/images/info/info_icon.png'
-import github_icon from 'styles/images/info/github_icon.png'
+import hannibal_background from 'styles/images/wargroove_bw_light.png';
 
 import 'styles/views/HomePage.scss';
 

@@ -34,7 +34,6 @@ const CreateLobby = () => {
     const isRegistered = localStorage.getItem('isRegistered') === 'true';
 
     const [name, setName] = useState('');
-    const [gameMode, setGameMode] = useState("ONE_VS_ONE");
     const [visibility, setVisibility] = useState("PUBLIC");
     const [gameType, setGameType] = useState("UNRANKED");
     const [creating, setCreating] = useState(false);
@@ -71,24 +70,24 @@ const CreateLobby = () => {
                 localStorage.setItem('playerId', response.data.playerId);
 
                 history.push({pathname: '/lobby/' + lobby.id})
-            } catch (error) {
+            } catch (e) {
 
                 setCreating(false);
 
-                if (error.response != null) {
+                if (e.response != null) {
                     // conflict in lobby name
-                    if (error.response.status === 409) {
+                    if (e.response.status === 409) {
                         setError({
                             open: true,
                             message: <div> Lobby name assignment is not possible <br/> This name already taken! </div>
                         });
-                    } else if (error.response.status === 401) {
+                    } else if (e.response.status === 401) {
                         setError({
                             open: true,
                             message: <div> It is necessary to be register in order to play a ranked game. </div>
                         });
                         setGameType("UNRANKED");
-                    } else if (error.response.status === 403) {
+                    } else if (e.response.status === 403) {
                         setError({
                             open: true,
                             message: <div> It looks like your authentication is wrong <br /> We will log you out automatically. </div>

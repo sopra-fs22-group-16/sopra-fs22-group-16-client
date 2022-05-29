@@ -39,10 +39,10 @@ const RegisterUser = () => {
             history.push('/home');
         }
 
-        catch (error) {
+        catch (e) {
             setCreating(false);
-            if (error.response != null) {
-                if (error.response.status === 409) {
+            if (e.response != null) {
+                if (e.response.status === 409) {
                     setError({open: true, message: <div> This username is already taken! </div>})
                 } else {
                     setError({open: true, message:<div> Ups! Something happened. <br/> Try again and if the error persists, contact the administrator. </div>});
