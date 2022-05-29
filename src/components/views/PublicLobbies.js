@@ -63,10 +63,34 @@ const PublicLobbies = () => {
             history.push({pathname: '/lobby/' + id})
         } catch (e) {
             setJoining(false);
-            if (emptyState.response.status === 404) {
-                setError({open: true, message: <div> This lobby does not seem to be live! </div>});
-            } else if (e.response.status === 409) {
-                setError({open: true, message: <div> This lobby is already full!</div>});
+            if (e.response !== null) {
+                // conflict in lobby name
+                if (e.response.status === 404) {
+                    setError({open: true, message: <div> This lobby does not seem to be live! </div>});
+                } else if (e.response.status === 401) {
+                    setError({
+                        open: true,
+                        message: <div> It is necessary to be register in order to play a ranked game. </div>
+                    });
+                } else if (e.response.status === 403) {
+                    setError({
+                        open: true,
+                        message: <div> It looks like your authentication is wrong <br /> We will log you out automatically. </div>
+                    });
+                    localStorage.removeItem('token');
+                    localStorage.removeItem('userId');
+                    localStorage.removeItem('isRegistered');
+                } else if (e.response.status === 409) {
+                    setError({open: true, message: <div> This lobby is already full!</div>});
+                } else if (e.response.status === 400) {
+                    setError({open: true, message: <div> The code does not match the lobby!</div>});
+                } else {
+                    setError({
+                        open: true,
+                        message: <div> Ups! Something happened. <br/> Try again and if the error persists, contact the
+                            administrator.</div>
+                    });
+                }
             } else {
                 setError({
                     open: true,
