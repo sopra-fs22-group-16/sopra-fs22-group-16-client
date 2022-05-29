@@ -89,6 +89,14 @@ These instructions will get you a copy of the project up and running on your loc
 ### Prerequisites and Installation
 Get the [Hannibal server](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-server) and [Hannibal client](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client) repository from GitHub and follow the installation guide in each repository.
 
+Get the client
+
+```bash
+https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client.git
+```
+
+and open the project with an IDE of your choice.
+
 For your local development environment, you will need [Node.js](https://nodejs.org). All other dependencies, including React, get installed with:
 
 ```bash
