@@ -202,11 +202,13 @@ The host of the lobby has access to three additional views. He can access them v
 	
 <br clear="both"/>
 
+<br>
+
 <p>
 
 <img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/MovementAndAttackRange.png">
 
-<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/empty.png">
+<img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/attack.png">
 
 </p>
 	
