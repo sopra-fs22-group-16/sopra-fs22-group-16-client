@@ -3,7 +3,6 @@
 .Leaderboard {
 
   &.container {
-    margin-top: 2em;
     @include center;
     flex-direction: column;
   }
@@ -12,7 +11,7 @@
     display: block;
     text-align: center;
     font-size: 2em;
-    padding-bottom: 1.25em;
+    padding-bottom: 2em;
   }
 
   &.table {
@@ -58,7 +57,7 @@
 
   &.button-container {
     position: absolute;
-    bottom: 50px;
+    bottom: 10vh;
     display: flex;
     margin-top: 1em;
     width: 200px;

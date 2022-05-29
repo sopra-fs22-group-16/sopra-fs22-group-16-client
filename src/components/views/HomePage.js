@@ -34,10 +34,6 @@ const HomePage = () => {
         history.push('/leaderboard');
     }
 
-    const goInfoPage = () => {
-        history.push('/info');
-    }
-
     return (
         <div className={"HomePage baseContainer"}>
             <img src={hannibal_background} className={"HomePage backgroundImage"} alt={""}/>
@@ -92,11 +88,6 @@ const HomePage = () => {
                         }
                     </div>
                 </div>
-                <img src={info_icon} onClick={() => goInfoPage()} className={"HomePage infoIcon"} alt={""}
-                     style={{cursor: "pointer"}}/>
-                <a target="_blank" href="https://github.com/sopra-fs22-group-16">
-                    <img src={github_icon} className={"HomePage githubIcon"} alt={""} style={{cursor: "pointer"}}/>
-                </a>
             </div>
         </div>
     );

@@ -6,7 +6,12 @@
   margin-right: auto;
   padding-right: 15px;
   padding-top: 80px;
-  max-width: $DESKTOP_WIDTH;
+
+  box-sizing: border-box;
+  max-width: 100vw;
+  min-height: 100vh;
+  width: 100vw;
+
   color: $textColorLight;
   font-weight: $fontweight;
 }

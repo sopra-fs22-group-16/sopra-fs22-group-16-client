@@ -168,7 +168,7 @@ const UpdateLobby = ({id}) => {
     }
 
     return (
-        <BaseContainer noLogOutBool={true}>
+        <BaseContainer noHeaderIcons={true}>
             <div className="updateLobby">
                 <label className="updateLobby lobby-title">Update Lobby</label>
                 <table className="lobby-info">
