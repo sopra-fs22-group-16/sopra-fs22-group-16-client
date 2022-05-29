@@ -2,6 +2,9 @@
 
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard.
 
+### Motivation
+The motivation of the game was to create something which is fun to play without learning too many rules, and something we envisioned people enjoying playing even outside the SoPra requirements. 
+
 
 ## Table of content
 
@@ -216,7 +219,9 @@ The user can return to the list of public lobbies or the homepage by using the t
 
 ## Roadmap
 
-<img src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Hannibalroadmap.png" width="100%"/>
+<p align="center">
+<img align="center" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Hannibalroadmap.png" width="50%"/>
+</p>
 
 ## Authors
 
