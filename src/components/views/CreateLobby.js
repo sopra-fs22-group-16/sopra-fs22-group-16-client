@@ -39,6 +39,18 @@ const CreateLobby = () => {
 
     const [error, setError] = useState({open: false, message: <div/>});
 
+    // lobby name limit to 8 characters
+    const setLobbyName = (un) => {
+
+        if(un.length < 9) {
+            setName(un);
+        }
+
+        else {
+            setError({open: true, message: <div>The name you are entering is too long! <br /> Please limit yourself to 8 characters. </div>});
+        }
+    }
+
     const postLobby = async () => {
 
         if (name === '') {
@@ -128,7 +140,7 @@ const CreateLobby = () => {
                         <td colSpan="2">
                             <FormField
                                 value={name}
-                                onChange={un => setName(un)}>
+                                onChange={un => setLobbyName(un)}>
                             </FormField>
                         </td>
                     </tr>

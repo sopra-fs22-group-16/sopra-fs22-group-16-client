@@ -102,6 +102,19 @@ const UpdateLobby = ({id}) => {
         fetchData().catch(() => setGetDataFailed(true));
     }, [id, token]);
 
+ 
+    // update lobby name limit to 8 characters
+    const setNewLobbyName = (un) => {
+
+        if(un.length < 9) {
+            setName(un);
+        }
+
+        else {
+            setError({open: true, message: <div>The name you are entering is too long! <br /> Please limit yourself to 8 characters. </div>});
+        }
+    }
+
     //call to the update backend API
     const updateLobby = async () => {
 
@@ -178,7 +191,7 @@ const UpdateLobby = ({id}) => {
                         <td colSpan="2">
                             <FormField
                                 value={name}
-                                onChange={un => setName(un)}>
+                                onChange={un => setNewLobbyName(un)}>
                             </FormField>
                         </td>
                     </tr>
