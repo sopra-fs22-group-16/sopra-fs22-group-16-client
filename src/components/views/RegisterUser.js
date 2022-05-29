@@ -57,7 +57,7 @@ const RegisterUser = () => {
         history.push('/home');
     };
 
-    // lobby name limit to 8 characters
+    // lobby name limit to 10 characters
     const setNewUsername = (un) => {
 
         if(un.length < 11) {

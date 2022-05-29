@@ -39,7 +39,7 @@ const CreateLobby = () => {
 
     const [error, setError] = useState({open: false, message: <div/>});
 
-    // lobby name limit to 8 characters
+    // lobby name limit to 10 characters
     const setLobbyName = (un) => {
 
         if(un.length < 11) {

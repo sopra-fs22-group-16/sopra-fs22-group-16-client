@@ -103,7 +103,7 @@ const UpdateLobby = ({id}) => {
     }, [id, token]);
 
  
-    // update lobby name limit to 8 characters
+    // update lobby name limit to 10 characters
     const setNewLobbyName = (un) => {
 
         if(un.length < 11) {
