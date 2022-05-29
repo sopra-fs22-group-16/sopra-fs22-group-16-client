@@ -1,16 +1,17 @@
 import React, {useState, useEffect} from 'react';
 import {api} from 'helpers/api';
-import {useHistory, useLocation} from 'react-router-dom';
+import {Link, useHistory, useLocation} from 'react-router-dom';
 import {Button} from 'components/ui/Button';
 import BaseContainer from "components/ui/BaseContainer";
 import {defaultTheme} from "styles/themes/defaulTheme";
 import {LinearProgress} from "@mui/material";
 import {ThemeProvider} from "@emotion/react";
-
-import 'styles/views/PublicLobbies.scss';
+import emptyState from "styles/images/empty_state.png";
 import CustomPopUp from "components/ui/CustomPopUp";
 import Socket from "components/socket/Socket";
 import UserModel from "models/UserModel";
+
+import 'styles/views/PublicLobbies.scss';
 
 const PublicLobbies = () => {
 
@@ -76,9 +77,9 @@ const PublicLobbies = () => {
         }
     }
 
-    let content = null;
+    let content;
 
-    if (lobbyData) {
+    if (lobbyData?.length > 0) {
         content = lobbyData.map((lobby, key) => (
                 <LobbyInfo
                     key={key}
@@ -93,6 +94,21 @@ const PublicLobbies = () => {
                 />
             )
         );
+    } else {
+        content = <tr>
+            <td colSpan="5" className={"PublicLobbies table-spacer"}>
+                <Link to={{
+                    pathname: '/lobby/create'
+                }}
+                      style={{textDecoration: 'none'}}>
+                    <div className={"PublicLobbies table-spacer spacer-container"}>
+                        <h1>There are no more raging battles!</h1>
+                        <img src={emptyState} alt={"An image of a deserted battlefield."}/>
+                        <h2>Do you want to create your own?</h2>
+                    </div>
+                </Link>
+            </td>
+        </tr>
     }
 
     return (
@@ -133,6 +149,7 @@ const PublicLobbies = () => {
                         RETURN HOME
                     </Button>
                 </div>
+                <div className={"PublicLobbies spacer"}/>
             </div>
             <ThemeProvider theme={defaultTheme}>
                 <CustomPopUp open={isJoining} information={"Joining Lobby"}>

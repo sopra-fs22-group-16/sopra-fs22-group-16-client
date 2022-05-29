@@ -140,7 +140,7 @@ const Leaderboard = () => {
         <BaseContainer>
             <ThemeProvider theme={defaultTheme}>
                 <div className="Leaderboard container">
-                    <label className="PublicLobbies h1"> Leaderboard </label>
+                    <label className="Leaderboard h1"> Leaderboard </label>
 
                     <table className="Leaderboard table">
                         <thead>

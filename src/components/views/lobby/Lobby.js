@@ -282,7 +282,7 @@ const Lobby = ({id}) => {
     }
 
     return (
-        <BaseContainer noLogOutBool={true}>
+        <BaseContainer noHeaderIcons={true}>
             <div className="lobby">
                 <label className="lobby lobby-title">Lobby Information</label>
                 {
@@ -352,6 +352,8 @@ const Lobby = ({id}) => {
                                            style={{cursor: parseInt(localStorage.getItem("playerId")) === user.id ? 'pointer' : 'default'}}
                                            checked={user.ready}
                                            onChange={() => {
+                                               // This is intentional
+                                               // A input field provided a `checked` prop requires an `onChange` handler.
                                            }}
                                            onClick={() => changeStatus(user)}
                                            maxLength={10}
