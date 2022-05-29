@@ -42,12 +42,12 @@ const CreateLobby = () => {
     // lobby name limit to 8 characters
     const setLobbyName = (un) => {
 
-        if(un.length < 9) {
+        if(un.length < 11) {
             setName(un);
         }
 
         else {
-            setError({open: true, message: <div>The name you are entering is too long! <br /> Please limit yourself to 8 characters. </div>});
+            setError({open: true, message: <div>The name you are entering is too long! <br /> Please limit yourself to 10 characters. </div>});
         }
     }
 
