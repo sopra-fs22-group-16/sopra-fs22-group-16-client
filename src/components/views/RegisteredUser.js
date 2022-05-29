@@ -47,7 +47,7 @@ const RegisteredUser = ({id}) => {
     }
 
     const handleLoadUserDataError = (e) => {
-        if (error.response != null) {
+        if (e.response != null) {
             if (e.response?.status === 404) {
                 setGetDataFailed({open: true, message: <div> The user with the id {id} does not exist! </div>});
             } else {
