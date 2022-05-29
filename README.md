@@ -3,7 +3,7 @@
 Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard.
 
 ### Motivation
-The motivation of the game was to create something which is fun to play without learning too many rules, and something we envisioned people enjoying playing even outside the SoPra requirements. 
+We performed multiple brainstorming sessions as a group and came up with different project ideas. We decided we preferred to create a game as we were keen on playing a game we envisioned and created as a team together. From the beginning, we envisioned the game to be something which is fun to play without learning too many rules, and something people enjoying playing, even outside the SoPra requirements. Another major point for us was that the game should be competitive and thus we decided on a turn-based strategy game as this would be appropriate for the scope of the SoPra. While searching for a name, one of our team members proposed Hannibal as a name, as he was a brilliant strategist who lived between 183 and 181 BC. Because Hannibal moved over the alps with elephants, we also choose the pixel art icon of the war elephant as our logo.
 
 
 ## Table of content
@@ -44,7 +44,15 @@ The motivation of the game was to create something which is fun to play without 
 
 ## High-level components
 
-TODO:
+The major components of the front end are the views. As they are the components, the user directly interacts with. Of the views, the most important are the `Game` and `Map` component and the `Lobby` component.
+
+The `Lobby` component manages the lobby and handles changes in lobby settings, addition, removal and state changes of players. The Lobby component also handles redirecting the user after the game started.
+
+The `Game` component manages the game and handles general input, such as whether animations are enabled and if the user wants to surrender. The `Map` component displays the map, delegates the `Unit` components and manages the input of the user.
+
+Another major component is the `UnitModel` as it manages the state of the units and is responsible for calculating attack range, movement range and paths in the game.
+
+The main entry point of the application in the client is the [index.js](https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/master/src/index.js) file.
 
 ## External Dependencies
 
