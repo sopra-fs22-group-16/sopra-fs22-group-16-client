@@ -11,10 +11,10 @@
 	<img src="https://img.shields.io/github/license/sopra-fs22-group-16/sopra-fs22-group-16-client"/>
 </p>
 
-Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard. Because of the quick nature of the game (you can finish a game in roughly 20 turns). Hannibal is best suited to be played on mobile phones, but can also be played on the Desktop version.  
+Hannibal is a turn-based strategy game in which players can play against each other over the web. Users can create 1vs1 public or private games without registration. However, it is possible to register to keep records of the games played and compete with other users to be at the top of the leaderboard. Because of the quick nature of the game (you can finish a game in roughly 20 turns), Hannibal is best suited to be played on mobile phones, but can also be played on the Desktop version.  
 
 ### Motivation
-We performed multiple brainstorming sessions as a group and came up with different project ideas. We decided we preferred to create a game as we were keen on playing a game we envisioned and created together. From the beginning, we envisioned the game to be something which is fun to play without learning too many rules, and something people enjoying playing, even outside the SoPra requirements. Another major point for us was that the game should be competitive and thus we decided on a turn-based strategy game as this would be appropriate for the scope of the SoPra. While searching for a name, one of our team members proposed Hannibal, as he was a brilliant strategist who lived between 183 and 181 BC. Because Hannibal moved over the alps with elephants, we also choose the pixel art icon of the war elephant as our logo.
+We held multiple brainstorming sessions as a group and came up with different project ideas. We decided we preferred to create a game as we were keen on playing a game we envisioned and created together. From the beginning, we envisioned the game to be something which is fun to play without learning too many rules, and something people would enjoy playing, even outside the SoPra requirements. Another major point for us was that the game should be collaborative and thus we decided on a turn-based strategy game as this would be appropriate for the scope of SoPra. While searching for a name, one of our team members proposed Hannibal, as he was a brilliant strategist who lived between 183 and 181 BC. Because Hannibal moved over the Alps with elephants, we also choose the pixel art icon of the war elephant as our logo.
 
 
 ## Table of content
@@ -55,7 +55,7 @@ We performed multiple brainstorming sessions as a group and came up with differe
 
 ## High-level components (** WILL REDO**)
 
-The major components of the front end are the views. As they are the components, the user directly interacts with. Of the views, the most important are the `Game` and `Map` component and the `Lobby` component.
+The main components of the front end are the views, as these are the components the users directly interact with. The most important are the `Game`, `Map` and `Lobby` components.
 
 ### Registered Users
 infos about registerd user components
@@ -80,7 +80,7 @@ infos about game components
 ```
 
 
-The `Lobby` component manages the lobby and handles changes in lobby settings, addition, removal and state changes of players. The Lobby component also handles redirecting the user after the game started.
+The `Lobby` component manages the lobby and handles changes in lobby settings, addition, removal and state changes of players. The Lobby component is also responsible for redirecting the user once the game has started.
 
 The `Game` component manages the game and handles general input, such as whether animations are enabled and if the user wants to surrender. The `Map` component displays the map, delegates the `Unit` components and manages the input of the user.
 
@@ -169,9 +169,9 @@ After each commit to the master branch, automatic Github Actions get executed wh
 	
 ### Homepage
 
-On the homepage of Hannibal, the user gets a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
+On the homepage of Hannibal, users get a general overview of the features. In the top right corner are multiple icon buttons. Pressing the Information icon redirects the user to a different page, where the user can get additional information about the flow of the game. The GitHub button leads the user to the GitHub project of Hannibal. The user has the possibility of joining existing lobbies by pressing <code>JOIN LOBBY</code>. The user can create new lobbies when pressing on the <code>CREATE LOBBY</code> button.
 
-To keep records of the games played and compete with other users with their ranked score, the user can register an account by pressing <code>SIGN IN/CREATE USER</code>. To view the score of the best users in all of Hannibal, the user can press the <code>LEADERBOARD</code> button to get to a leaderboard which the user can sort by wins, losses or ranked score.
+To keep records of the games played and compete with other users with their ranked score, the user can register by pressing <code>SIGN IN/CREATE USER</code>. To view the score of the best users in all of Hannibal, the user can press the <code>LEADERBOARD</code> button to get to a leaderboard where the user can sort by wins, losses or rank score.
 
 </p>	
 	
@@ -189,12 +189,12 @@ To keep records of the games played and compete with other users with their rank
 
 ### Creating and joining a lobby
 
-After pressing <code>CREATE LOBBY</code> the user is presented with a form where he can specify the name, the type and the visibility of the lobby. In game of type Ranked, the registered users compete against each other and in the end the wins, losses and ranked score get updated. With the option visibility, the user can decide if the lobby gets added to the list of public lobbies. 
+After pressing <code>CREATE LOBBY</code> the user is presented with a form where he can specify the name, the type and the visibility of the lobby. In ranked games, registered users compete against each other and in the end the wins, losses and ranked score get updated. With the option visibility, the user can decide if the lobby gets added to the list of public lobbies. 
 
 
 After pressing <code>JOIN LOBBY</code> the user is presented with a list of public lobbies. The name, type, number of players and type of the lobby is indicated. The user can join the lobby if the user is eligible for the lobby by pressing on it.
 	
-If the user wants to join a specifig lobby, they can press <code>JOIN A LOBBY BY CODE</code>.
+If the user wants to join a specific lobby, they can press <code>JOIN A LOBBY BY CODE</code>.
 	
 Additionally, the user can return to the home screen by pressing <code>RETURN HOME</code>.
 	
@@ -212,9 +212,9 @@ Additionally, the user can return to the home screen by pressing <code>RETURN HO
 
 ### Joining a lobby by code
 	
-After pressing <code>JOIN A LOBBY BY CODE</code> the user gets presented with an inputfield where, the user can input a lobbycode. The user can validate the code by pressing <code>VALIDATE CODE</code>. 
+After pressing <code>JOIN A LOBBY BY CODE</code> the user gets presented with an inputfield where they can input a lobbycode. The code can be validated by pressing <code>VALIDATE CODE</code>. 
 
-Additianally, the user can press <code>Join using a QR code instead</code> to get the possibility to join a lobby by scanning a QR code.
+Additionally, the user can press <code>Join using a QR code instead</code> to get the possibility to join a lobby by scanning a QR code.
 
 The user can return to the list of public lobbies or the homepage by using the two buttons below.
 	
@@ -230,9 +230,9 @@ The user can return to the list of public lobbies or the homepage by using the t
 
 ### Lobby
 	
-In the lobby, the user can see the current settings of the lobby. This includes the name (NAME), the visibility (ACCESS), the type (TYPE), the number of players and respectively the maximal number of players (PLAYERS) and the number of ready players (READY). Below the lobby information is a table with the players currently in the lobby. The name of the play, the team and ready status is stated in each table row. The user can change his name by selecting the input field and then pressing the yellow button on the left of it. The user can change his ready status by clicking on the checkbox in the user's row.
+In the lobby, the user can see the current settings of the lobby. This includes the name (NAME), the visibility (ACCESS), the type (TYPE), the number of players and respectively the maximal number of players (PLAYERS) and the number of ready players (READY). Below the lobby information is a table with the players who are currently in the lobby. The name of the game, the team and ready status are stated in each table row. The user can change their name by selecting the input field and then pressing the yellow button on the left of it. The user can change their ready status by clicking on the checkbox in the user's row.
 
-The host of the lobby has access to three additional views. He can access them via the blue links above the lobby information and below the player table. With the above link, he has the possibility of changing the lobby settings. The link below the player's table allows the host to see the invitation code or the QR code.
+The host of the lobby has access to three additional views. He can access them via the blue links above the lobby information and below the player table. With the above link, they have the possibility of changing the lobby settings. The link below the player's table allows the host to see the invitation code or the QR code.
 	
 </p>
 	
@@ -261,7 +261,7 @@ In the game, at the start of each turn, the turn number and the name of the play
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/attack.png">
 
-After the user selected a unit, the movement range is shown with the striped tile. The full attack range is shown with the framed tiles. If a hostile unit is inside the attack or movement range, the indicator below is colored red. The user can select a hostile unit in attack range and the estimated damage exchange is displayed in a pop up above the hostile unit. A dropdown shows where the user can select the actions to perform. There are further ways to perform actions with more precision. Please refer to the [info page of Hannibal](https://sopra-fs22-group-16-client.herokuapp.com/info) for more information.
+After the user selected a unit, the movement range is shown with the striped tile. The full attack range is shown with the framed tiles. If a hostile unit is inside the attack or movement range, the indicator below is colored red. The user can select a hostile unit in attack range and the estimated damage exchange is displayed in a pop up above the hostile unit. A dropdown shows the possible actions the users can perform. There are further ways to perform actions with more precision. Please refer to the [info page of Hannibal](https://sopra-fs22-group-16-client.herokuapp.com/info) for more information.
 	
 </p>
 	
@@ -276,7 +276,7 @@ After the user selected a unit, the movement range is shown with the striped til
 
 ### End of game
 	
-After all units of a player got destroyed or one player surrendered, the victory or defeat view gets shown. The name of the user who won gets named again, and the winner gets showered in confetti. The user has the possibility to look at statistics about the game by pressing <code>STATISTICS</code>. If the user wants to play again, <code>PLAY AGAIN</code> leads the user back to the lobby, where the user can get ready again. If the user doesn’t want to play again, <code>RETURN HOME</code>, returns the user back to the home screen, and the user leaves the lobby automatically. 
+After all of a player's units have been destroyed or a player has surrendered, the victory or defeat view is displayed. This view shows the result of the game and the name of the winner. Besides, the winner gets showered in confetti. The user has the possibility to look at statistics about the game by pressing <code>STATISTICS</code>. If the user wants to play again, <code>PLAY AGAIN</code> leads the user back to the lobby, where the user can get ready again. If the user doesn’t want to play again, <code>RETURN HOME</code>, returns the user back to the home screen, and the user leaves the lobby automatically. 
 
 </p>
 	
