@@ -214,6 +214,8 @@ In the game, at the start of each turn, the turn number and the name of the play
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/attack.png">
 
+After the user selected a unit, the movement range is shown with the striped tile. The full attack range is shown with the framed tiles. If a hostile unit is inside the attack or movement range, the indicator below is colored red. The user can select a hostile unit in attack range and the estimated damage exchange is displayed in a pop up above the hostile unit. A dropdown shows where the user can select the actions to perform. There are further ways to perform actions with more precision. Please refer to the [info page of Hannibal](https://sopra-fs22-group-16-client.herokuapp.com/info) for more information.
+	
 </p>
 	
 <br clear="both"/>
@@ -225,6 +227,10 @@ In the game, at the start of each turn, the turn number and the name of the play
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/Defeat.png">
 
+### End of game
+	
+After all units of a player got destroyed or one player surrendered, the victory or defeat view gets shown. The name of the user who won gets named again, and the winner gets showered in confetti. The user has the possibility to look at statistics about the game by pressing <code>STATISTICS</code>. If the user wants to play again, <code>PLAY AGAIN</code> leads the user back to the lobby, where the user can get ready again. If the user doesn’t want to play again, <code>RETURN HOME</code>, returns the user back to the home screen, and the user leaves the lobby automatically. 
+
 </p>
 	
 <br clear="both"/>
@@ -233,6 +239,8 @@ In the game, at the start of each turn, the turn number and the name of the play
 <img align="left"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/statisticsKPT.png">
 
 <img align="right"  width="25%" src="https://github.com/sopra-fs22-group-16/sopra-fs22-group-16-client/blob/ReadMe-media/images/Illustrations/statisticsUPT.png">
+
+### Statistics
 
 </p>
 	
