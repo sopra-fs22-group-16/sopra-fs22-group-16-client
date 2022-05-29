@@ -55,7 +55,7 @@ We held multiple brainstorming sessions as a group and came up with different pr
 
 ## High-level components (** WILL REDO**)
 
-The main components of the front end are the views, as these are the components the users directly interacts with. The most important are the `Game`, `Map` and `Lobby` components.
+The main components of the front end are the views, as these are the components the users directly interact with. The most important are the `Game`, `Map` and `Lobby` components.
 
 ### Registered Users
 infos about registerd user components
