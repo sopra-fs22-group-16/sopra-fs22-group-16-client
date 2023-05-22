@@ -314,7 +314,7 @@ To learn from the game the users just played, they can look at two different gra
 * **Paul Luley**  - [paolovic](https://github.com/paolovic)
 * **Maria Korobeynikova** - [mkorob](https://github.com/mkorob)
 * **Hilal Çomak** - [hilalcomak](https://github.com/hilalcomak)
-* **Alessio Brazerol** - [apple00juice](https://github.com/apple00juice)
+* **Alessio Brazerol** - [AlessioBrazerol](https://github.com/AlessioBrazerol)
 
 ## License
 This project is licensed under [GPLv3](https://www.gnu.org/licenses/gpl-3.0.en.html), which guarantees end users the freedoms to run, study, share and modify the software.
